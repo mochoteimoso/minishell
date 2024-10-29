@@ -1,4 +1,4 @@
 #ifndef MINISHELL_H
-# define MINITALK_H
+# define MINISHELL_H
 
 #endif
