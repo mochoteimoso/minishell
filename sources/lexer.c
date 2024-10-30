@@ -6,17 +6,9 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:09:08 by henbuska          #+#    #+#             */
-/*   Updated: 2024/10/30 10:31:24 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:45:20 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-int	lexer_cmd_line(char *str)
-{
-	if (check_quotes(str))
-		return (1);
-	else
-		return (0);
-}
 
 int	check_quotes(char *str)
 {
@@ -40,6 +32,15 @@ int	check_quotes(char *str)
 	
 }
 
+int	lexer_cmd_line(char *str)
+{
+	if (!*str)
+		return (1);
+	if (check_quotes(str))
+		return (1);
+	else
+		return (0);
+}
 
 /*int	check_single_quote(char *str)
 {
