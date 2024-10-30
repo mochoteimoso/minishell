@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/29 17:25:33 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:24:15 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,12 @@ int	main(int argc, char **argv, char **envp)
 {
 	int	exit_c;
 
-	exit_c = 0;
-	(void)argc;
 	(void)argv;
+	exit_c = 0;
+	if (argc != 1)
+	{
+		printf("Minishell doesn't take arguments\n");
+		return (0);
+	}
 	return (user_prompt(exit_c, envp));
 }
