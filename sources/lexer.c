@@ -6,19 +6,42 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:09:08 by henbuska          #+#    #+#             */
-/*   Updated: 2024/10/29 18:55:47 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/10/30 10:31:24 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	lexer_cmd_line(char *str)
 {
-	if (check_single_quote)
+	if (check_quotes(str))
 		return (1);
-	if (check_double_quote)
-		return (1);
+	else
+		return (0);
 }
 
-int	check_single_quote(char *str)
+int	check_quotes(char *str)
+{
+	int	in_single_quote;
+	int	in_double_quote;
+
+	in_single_quote = 0;
+	in_double_quote = 0;
+	while (*str)
+	{
+		if (*str == '\'' && !in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (*str == '"' && !in_single_quote)
+			in_double_quote = !in_double_quote;
+		str++;
+	}
+	if (in_double_quote || in_single_quote)
+		return (1);
+	else
+		return (0);
+	
+}
+
+
+/*int	check_single_quote(char *str)
 {
 	int		quote_count;
 	char	single_quote;
@@ -57,4 +80,4 @@ int	check_double_quote(char *str)
 		return (0);
 	else
 		return (1);
-}
+} */
