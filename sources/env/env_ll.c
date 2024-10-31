@@ -1,33 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   env_ll.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/31 17:44:28 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/10/31 17:23:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*Changes the current directory. Accepts a relative or absolute path as an argument.*/
-
-void	built_cd(char **args)
+int	set_name(t_env *node, void *stuff)
 {
-	const char	*path;
+	node->name = ft_strdup(stuff);
+	if (!node->name)
+		return (1);
+	return (0);
+}
 
-	path = args[1];
-	if (!path)
-	{
-		path = getenv("HOME");
-		if (!path)
-		{
-			ft_putstr_fd("cd HOME not set\n", 1);
-			return ;
-		}
-	}
-	if (chdir(path) != 0)
-		perror("cd");
+int	set_value(t_env *node, void *stuff)
+{
+	char *sign;
+
+	sign = ft_strchr(stuff, '=');
+	if (sign)
+		node->value = ft_strdup(sign + 1);
+	else
+		node->value = ft_strdup("");
+	if (!node->value)
+		return (1);
+	return (0);
 }

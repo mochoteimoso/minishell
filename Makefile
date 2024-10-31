@@ -2,7 +2,13 @@ NAME = minishell
 
 SRC_DIR = sources/
 
-SRC = $(SRC_DIR)main.c
+SRC = $(SRC_DIR)main.c\
+	$(SRC_DIR)built_in/cd.c\
+	$(SRC_DIR)built_in/echo.c\
+	$(SRC_DIR)built_in/export.c\
+	$(SRC_DIR)built_in/pwd.c\
+	$(SRC_DIR)env/env_handling.c\
+	$(SRC_DIR)env/env_ll.c\
 
 FLAGS = -Wall -Werror -Wextra -g
 
@@ -14,16 +20,18 @@ LIBFT_DIR = ./libft
 
 OBJ_DIR = objects/
 
-OBJS = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
+OBJS = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
+
+OBJ_DIRS = $(sort $(dir $(OBJS)))
 
 MAKEFLAGS += --no-print-directory
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(OBJ_DIRS) $(NAME)
 
-$(OBJ_DIR):
-		@mkdir -p $(OBJ_DIR)
+$(OBJ_DIRS):
+		@mkdir -p $(OBJ_DIRS)
 
-$(OBJ_DIR)%.o:$(SRC_DIR)%.c | $(OBJ_DIR)
+$(OBJ_DIR)%.o:$(SRC_DIR)%.c
 		@cc $(FLAGS) -c $< -o $@
 
 $(LIBFT):
@@ -40,6 +48,7 @@ clean:
 
 fclean:
 		@rm -f $(NAME)
+		@rm -rf $(OBJ_DIR)
 		@make -C $(LIBFT_DIR) fclean
 		@echo "\n\033[0;31mAll is gone\033[0m\n"
 
