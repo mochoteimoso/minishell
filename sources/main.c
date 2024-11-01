@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/31 17:31:38 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/01 14:36:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ static int user_prompt(char **envp)
 	t_shell	sh;
 
 	init_shell(&sh, envp);
+	init_sig();
 	while (1)
 	{
+
 		input = readline("minishell> ");
 		if (input == NULL)
 			break ;

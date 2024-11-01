@@ -1,21 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 13:07:40 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/01 13:43:57 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/01 14:34:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
-/*Sets an environment variable. Accepts VAR=VALUE format to
-define or update variables.*/
+static void	sigint_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		rl_replace_line("", 0);
+		printf("\n");
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
 
-// int	built_export(t_shell *sh)
-// {
-
-// }
+void	init_sig(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}

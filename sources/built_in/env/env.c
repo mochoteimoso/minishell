@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 13:07:40 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/01 13:33:53 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
-/*Sets an environment variable. Accepts VAR=VALUE format to
-define or update variables.*/
-
-// int	built_export(t_shell *sh)
+// char	**built_env(t_shell *sh, char **envp)
 // {
 
 // }

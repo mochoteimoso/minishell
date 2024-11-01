@@ -3,12 +3,14 @@ NAME = minishell
 SRC_DIR = sources/
 
 SRC = $(SRC_DIR)main.c\
+	$(SRC_DIR)signals.c\
 	$(SRC_DIR)built_in/cd.c\
 	$(SRC_DIR)built_in/echo.c\
 	$(SRC_DIR)built_in/export.c\
 	$(SRC_DIR)built_in/pwd.c\
-	$(SRC_DIR)env/env_handling.c\
-	$(SRC_DIR)env/env_ll.c\
+	$(SRC_DIR)built_in/env/env_handling.c\
+	$(SRC_DIR)built_in/env/env_ll.c\
+	$(SRC_DIR)utils/freeing.c
 
 FLAGS = -Wall -Werror -Wextra -g
 
@@ -43,7 +45,7 @@ $(NAME): $(OBJS)
 		@echo "\n\033[0;32mLet's mini!\033[0m\n"
 
 clean:
-		@rm -f $(OBJ_DIR)
+		@rm -rf $(OBJ_DIR)
 		@make -C $(LIBFT_DIR) clean
 
 fclean:

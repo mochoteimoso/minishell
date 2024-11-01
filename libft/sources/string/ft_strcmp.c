@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_ll.c                                           :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/31 17:23:50 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/01 12:52:44 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/01 12:54:34 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../includes/libft.h"
 
-int	set_name(t_env *node, void *stuff)
+int	ft_strcmp(char *s1, char *s2)
 {
-	node->name = ft_strdup(stuff);
-	if (!node->name)
-		return (1);
-	return (0);
-}
+	int	i;
 
-int	set_value(t_env *node, void *stuff)
-{
-	char *sign;
-
-	sign = ft_strchr(stuff, '=');
-	if (sign)
-		node->value = ft_strdup(sign + 1);
-	else
-		node->value = ft_strdup("");
-	if (!node->value)
-		return (1);
-	return (0);
+	i = 0;
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }

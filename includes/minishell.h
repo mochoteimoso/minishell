@@ -7,6 +7,8 @@
 # include <stdio.h>
 # include <limits.h>
 # include <errno.h>
+# include <signal.h>
+//# include </usr/include/linux/signal.h>
 
 typedef struct s_env
 {
@@ -25,8 +27,14 @@ typedef struct s_shell
 char	**copy_env(char **envp);
 void	*list_env(t_env *ll, char **envp);
 
-/*env_ll*/
-int		set_name(t_env *node, void *stuff);
-int		set_value(t_env *node, void *stuff);
+/*env/env_ll*/
+t_env	*add_node(void *stuff);
+void	ft_env_lstadd_back(t_env *lst, t_env *new);
+
+/*utils/freeing*/
+void	cleaner(t_env *node, char **temp);
+
+/*signals.c*/
+void	init_sig(void);
 
 #endif
