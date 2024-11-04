@@ -6,20 +6,25 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/10/31 18:00:09 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/04 16:01:15 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-// linked list for tokens
+// struct for input segments, split based on pipes
 
-typedef struct s_tokens
+typedef struct s_command
 {
-	t_tok_type		type;
-	char			*content;
-	struct s_tokens	*next;
-}	t_tokens;
+	char 	*command;
+	char	**args;
+	int		args_count;
+	char	*redirect_in;
+	char	*redirect_out;
+	int		append;
+	int		heredoc;
+	
+}	t_command;
 
 // enum of token types
 
@@ -36,9 +41,41 @@ typedef enum e_tok_type
 } t_tok_type;
 
 
+int	count_pipes(char *line)
+{
+	int	i;
+	int	pipe_count;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '|' && !is_in_quotes(line, i))
+			pipe_count++;
+	}
+	return (pipe_count);
+}
+
+t_command *initialize_struct_array(int size)
+{
+	t_command *cmds;
+	cmds = ft_calloc(sizeof(t_command) * size + 1);
+	if (!cmds)
+		perror("Failed to allocate memory for struct array");
+		return (1);
+	return (cmds);
+	
+}
+
+void	add_cmd_to_array(t_command **cmds, int size, char *command)
+{
+	
+}
+
+
+
 // add tokens with content and type to list of tokens
 
-void	add_token(t_tokens **tokens, void *content, t_tok_type type)
+/*void	add_token(t_tokens **tokens, void *content, t_tok_type type)
 {
 	t_tokens	*new;
 	t_tokens	*temp;
@@ -58,7 +95,7 @@ void	add_token(t_tokens **tokens, void *content, t_tok_type type)
 			temp = temp->next;
 		temp->next = new;
 	}
-}
+} */
 
 
 /*t_tokens	*add_new_token(void *content, t_tok_type type)
@@ -74,6 +111,7 @@ void	add_token(t_tokens **tokens, void *content, t_tok_type type)
 	return (new);
 } */
 
+/*
 t_tokens	*tokenizer(char *line)
 {
 	t_tokens	*tokens;
@@ -126,4 +164,4 @@ void	handle_redirects(char *line, t_tokens **tokens, int i)
 		}
 	}
 	return (i);
-}
+} */
