@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/04 15:02:52 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/04 15:42:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	validate_input_syntax(char *line)
 	else
 		return (0);
 }
+
+// checks whether special character is in quotes or not
 
 int	is_in_quotes(char *line, int i)
 {
@@ -81,6 +83,8 @@ int	is_in_quotes(char *line, int i)
 		return (0);	
 } */
 
+//checks whether pipe is at an invalid location, i.e. at the start or end of input
+
 int	check_pipes(char *line)
 {
 	int	i;
@@ -110,6 +114,8 @@ int	check_pipes(char *line)
 	return (0);
 }
 
+// checks if there are consecutive pipes without text in between
+
 int	check_consecutive_pipes(char *line)
 {
 	int	i;
@@ -134,6 +140,8 @@ int	check_consecutive_pipes(char *line)
 	}
 	return (0);
 }
+
+// checks that there is a non-space character after redirects
 
 int	check_redirects(char *line)
 {
@@ -175,12 +183,14 @@ int	check_redirects(char *line)
 	return (0);
 }
 
+// checks that there is a non-space character after redirect
+
 int	validate_redirect(char *line, int *i, char *type)
 {
 	(*i)++;
 	while (line[*i] == ' ')
 		(*i)++;
-	if (!line[*i] || line[*i] == '|'|| line[*i] == '<' || line[*i] == '>')
+	if (!line[*i] || line[*i] == '|' || line[*i] == '<' || line[*i] == '>')
 	{
 		printf("syntax error near unexpected token %s\n", type);
 		return (1);
