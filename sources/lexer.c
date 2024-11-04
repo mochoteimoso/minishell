@@ -6,7 +6,8 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:09:08 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/04 15:02:48 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/04 19:15:14 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../includes/minishell.h"
