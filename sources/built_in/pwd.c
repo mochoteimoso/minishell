@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 14:58:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 11:47:43 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/10/30 16:10:30 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/10/31 10:48:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/libft.h"
+#include "../../includes/minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+/*Prints the current working directory.*/
+
+void	built_pwd(void)
 {
-	t_list	*temp;
-
-	if (!lst || !new)
-		return ;
-	if (!(*lst))
+	char	cwd[PATH_MAX];
+	char	*str;
+	str = getcwd(cwd, sizeof(cwd));
+	if (str)
 	{
-		*lst = new;
+		ft_putstr_fd(str, 1);
+		printf("\n");
 		return ;
 	}
-	temp = *lst;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
+	else
+	{
+		ft_putstr_fd("cannot access directories: ", 2);
+		return ;
+	}
 }

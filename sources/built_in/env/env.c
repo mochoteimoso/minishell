@@ -1,30 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 14:58:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 11:47:43 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/01 13:33:53 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/libft.h"
+#include "../../../includes/minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
-{
-	t_list	*temp;
+// char	**built_env(t_shell *sh, char **envp)
+// {
 
-	if (!lst || !new)
-		return ;
-	if (!(*lst))
-	{
-		*lst = new;
-		return ;
-	}
-	temp = *lst;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
-}
+// }

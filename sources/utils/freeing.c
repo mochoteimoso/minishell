@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 14:58:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 11:47:43 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/01 11:57:39 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/libft.h"
+#include "../../includes/minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	cleaner(t_env *node, char **temp)
 {
-	t_list	*temp;
-
-	if (!lst || !new)
-		return ;
-	if (!(*lst))
+	if (temp)
+		ft_free_array(temp);
+	if (node)
 	{
-		*lst = new;
-		return ;
+		free(node->name);
+		node->name = NULL;
+		free(node->value);
+		node->value = NULL;
 	}
-	temp = *lst;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
 }

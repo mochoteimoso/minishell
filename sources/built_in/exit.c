@@ -1,30 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 14:58:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 11:47:43 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/01 16:06:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/libft.h"
+#include "../../includes/minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+int	built_exit(t_shell *sh, char *cmd)
 {
-	t_list	*temp;
+	int	ec;
 
-	if (!lst || !new)
-		return ;
-	if (!(*lst))
-	{
-		*lst = new;
-		return ;
-	}
-	temp = *lst;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
+	if()
 }
