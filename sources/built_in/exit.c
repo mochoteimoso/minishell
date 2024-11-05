@@ -1,15 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/01 14:46:33 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 14:52:16 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/01 16:06:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	builtin_exe(t_shell *sh,)
+int	built_exit(t_shell *sh, char *cmd)
+{
+	int	ec;
+
+	if()
+}
