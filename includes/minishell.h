@@ -66,5 +66,6 @@ char	**split_input_by_pipes(char *line, t_mini *mini);
 char	**split_input_by_pipes(char *line, t_mini *mini);
 int		parse_input_segments(t_mini *mini, t_command *cmds);
 int		parse_and_validate_input(char *line, t_mini *mini);
+int		prepare_command_structs(char *line);
 
 #endif
