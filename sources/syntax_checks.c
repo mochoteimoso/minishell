@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/04 18:24:14 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/05 11:16:35 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,27 +63,6 @@ int	is_in_quotes(char *line, int i)
 	else
 		return (0);
 }
-
-/*int	is_in_quotes(char *line, int i)
-{
-	int	in_single_quote;
-	int	in_double_quote;
-
-	in_single_quote = 0;
-	in_double_quote = 0;
-	while (*line)
-	{
-		if (line[i] == '\'' && in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (line[i] == '"' && in_single_quote)
-			in_double_quote = !in_double_quote;
-		line++;
-	}
-	if (in_double_quote || in_single_quote)
-		return (1);
-	else
-		return (0);	
-} */
 
 //checks whether pipe is at an invalid location, i.e. at the start or end of input
 
@@ -199,3 +178,24 @@ int	validate_redirect(char *line, int *i, char *type)
 	}
 	return (0);
 }
+
+/*int	is_in_quotes(char *line, int i)
+{
+	int	in_single_quote;
+	int	in_double_quote;
+
+	in_single_quote = 0;
+	in_double_quote = 0;
+	while (*line)
+	{
+		if (line[i] == '\'' && in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (line[i] == '"' && in_single_quote)
+			in_double_quote = !in_double_quote;
+		line++;
+	}
+	if (in_double_quote || in_single_quote)
+		return (1);
+	else
+		return (0);	
+} */
