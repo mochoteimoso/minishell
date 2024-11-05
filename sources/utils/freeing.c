@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 11:57:39 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/05 10:57:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,9 @@ void	cleaner(t_env *node, char **temp)
 		free(node->value);
 		node->value = NULL;
 	}
+}
+
+void	error(char *str)
+{
+	ft_putstr_fd(str, 2);
 }

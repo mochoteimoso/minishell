@@ -6,15 +6,15 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 16:06:49 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/05 11:07:37 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	built_exit(t_shell *sh, char *cmd)
-{
-	int	ec;
+// int	built_exit(t_shell *sh, char *cmd)
+// {
+// 	int	ec;
 
-	if()
-}
+// 	if()
+// }
