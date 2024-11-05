@@ -2,7 +2,7 @@ NAME = minishell
 
 SRC_DIR = sources/
 
-SRC_FILES = syntax_checks.c parser.c main.c
+SRC_FILES = syntax_checks.c parser.c array_of_structs.c main.c
 
 FLAGS = -Wall -Werror -Wextra -g
 
