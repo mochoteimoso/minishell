@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 13:22:33 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/06 16:01:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ int	built_exit(t_shell *sh, char **cmd)
 		ft_putstr_fd("exit: ", 2);
 		ft_putstr_fd(cmd[1], 2);
 		ft_putstr_fd(": needs to be numeric\n", 2);
-		cleaner(sh->env, sh->envp);
+		cleaner(sh->env, NULL);
+		ft_free_array(cmd);
+		free(sh);
 		exit(2);
 	}
 	if (cmd[1] && cmd[2])
@@ -48,11 +50,11 @@ int	built_exit(t_shell *sh, char **cmd)
 		return (1);
 	}
 	if (cmd[1])
-		ec = sh->exit_stat;
+		ec = ft_atoi(cmd[1]);
 	else
-	{
-		cleaner(sh->env, sh->envp);
-		exit(0);
-	}
-	return (0);
+		ec = sh->exit_stat;
+	cleaner(sh->env, NULL);
+	ft_free_array(cmd);
+	free(sh);
+	exit(ec);
 }

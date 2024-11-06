@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 13:35:53 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:21:04 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ int	built_echo(char **cmd)
 	}
 	if (nl)
 		printf("\n");
+	ft_free_array(cmd);
 	return (0);
 }

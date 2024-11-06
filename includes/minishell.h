@@ -19,7 +19,7 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char	**envp;
+	//char	**envp;
 	t_env	*env;
 	int		exit_stat;
 } t_shell;
@@ -36,6 +36,7 @@ int		built_exit(t_shell *sh, char **cmd);
 /*built_in/env/env_handling*/
 char	**copy_env(char **envp);
 t_env	*list_env(char **envp);
+int		built_env(t_shell *sh);
 
 /*built_in/env/env_ll*/
 t_env	*add_node(char *env);
@@ -43,6 +44,9 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
 /*built_in/pwd.c*/
 int		built_pwd(t_shell *sh);
+
+/*built_in/unset.c*/
+int	built_unset(t_env **env, char **cmd);
 
 /*utils/freeing*/
 void	cleaner(t_env *node, char **temp);

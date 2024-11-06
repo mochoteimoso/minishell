@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 13:31:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/06 18:02:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,10 @@
 
 static int	init_shell(t_shell *sh, char **envp)
 {
-	//t_env	*ll;
-	int 	i;
-
 	sh->env = ft_calloc(1, sizeof(t_env *));
 	if (!sh->env)
 		return (1);
 	sh->env = list_env(envp);
-	sh->envp = (char **)malloc(sizeof(char *) * (ft_array_len(envp) + 1));
-	if (!sh->envp)
-		error("Malloc fail\n");
-	i = 0;
-	while (envp[i])
-	{
-		sh->envp[i] = ft_strdup(envp[i]);
-		if (!sh->envp[i])
-		{
-			while (i > 0)
-				free(sh->envp[--i]);
-			free(sh->envp);
-			return (1);
-		}
-		i++;
-	}
-	sh->envp[i] = NULL;
 	sh->exit_stat = 0;
 	return (0);
 }
@@ -52,12 +32,12 @@ static int	built_in_exe(char *input, t_shell *sh)
 		return (built_cd(sh, cmd));
 	else if (ft_strcmp(cmd[0], "echo") == 0)
 		return (built_echo(cmd));
-	// else if (ft_strcmp(cmd, "env") == 0)
-	// 	return (built_env(sh, envp));
+	else if (ft_strcmp(cmd[0], "env") == 0)
+	 	return (built_env(sh));
 	else if (ft_strcmp(cmd[0], "pwd") == 0 && cmd[1] == NULL)
 		return (built_pwd(sh));
-	// else if (ft_strcmp(cmd, "unset") == 0)
-	// 	return (built_unset(sh, cmd));
+	else if (ft_strcmp(cmd[0], "unset") == 0)
+		return (built_unset(&sh->env, cmd));
 	// else if (ft_strcmp(cmd, "export") == 0)
 	// 	return (built_export(sh, cmd));
 	return (0);
@@ -99,17 +79,3 @@ int	main(int argc, char **argv, char **envp)
 	user_prompt(envp);
 	return (0);
 }
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	int	exit_c;
-
-// 	(void)argv;
-// 	exit_c = 0;
-// 	if (argc != 1)
-// 	{
-// 		printf("Minishell doesn't take arguments\n");
-// 		return (0);
-// 	}
-// 	return (user_prompt(exit_c, envp));
-// }

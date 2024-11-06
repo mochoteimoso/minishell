@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 11:19:18 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:24:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static void	to_path(t_shell *sh, char *path)
 	chdir(path);
 	cwd->value = getcwd(NULL, 0);
 	update_pwd(env, cwd, oldpwd, 0);
+	free(cwd);
+	free(oldpwd);
 }
 
 /*Changes the current directory. Accepts a relative or absolute path as an argument.*/
@@ -81,7 +83,6 @@ int	built_cd(t_shell *sh, char **cmd)
 {
 	const char	*path;
 	char		*cwd;
-	//char		*oldpwd;
 
 	if (ft_array_len(cmd) > 2)
 		error("Too many arguments\n");
@@ -98,11 +99,15 @@ int	built_cd(t_shell *sh, char **cmd)
 			return (1);
 		}
 		chdir(path);
+		free(cwd);
+		ft_free_array(cmd);
 		return (0);
 	}
 	else if (cmd[1][0] == '-')
 		old_pwd(sh);
 	else
 		to_path(sh, cmd[1]);
+	free(cwd);
+	ft_free_array(cmd);
 	return (0);
 }
