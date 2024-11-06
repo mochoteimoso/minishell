@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/05 11:16:35 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:22:15 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	validate_redirect(char *line, int *i, char *type);
 
 int	validate_input_syntax(char *line)
 {
-	if (!*line)
+	if (!line)
 		return (1);
 	if (is_in_quotes(line, 0))
 	{
