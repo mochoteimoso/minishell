@@ -6,6 +6,8 @@ SRC_FILES = syntax_checks.c parser.c array_of_structs.c main.c
 
 FLAGS = -Wall -Werror -Wextra -g
 
+LDFLAGS = -lreadline
+
 LIBFT = ./libft/libft.a
 LIBFT_DIR = ./libft
 
@@ -31,7 +33,7 @@ $(LIBFT):
 	@echo "\n\033[0;32mLibft ready\033[0m\n"
 
 $(NAME): $(OBJS)
-	@cc $(OBJS) $(LIBFT) -o $(NAME) > /dev/null
+	@cc $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS) > /dev/null
 	@echo "\n\033[0;32mLet's mini!\033[0m\n"
 
 clean:
