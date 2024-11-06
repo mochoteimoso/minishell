@@ -6,20 +6,20 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/05 19:16:00 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:20:25 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	**split_input_by_pipes(char *line, t_mini *mini);
+int		split_input_by_pipes(char *line, t_mini *mini);
 int		parse_input_segments(t_mini *mini, t_command *cmds);
 int		parse_cmd_string(t_mini *mini, t_command *cmds, int index);
 char	*ft_strndup(const char *src, size_t n);
 bool	is_redirection(char *str, int index);
-void	handle_redirect_in(char *str, int *i, t_command *cmds);
+//void	handle_redirect_in(char *str, int *i, t_command *cmds);
 //void	handle_redirect_out(char *str, int *i, t_command *cmds);
-//void	handle_heredoc(char *str, int *i, t_command *cmds);
+void	handle_heredoc(char *str, int *i, t_command *cmds);
 //void	handle_append(char *str, int *i, t_command *cmds);
 
 char	*ft_strndup(const char *src, size_t n)
@@ -47,7 +47,7 @@ char	*ft_strndup(const char *src, size_t n)
 	return (dest);
 }
 
-char	**split_input_by_pipes(char *line, t_mini *mini)
+int	split_input_by_pipes(char *line, t_mini *mini)
 {
 	int		i;
 	char	delimiter;
@@ -55,26 +55,35 @@ char	**split_input_by_pipes(char *line, t_mini *mini)
 	i = 0;
 	delimiter = '|';
 	if (!line)
-		return (NULL);
+		return (1);
 	mini->split_input = ft_split(line, delimiter);
 	if (!mini->split_input)
 	{
-		printf("failed to split input string");
-		return (NULL);
+		printf("Failed to split input string");
+		return (1);
 	}
-	return (mini->split_input);
+	printf("Split input by pipes:\n");
+	while (mini->split_input[i])
+	{
+		printf("Segment %d: %s\n", i, mini->split_input[i]);
+		i++;
+	}
+	printf("Total segments: %d\n", i);
+	return (0);
 }
 
 int	parse_input_segments(t_mini *mini, t_command *cmds)
 {
-	int	i;
+	int	index;
 
-	i = 0;
-	while (mini->split_input[i])
+	index = 0;
+	printf("mini->split_input[index]: %s\n", mini->split_input[index]);
+	while (mini->split_input[index])
 	{
-		if (parse_cmd_string(mini, cmds, i))
+		printf("Calling parse_cmd_string with index %d\n", index);
+		if (parse_cmd_string(mini, cmds, index))
 			return (1);
-		i++;
+		index++;
 	}
 	return (0);
 }
@@ -85,17 +94,19 @@ int	parse_cmd_string(t_mini *mini, t_command *cmds, int index)
 	char	*cmd_string;
 
 	i = 0;
+	printf("in parse_cmd_string function\n");
 	cmd_string = mini->split_input[index];
+	printf("mini->split_input[0]: %s\n", mini->split_input[index]); 
 	while (cmd_string[i])
 	{
 		if (is_redirection(cmd_string, i))
 		{
-			//if (cmd_string[i] == '<' && cmd_string[i + 1] == '<')
-				//handle_heredoc(cmd_string, &i, cmds);
+			if (cmd_string[i] == '<' && cmd_string[i + 1] == '<')
+				handle_heredoc(cmd_string, &i, cmds);
 			//else if (cmd_string[i] == '>' && cmd_string[i + 1] == '>')
 			//	handle_append(cmd_string, &i, cmds);
-			if (cmd_string[i] == '<')
-				handle_redirect_in(cmd_string, &i, cmds);
+			//if (cmd_string[i] == '<')
+				//handle_redirect_in(cmd_string, &i, cmds);
 			//else if (cmd_string[i] == '>')
 			//	handle_redirect_out(cmd_string, &i, cmds);
 		}
@@ -104,6 +115,7 @@ int	parse_cmd_string(t_mini *mini, t_command *cmds, int index)
 		//	tokenize_command(&cmds[index], cmd_string + i);
 		//	i++;
 		//}
+		i++;
 	}
 	return (0);
 }
@@ -116,7 +128,7 @@ bool	is_redirection(char *str, int index)
 		return (false);
 }
 
-void	handle_redirect_in(char *str, int *i, t_command *cmds)
+/*void	handle_redirect_in(char *str, int *i, t_command *cmds)
 {
 	char	*filename_start;
 	int		filename_length;
@@ -136,7 +148,7 @@ void	handle_redirect_in(char *str, int *i, t_command *cmds)
 	//add error handling
 	cmds-> redirect_type = REDIRECT_IN;
 }
-/*
+
 void	handle_redirect_out(char *str, int *i, t_command *cmds)
 {
 	char	*filename_start;
@@ -156,7 +168,7 @@ void	handle_redirect_out(char *str, int *i, t_command *cmds)
 	cmds->redirect_out = ft_strndup(filename_start, filename_length);
 	//add error handling
 	cmds-> redirect_type = REDIRECT_OUT;
-}
+} */
 
 void	handle_heredoc(char *str, int *i, t_command *cmds)
 {
@@ -180,7 +192,7 @@ void	handle_heredoc(char *str, int *i, t_command *cmds)
 	cmds->redirect_type = HEREDOC;
 	cmds->heredoc = true;
 }
-
+/*
 void	handle_append(char *str, int *i, t_command *cmds)
 {
 	char	*filename_start;
