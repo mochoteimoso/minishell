@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/06 15:37:59 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/06 17:26:32 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	prepare_command_structs(char *line, t_command **cmds)
 	i = 0;
 	while (i < command_count)
 	{
-		initialize_command_struct(cmds[i]);
+		initialize_command_struct(&(*cmds)[i]);
 		i++;
 	}
 	printf("Allocated %d command struct(s)\n", command_count);
