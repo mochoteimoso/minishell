@@ -6,15 +6,15 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/06 14:20:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/06 17:27:48 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		split_input_by_pipes(char *line, t_mini *mini);
-int		parse_input_segments(t_mini *mini, t_command *cmds);
-int		parse_cmd_string(t_mini *mini, t_command *cmds, int index);
+int		split_input_by_pipes(char *line, t_shell *sh);
+int		parse_input_segments(t_shell *sh, t_command *cmds);
+int		parse_cmd_string(t_shell *sh, t_command *cmds, int index);
 char	*ft_strndup(const char *src, size_t n);
 bool	is_redirection(char *str, int index);
 //void	handle_redirect_in(char *str, int *i, t_command *cmds);
@@ -47,7 +47,7 @@ char	*ft_strndup(const char *src, size_t n)
 	return (dest);
 }
 
-int	split_input_by_pipes(char *line, t_mini *mini)
+int	split_input_by_pipes(char *line, t_shell *sh)
 {
 	int		i;
 	char	delimiter;
@@ -56,47 +56,42 @@ int	split_input_by_pipes(char *line, t_mini *mini)
 	delimiter = '|';
 	if (!line)
 		return (1);
-	mini->split_input = ft_split(line, delimiter);
-	if (!mini->split_input)
+	sh->split_input = ft_split(line, delimiter);
+	if (!sh->split_input)
 	{
 		printf("Failed to split input string");
 		return (1);
 	}
 	printf("Split input by pipes:\n");
-	while (mini->split_input[i])
+	while (sh->split_input[i])
 	{
-		printf("Segment %d: %s\n", i, mini->split_input[i]);
+		printf("Segment %d: %s\n", i, sh->split_input[i]);
 		i++;
 	}
-	printf("Total segments: %d\n", i);
 	return (0);
 }
 
-int	parse_input_segments(t_mini *mini, t_command *cmds)
+int	parse_input_segments(t_shell *sh, t_command *cmds)
 {
 	int	index;
 
 	index = 0;
-	printf("mini->split_input[index]: %s\n", mini->split_input[index]);
-	while (mini->split_input[index])
+	while (sh->split_input[index])
 	{
-		printf("Calling parse_cmd_string with index %d\n", index);
-		if (parse_cmd_string(mini, cmds, index))
+		if (parse_cmd_string(sh, cmds, index))
 			return (1);
 		index++;
 	}
 	return (0);
 }
 
-int	parse_cmd_string(t_mini *mini, t_command *cmds, int index)
+int	parse_cmd_string(t_shell *sh, t_command *cmds, int index)
 {
 	int		i;
 	char	*cmd_string;
 
 	i = 0;
-	printf("in parse_cmd_string function\n");
-	cmd_string = mini->split_input[index];
-	printf("mini->split_input[0]: %s\n", mini->split_input[index]); 
+	cmd_string = sh->split_input[index];
 	while (cmd_string[i])
 	{
 		if (is_redirection(cmd_string, i))
