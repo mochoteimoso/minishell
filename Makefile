@@ -6,6 +6,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)signals.c\
 	$(SRC_DIR)built_in/cd.c\
 	$(SRC_DIR)built_in/echo.c\
+	$(SRC_DIR)built_in/exit.c\
 	$(SRC_DIR)built_in/export.c\
 	$(SRC_DIR)built_in/pwd.c\
 	$(SRC_DIR)built_in/env/env_handling.c\

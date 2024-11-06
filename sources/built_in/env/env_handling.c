@@ -6,25 +6,27 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:14:43 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 14:37:43 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/05 17:42:27 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void	*list_env(t_env *ll, char **envp)
+t_env	*list_env(char **envp)
 {
-	t_env	*temp;
+	t_env	*ll;
+	t_env	*new_node;
 	int		i;
 
 	i = 0;
-	if (ll == NULL)
-		ll = add_node(envp[i++]);
-	temp = ll;
+	ll = NULL;
 	while (envp[i])
-		ft_env_lstadd_back(ll, add_node(envp[i++]));
-	ll = temp;
-	return (0);
+	{
+		new_node = add_node(envp[i]);
+		ft_env_lstadd_back(&ll, new_node);
+		i++;
+	}
+	return (ll);
 }
 
 char	**copy_env(char **envp)

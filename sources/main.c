@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/05 11:47:16 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:31:57 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 static int	init_shell(t_shell *sh, char **envp)
 {
-	t_env	*ll;
+	//t_env	*ll;
 	int 	i;
 
-	ll = ft_calloc(1, sizeof(t_env *));
-	if (!ll)
+	sh->env = ft_calloc(1, sizeof(t_env *));
+	if (!sh->env)
 		return (1);
-	list_env(ll, envp);
-	sh->env = ll;
+	sh->env = list_env(envp);
 	sh->envp = (char **)malloc(sizeof(char *) * (ft_array_len(envp) + 1));
 	if (!sh->envp)
 		error("Malloc fail\n");
@@ -29,7 +28,7 @@ static int	init_shell(t_shell *sh, char **envp)
 	while (envp[i])
 	{
 		sh->envp[i] = ft_strdup(envp[i]);
-		if (sh->envp[i])
+		if (!sh->envp[i])
 		{
 			while (i > 0)
 				free(sh->envp[--i]);
@@ -39,18 +38,20 @@ static int	init_shell(t_shell *sh, char **envp)
 		i++;
 	}
 	sh->envp[i] = NULL;
+	sh->exit_stat = 0;
 	return (0);
 }
 
 static int	built_in_exe(char *input, t_shell *sh)
 {
 	char	**cmd = ft_split(input, ' ');
-	// if (ft_strcmp(cmd, "exit") == 0)
-	// 	return (built_exit(sh, cmd));
-	if (ft_strcmp(cmd[0], "cd") == 0)
+	// printf("cmd[0]: %s\ncmd[1]: %s\n", cmd[0], cmd[1]);
+	if (ft_strcmp(cmd[0], "exit") == 0)
+		return (built_exit(sh, cmd));
+	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (built_cd(sh, cmd));
-	// else if (ft_strcmp(cmd, "echo") == 0)
-	// 	return (built_echo(cmd));
+	else if (ft_strcmp(cmd[0], "echo") == 0)
+		return (built_echo(cmd));
 	// else if (ft_strcmp(cmd, "env") == 0)
 	// 	return (built_env(sh, envp));
 	else if (ft_strcmp(cmd[0], "pwd") == 0 && cmd[1] == NULL)
@@ -65,9 +66,10 @@ static int	built_in_exe(char *input, t_shell *sh)
 static int user_prompt(char **envp)
 {
 	char	*input;
-	t_shell	sh;
+	t_shell	*sh;
 
-	init_shell(&sh, envp);
+	sh = malloc(sizeof(t_shell));
+	init_shell(sh, envp);
 	init_sig();
 	while (1)
 	{
@@ -77,7 +79,7 @@ static int user_prompt(char **envp)
 			break ;
 		if (input && *input)
 			add_history(input);
-		built_in_exe(input, &sh);
+		built_in_exe(input, sh);
 	}
 	return (0);
 }

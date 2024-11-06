@@ -21,18 +21,25 @@ typedef struct s_shell
 {
 	char	**envp;
 	t_env	*env;
+	int		exit_stat;
 } t_shell;
 
 /*built_in/cd*/
 int		built_cd(t_shell *sh, char **cmd);
 
+/*built_in/echo.c*/
+int		built_echo(char **cmd);
+
+/*built_in/exit.c*/
+int		built_exit(t_shell *sh, char **cmd);
+
 /*built_in/env/env_handling*/
 char	**copy_env(char **envp);
-void	*list_env(t_env *ll, char **envp);
+t_env	*list_env(char **envp);
 
 /*built_in/env/env_ll*/
-t_env	*add_node(void *stuff);
-void	ft_env_lstadd_back(t_env *lst, t_env *new);
+t_env	*add_node(char *env);
+void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
 /*built_in/pwd.c*/
 int		built_pwd(t_shell *sh);
