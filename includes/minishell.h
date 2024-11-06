@@ -58,14 +58,10 @@ int		check_pipes(char *line);
 int		check_redirects(char *line);
 int		validate_redirect(char *line, int *i, char *type);
 int		count_pipes(char *line);
-t_command *initialize_cmd_array(int count);
-void	add_single_command(t_command *cmd, char *command);
-void	add_cmd_to_array(t_command *cmds, int *count, int size, char *command);
-void	handle_single_command(char *line);
-char	**split_input_by_pipes(char *line, t_mini *mini);
-char	**split_input_by_pipes(char *line, t_mini *mini);
+t_command *allocate_cmd_array(int command_count);
+int		split_input_by_pipes(char *line, t_mini *mini);
 int		parse_input_segments(t_mini *mini, t_command *cmds);
-int		parse_and_validate_input(char *line, t_mini *mini);
-int		prepare_command_structs(char *line);
+int		parse_and_validate_input(char *line, t_mini *mini, t_command **cmds);
+int		prepare_command_structs(char *line, t_command **cmds);
 
 #endif
