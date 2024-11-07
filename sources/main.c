@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/07 15:52:02 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:06:59 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,22 @@ int	parse_and_validate_input(char *input, t_shell *sh)
 		return (1);
 	if (split_input_by_pipes(input, sh))
 		return (1);
+	//printf("Struct 2: segment: %s\n", sh->cmds[2]->segment);
+	//printf("Struct 0: heredoc_delim: %s\n", sh->cmds[0]->heredoc_delim);
+	//printf("Struct 0: heredoc: %d\n", sh->cmds[0]->heredoc);
+	if (parse_input(sh))
+		return (1);
 	int i = 0;
 	while (sh->cmds[i])
 	{
 		printf("Struct %d: segment: %s\n", i, sh->cmds[i]->segment);
+		printf("Struct %d: redirect_in: %s\n", i, sh->cmds[i]->redirect_in);
+		printf("Struct %d: redirect_out %s\n", i, sh->cmds[i]->redirect_out);
+		printf("Struct %d: append %s\n", i, sh->cmds[i]->append);
+		printf("Struct %d: heredoc: %d\n", i, sh->cmds[i]->heredoc);
+		printf("Struct %d: heredoc_delim: %s\n", i, sh->cmds[i]->heredoc_delim);
 		i++;
 	}
-	//printf("Struct 2: segment: %s\n", sh->cmds[2]->segment);
-	//printf("Struct 0: heredoc_delim: %s\n", sh->cmds[0]->heredoc_delim);
-	//printf("Struct 0: heredoc: %d\n", sh->cmds[0]->heredoc);
-	//parse_input_segments(sh, *cmds);
-	printf("Struct 0: heredoc_delim: %s\n", sh->cmds[0]->heredoc_content);
-	printf("Struct 0: heredoc: %d\n", sh->cmds[0]->heredoc);
 	//if (parse_input(mini, *cmds))
 	//	return (1);
 	return (0);
@@ -45,7 +49,7 @@ void	initialize_struct(t_shell *sh) //, t_command **cmds)
 	//ft_memset(cmds, 0, sizeof(t_command));
 }
 
-static int user_prompt()
+static	int user_prompt()
 {
 	char		*input;
 	t_shell		sh;
@@ -69,7 +73,6 @@ static int user_prompt()
 int	main(int argc, char **argv) //, char **envp)
 {
 	//int	exit_c;
-
 	(void)argv;
 	//exit_c = 0;
 	if (argc != 1)
