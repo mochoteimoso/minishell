@@ -17,7 +17,8 @@
 
 typedef struct s_command
 {
-	char 	*command;
+	char	*segment;
+	char	*command;
 	char	**args;
 	int		args_count;
 	char	*redirect_in;
@@ -44,10 +45,10 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char	**envp;
-	t_env	*env;
-	char	**split_input;
-
+	t_env		*env;
+	char		**pending;
+	t_command	**cmds;
+	int			exit_stat;
 } t_shell;
 
 /*typedef struct s_mini
@@ -78,11 +79,13 @@ int		check_pipes(char *input);
 int		check_redirects(char *input);
 int		validate_redirect(char *input, int *i, char *type);
 int		count_pipes(char *input);
-t_command *allocate_cmd_array(int command_count);
+t_command **allocate_cmd_array(int command_count);
 int		split_input_by_pipes(char *input, t_shell *sh);
-int		parse_input_segments(t_shell *sh, t_command *cmds);
-int		parse_and_validate_input(char *input, t_shell *sh, t_command **cmds);
-int		prepare_command_structs(char *input, t_command **cmds);
+int		parse_input_segments(t_shell *sh);
+int		parse_and_validate_input(char *input, t_shell *sh);
+int		prepare_command_structs(t_shell *sh, char *input);
 void	init_sig(void);
+int		split_input_by_pipes(char *input, t_shell *sh);
+char	*ft_strndup(const char *src, size_t n);
 
 #endif
