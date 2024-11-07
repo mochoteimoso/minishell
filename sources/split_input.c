@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/07 13:52:47 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:00:53 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	split_input_by_pipes(char *input, t_shell *sh)
 	return (0);
 }
 
-//trim leading and trailing whitespaces from the segment string
+//trims leading and trailing whitespaces from the segment string
 
 char	*trim_whitespace(char *segment)
 {
@@ -105,3 +105,27 @@ int	ft_isspace(char c)
 	else
 		return (0);
 }
+
+/*int	split_input_by_pipes(char *line, t_shell *sh)
+{
+	int		i;
+	char	delimiter;
+
+	i = 0;
+	delimiter = '|';
+	if (!line)
+		return (1);
+	sh->split_input = ft_split(line, delimiter);
+	if (!sh->split_input)
+	{
+		printf("Failed to split input string");
+		return (1);
+	}
+	printf("Split input by pipes:\n");
+	while (sh->split_input[i])
+	{
+		printf("Segment %d: %s\n", i, sh->split_input[i]);
+		i++;
+	}
+	return (0);
+} */
