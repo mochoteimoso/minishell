@@ -6,21 +6,17 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/07 14:07:17 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/07 19:22:49 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		split_input_by_pipes(char *line, t_shell *sh);
-int		parse_input_segments(t_shell *sh);
-int		parse_cmd_string(t_shell *sh, int index);
 char	*ft_strndup(const char *src, size_t n);
-bool	is_redirection(char *str, int index);
-//void	handle_redirect_in(char *str, int *i, t_command *cmds);
-//void	handle_redirect_out(char *str, int *i, t_command *cmds);
-void	handle_heredoc(char *str, int *i, t_shell *sh, int index);
-//void	handle_append(char *str, int *i, t_command *cmds);
+int		parse_input(t_shell *sh);
+int		parse_cmd_string(t_shell *sh, int index);
+
+// Allocates memory and  duplicates a string
 
 char	*ft_strndup(const char *src, size_t n)
 {
@@ -47,31 +43,9 @@ char	*ft_strndup(const char *src, size_t n)
 	return (dest);
 }
 
-/*int	split_input_by_pipes(char *line, t_shell *sh)
-{
-	int		i;
-	char	delimiter;
+// Parses information added to array of structs
 
-	i = 0;
-	delimiter = '|';
-	if (!line)
-		return (1);
-	sh->split_input = ft_split(line, delimiter);
-	if (!sh->split_input)
-	{
-		printf("Failed to split input string");
-		return (1);
-	}
-	printf("Split input by pipes:\n");
-	while (sh->split_input[i])
-	{
-		printf("Segment %d: %s\n", i, sh->split_input[i]);
-		i++;
-	}
-	return (0);
-} */
-
-int	parse_input_segments(t_shell *sh)
+int	parse_input(t_shell *sh)
 {
 	int	index;
 
@@ -85,6 +59,13 @@ int	parse_input_segments(t_shell *sh)
 	return (0);
 }
 
+// Parses the segment string of each struct 
+
+// create a linked list if the segment string contains redirections
+// each redirect will be its own node and will contain information about redirection type,
+// filename, delimiter and pointer to next node
+// move these items from the array of structs to the linked list
+
 int	parse_cmd_string(t_shell *sh, int index)
 {
 	int		i;
@@ -97,13 +78,25 @@ int	parse_cmd_string(t_shell *sh, int index)
 		if (is_redirection(cmd_string, i))
 		{
 			if (cmd_string[i] == '<' && cmd_string[i + 1] == '<')
-				handle_heredoc(cmd_string, &i, sh, index);
-			//else if (cmd_string[i] == '>' && cmd_string[i + 1] == '>')
-			//	handle_append(cmd_string, &i, cmds);
-			//if (cmd_string[i] == '<')
-				//handle_redirect_in(cmd_string, &i, cmds);
-			//else if (cmd_string[i] == '>')
-			//	handle_redirect_out(cmd_string, &i, cmds);
+			{
+				if (handle_heredoc(cmd_string, &i, sh, index))
+					return (1);
+			}
+			else if (cmd_string[i] == '>' && cmd_string[i + 1] == '>')
+			{
+				if (handle_append(cmd_string, &i, sh, index))
+					return (1);
+			}
+			else if (cmd_string[i] == '<')
+			{
+				if (handle_redirect_in(cmd_string, &i, sh, index))
+					return (1);
+			}
+			else if (cmd_string[i] == '>')
+			{
+				if (handle_redirect_out(cmd_string, &i, sh, index))
+					return (1);
+			}
 		}
 		//else
 		//{
@@ -115,97 +108,3 @@ int	parse_cmd_string(t_shell *sh, int index)
 	return (0);
 }
 
-bool	is_redirection(char *str, int i)
-{
-	if ((str[i] == '>' || str[i] == '<') && !is_in_quotes(str, i))
-		return (true);
-	else
-		return (false);
-}
-
-/*void	handle_redirect_in(char *str, int *i, t_command *cmds)
-{
-	char	*filename_start;
-	int		filename_length;
-	
-	filename_length = 0;
-	(*i)++;
-	while (str[*i] == ' ')
-		(*i)++;
-	filename_start = &str[*i];
-	while (str[*i] && str[*i] != ' ' && str[*i] != '|' && str[*i] != '<' &&
-		str[*i] != '>' && str[*i] != '$')
-	{
-		filename_length++;
-		(*i)++;
-	}
-	cmds->redirect_in = ft_strndup(filename_start, filename_length);
-	//add error handling
-	cmds-> redirect_type = REDIRECT_IN;
-}
-
-void	handle_redirect_out(char *str, int *i, t_command *cmds)
-{
-	char	*filename_start;
-	int		filename_length;
-	
-	filename_length = 0;
-	(*i)++;
-	while (str[*i] == ' ')
-		(*i)++;
-	filename_start = &str[*i];
-	while (str[*i] && str[*i] != ' ' && str[*i] != '|' && str[*i] != '<' &&
-		str[*i] != '>' && str[*i] != '$')
-	{
-		filename_length++;
-		(*i)++;
-	}
-	cmds->redirect_out = ft_strndup(filename_start, filename_length);
-	//add error handling
-	cmds-> redirect_type = REDIRECT_OUT;
-} */
-
-void	handle_heredoc(char *str, int *i, t_shell *sh, int index)
-{
-	char	*delimiter_start;
-	int		delimiter_length;
-	
-	delimiter_length = 0;
-	(*i)++;
-	(*i)++;
-	while (str[*i] == ' ')
-		(*i)++;
-	delimiter_start = &str[*i];
-	while (str[*i] && str[*i] != ' ' && str[*i] != '|' && str[*i] != '<' &&
-		str[*i] != '>' && str[*i] != '$')
-	{
-		delimiter_length++;
-		(*i)++;
-	}
-	sh->cmds[index]->heredoc_delim = ft_strndup(delimiter_start, delimiter_length);
-	//add error handling
-	sh->cmds[index]->redirect_type = HEREDOC;
-	sh->cmds[index]->heredoc = true;
-}
-/*
-void	handle_append(char *str, int *i, t_command *cmds)
-{
-	char	*filename_start;
-	int		filename_length;
-	
-	filename_length = 0;
-	(*i)++;
-	(*i)++;
-	while (str[*i] == ' ')
-		(*i)++;
-	filename_start = &str[*i];
-	while (str[*i] && str[*i] != ' ' && str[*i] != '|' && str[*i] != '<' &&
-		str[*i] != '>' && str[*i] != '$')
-	{
-		filename_length++;
-		(*i)++;
-	}
-	cmds->append = ft_strndup(filename_start, filename_length);
-	//add error handling
-	cmds-> redirect_type = APPEND;
-} */
