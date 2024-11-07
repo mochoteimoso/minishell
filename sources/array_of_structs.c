@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/07 15:01:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:04:16 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ int	count_pipes(char *line)
 	return (pipe_count);
 }
 
-// set up an array of structs and initialize it
-
+// set up an array of structs and allocate memory for individual structs
 int	prepare_command_structs(t_shell *sh, char *input)
 {
 	int	i;
@@ -68,15 +67,15 @@ int	prepare_command_structs(t_shell *sh, char *input)
 		i++;
 	}
 	printf("Allocated %d command struct(s)\n", command_count);
-	return 0;
+	return (0);
 }
 
 //allocate memory for an array of structs
 
-t_command **allocate_cmd_array(int command_count)
+t_command	**allocate_cmd_array(int command_count)
 {
-	t_command **cmds;
-	
+	t_command	**cmds;
+
 	cmds = ft_calloc(command_count, sizeof(t_command));
 	if (!cmds)
 	{
@@ -86,7 +85,7 @@ t_command **allocate_cmd_array(int command_count)
 	return (cmds);
 }
 
-// initialize all the structs in the array
+// initialize individual structs in the array
 
 void	initialize_command_struct(t_command *cmd)
 {
