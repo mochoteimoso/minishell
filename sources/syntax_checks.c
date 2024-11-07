@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/06 18:24:14 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/07 19:13:42 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int	check_consecutive_pipes(char *input);
 int	check_pipes(char *input);
 int	check_redirects(char *input);
 int	validate_redirect(char *input, int *i, char *type);
+
+// Checks the syntax of the input string
+// for unmatched quotes and incorrectly placed pipes and redirects
 
 int	validate_input_syntax(char *input)
 {
@@ -42,7 +45,7 @@ int	validate_input_syntax(char *input)
 		return (0);
 }
 
-// checks whether special character is in quotes or not
+// Checks whether special character is in quotes or not
 
 int	is_in_quotes(char *input, int i)
 {
@@ -76,9 +79,9 @@ int	check_pipes(char *input)
 	i = 0;
 	while (input[i] == ' ')
 		i++;
-
+		
 	// check that pipe is not first non-space character
-	
+
 	if (input[i] == '|' && !is_in_quotes(input, i))
 	{
 		printf("syntax error near unexpected token %c\n", input[i]);
@@ -86,7 +89,7 @@ int	check_pipes(char *input)
 	}
 	
 	// check that there are no consecutive pipes
-	
+
 	if (check_consecutive_pipes(input))
 	{
 		printf("syntax error near unexpected token %c\n", input[i]);
@@ -94,7 +97,7 @@ int	check_pipes(char *input)
 	}
 
 	//check that the pipe is not the last non-space character
-	
+
 	while (input[i])
 		i++;
 	while (i >= 0 && input[i - 1] == ' ')
@@ -191,6 +194,9 @@ int	validate_redirect(char *input, int *i, char *type)
 	return (0);
 }
 
+
+// This needs to be combined with is_in_quotes function - figure out how
+
 int	has_quotes(char *input, int i)
 {
 	int	in_single_quote;
@@ -208,5 +214,5 @@ int	has_quotes(char *input, int i)
 	}
 	if (in_double_quote || in_single_quote)
 		return (1);
-	return (0);	
+	return (0);
 }
