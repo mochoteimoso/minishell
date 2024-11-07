@@ -6,20 +6,20 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/06 17:27:48 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:07:17 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 int		split_input_by_pipes(char *line, t_shell *sh);
-int		parse_input_segments(t_shell *sh, t_command *cmds);
-int		parse_cmd_string(t_shell *sh, t_command *cmds, int index);
+int		parse_input_segments(t_shell *sh);
+int		parse_cmd_string(t_shell *sh, int index);
 char	*ft_strndup(const char *src, size_t n);
 bool	is_redirection(char *str, int index);
 //void	handle_redirect_in(char *str, int *i, t_command *cmds);
 //void	handle_redirect_out(char *str, int *i, t_command *cmds);
-void	handle_heredoc(char *str, int *i, t_command *cmds);
+void	handle_heredoc(char *str, int *i, t_shell *sh, int index);
 //void	handle_append(char *str, int *i, t_command *cmds);
 
 char	*ft_strndup(const char *src, size_t n)
@@ -47,7 +47,7 @@ char	*ft_strndup(const char *src, size_t n)
 	return (dest);
 }
 
-int	split_input_by_pipes(char *line, t_shell *sh)
+/*int	split_input_by_pipes(char *line, t_shell *sh)
 {
 	int		i;
 	char	delimiter;
@@ -69,35 +69,35 @@ int	split_input_by_pipes(char *line, t_shell *sh)
 		i++;
 	}
 	return (0);
-}
+} */
 
-int	parse_input_segments(t_shell *sh, t_command *cmds)
+int	parse_input_segments(t_shell *sh)
 {
 	int	index;
 
 	index = 0;
-	while (sh->split_input[index])
+	while (sh->cmds[index])
 	{
-		if (parse_cmd_string(sh, cmds, index))
+		if (parse_cmd_string(sh, index))
 			return (1);
 		index++;
 	}
 	return (0);
 }
 
-int	parse_cmd_string(t_shell *sh, t_command *cmds, int index)
+int	parse_cmd_string(t_shell *sh, int index)
 {
 	int		i;
 	char	*cmd_string;
 
 	i = 0;
-	cmd_string = sh->split_input[index];
+	cmd_string = sh->cmds[index]->segment;
 	while (cmd_string[i])
 	{
 		if (is_redirection(cmd_string, i))
 		{
 			if (cmd_string[i] == '<' && cmd_string[i + 1] == '<')
-				handle_heredoc(cmd_string, &i, cmds);
+				handle_heredoc(cmd_string, &i, sh, index);
 			//else if (cmd_string[i] == '>' && cmd_string[i + 1] == '>')
 			//	handle_append(cmd_string, &i, cmds);
 			//if (cmd_string[i] == '<')
@@ -115,9 +115,9 @@ int	parse_cmd_string(t_shell *sh, t_command *cmds, int index)
 	return (0);
 }
 
-bool	is_redirection(char *str, int index)
+bool	is_redirection(char *str, int i)
 {
-	if ((str[index] == '>' || str[index] == '<') && !is_in_quotes(str, index))
+	if ((str[i] == '>' || str[i] == '<') && !is_in_quotes(str, i))
 		return (true);
 	else
 		return (false);
@@ -165,7 +165,7 @@ void	handle_redirect_out(char *str, int *i, t_command *cmds)
 	cmds-> redirect_type = REDIRECT_OUT;
 } */
 
-void	handle_heredoc(char *str, int *i, t_command *cmds)
+void	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 {
 	char	*delimiter_start;
 	int		delimiter_length;
@@ -182,10 +182,10 @@ void	handle_heredoc(char *str, int *i, t_command *cmds)
 		delimiter_length++;
 		(*i)++;
 	}
-	cmds->heredoc_delim = ft_strndup(delimiter_start, delimiter_length);
+	sh->cmds[index]->heredoc_delim = ft_strndup(delimiter_start, delimiter_length);
 	//add error handling
-	cmds->redirect_type = HEREDOC;
-	cmds->heredoc = true;
+	sh->cmds[index]->redirect_type = HEREDOC;
+	sh->cmds[index]->heredoc = true;
 }
 /*
 void	handle_append(char *str, int *i, t_command *cmds)
