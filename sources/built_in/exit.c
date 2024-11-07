@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 16:01:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:01:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	isonlynum(char *str)
 	return (1);
 }
 
-int	built_exit(t_shell *sh, char **cmd)
+int	built_exit(t_shell *mini, char **cmd)
 {
 	int	ec;
 
@@ -38,23 +38,23 @@ int	built_exit(t_shell *sh, char **cmd)
 		ft_putstr_fd("exit: ", 2);
 		ft_putstr_fd(cmd[1], 2);
 		ft_putstr_fd(": needs to be numeric\n", 2);
-		cleaner(sh->env, NULL);
+		cleaner(mini->env, NULL);
 		ft_free_array(cmd);
-		free(sh);
+		free(mini);
 		exit(2);
 	}
 	if (cmd[1] && cmd[2])
 	{
 		ft_putstr_fd("exit: too many arguments\n", 2);
-		sh->exit_stat = 1;
+		mini->exit_stat = 1;
 		return (1);
 	}
 	if (cmd[1])
 		ec = ft_atoi(cmd[1]);
 	else
-		ec = sh->exit_stat;
-	cleaner(sh->env, NULL);
+		ec = mini->exit_stat;
+	cleaner(mini->env, NULL);
 	ft_free_array(cmd);
-	free(sh);
+	free(mini);
 	exit(ec);
 }

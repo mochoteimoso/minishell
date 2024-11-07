@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:14:43 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 16:13:59 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:19:55 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,23 @@ char	**copy_env(char **envp)
 	}
 	copy[i] = NULL;
 	return (copy);
+}
+
+void	to_alphabetical(char **array)
+{
+	char	*temp;
+	int		i;
+
+	i = 1;
+	while (array[i])
+	{
+		if (ft_strcmp(array[i], array[i -1]) < 0)
+		{
+			temp = array[i];
+			array[i] = array[i - 1];
+			array[i - 1] = temp;
+			i = 0;
+		}
+		i++;
+	}
 }

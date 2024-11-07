@@ -14,6 +14,7 @@ typedef struct s_env
 {
 	char			*name;
 	char			*value;
+//	char			*both;
 	struct s_env	*next;
 } t_env;
 
@@ -21,32 +22,32 @@ typedef struct s_shell
 {
 	//char	**envp;
 	t_env	*env;
+	char	**pending;
 	int		exit_stat;
 } t_shell;
 
-/*built_in/cd*/
-int		built_cd(t_shell *sh, char **cmd);
-
-/*built_in/echo.c*/
+/*built_in*/
+	/*cd*/
+int		built_cd(t_shell *mini, char **cmd);
+	/*echo.c*/
 int		built_echo(char **cmd);
-
-/*built_in/exit.c*/
-int		built_exit(t_shell *sh, char **cmd);
-
-/*built_in/env/env_handling*/
+	/*exit.c*/
+int		built_exit(t_shell *mini, char **cmd);
+	/*export.c*/
+int		built_export(t_shell *mini, char **args);
+	/*pwd.c*/
+int		built_pwd(t_shell *mini);
+	/*unset.c*/
+int	built_unset(t_env **env, char **cmd);
+/*built_in/env*/
+	/*env_handling*/
 char	**copy_env(char **envp);
+int		built_env(t_shell *mini);
 t_env	*list_env(char **envp);
-int		built_env(t_shell *sh);
-
-/*built_in/env/env_ll*/
+void	to_alphabetical(char **array);
+	/*env_ll*/
 t_env	*add_node(char *env);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
-
-/*built_in/pwd.c*/
-int		built_pwd(t_shell *sh);
-
-/*built_in/unset.c*/
-int	built_unset(t_env **env, char **cmd);
 
 /*utils/freeing*/
 void	cleaner(t_env *node, char **temp);

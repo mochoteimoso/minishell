@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 15:24:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:01:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,17 @@ static void	update_pwd(t_env *env, t_env *wd, t_env *oldpwd, int n)
 	}
 }
 
-static void	old_pwd(t_shell *sh)
+static void	old_pwd(t_shell *mini)
 {
 	char	*temp;
 	t_env	*env;
 	t_env	*pwd;
 	t_env	*oldpwd;
 
-	env = sh->env;
+	env = mini->env;
 	pwd = ft_calloc(1, sizeof(t_env));
 	oldpwd = ft_calloc(1, sizeof(t_env));
-	update_pwd(sh->env, pwd, oldpwd, 1);
+	update_pwd(mini->env, pwd, oldpwd, 1);
 	temp = oldpwd->value;
 	if (!oldpwd)
 		error("No OLDPWD set\n");
@@ -58,13 +58,13 @@ static void	old_pwd(t_shell *sh)
 	free(pwd);
 }
 
-static void	to_path(t_shell *sh, char *path)
+static void	to_path(t_shell *mini, char *path)
 {
 	t_env	*cwd;
 	t_env	*oldpwd;
 	t_env	*env;
 
-	env = sh->env;
+	env = mini->env;
 	cwd = ft_calloc(1, sizeof(t_env));
 	oldpwd = ft_calloc(1, sizeof(t_env));
 	oldpwd->value = getcwd(NULL, 0);
@@ -79,7 +79,7 @@ static void	to_path(t_shell *sh, char *path)
 
 /*Changes the current directory. Accepts a relative or absolute path as an argument.*/
 
-int	built_cd(t_shell *sh, char **cmd)
+int	built_cd(t_shell *mini, char **cmd)
 {
 	const char	*path;
 	char		*cwd;
@@ -104,9 +104,9 @@ int	built_cd(t_shell *sh, char **cmd)
 		return (0);
 	}
 	else if (cmd[1][0] == '-')
-		old_pwd(sh);
+		old_pwd(mini);
 	else
-		to_path(sh, cmd[1]);
+		to_path(mini, cmd[1]);
 	free(cwd);
 	ft_free_array(cmd);
 	return (0);

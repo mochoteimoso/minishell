@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:10:30 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 15:22:40 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:01:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 /*Prints the current working directory.*/
 
-int	built_pwd(t_shell *sh)
+int	built_pwd(t_shell *mini)
 {
 	char	*cwd;
 
-	if (!sh->env)
+	if (!mini->env)
 		return (1);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
