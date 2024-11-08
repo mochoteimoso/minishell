@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/08 15:33:23 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:55:54 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int		parse_input(t_shell *sh);
 int		parse_cmd_string(t_shell *sh, int index);
 int		handle_redirections(char *cmd_string, int i, t_shell *sh, int index);
 int		handle_cmd_name(char *cmd_string, int i, t_shell *sh, int index);
+int		count_args(char *cmd_string, int i);
+int		handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index);
 
 // Allocates memory and  duplicates a string
 
@@ -79,9 +81,11 @@ int	parse_cmd_string(t_shell *sh, int index)
 	cmd_string = sh->cmds[index]->segment;
 	i = handle_redirections(cmd_string, i, sh, index);
 	if (i == -1)
+		return ((1));
 	i = handle_cmd_name(cmd_string, i, sh, index);
 	if (i == -1)
 		return (1);
+	cmd_found = true;
 	while (cmd_string[i])
 	{
 		if (is_redirection(cmd_string, i))
@@ -90,19 +94,19 @@ int	parse_cmd_string(t_shell *sh, int index)
 			if (i == -1)
 				return (1);
 		}	
-		else if (!cmd_found)
+		/*else if (!cmd_found)
 		{
 			i = handle_cmd_name(cmd_string, i, sh, index);
 			if (i == -1)
 				return (1);
 			cmd_found = true;
+		}*/
+		else if (cmd_found)
+		{
+			i = handle_cmd_args(cmd_string, i, sh, index);
+			if (i == -1)
+				return (1);
 		}
-		//else
-		//{
-		//  i = handle_cmd_args(cmd_string, i, sh, index);
-		//	if (i == -1)
-		//		return (1);
-		//}
 		i++;
 	}
 	return (0);
@@ -134,9 +138,9 @@ int	handle_redirections(char *cmd_string, int i, t_shell *sh, int index)
 			if (handle_redirect_out(cmd_string, &i, sh, index))
 				return (-1);
 		}
-		else if (!ft_isspace(cmd_string[i]))
+		else
 			break ;
-		(i)++;
+		i++;
 	}
 	printf("index after handle_redirections: %d\n", i);
 	return (i);
@@ -168,24 +172,64 @@ int	handle_cmd_name(char *cmd_string, int i, t_shell *sh, int index)
 	return (i);
 }
 
-/*int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index)
+int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index)
 {
-	int		arg_length = 0;
+	int		arg_length;
 	char	*arg_start;
+	char	args_count;
+	int		arg_index;
 	
+	arg_index = 0;
+	args_count = count_args(cmd_string, i);
+	sh->cmds[index]->args = ft_calloc(args_count + 1, sizeof(char *));
+	if (!sh->cmds[index]->args)
+		return (-1);
 	while (cmd_string[i] && ft_isspace(cmd_string[i]))
 		i++;
-	arg_start = &cmd_string[i];
-	while (cmd_string[i] && !ft_isspace(cmd_string[i]) && !is_redirection(cmd_string, i))
+	while (cmd_string[i] && arg_index <= args_count)
 	{
-		arg_length++;
-		i++;
+		arg_start = &cmd_string[i];
+		arg_length = 0;
+		while (cmd_string[i] && !ft_isspace(cmd_string[i]) && !is_redirection(cmd_string, i))
+		{
+			arg_length++;
+			i++;
+		}
+		sh->cmds[index]->args[arg_index] = ft_strndup(arg_start, arg_length);
+		if (!sh->cmds[index]->args[arg_index])
+		{
+			printf("Failed to allocate memory for argument\n");
+			return (-1);
+		}
+		arg_index++;
+		while (cmd_string[i] && ft_isspace(cmd_string[i]))
+			i++;
 	}
-} */
+	sh->cmds[index]->args[arg_index] = NULL;
+	printf("index after handle_args: %d\n", i);
+	return (i);
+}
 
-/*int	count_args(char *cmd_string, int i)
+int	count_args(char *cmd_string, int i)
 {
-	int	count;
-	int i;
-	
-} */
+	int	args_count;
+
+	args_count = 0;
+	while (cmd_string[i] && ft_isspace(cmd_string[i]))
+		i++;
+	while (cmd_string[i])
+	{
+		if (cmd_string[i] && !is_redirection(cmd_string, i))
+		{
+			args_count++;
+			while (cmd_string[i] && !ft_isspace(cmd_string[i]) && !is_redirection(cmd_string, i))
+				i++;
+		}
+		else if (is_redirection(cmd_string, i))
+			break ;
+		while (cmd_string[i] && ft_isspace(cmd_string[i]))
+			i++;
+	}
+	printf("Argument count: %d\n", args_count);
+	return (args_count);
+}
