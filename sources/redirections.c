@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/07 19:06:18 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:29:54 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int		handle_redirect_out(char *str, int *i, t_shell *sh, int index);
 int		handle_heredoc(char *str, int *i, t_shell *sh, int index);
 int		handle_append(char *str, int *i, t_shell *sh, int index);
 
+// Checks if the input contains a redirection symbol that is not within quotes
+
 bool	is_redirection(char *str, int i)
 {
 	if ((str[i] == '>' || str[i] == '<') && !is_in_quotes(str, i))
@@ -25,6 +27,8 @@ bool	is_redirection(char *str, int i)
 	else
 		return (false);
 }
+
+// Handles < redirection, finds the filename and copies data to the redir linked list  
 
 int	handle_redirect_in(char *str, int *i, t_shell *sh, int index)
 {
@@ -52,6 +56,8 @@ int	handle_redirect_in(char *str, int *i, t_shell *sh, int index)
 	return (0);
 }
 
+// Handles > redirection, finds the filename and copies data to the redir linked list  
+
 int	handle_redirect_out(char *str, int *i, t_shell *sh, int index)
 {
 	char	*filename_start;
@@ -77,6 +83,8 @@ int	handle_redirect_out(char *str, int *i, t_shell *sh, int index)
 	sh->cmds[index]->redirect_type = REDIRECT_OUT;
 	return (0);
 }
+
+// Handles heredoc, finds the delimiter and copies data to the redir linked list  
 
 int	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 {
@@ -105,10 +113,13 @@ int	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 		return (1);
 	}
 	printf("heredoc_delim after copy: %s\n", sh->cmds[index]->heredoc_delim);
+	printf("Made it here!");
 	sh->cmds[index]->redirect_type = HEREDOC;
 	sh->cmds[index]->heredoc = true;
 	return (0);
 }
+
+// Handles append redirection, finds the filename and copies data to the redir linked list  
 
 int	handle_append(char *str, int *i, t_shell *sh, int index)
 {
