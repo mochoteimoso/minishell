@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/07 18:06:59 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:30:05 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,27 @@ int	parse_and_validate_input(char *input, t_shell *sh)
 	int i = 0;
 	while (sh->cmds[i])
 	{
+		printf("\n");
 		printf("Struct %d: segment: %s\n", i, sh->cmds[i]->segment);
+		printf("Struct %d: command: %s\n", i, sh->cmds[i]->command);
+		printf("Struct %d: arg 1: %s\n", i, sh->cmds[i]->args[0]);
+		printf("Struct %d: arg 2: %s\n", i, sh->cmds[i]->args[1]);
 		printf("Struct %d: redirect_in: %s\n", i, sh->cmds[i]->redirect_in);
 		printf("Struct %d: redirect_out %s\n", i, sh->cmds[i]->redirect_out);
 		printf("Struct %d: append %s\n", i, sh->cmds[i]->append);
 		printf("Struct %d: heredoc: %d\n", i, sh->cmds[i]->heredoc);
 		printf("Struct %d: heredoc_delim: %s\n", i, sh->cmds[i]->heredoc_delim);
+		printf("\n");
 		i++;
 	}
-	//if (parse_input(mini, *cmds))
-	//	return (1);
 	return (0);
 }
 
 // initialize mini struct
 
-void	initialize_struct(t_shell *sh) //, t_command **cmds)
+void	initialize_struct(t_shell *sh)
 {
 	ft_memset(sh, 0, sizeof(t_shell));
-	//ft_memset(cmds, 0, sizeof(t_command));
 }
 
 static	int user_prompt()
