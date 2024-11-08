@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/07 19:22:49 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:39:53 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*ft_strndup(const char *src, size_t n);
 int		parse_input(t_shell *sh);
 int		parse_cmd_string(t_shell *sh, int index);
+int		handle_redirections(char *cmd_string, int *i, t_shell *sh, int index);
 
 // Allocates memory and  duplicates a string
 
@@ -77,7 +78,15 @@ int	parse_cmd_string(t_shell *sh, int index)
 	{
 		if (is_redirection(cmd_string, i))
 		{
-			if (cmd_string[i] == '<' && cmd_string[i + 1] == '<')
+			if (handle_redirections(cmd_string, &i, sh, index))
+				return (1);
+		}	
+		//else
+		//{
+		//	if (handle_command_name())
+		//		return (1);
+		//}
+			/*if (cmd_string[i] == '<' && cmd_string[i + 1] == '<')
 			{
 				if (handle_heredoc(cmd_string, &i, sh, index))
 					return (1);
@@ -97,7 +106,7 @@ int	parse_cmd_string(t_shell *sh, int index)
 				if (handle_redirect_out(cmd_string, &i, sh, index))
 					return (1);
 			}
-		}
+		} */
 		//else
 		//{
 		//	tokenize_command(&cmds[index], cmd_string + i);
@@ -108,3 +117,33 @@ int	parse_cmd_string(t_shell *sh, int index)
 	return (0);
 }
 
+// Handles different redirections in the segment strings
+
+int	handle_redirections(char *cmd_string, int *i, t_shell *sh, int index)
+{
+	while (cmd_string[*i])
+	{
+		if (cmd_string[*i] == '<' && cmd_string[*i + 1] == '<')
+		{
+			if (handle_heredoc(cmd_string, i, sh, index))
+				return (1);
+		}
+		else if (cmd_string[*i] == '>' && cmd_string[*i + 1] == '>')
+		{
+			if (handle_append(cmd_string, i, sh, index))
+				return (1);
+		}
+		else if (cmd_string[*i] == '<')
+		{
+			if (handle_redirect_in(cmd_string, i, sh, index))
+				return (1);
+		}
+		else if (cmd_string[*i] == '>')
+		{
+			if (handle_redirect_out(cmd_string, i, sh, index))
+				return (1);
+		}
+		(*i)++;
+	}
+	return (0);
+}
