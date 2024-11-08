@@ -6,13 +6,13 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/07 18:10:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:50:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	**update_pending(t_shell *mini, char *str)
+static int	update_pending(t_shell *mini, char *str)
 {
 	size_t	i;
 	char	**temp;
@@ -21,8 +21,11 @@ static char	**update_pending(t_shell *mini, char *str)
 	i = ft_array_len(mini->pending);
 	temp = ft_realloc(mini->pending, i * sizeof(char *), (i + 2) * sizeof(char *));
 	if (!temp)
-		return (NULL);
-	
+		return (1);
+	mini->pending = temp;
+	mini->pending[i] = ft_strdup(str);
+	mini->pending[i + 1] = NULL;
+	return (0);
 }
 
 static void	print_pending(t_shell *mini)
@@ -42,13 +45,15 @@ static int	parse_and_add(t_shell *mini, char *str)
 	char	*sign;
 	t_env	*new;
 
-	sign = ft_strchr(*str, '=');
+	sign = ft_strchr(str, '=');
 	if (sign)
 	{
 		new = add_node(str);
-		ft_env_lstadd_back(mini->env, new);
-		mini->pending = update_pending(mini, str);
+		ft_env_lstadd_back(&mini->env, new);
+		update_pending(mini, str);
+		to_alphabetical(mini->pending);
 	}
+	return (0);
 }
 
 /*Sets an environment variable. Accepts VAR=VALUE format to

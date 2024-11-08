@@ -6,21 +6,57 @@
 # include <readline/history.h>
 # include <stdio.h>
 # include <limits.h>
+# include <stdbool.h>
+# include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
 //# include </usr/include/linux/signal.h>
+
+typedef enum e_redir_type
+{
+	REDIRECT_IN,
+	REDIRECT_OUT,
+	APPEND,
+	HEREDOC
+}	t_redir_type;
+
+typedef struct s_redir
+{
+	char				*file;
+	char				*delimiter;
+	t_redir_type		*type;
+	struct s_redir		*next;
+}	t_redir;
+
+typedef struct s_cmd
+{
+	char	*segment;
+	char	*command;
+	char	**args;
+	int		args_count;
+	// char	*redirect_in;
+	// char	*redirect_out;
+	// int		redirect_type; //??
+	char	**env_vars; //??
+	int		env_var_count; //??
+	char	*append;
+	t_redir *redir;
+	//bool	heredoc;
+	// char	*heredoc_delim;
+	// char	*heredoc_content;
+	int		exit_status;
+}	t_cmd;
 
 typedef struct s_env
 {
 	char			*name;
 	char			*value;
-//	char			*both;
 	struct s_env	*next;
 } t_env;
 
 typedef struct s_shell
 {
-	//char	**envp;
+	t_cmd	**cmds;
 	t_env	*env;
 	char	**pending;
 	int		exit_stat;
@@ -38,7 +74,7 @@ int		built_export(t_shell *mini, char **args);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
-int	built_unset(t_env **env, char **cmd);
+int	built_unset(t_shell *mini, char **cmd);
 /*built_in/env*/
 	/*env_handling*/
 char	**copy_env(char **envp);

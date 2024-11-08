@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/07 13:01:07 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:32:59 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	built_exit(t_shell *mini, char **cmd)
 		ec = ft_atoi(cmd[1]);
 	else
 		ec = mini->exit_stat;
-	cleaner(mini->env, NULL);
+	cleaner(mini->env, mini->pending);
 	ft_free_array(cmd);
 	free(mini);
 	exit(ec);
