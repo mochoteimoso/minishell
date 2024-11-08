@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/08 13:02:11 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 15:58:09 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,6 @@ int	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 		delimiter_length++;
 		(*i)++;
 	}
-	//printf("delimiter start: %s\n", delimiter_start);
-	//printf("delimiter len: %d\n", delimiter_length);
-	
 	sh->cmds[index]->heredoc_delim = ft_strndup(delimiter_start, delimiter_length);
 	if (!sh->cmds[index]->heredoc_delim)
 	{
