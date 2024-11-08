@@ -92,5 +92,6 @@ int			handle_redirect_in(char *str, int *i, t_shell *sh, int index);
 int			handle_redirect_out(char *str, int *i, t_shell *sh, int index);
 int			handle_heredoc(char *str, int *i, t_shell *sh, int index);
 int			handle_append(char *str, int *i, t_shell *sh, int index);
+int			ft_isspace(char c);
 
 #endif
