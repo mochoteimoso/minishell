@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/08 10:29:54 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:02:11 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	handle_redirect_in(char *str, int *i, t_shell *sh, int index)
 	
 	filename_length = 0;
 	(*i)++;
-	while (str[*i] == ' ')
+	while (str[*i] && ft_isspace(str[*i]))
 		(*i)++;
 	filename_start = &str[*i];
 	while (str[*i] && str[*i] != ' ' && str[*i] != '|' && str[*i] != '<' &&
@@ -65,7 +65,7 @@ int	handle_redirect_out(char *str, int *i, t_shell *sh, int index)
 	
 	filename_length = 0;
 	(*i)++;
-	while (str[*i] == ' ')
+	while (str[*i] && ft_isspace(str[*i]))
 		(*i)++;
 	filename_start = &str[*i];
 	while (str[*i] && str[*i] != ' ' && str[*i] != '|' && str[*i] != '<' &&
@@ -94,7 +94,7 @@ int	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 	delimiter_length = 0;
 	(*i)++;
 	(*i)++;
-	while (str[*i] == ' ')
+	while (str[*i] && ft_isspace(str[*i]))
 		(*i)++;
 	delimiter_start = &str[*i];
 	while (str[*i] && str[*i] != ' ' && str[*i] != '|' && str[*i] != '<' &&
@@ -103,8 +103,8 @@ int	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 		delimiter_length++;
 		(*i)++;
 	}
-	printf("delimiter start: %s\n", delimiter_start);
-	printf("delimiter len: %d\n", delimiter_length);
+	//printf("delimiter start: %s\n", delimiter_start);
+	//printf("delimiter len: %d\n", delimiter_length);
 	
 	sh->cmds[index]->heredoc_delim = ft_strndup(delimiter_start, delimiter_length);
 	if (!sh->cmds[index]->heredoc_delim)
@@ -112,8 +112,7 @@ int	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 		printf("Failed to allocate memory for heredoc delimiter\n");
 		return (1);
 	}
-	printf("heredoc_delim after copy: %s\n", sh->cmds[index]->heredoc_delim);
-	printf("Made it here!");
+	//printf("heredoc_delim after copy: %s\n", sh->cmds[index]->heredoc_delim);
 	sh->cmds[index]->redirect_type = HEREDOC;
 	sh->cmds[index]->heredoc = true;
 	return (0);
@@ -129,7 +128,7 @@ int	handle_append(char *str, int *i, t_shell *sh, int index)
 	filename_length = 0;
 	(*i)++;
 	(*i)++;
-	while (str[*i] == ' ')
+	while (str[*i] && ft_isspace(str[*i]))
 		(*i)++;
 	filename_start = &str[*i];
 	while (str[*i] && str[*i] != ' ' && str[*i] != '|' && str[*i] != '<' &&
