@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/07 19:13:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:10:39 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	is_in_quotes(char *input, int i)
 		return (0);
 }
 
-//checks whether pipe is at an invalid location, i.e. at the start or end of input
+//Checks whether pipe is at an invalid location, i.e. at the start or end of input
 
 int	check_pipes(char *input)
 {
@@ -137,7 +137,7 @@ int	check_consecutive_pipes(char *input)
 	return (0);
 }
 
-// checks that there is a non-space character after redirects
+// Checks that there is a non-space character after redirects
 
 int	check_redirects(char *input)
 {
