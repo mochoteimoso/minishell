@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/07 16:04:16 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:11:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int			prepare_command_structs(t_shell *sh, char *input);
 t_command	**allocate_cmd_array(int command_count);
 void		initialize_command_struct(t_command *cmd);
 
-// count number of pipes in input string
+// Counts the number of pipes in input string
 
 int	count_pipes(char *line)
 {
@@ -35,7 +35,7 @@ int	count_pipes(char *line)
 	return (pipe_count);
 }
 
-// set up an array of structs and allocate memory for individual structs
+// Sets up an array of structs and allocates memory for individual structs
 int	prepare_command_structs(t_shell *sh, char *input)
 {
 	int	i;
@@ -70,7 +70,7 @@ int	prepare_command_structs(t_shell *sh, char *input)
 	return (0);
 }
 
-//allocate memory for an array of structs
+//Allocates memory for an array of structs
 
 t_command	**allocate_cmd_array(int command_count)
 {
@@ -85,7 +85,7 @@ t_command	**allocate_cmd_array(int command_count)
 	return (cmds);
 }
 
-// initialize individual structs in the array
+// Initializes individual structs in the array
 
 void	initialize_command_struct(t_command *cmd)
 {
