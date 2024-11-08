@@ -6,21 +6,30 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 11:57:39 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:46:59 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	cleaner(t_env *node, char **temp)
+void	cleaner(t_env *ll, char **array)
 {
-	if (temp)
-		ft_free_array(temp);
-	if (node)
+	t_env *temp;
+
+	if (array)
+		ft_free_array(array);
+	while (ll != NULL)
 	{
-		free(node->name);
-		node->name = NULL;
-		free(node->value);
-		node->value = NULL;
+		temp = ll;
+		free(ll->name);
+		free(ll->value);
+		ll = ll->next;
+		free(temp);
 	}
+	//free(ll);
+}
+
+void	error(char *str)
+{
+	ft_putstr_fd(str, 2);
 }
