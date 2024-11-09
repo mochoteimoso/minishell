@@ -10,6 +10,7 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
+
 //# include </usr/include/linux/signal.h>
 
 typedef enum e_redir_type
@@ -20,12 +21,15 @@ typedef enum e_redir_type
 	HEREDOC
 }	t_redir_type;
 
+// linked list for redirects in each command struct
+
 typedef struct s_redir
 {
-	char				*file;
-	char				*delimiter;
-	t_redir_type		*type;
-	struct s_redir		*next;
+	char			*file;
+	char			*delimiter;
+	t_redir_type	*type;
+	int				node_ind;	
+	struct s_redir	*next;
 }	t_redir;
 
 typedef struct s_cmd
@@ -55,49 +59,7 @@ typedef struct s_env
 
 }	t_env;
 
-// linked list for redirects in each command struct
-// Nikolai please create the functions for adding these nodes to a list
-
-typedef struct s_redir
-{
-	char				*file;
-	char				*delimiter;
-	t_redir_type		*type;
-	struct s_redir		*next;
-}	t_redir;
-
 // struct to store general information
-
-typedef struct s_shell
-{
-	t_env		*env;
-	char		**pending;
-	t_command	**cmds;
-	int			exit_stat;
-}	t_shell;
-
-int			validate_input_syntax(char *input);
-int			is_in_quotes(char *input, int i);
-int			check_consecutive_pipes(char *input);
-int			check_pipes(char *input);
-int			check_redirects(char *input);
-int			validate_redirect(char *input, int *i, char *type);
-int			count_pipes(char *input);
-t_command	**allocate_cmd_array(int command_count);
-int			split_input_by_pipes(char *input, t_shell *sh);
-int			parse_input(t_shell *sh);
-int			parse_and_validate_input(char *input, t_shell *sh);
-int			prepare_command_structs(t_shell *sh, char *input);
-void		init_sig(void);
-int			split_input_by_pipes(char *input, t_shell *sh);
-char		*ft_strndup(const char *src, size_t n);
-bool		is_redirection(char *str, int index);
-int			handle_redirect_in(char *str, int *i, t_shell *sh, int index);
-int			handle_redirect_out(char *str, int *i, t_shell *sh, int index);
-int			handle_heredoc(char *str, int *i, t_shell *sh, int index);
-int			handle_append(char *str, int *i, t_shell *sh, int index);
-int			ft_isspace(char c);
-} t_env;
 
 typedef struct s_shell
 {
@@ -106,6 +68,28 @@ typedef struct s_shell
 	char	**pending;
 	int		exit_stat;
 } t_shell;
+
+int		validate_input_syntax(char *input);
+int		is_in_quotes(char *input, int i);
+int		check_consecutive_pipes(char *input);
+int		check_pipes(char *input);
+int		check_redirects(char *input);
+int		validate_redirect(char *input, int *i, char *type);
+int		count_pipes(char *input);
+t_cmd	**allocate_cmd_array(int command_count);
+int		split_input_by_pipes(char *input, t_shell *sh);
+int		parse_input(t_shell *sh);
+int		parse_and_validate_input(char *input, t_shell *sh);
+int		prepare_command_structs(t_shell *sh, char *input);
+void	init_sig(void);
+int		split_input_by_pipes(char *input, t_shell *sh);
+char	*ft_strndup(const char *src, size_t n);
+bool	is_redirection(t_cmd *cmd, int i);
+int		handle_redirect_in(t_cmd *cmd, int *i);
+int		handle_redirect_out(t_cmd *cmd, int *i);
+int		handle_heredoc(t_cmd *cmd, int *i);
+int		handle_append(t_cmd *cmd, int *i);
+int		ft_isspace(char c);
 
 /*built_in*/
 	/*cd*/
