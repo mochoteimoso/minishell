@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 14:58:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 11:47:43 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/08 13:46:59 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/libft.h"
+#include "../../includes/minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	cleaner(t_env *ll, char **array)
 {
-	t_list	*temp;
+	t_env *temp;
 
-	if (!lst || !new)
-		return ;
-	if (!(*lst))
+	if (array)
+		ft_free_array(array);
+	while (ll != NULL)
 	{
-		*lst = new;
-		return ;
+		temp = ll;
+		free(ll->name);
+		free(ll->value);
+		ll = ll->next;
+		free(temp);
 	}
-	temp = *lst;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
+	//free(ll);
+}
+
+void	error(char *str)
+{
+	ft_putstr_fd(str, 2);
 }

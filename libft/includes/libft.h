@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 10:45:23 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/17 17:33:00 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:02:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include "ft_printf.h"
 # include "get_next_line.h"
+# include "../../includes/minishell.h"
 
 typedef struct s_list
 {
@@ -48,6 +49,7 @@ int		ft_isdigit(int ch);
 int		ft_isprint(int ch);
 int		ft_lstsize(t_list *lst);
 int		ft_memcmp(char *ptr1, char *ptr2, size_t num);
+int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(char const *s1, char const *s2, size_t num);
 size_t	ft_strlcat(char *dest, char const *src, size_t size);
 size_t	ft_strlcpy(char *dest, char const *src, size_t size);

@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 14:58:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/01 11:47:43 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/10/30 16:10:30 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/07 13:01:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/libft.h"
+#include "../../includes/minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+/*Prints the current working directory.*/
+
+int	built_pwd(t_shell *mini)
 {
-	t_list	*temp;
+	char	*cwd;
 
-	if (!lst || !new)
-		return ;
-	if (!(*lst))
+	if (!mini->env)
+		return (1);
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
 	{
-		*lst = new;
-		return ;
+		ft_putendl_fd("pwd not found", 2);
+		cwd = ft_strdup("lost");
 	}
-	temp = *lst;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
+	printf("%s\n", cwd);
+	free(cwd);
+	return (0);
 }

@@ -7,37 +7,77 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
 /*   Updated: 2024/11/09 14:23:26 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/08 15:45:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	parse_and_validate_input(char *input, t_shell *sh)
+static int	init_shell(t_shell *mini, char **envp)
 {
-	if (validate_input_syntax(input))
-		return (1);
-	if (prepare_command_structs(sh, input))
-		return (1);
-	if (split_input_by_pipes(input, sh))
-		return (1);
-	if (parse_input(sh))
-		return (1);
-	int i = 0;
-	while (sh->cmds[i])
+	int	i;
+
+	i = 0;
+	mini->cmds = NULL;
+	mini->env = list_env(envp);
+	mini->pending = copy_env(envp);
+	to_alphabetical(mini->pending);
+	mini->exit_stat = 0;
+	return (0);
+}
+
+static int	built_in_exe(char *input, t_shell *mini)
+{
+	char	**cmd = ft_split(input, ' ');
+	if (ft_strcmp(cmd[0], "exit") == 0)
+		return (built_exit(mini, cmd));
+	else if (ft_strcmp(cmd[0], "cd") == 0)
+		return (built_cd(mini, cmd));
+	else if (ft_strcmp(cmd[0], "echo") == 0)
+		return (built_echo(cmd));
+	else if (ft_strcmp(cmd[0], "env") == 0)
+	 	return (built_env(mini));
+	else if (ft_strcmp(cmd[0], "pwd") == 0 && cmd[1] == NULL)
+		return (built_pwd(mini));
+	else if (ft_strcmp(cmd[0], "unset") == 0)
+		return (built_unset(mini, cmd));
+	else if (ft_strcmp(cmd[0], "export") == 0)
+		return (built_export(mini, cmd));
+	ft_free_array(cmd);
+	return (0);
+}
+
+static int user_prompt(char **envp)
+{
+	char	*input;
+	t_shell	*mini;
+
+	mini = malloc(sizeof(t_shell));
+	init_shell(mini, envp);
+	init_sig();
+	while (1)
 	{
-		printf("\n");
-		printf("Struct %d: segment: %s\n", i, sh->cmds[i]->segment);
-		printf("Struct %d: command: %s\n", i, sh->cmds[i]->command);
-		printf("Struct %d: arg 1: %s\n", i, sh->cmds[i]->args[0]);
-		printf("Struct %d: arg 2: %s\n", i, sh->cmds[i]->args[1]);
-		printf("Struct %d: redirect_in: %s\n", i, sh->cmds[i]->redirect_in);
-		printf("Struct %d: redirect_out %s\n", i, sh->cmds[i]->redirect_out);
-		printf("Struct %d: append %s\n", i, sh->cmds[i]->append);
-		printf("Struct %d: heredoc: %d\n", i, sh->cmds[i]->heredoc);
-		printf("Struct %d: heredoc_delim: %s\n", i, sh->cmds[i]->heredoc_delim);
-		printf("\n");
-		i++;
+
+		input = readline("minishell> ");
+		if (input == NULL)
+			break ;
+		if (input && *input)
+			add_history(input);
+		built_in_exe(input, mini);
 	}
+	return (0);
+}
+
+
+int	main(int argc, char **argv, char **envp)
+{
+	(void)argv;
+	if (argc != 1)
+	{
+		printf("Minishell doesn't take arguments\n");
+		return (0);
+	}
+	user_prompt(envp);
 	return (0);
 }
 
