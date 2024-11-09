@@ -53,6 +53,8 @@ static int user_prompt(char **envp)
 	t_shell	*mini;
 
 	mini = malloc(sizeof(t_shell));
+	if (!mini)
+		error("Malloc failed\n");
 	init_shell(mini, envp);
 	init_sig();
 	while (1)
@@ -63,6 +65,8 @@ static int user_prompt(char **envp)
 			break ;
 		if (input && *input)
 			add_history(input);
+		if (parse_and_validate_input(input, mini))
+			error("ALL IS BROKE!!\n");
 		built_in_exe(input, mini);
 	}
 	return (0);

@@ -129,7 +129,9 @@ void	to_alphabetical(char **array);
 	/*env_ll*/
 t_env	*add_node(char *env);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
-
+/*redirection/redir_ll*/
+bool	is_redirection(char *str, int i);
+t_redir	*list_redir(void);
 /*utils/freeing*/
 void	cleaner(t_env *node, char **temp);
 void	error(char *str);
