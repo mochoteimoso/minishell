@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_cmd_args.c                                  :+:      :+:    :+:   */
+/*   cmd_array_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 14:41:49 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:31:20 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index);
 int	count_args(char *cmd_string, int i);
@@ -23,7 +23,7 @@ int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index)
 	char	*arg_start;
 	char	args_count;
 	int		arg_index;
-	
+
 	arg_index = 0;
 	args_count = count_args(cmd_string, i);
 	sh->cmds[index]->args = ft_calloc(args_count + 1, sizeof(char *));

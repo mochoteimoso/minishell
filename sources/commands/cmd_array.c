@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   array_of_structs.c                                 :+:      :+:    :+:   */
+/*   cmd_array.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 14:37:47 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:31:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int			count_pipes(char *line);
 int			prepare_command_structs(t_shell *sh, char *input);
-t_command	**allocate_cmd_array(int command_count);
-void		initialize_command_struct(t_command *cmd);
+t_cmd	**allocate_cmd_array(int command_count);
+void		initialize_command_struct(t_cmd *cmd);
 
 // Counts the number of pipes in input string
 
@@ -52,7 +52,7 @@ int	prepare_command_structs(t_shell *sh, char *input)
 	i = 0;
 	while (i < command_count)
 	{
-		sh->cmds[i] = malloc(sizeof(t_command));
+		sh->cmds[i] = malloc(sizeof(t_cmd));
 		if (!sh->cmds[i])
 		{
 			printf("Failed to allocate memory for struct\n");
@@ -73,11 +73,11 @@ int	prepare_command_structs(t_shell *sh, char *input)
 
 //Allocates memory for an array of structs
 
-t_command	**allocate_cmd_array(int command_count)
+t_cmd	**allocate_cmd_array(int command_count)
 {
-	t_command	**cmds;
+	t_cmd	**cmds;
 
-	cmds = ft_calloc(command_count, sizeof(t_command));
+	cmds = ft_calloc(command_count, sizeof(t_cmd));
 	if (!cmds)
 	{
 		printf("Failed to allocate memory for array of structs\n");
@@ -88,19 +88,20 @@ t_command	**allocate_cmd_array(int command_count)
 
 // Initializes individual structs in the array
 
-void	initialize_command_struct(t_command *cmd)
+void	initialize_command_struct(t_cmd *cmd)
 {
 	cmd->command = NULL;
 	cmd->args = NULL;
 	cmd->args_count = 0;
-	cmd->redirect_in = NULL;
-	cmd->redirect_out = NULL;
-	cmd->redirect_type = 0;
+	// cmd->redirect_in = NULL;
+	// cmd->redirect_out = NULL;
+	// cmd->redirect_type = 0;
 	cmd->append = NULL;
-	cmd->heredoc = false;
-	cmd->heredoc_delim = NULL;
-	cmd->heredoc_content = NULL;
+	// cmd->heredoc = false;
+	// cmd->heredoc_delim = NULL;
+	// cmd->heredoc_content = NULL;
 	cmd->env_vars = NULL;
 	cmd->env_var_count = 0;
 	cmd->exit_status = 0;
 }
+

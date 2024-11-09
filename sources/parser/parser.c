@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 14:50:34 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:31:08 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*ft_strndup(const char *src, size_t n);
 int		parse_input(t_shell *sh);
@@ -30,22 +30,6 @@ int	parse_and_validate_input(char *input, t_shell *sh)
 		return (1);
 	if (parse_input(sh))
 		return (1);
-	int i = 0;
-	while (sh->cmds[i])
-	{
-		printf("\n");
-		printf("Struct %d: segment: %s\n", i, sh->cmds[i]->segment);
-		printf("Struct %d: command: %s\n", i, sh->cmds[i]->command);
-		printf("Struct %d: arg 1: %s\n", i, sh->cmds[i]->args[0]);
-		printf("Struct %d: arg 2: %s\n", i, sh->cmds[i]->args[1]);
-		printf("Struct %d: redirect_in: %s\n", i, sh->cmds[i]->redirect_in);
-		printf("Struct %d: redirect_out %s\n", i, sh->cmds[i]->redirect_out);
-		printf("Struct %d: append %s\n", i, sh->cmds[i]->append);
-		printf("Struct %d: heredoc: %d\n", i, sh->cmds[i]->heredoc);
-		printf("Struct %d: heredoc_delim: %s\n", i, sh->cmds[i]->heredoc_delim);
-		printf("\n");
-		i++;
-	}
 	return (0);
 }
 
@@ -65,7 +49,7 @@ int	parse_input(t_shell *sh)
 	return (0);
 }
 
-// Parses the segment string of each struct 
+// Parses the segment string of each struct
 
 // create a linked list if the segment string contains redirections
 // each redirect will be its own node and will contain information about redirection type,
@@ -101,7 +85,7 @@ int	parse_cmd_string(t_shell *sh, int index)
 			i = handle_redirections(cmd_string, i, sh, index);
 			if (i == -1)
 				return (1);
-		}	
+		}
 		else
 			i++;
 	}
@@ -149,7 +133,7 @@ int	handle_cmd_name(char *cmd_string, int i, t_shell *sh, int index)
 {
 	char	*cmd_start;
 	int		cmd_length;
-	
+
 	cmd_length = 0;
 	while (cmd_string[i] && ft_isspace(cmd_string[i]))
 		i++;

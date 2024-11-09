@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/08 15:58:09 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:55:31 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 bool	is_redirection(char *str, int index);
 int		handle_redirect_in(char *str, int *i, t_shell *sh, int index);
@@ -28,13 +28,13 @@ bool	is_redirection(char *str, int i)
 		return (false);
 }
 
-// Handles < redirection, finds the filename and copies data to the redir linked list  
+// Handles < redirection, finds the filename and copies data to the redir linked list
 
 int	handle_redirect_in(char *str, int *i, t_shell *sh, int index)
 {
 	char	*filename_start;
 	int		filename_length;
-	
+
 	filename_length = 0;
 	(*i)++;
 	while (str[*i] && ft_isspace(str[*i]))
@@ -56,13 +56,13 @@ int	handle_redirect_in(char *str, int *i, t_shell *sh, int index)
 	return (0);
 }
 
-// Handles > redirection, finds the filename and copies data to the redir linked list  
+// Handles > redirection, finds the filename and copies data to the redir linked list
 
 int	handle_redirect_out(char *str, int *i, t_shell *sh, int index)
 {
 	char	*filename_start;
 	int		filename_length;
-	
+
 	filename_length = 0;
 	(*i)++;
 	while (str[*i] && ft_isspace(str[*i]))
@@ -84,7 +84,7 @@ int	handle_redirect_out(char *str, int *i, t_shell *sh, int index)
 	return (0);
 }
 
-// Handles heredoc, finds the delimiter and copies data to the redir linked list  
+// Handles heredoc, finds the delimiter and copies data to the redir linked list
 
 int	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 {
@@ -115,13 +115,13 @@ int	handle_heredoc(char *str, int *i, t_shell *sh, int index)
 	return (0);
 }
 
-// Handles append redirection, finds the filename and copies data to the redir linked list  
+// Handles append redirection, finds the filename and copies data to the redir linked list
 
 int	handle_append(char *str, int *i, t_shell *sh, int index)
 {
 	char	*filename_start;
 	int		filename_length;
-	
+
 	filename_length = 0;
 	(*i)++;
 	(*i)++;

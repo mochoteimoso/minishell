@@ -2,7 +2,6 @@ NAME = minishell
 
 SRC_DIR = sources/
 
-
 SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)signals.c\
 	$(SRC_DIR)built_in/cd.c\
@@ -16,9 +15,12 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
 	$(SRC_DIR)commands/cmd_array.c\
 	$(SRC_DIR)commands/cmd_array_utils.c\
-	$(SRC_DIR)parser/parse_cmd.c\
-	$(SRC_DIR)parser/syntax.c\
+	$(SRC_DIR)parser/parser.c\
+	$(SRC_DIR)parser/parser_utils.c\
+	$(SRC_DIR)parser/split_input.c\
+	$(SRC_DIR)parser/syntax_checks.c\
 	$(SRC_DIR)redirection/redir_ll.c\
+	$(SRC_DIR)redirection/handle_redirections.c\
 	$(SRC_DIR)utils/freeing.c
 
 FLAGS = -Wall -Werror -Wextra -g
@@ -26,7 +28,6 @@ FLAGS = -Wall -Werror -Wextra -g
 LDFLAGS = -lreadline
 
 LIBFT = ./libft/libft.a
-LIBFT_DIR = ./libft
 
 LIBFT_DIR = ./libft
 
@@ -47,10 +48,22 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 		@cc $(FLAGS) -c $< -o $@
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR)
-	@echo "\n\033[0;32mLibft ready\033[0m\n"
+		@make -C $(LIBFT_DIR)
+		@echo "\n\033[0;32mLibft ready\033[0m\n"
 
 $(NAME): $(OBJS)
+		@cc $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS) > /dev/null
+		@echo "\n\033[0;32mLet's mini!\033[0m\n"
+
+clean:
+		@rm -rf $(OBJ_DIR)
+		@make -C $(LIBFT_DIR) clean
+
+fclean:
+		@rm -f $(NAME)
+		@rm -rf $(OBJ_DIR)
+		@make -C $(LIBFT_DIR) fclean
+		@echo "\n\033[0;31mAll is gone\033[0m\n"
 
 re: fclean all
 

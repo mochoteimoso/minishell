@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   split_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 14:53:40 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:31:02 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int		split_input_by_pipes(char *input, t_shell *sh);
 char	*trim_whitespace(char *segment);
@@ -25,11 +25,11 @@ int	split_input_by_pipes(char *input, t_shell *sh)
 	int		start;
 	int		index;
 	char	*trimmed_segment;
-	
+
 	i = 0;
 	start = 0;
 	index = 0;
-	
+
 	while (input[i])
 	{
 		if (input[i] == '|' && !is_in_quotes(input, i))
