@@ -14,7 +14,14 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env.c\
 	$(SRC_DIR)built_in/env/env_handling.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
-	$(SRC_DIR)utils/freeing.c
+	$(SRC_DIR)parser/array_of_structs.c
+	$(SRC_DIR)parser/handle_cmd_args.c
+	$(SRC_DIR)parser/handle_redirections.c
+	$(SRC_DIR)parser/parser_utils.c
+	$(SRC_DIR)parser/parder.c
+	$(SRC_DIR)parser/redir_list.c
+	$(SRC_DIR)parser/split_input.c
+	$(SRC_DIR)parser/syntax_checks.c
 
 FLAGS = -Wall -Werror -Wextra -g
 
