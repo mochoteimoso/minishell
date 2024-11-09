@@ -6,10 +6,10 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/09 14:23:26 by henbuska         ###   ########.fr       */
-/*   Updated: 2024/11/08 15:45:48 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:27:53 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
@@ -63,6 +63,8 @@ static int user_prompt(char **envp)
 			break ;
 		if (input && *input)
 			add_history(input);
+		if (parse_and_validate_input(input, &mini))
+			return (1);
 		built_in_exe(input, mini);
 	}
 	return (0);
@@ -81,45 +83,5 @@ int	main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-// initialize mini struct
 
-void	initialize_struct(t_shell *sh)
-{
-	ft_memset(sh, 0, sizeof(t_shell));
-}
-
-static	int user_prompt()
-{
-	char		*input;
-	t_shell		sh;
-
-	//init_shell(&sh, envp);
-	//init_sig();
-	while (1)
-	{
-		initialize_struct(&sh);
-		input = readline("minishell> ");
-		if (input == NULL)
-			break ;
-		if (input && *input)
-			add_history(input);	
-		if (parse_and_validate_input(input, &sh))
-			return (1);
-	}
-	return (0);
-}
-
-int	main(int argc, char **argv) //, char **envp)
-{
-	//int	exit_c;
-	(void)argv;
-	//exit_c = 0;
-	if (argc != 1)
-	{
-		printf("Minishell doesn't take arguments\n");
-		return (0);
-	}
-	user_prompt();
-	return (0);
-}
 
