@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/09 16:14:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:54:30 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ static int	init_shell(t_shell *mini, char **envp)
 
 static int	built_in_exe(char *input, t_shell *mini)
 {
-	char	**cmd = ft_split(input, ' ');
+	char	**cmd;
+
+	cmd = ft_split(input, ' ');
 	if (ft_strcmp(cmd[0], "exit") == 0)
 		return (built_exit(mini, cmd));
 	else if (ft_strcmp(cmd[0], "cd") == 0)
@@ -65,8 +67,9 @@ static int user_prompt(char **envp)
 			break ;
 		if (input && *input)
 			add_history(input);
-		if (parse_and_validate_input(input, mini))
-			error("ALL IS BROKE!!\n");
+		// if (parse_and_validate_input(input, mini))
+		// 	error("ALL IS BROKE!!\n");
+		heredoc(input);
 		built_in_exe(input, mini);
 	}
 	return (0);

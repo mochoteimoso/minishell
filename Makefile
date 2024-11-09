@@ -15,6 +15,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
 	$(SRC_DIR)commands/cmd_array.c\
 	$(SRC_DIR)commands/cmd_array_utils.c\
+	$(SRC_DIR)heredoc/heredoc.c\
 	$(SRC_DIR)parser/parser.c\
 	$(SRC_DIR)parser/parser_utils.c\
 	$(SRC_DIR)parser/split_input.c\

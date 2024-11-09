@@ -10,6 +10,10 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <string.h>
+
 //# include </usr/include/linux/signal.h>
 
 typedef enum e_redir_type
@@ -34,16 +38,16 @@ typedef struct s_cmd
 	char	*command;
 	char	**args;
 	int		args_count;
-	// char	*redirect_in;
-	// char	*redirect_out;
-	// int		redirect_type; //??
+	char	*redirect_in;
+	char	*redirect_out;
+	int		redirect_type; //??
 	char	**env_vars; //??
 	int		env_var_count; //??
 	char	*append;
 	t_redir *redir;
-	//bool	heredoc;
-	// char	*heredoc_delim;
-	// char	*heredoc_content;
+	bool	heredoc;
+	char	*heredoc_delim;
+	char	*heredoc_content;
 	int		exit_status;
 }	t_cmd;
 
@@ -95,6 +99,8 @@ void		initialize_command_struct(t_cmd *cmd);
 	/*cmd_array_utils.c*/
 int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index);
 int	count_args(char *cmd_string, int i);
+/*heredoc*/
+void	heredoc(char *input);
 /*parser*/
 	/*parser.c*/
 char	*ft_strndup(const char *src, size_t n);
