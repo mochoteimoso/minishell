@@ -6,18 +6,18 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 14:41:49 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:28:41 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index);
+int	handle_cmd_args(char *cmd_string, int i, t_shell *mini, int index);
 int	count_args(char *cmd_string, int i);
 
 // Retrieves command arguments from string and copies them to struct
 
-int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index)
+int	handle_cmd_args(char *cmd_string, int i, t_shell *mini, int index)
 {
 	int		arg_length;
 	char	*arg_start;
@@ -26,8 +26,8 @@ int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index)
 	
 	arg_index = 0;
 	args_count = count_args(cmd_string, i);
-	sh->cmds[index]->args = ft_calloc(args_count + 1, sizeof(char *));
-	if (!sh->cmds[index]->args)
+	mini->cmds[index]->args = ft_calloc(args_count + 1, sizeof(char *));
+	if (!mini->cmds[index]->args)
 		return (-1);
 	while (cmd_string[i] && ft_isspace(cmd_string[i]))
 		i++;
@@ -40,8 +40,8 @@ int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index)
 			arg_length++;
 			i++;
 		}
-		sh->cmds[index]->args[arg_index] = ft_strndup(arg_start, arg_length);
-		if (!sh->cmds[index]->args[arg_index])
+		mini->cmds[index]->args[arg_index] = ft_strndup(arg_start, arg_length);
+		if (!mini->cmds[index]->args[arg_index])
 		{
 			printf("Failed to allocate memory for argument\n");
 			return (-1);
@@ -50,7 +50,7 @@ int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index)
 		while (cmd_string[i] && ft_isspace(cmd_string[i]))
 			i++;
 	}
-	sh->cmds[index]->args[arg_index] = NULL;
+	mini->cmds[index]->args[arg_index] = NULL;
 	printf("index after handle_args: %d\n", i);
 	return (i);
 }
