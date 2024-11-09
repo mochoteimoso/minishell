@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/08 18:30:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/09 14:23:26 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@ int	parse_and_validate_input(char *input, t_shell *sh)
 		return (1);
 	if (split_input_by_pipes(input, sh))
 		return (1);
-	//printf("Struct 2: segment: %s\n", sh->cmds[2]->segment);
-	//printf("Struct 0: heredoc_delim: %s\n", sh->cmds[0]->heredoc_delim);
-	//printf("Struct 0: heredoc: %d\n", sh->cmds[0]->heredoc);
 	if (parse_input(sh))
 		return (1);
 	int i = 0;
@@ -86,46 +83,3 @@ int	main(int argc, char **argv) //, char **envp)
 	return (0);
 }
 
-/*
-int	main(int argc, char **argv)
-{
-	(void)argc;
-	t_shell		sh;
-	t_command	*cmds;
-	
-	initialize_struct(&sh); // &cmds);
-	if (parse_and_validate_input(argv[1], &sh, &cmds))
-		exit(EXIT_FAILURE);
-	free(cmds);
-	return (0);
-} */
-
-/*static int	init_shell(t_shell *sh, char **envp)
-{
-	t_env	*ll;
-	int 	i;
-
-	ll = ft_calloc(1, sizeof(t_env *));
-	if (!ll)
-		return (1);
-	list_env(ll, envp);
-	sh->env = ll;
-	sh->envp = (char **)malloc(sizeof(char *) * (ft_array_len(envp) + 1));
-	if (!sh->envp)
-		error("Malloc fail");
-	i = 0;
-	while (envp[i])
-	{
-		sh->envp[i] = ft_strdup(envp[i]);
-		if (sh->envp[i])
-		{
-			while (i > 0)
-				free(sh->envp[--i]);
-			free(sh->envp);
-			return (1);
-		}
-		i++;
-	}
-	sh->envp[i] = NULL;
-	return (0);
-} */
