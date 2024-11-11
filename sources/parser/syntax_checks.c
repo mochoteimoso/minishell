@@ -6,11 +6,11 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/08 10:10:39 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:33:32 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	validate_input_syntax(char *input);
 int	is_in_quotes(char *input, int i);

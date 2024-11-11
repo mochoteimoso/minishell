@@ -2,7 +2,6 @@ NAME = minishell
 
 SRC_DIR = sources/
 
-
 SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)signals.c\
 	$(SRC_DIR)built_in/cd.c\
@@ -14,14 +13,15 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env.c\
 	$(SRC_DIR)built_in/env/env_handling.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
-	$(SRC_DIR)parser/array_of_structs.c
-	$(SRC_DIR)parser/handle_cmd_args.c
-	$(SRC_DIR)parser/handle_redirections.c
-	$(SRC_DIR)parser/parser_utils.c
-	$(SRC_DIR)parser/parder.c
-	$(SRC_DIR)parser/redir_list.c
-	$(SRC_DIR)parser/split_input.c
-	$(SRC_DIR)parser/syntax_checks.c
+	$(SRC_DIR)parser/array_of_structs.c\
+	$(SRC_DIR)parser/handle_cmd_args.c\
+	$(SRC_DIR)parser/handle_redirections.c\
+	$(SRC_DIR)parser/parser_utils.c\
+	$(SRC_DIR)parser/parser.c\
+	$(SRC_DIR)parser/redir_list.c\
+	$(SRC_DIR)parser/split_input.c\
+	$(SRC_DIR)parser/syntax_checks.c\
+	$(SRC_DIR)utils/freeing.c
 
 FLAGS = -Wall -Werror -Wextra -g
 
@@ -53,6 +53,18 @@ $(LIBFT):
 	@echo "\n\033[0;32mLibft ready\033[0m\n"
 
 $(NAME): $(OBJS)
+		@cc $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS) > /dev/null
+		@echo "\n\033[0;32mLet's mini!\033[0m\n"
+
+clean:
+		@rm -rf $(OBJ_DIR)
+		@make -C $(LIBFT_DIR) clean
+
+fclean:
+		@rm -f $(NAME)
+		@rm -rf $(OBJ_DIR)
+		@make -C $(LIBFT_DIR) fclean
+		@echo "\n\033[0;31mAll is gone\033[0m\n"
 
 re: fclean all
 
