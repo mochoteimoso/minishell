@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/09 16:27:53 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:41:43 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ static int user_prompt(char **envp)
 			break ;
 		if (input && *input)
 			add_history(input);
-		if (parse_and_validate_input(input, &mini))
-			return (1);
+		parse_and_validate_input(input, mini);
 		built_in_exe(input, mini);
 	}
 	return (0);
