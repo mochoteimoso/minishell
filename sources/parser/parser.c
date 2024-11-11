@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 13:23:10 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:38:04 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,26 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 		printf("\n");
 		printf("Struct %d: segment: %s\n", i, mini->cmds[i]->segment);
 		printf("Struct %d: command: %s\n", i, mini->cmds[i]->command);
-		printf("Struct %d: arg 1: %s\n", i, mini->cmds[i]->args[0]);
-		printf("Struct %d: arg 2: %s\n", i, mini->cmds[i]->args[1]);
-		printf("Struct %d: redirect_in: %u\n", i, mini->cmds[i]->redir->type);
-		printf("Struct %d: redirect_out %s\n", i, mini->cmds[i]->redir->file);
+		int j = 0;
+		while (mini->cmds[i]->args[j] != NULL)
+		{
+			printf("Struct %d: arg %d: %s\n", i, j, mini->cmds[i]->args[j]);
+			j++;
+		}
+		t_redir *redir = mini->cmds[i]->redir_head;
+		int redir_index = 0;
+		while (redir)
+		{
+			printf("Struct %d: Redirection %d - file: %s, type: %d\n",
+				i, redir_index, redir->file ? redir->file : "(null)", redir->type);
+			printf("Struct %d: Redirection %d - delimiter: %s, type: %d\n",
+				i, redir_index, redir->delimiter ? redir->delimiter : "(null)", redir->type);	
+			redir = redir->next;
+			redir_index++;
+		}
+		//printf("Struct %d: redirect_in: %u\n", i, mini->cmds[i]->redir_tail->type);
+		//printf("Struct %d: redirect_out %s\n", i, mini->cmds[i]->redir_tail->file);
+		//printf("Struct %d: redirect_out %s\n", i, mini->cmds[i]->redir_tail->file);
 		//printf("Struct %d: append %s\n", i, mini->cmds[i]->append);
 		//printf("Struct %d: heredoc: %d\n", i, mini->cmds[i]->heredoc);
 		//printf("Struct %d: heredoc_delim: %s\n", i, mini->cmds[i]->heredoc_delim);
@@ -111,56 +127,53 @@ int	parse_cmd_string(t_cmd *cmd)
 
 int	handle_redirections(t_cmd *cmd, int i)
 {
-	t_redir *new;
-	t_redir *temp;
-	
 	if (is_redirection(cmd, i))
 	{
-		if (!cmd->redir)
+		if (!cmd->redir_head)
 		{
-			cmd->redir = list_redir(cmd);
-			if (!cmd->redir) {
+			cmd->redir_head = list_redir();
+			if (!cmd->redir_head) 
+			{
 				printf("Failed to initialize redirection list\n");
 				return (-1);
 			}
+			cmd->redir_tail = cmd->redir_head;	
 		}
 		else
 		{
-			new = redir_add_node();
-			if (!new) 
+			redir_update_tail(cmd);
+			if (!cmd->redir_tail) 
 			{
 				printf("Failed to allocate memory for new redirection node\n");
 				return (-1);
 			}
 		}
-	redir_lstadd_back(&cmd->redir, new);
-	//temp = cmd->redir->next;
+	}
 	while (cmd->segment[i])
 	{
 		if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
 		{	
-			if (handle_heredoc(cmd, i, new) == -1)
+			if (handle_heredoc(cmd, i) == -1)
 				return (-1);
 		}
 		else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
 		{
-			if (handle_append(cmd, i, new) == -1)
+			if (handle_append(cmd, i) == -1)
 				return (-1);
 		}
 		else if (cmd->segment[i] == '<')
 		{
-			if (handle_redirect_in(cmd, i, new) == -1)
+			if (handle_redirect_in(cmd, i) == -1)
 				return (-1);
 		}
 		else if (cmd->segment[i] == '>')
 		{
-			if (handle_redirect_out(cmd, i, new) == -1)
+			if (handle_redirect_out(cmd, i) == -1)
 				return (-1);
 		}
 		else
 			break ;
-			i++;
-		}
+		i++;
 	}
 	printf("index after handle_redirections: %d\n", i);
 	return (i);
