@@ -27,8 +27,8 @@ typedef struct s_redir
 {
 	char			*file;
 	char			*delimiter;
-	t_redir_type	*type;
-	int				node_ind;	
+	t_redir_type	type;
+	int				node_ind;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -77,19 +77,22 @@ int		check_redirects(char *input);
 int		validate_redirect(char *input, int *i, char *type);
 int		count_pipes(char *input);
 t_cmd	**allocate_cmd_array(int command_count);
-int		split_input_by_pipes(char *input, t_shell *sh);
+int		split_input_by_pipes(char *input, t_shell *mini);
 int		parse_input(t_shell *sh);
-int		parse_and_validate_input(char *input, t_shell *sh);
+int		parse_and_validate_input(char *input, t_shell *mini);
 int		prepare_command_structs(t_shell *sh, char *input);
 void	init_sig(void);
-int		split_input_by_pipes(char *input, t_shell *sh);
+int		split_input_by_pipes(char *input, t_shell *mini);
 char	*ft_strndup(const char *src, size_t n);
 bool	is_redirection(t_cmd *cmd, int i);
-int		handle_redirect_in(t_cmd *cmd, int *i);
-int		handle_redirect_out(t_cmd *cmd, int *i);
-int		handle_heredoc(t_cmd *cmd, int *i);
-int		handle_append(t_cmd *cmd, int *i);
+int		handle_redirect_in(t_cmd *cmd, int i, t_redir *redir_node);
+int		handle_redirect_out(t_cmd *cmd, int i, t_redir *redir_node);
+int		handle_heredoc(t_cmd *cmd, int i, t_redir *redir_node);
+int		handle_append(t_cmd *cmd, int i, t_redir *redir_node);
+int		handle_cmd_args(t_cmd *cmd, int i);
 int		ft_isspace(char c);
+void	redir_lstadd_back(t_redir **lst, t_redir *new);
+t_redir	*redir_add_node(void);
 
 /*built_in*/
 	/*cd*/
