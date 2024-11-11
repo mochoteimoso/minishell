@@ -38,16 +38,11 @@ typedef struct s_cmd
 	char	*command;
 	char	**args;
 	int		args_count;
-	// char	*redirect_in;
-	// char	*redirect_out;
-	// int		redirect_type; //??
 	char	**env_vars; //??
 	int		env_var_count; //??
 	char	*append;
-	t_redir *redir;
-	//bool	heredoc;
-	// char	*heredoc_delim;
-	// char	*heredoc_content;
+	t_redir *redir_head;
+	t_redir *redir_tail;
 	int		exit_status;
 }	t_cmd;
 
@@ -85,14 +80,16 @@ void	init_sig(void);
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*ft_strndup(const char *src, size_t n);
 bool	is_redirection(t_cmd *cmd, int i);
-int		handle_redirect_in(t_cmd *cmd, int i, t_redir *redir_node);
-int		handle_redirect_out(t_cmd *cmd, int i, t_redir *redir_node);
-int		handle_heredoc(t_cmd *cmd, int i, t_redir *redir_node);
-int		handle_append(t_cmd *cmd, int i, t_redir *redir_node);
+int		handle_redirect_in(t_cmd *cmd, int i);
+int		handle_redirect_out(t_cmd *cmd, int i);
+int		handle_heredoc(t_cmd *cmd, int i);
+int		handle_append(t_cmd *cmd, int i);
 int		handle_cmd_args(t_cmd *cmd, int i);
 int		ft_isspace(char c);
+t_redir	*list_redir(void);
 void	redir_lstadd_back(t_redir **lst, t_redir *new);
 t_redir	*redir_add_node(void);
+void 	redir_update_tail(t_cmd *cmd);
 
 /*built_in*/
 	/*cd*/
