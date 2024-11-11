@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 18:38:04 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 19:56:56 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 		int redir_index = 0;
 		while (redir)
 		{
-			printf("Struct %d: Redirection %d - file: %s, type: %d\n",
-				i, redir_index, redir->file ? redir->file : "(null)", redir->type);
-			printf("Struct %d: Redirection %d - delimiter: %s, type: %d\n",
-				i, redir_index, redir->delimiter ? redir->delimiter : "(null)", redir->type);	
+			printf("Struct %d: Redirection %d - type: %d\n", i, redir_index, redir->type);
+			printf("Struct %d: Redirection %d - file: %s\n",
+				i, redir_index, redir->file ? redir->file : "(null)");
+			printf("Struct %d: Redirection %d - delimiter: %s\n",
+				i, redir_index, redir->delimiter ? redir->delimiter : "(null)");
 			redir = redir->next;
 			redir_index++;
 		}
@@ -81,6 +82,50 @@ int	parse_input(t_shell *mini)
 	return (0);
 }
 
+/* int parse_cmd_string(t_cmd *cmd)
+{
+	int		i;
+	bool	cmd_found ;
+	
+	i = 0;
+	cmd_found = false;
+	while (cmd->segment[i])
+	{
+		// Step 1: Handle initial redirections
+		if (is_redirection(cmd, i)) 
+		{
+			i = handle_redirections(cmd, i);
+			if (i == -1)
+				return (1);
+		}
+		// Step 2: Find the command if not found yet
+		else if (!cmd_found) 
+		{
+			i = handle_cmd_name(cmd, i);
+			if (i == -1)
+				return (1);
+			cmd_found = true;
+		}
+		// Step 3: After command is found, handle arguments
+		else if (cmd_found && !is_redirection(cmd, i))
+		{
+			i = handle_cmd_args(cmd, i);
+			if (i == -1)
+				return (1);
+		}
+		// Step 4: Handle any redirections after arguments
+		else if (is_redirection(cmd, i))
+		{
+			i = handle_redirections(cmd, i);
+			if (i == -1)
+				return (1);
+		}
+		else
+			i++;  // Move to the next character if none of the above conditions are met
+	}
+	return (0);
+} */
+
 // Parses the segment string of each struct 
 
 // create a linked list if the segment string contains redirections
@@ -109,71 +154,69 @@ int	parse_cmd_string(t_cmd *cmd)
 		if (i == -1)
 			return (1);
 	}
-	while (cmd->segment[i])
-	{
-		if (is_redirection(cmd, i))
-		{
-			i = handle_redirections(cmd, i);
-			if (i == -1)
-				return (1);
-		}	
-		else
-			i++;
-	}
+	i = handle_redirections(cmd, i);
+	if (i == -1)
+		return (1);
 	return (0);
 }
 
-// Handles different redirections in the segment strings
-
-int	handle_redirections(t_cmd *cmd, int i)
+int handle_redirections(t_cmd *cmd, int i)
 {
-	if (is_redirection(cmd, i))
-	{
-		if (!cmd->redir_head)
-		{
-			cmd->redir_head = list_redir();
-			if (!cmd->redir_head) 
-			{
-				printf("Failed to initialize redirection list\n");
-				return (-1);
-			}
-			cmd->redir_tail = cmd->redir_head;	
-		}
-		else
-		{
-			redir_update_tail(cmd);
-			if (!cmd->redir_tail) 
-			{
-				printf("Failed to allocate memory for new redirection node\n");
-				return (-1);
-			}
-		}
-	}
 	while (cmd->segment[i])
 	{
-		if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
-		{	
-			if (handle_heredoc(cmd, i) == -1)
-				return (-1);
-		}
-		else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
+		// If a redirection symbol is found, create a new node and handle the redirection
+		if (is_redirection(cmd, i))
 		{
-			if (handle_append(cmd, i) == -1)
-				return (-1);
-		}
-		else if (cmd->segment[i] == '<')
-		{
-			if (handle_redirect_in(cmd, i) == -1)
-				return (-1);
-		}
-		else if (cmd->segment[i] == '>')
-		{
-			if (handle_redirect_out(cmd, i) == -1)
-				return (-1);
+			// Create a new redirection node each time a redirection is encountered
+			if (!cmd->redir_head)
+			{
+				cmd->redir_head = list_redir();  // Create the first redirection node
+				if (!cmd->redir_head)
+				{
+					printf("Failed to initialize redirection list\n");
+					return (-1);
+				}
+				cmd->redir_tail = cmd->redir_head;  // Set tail to head for the first node
+			}
+			else
+			{
+				// If the list already has redirections, update the tail and create a new node
+				redir_update_tail(cmd);  // Update tail to point to the most recent redirection
+				if (!cmd->redir_tail)
+				{
+					printf("Failed to allocate memory for new redirection node\n");
+					return (-1);
+				}
+			}
+			// Handle the specific redirection types
+			if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
+			{
+				i = handle_heredoc(cmd, i);
+				if (i == -1)
+					return (-1);
+			}
+			else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
+			{
+				i = handle_append(cmd, i);
+				if (i == -1) 
+					return (-1);
+			}
+			else if (cmd->segment[i] == '<')
+			{
+				i = handle_redirect_in(cmd, i);
+				if (i == -1)
+					return (-1);
+			}
+			else if (cmd->segment[i] == '>')
+			{
+				i = handle_redirect_out(cmd, i);
+				if (i == -1)
+					return (-1);
+			}
+			i++;
 		}
 		else
-			break ;
-		i++;
+			break;
 	}
 	printf("index after handle_redirections: %d\n", i);
 	return (i);
