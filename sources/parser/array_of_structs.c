@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 10:52:24 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:03:51 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ void	initialize_command_struct(t_cmd *cmd)
 	cmd->command = NULL;
 	cmd->args = NULL;
 	cmd->args_count = 0;
-	cmd->redir = NULL;
+	cmd->redir_head = NULL;
+	cmd->redir_tail = NULL;
 	//cmd->redirect_in = NULL;
 	//cmd->redirect_out = NULL;
 	//cmd->redirect_type = 0;
