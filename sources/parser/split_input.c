@@ -6,11 +6,11 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 16:31:34 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:33:30 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
