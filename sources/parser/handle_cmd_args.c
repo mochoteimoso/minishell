@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 10:37:32 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:41:28 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 {
 	int		arg_length;
 	char	*arg_start;
-	char	args_count;
+	int		args_count;
 	int		arg_index;
 	
 	arg_index = 0;
@@ -31,7 +31,7 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 		return (-1);
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
-	while (cmd->segment[i] && arg_index <= args_count)
+	while (cmd->segment[i] && arg_index < args_count)
 	{
 		arg_start = &cmd->segment[i];
 		arg_length = 0;
