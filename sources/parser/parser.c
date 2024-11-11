@@ -6,11 +6,11 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 18:31:28 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:23:10 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*ft_strndup(const char *src, size_t n);
 int		parse_input(t_shell *mini);
@@ -38,11 +38,11 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 		printf("Struct %d: command: %s\n", i, mini->cmds[i]->command);
 		printf("Struct %d: arg 1: %s\n", i, mini->cmds[i]->args[0]);
 		printf("Struct %d: arg 2: %s\n", i, mini->cmds[i]->args[1]);
-		printf("Struct %d: redirect_in: %s\n", i, mini->cmds[i]->redirect_in);
-		printf("Struct %d: redirect_out %s\n", i, mini->cmds[i]->redirect_out);
-		printf("Struct %d: append %s\n", i, mini->cmds[i]->append);
-		printf("Struct %d: heredoc: %d\n", i, mini->cmds[i]->heredoc);
-		printf("Struct %d: heredoc_delim: %s\n", i, mini->cmds[i]->heredoc_delim);
+		printf("Struct %d: redirect_in: %u\n", i, mini->cmds[i]->redir->type);
+		printf("Struct %d: redirect_out %s\n", i, mini->cmds[i]->redir->file);
+		//printf("Struct %d: append %s\n", i, mini->cmds[i]->append);
+		//printf("Struct %d: heredoc: %d\n", i, mini->cmds[i]->heredoc);
+		//printf("Struct %d: heredoc_delim: %s\n", i, mini->cmds[i]->heredoc_delim);
 		printf("\n");
 		i++;
 	}
@@ -75,29 +75,29 @@ int	parse_input(t_shell *mini)
 int	parse_cmd_string(t_cmd *cmd)
 {
 	int		i;
-	char	*cmd_string;
 	bool	cmd_found;
 
 	i = 0;
 	cmd_found = false;
-	i = handle_redirections(cmd->segment, i);
+	
+	i = handle_redirections(cmd, i);
 	if (i == -1)
 		return ((1));
-	i = handle_cmd_name(cmd->segment, i);
+	i = handle_cmd_name(cmd, i);
 	if (i == -1)
 		return (1);
 	cmd_found = true;
-	while (cmd->segment[i] && cmd_found && !is_redirection(cmd->segment, i))
+	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
-		i = handle_cmd_args(cmd->segment, i);
+		i = handle_cmd_args(cmd, i);
 		if (i == -1)
 			return (1);
 	}
-	while (cmd_string[i])
+	while (cmd->segment[i])
 	{
-		if (is_redirection(cmd->segment, i))
+		if (is_redirection(cmd, i))
 		{
-			i = handle_redirections(cmd->segment, i);
+			i = handle_redirections(cmd, i);
 			if (i == -1)
 				return (1);
 		}	
@@ -111,33 +111,54 @@ int	parse_cmd_string(t_cmd *cmd)
 
 int	handle_redirections(t_cmd *cmd, int i)
 {
-	while (cmd->segment[i])
+	t_redir *new;
+	t_redir *temp;
+	
+	if (is_redirection(cmd, i))
 	{
-		if (is_redirection(cmd, i))
+		if (!cmd->redir)
 		{
-			list_redir();
-			if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
-			{	
-				if (handle_heredoc(cmd->segment, &i))
-					return (-1);
-			}
-			else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
-			{
-				if (handle_append(cmd->segment, &i))
+			cmd->redir = list_redir(cmd);
+			if (!cmd->redir) {
+				printf("Failed to initialize redirection list\n");
 				return (-1);
 			}
-			else if (cmd->segment[i] == '<')
+		}
+		else
+		{
+			new = redir_add_node();
+			if (!new) 
 			{
-				if (handle_redirect_in(cmd->segment, &i))
-					return (-1);
+				printf("Failed to allocate memory for new redirection node\n");
+				return (-1);
 			}
-			else if (cmd->segment[i] == '>')
-			{
-				if (handle_redirect_out(cmd->segment, &i))
-					return (-1);
-			}
-			else
-				break ;
+		}
+	redir_lstadd_back(&cmd->redir, new);
+	//temp = cmd->redir->next;
+	while (cmd->segment[i])
+	{
+		if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
+		{	
+			if (handle_heredoc(cmd, i, new) == -1)
+				return (-1);
+		}
+		else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
+		{
+			if (handle_append(cmd, i, new) == -1)
+				return (-1);
+		}
+		else if (cmd->segment[i] == '<')
+		{
+			if (handle_redirect_in(cmd, i, new) == -1)
+				return (-1);
+		}
+		else if (cmd->segment[i] == '>')
+		{
+			if (handle_redirect_out(cmd, i, new) == -1)
+				return (-1);
+		}
+		else
+			break ;
 			i++;
 		}
 	}
@@ -159,7 +180,7 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 		i++;
 	cmd_start = &cmd->segment[i];
  	while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) &&
-	!is_redirection(cmd->segment, i))
+	!is_redirection(cmd, i))
 	{
 		cmd_length++;
 		i++;
