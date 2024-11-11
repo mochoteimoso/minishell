@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 18:20:14 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 19:58:16 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	handle_heredoc(t_cmd *cmd, int i)
 		i++;
 	delimiter_start = &cmd->segment[i];
 	while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && !is_redirection(cmd, i) &&
-		cmd->segment[i] != '|' &&cmd->segment[i] != '$')
+		cmd->segment[i] != '|' && cmd->segment[i] != '$')
 	{
 		delimiter_length++;
 		i++;
