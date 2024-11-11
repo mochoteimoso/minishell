@@ -6,11 +6,11 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 16:42:32 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:52:24 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int			count_pipes(char *line);
 int			prepare_command_structs(t_shell *sh, char *input);
@@ -93,7 +93,7 @@ void	initialize_command_struct(t_cmd *cmd)
 	cmd->command = NULL;
 	cmd->args = NULL;
 	cmd->args_count = 0;
-	t_redir *redir;
+	cmd->redir = NULL;
 	//cmd->redirect_in = NULL;
 	//cmd->redirect_out = NULL;
 	//cmd->redirect_type = 0;
