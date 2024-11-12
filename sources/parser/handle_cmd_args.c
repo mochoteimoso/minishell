@@ -51,9 +51,9 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 			printf("Failed to allocate memory for argument\n");
 			return (-1);
 		}
-		arg_index++;
 		while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 			i++;
+		arg_index++;
 	}
 	cmd->args[arg_index] = NULL;
 	//printf("index after handle_args: %d\n", i);
