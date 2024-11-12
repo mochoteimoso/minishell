@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 15:03:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:29:07 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			count_pipes(char *line);
 int			prepare_command_structs(t_shell *sh, char *input);
-t_cmd	**allocate_cmd_array(int command_count);
+t_cmd		**allocate_cmd_array(int command_count);
 void		initialize_command_struct(t_cmd *cmd);
 
 // Counts the number of pipes in input string
@@ -95,13 +95,7 @@ void	initialize_command_struct(t_cmd *cmd)
 	cmd->args_count = 0;
 	cmd->redir_head = NULL;
 	cmd->redir_tail = NULL;
-	//cmd->redirect_in = NULL;
-	//cmd->redirect_out = NULL;
-	//cmd->redirect_type = 0;
 	cmd->append = NULL;
-	//cmd->heredoc = false;
-	//cmd->heredoc_delim = NULL;
-	//cmd->heredoc_content = NULL;
 	cmd->env_vars = NULL;
 	cmd->env_var_count = 0;
 	cmd->exit_status = 0;
