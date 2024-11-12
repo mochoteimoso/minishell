@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/12 17:54:42 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/12 18:01:12 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static void	clean_cmds(t_cmd **cmds)
 		clean_redir(cmds[i]->redir_head,  cmds[i]->redir_tail);
 		i++;
 	}
+	free(cmds);
 }
 
 void	cleaner(t_shell *mini)
