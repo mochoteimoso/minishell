@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/07 18:50:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:53:22 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ static int	parse_and_add(t_shell *mini, char *str)
 /*Sets an environment variable. Accepts VAR=VALUE format to
 define or update variables.*/
 
-int	built_export(t_shell *mini, char **args)
+int	built_export(t_shell *mini, t_cmd *cmd)
 {
 	int		i;
 	int		sum;
 
 	sum = 0;
 	i = 1;
-	while (args[sum])
+	while (cmd->args[sum])
 		sum++;
 	if (sum == 1)
 		print_pending(mini);
@@ -74,7 +74,7 @@ int	built_export(t_shell *mini, char **args)
 	{
 		while (i < sum)
 		{
-			if (parse_and_add(mini, args[i]))
+			if (parse_and_add(mini, cmd->args[i]))
 				error("Invalid identifier");
 			i++;
 		}

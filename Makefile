@@ -14,9 +14,8 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env_handling.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
 	$(SRC_DIR)commands/cmd_array.c\
-	$(SRC_DIR)commands/cmd_array_utils.c\
 	$(SRC_DIR)parser/parser.c\
-	$(SRC_DIR)parser/parser_utils.c\
+	$(SRC_DIR)parser/handle_cmd_args.c\
 	$(SRC_DIR)parser/split_input.c\
 	$(SRC_DIR)parser/syntax_checks.c\
 	$(SRC_DIR)redirection/redir_ll.c\

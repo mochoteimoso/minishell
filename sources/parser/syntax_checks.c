@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 10:33:32 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:25:37 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,29 @@ int	validate_input_syntax(char *input)
 		return (0);
 }
 
-// Checks whether special character is in quotes or not
 
+// Checks whether special character is in quotes or not
+int	has_quotes(char *input, int i)
+{
+	int	in_single_quote;
+	int	in_double_quote;
+
+	in_single_quote = 0;
+	in_double_quote = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'' && in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (input[i] == '"' && in_single_quote)
+			in_double_quote = !in_double_quote;
+		i++;
+	}
+	if (in_double_quote || in_single_quote)
+		return (1);
+	return (0);
+}
+
+// This needs to be combined with is_in_quotes function - figure out how
 int	is_in_quotes(char *input, int i)
 {
 	int	in_single_quote;
@@ -195,24 +216,4 @@ int	validate_redirect(char *input, int *i, char *type)
 }
 
 
-// This needs to be combined with is_in_quotes function - figure out how
 
-int	has_quotes(char *input, int i)
-{
-	int	in_single_quote;
-	int	in_double_quote;
-
-	in_single_quote = 0;
-	in_double_quote = 0;
-	while (input[i])
-	{
-		if (input[i] == '\'' && in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (input[i] == '"' && in_single_quote)
-			in_double_quote = !in_double_quote;
-		i++;
-	}
-	if (in_double_quote || in_single_quote)
-		return (1);
-	return (0);
-}

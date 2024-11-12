@@ -6,12 +6,45 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/11 13:58:31 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 17:53:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../includes/minishell.h"
+
+// static void printer(t_shell *mini)
+// {
+// 	int i = 0;
+// 	while (mini->cmds[i])
+// 	{
+// 		printf("\n");
+// 		printf("|*************************************************|\n");
+// 		printf("Struct %d:\n", i);
+// 		printf("segment: %s\n", mini->cmds[i]->segment);
+// 		printf("command: %s\n", mini->cmds[i]->command);
+// 		int j = 0;
+// 		while (mini->cmds[i]->args[j])
+// 		{
+// 			printf("arg %d: %s\n", j, mini->cmds[i]->args[j]);
+// 			j++;
+// 		}
+// 		t_redir *redir = mini->cmds[i]->redir_head;
+// 		int redir_index = 0;
+// 		while (redir)
+// 		{
+// 			printf("Redir\n");
+// 			printf("Redirection %d - type: %d\n", redir_index, redir->type);
+// 			printf("Redirection %d - file: %s\n", redir_index, redir->file);
+// 			printf("Redirection %d - delimiter: %s\n", redir_index, redir->delimiter);
+// 			redir = redir->next;
+// 			redir_index++;
+// 		}
+// 		printf("|*************************************************|\n");
+// 		printf("\n");
+// 		i++;
+// 	}
+// }
 
 static int	init_shell(t_shell *mini, char **envp)
 {
@@ -26,24 +59,29 @@ static int	init_shell(t_shell *mini, char **envp)
 	return (0);
 }
 
-static int	built_in_exe(char *input, t_shell *mini)
+static int	built_in_exe(t_shell *mini)
 {
-	char	**cmd = ft_split(input, ' ');
-	if (ft_strcmp(cmd[0], "exit") == 0)
-		return (built_exit(mini, cmd));
-	else if (ft_strcmp(cmd[0], "cd") == 0)
-		return (built_cd(mini, cmd));
-	else if (ft_strcmp(cmd[0], "echo") == 0)
-		return (built_echo(cmd));
-	else if (ft_strcmp(cmd[0], "env") == 0)
-	 	return (built_env(mini));
-	else if (ft_strcmp(cmd[0], "pwd") == 0 && cmd[1] == NULL)
-		return (built_pwd(mini));
-	else if (ft_strcmp(cmd[0], "unset") == 0)
-		return (built_unset(mini, cmd));
-	else if (ft_strcmp(cmd[0], "export") == 0)
-		return (built_export(mini, cmd));
-	ft_free_array(cmd);
+	int i;
+
+	i = 0;
+	while (mini->cmds[i])
+	{
+		if (ft_strcmp(mini->cmds[i]->command, "exit") == 0)
+			built_exit(mini, mini->cmds[i]);
+		else if (ft_strcmp(mini->cmds[i]->command, "cd") == 0)
+			return (built_cd(mini, mini->cmds[i]));
+		else if (ft_strcmp(mini->cmds[i]->command, "echo") == 0)
+			return (built_echo(mini->cmds[i]));
+		else if (ft_strcmp(mini->cmds[i]->command, "env") == 0)
+		 	return (built_env(mini));
+		else if (ft_strcmp(mini->cmds[i]->command, "pwd") == 0 && mini->cmds[i]->args[0] == NULL)
+			return (built_pwd(mini));
+		else if (ft_strcmp(mini->cmds[i]->command, "unset") == 0)
+			return (built_unset(mini, mini->cmds[i]));
+		else if (ft_strcmp(mini->cmds[i]->command, "export") == 0)
+			return (built_export(mini, mini->cmds[i]));
+		i++;
+	}
 	return (0);
 }
 
@@ -67,7 +105,8 @@ static int user_prompt(char **envp)
 			add_history(input);
 		if (parse_and_validate_input(input, mini))
 			error("ALL IS BROKE!!\n");
-		built_in_exe(input, mini);
+		//printer(mini);
+		built_in_exe(mini);
 	}
 	return (0);
 }

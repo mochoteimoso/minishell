@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   array_of_structs.c                                 :+:      :+:    :+:   */
+/*   cmd_array.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 11:29:07 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 17:39:51 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	prepare_command_structs(t_shell *mini, char *input)
 
 		i++;
 	}
-	printf("Allocated %d command struct(s)\n", command_count);
+	//printf("Allocated %d command struct(s)\n", command_count);
 	return (0);
 }
 
@@ -93,12 +93,10 @@ t_cmd	**allocate_cmd_array(int command_count)
 void	initialize_command_struct(t_cmd *cmd)
 {
 	cmd->command = NULL;
+	cmd->cmd_path = NULL;
 	cmd->args = NULL;
 	cmd->args_count = 0;
 	cmd->redir_head = NULL;
 	cmd->redir_tail = NULL;
-	cmd->append = NULL;
-	cmd->env_vars = NULL;
-	cmd->env_var_count = 0;
 	cmd->exit_status = 0;
 }

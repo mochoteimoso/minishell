@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 11:31:54 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:23:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,34 +30,6 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 		return (1);
 	if (parse_input(mini))
 		return (1);
-	int i = 0;
-	while (mini->cmds[i])
-	{
-		printf("\n");
-		printf("Struct %d: segment: %s\n", i, mini->cmds[i]->segment);
-		printf("Struct %d: command: %s\n", i, mini->cmds[i]->command);
-		int j = 0;
-		while (mini->cmds[i]->args[j] != NULL)
-		{
-			printf("Struct %d: arg %d: %s\n", i, j, mini->cmds[i]->args[j]);
-			j++;
-		}
-		t_redir *redir = mini->cmds[i]->redir_head;
-		int redir_index = 0;
-		while (redir)
-		{
-			printf("Struct %d: Redirection %d - type: %d\n", i, redir_index, redir->type);
-			printf("Struct %d: Redirection %d - file: %s\n",
-				i, redir_index, redir->file ? redir->file : "(null)");
-			printf("Struct %d: Redirection %d - delimiter: %s\n",
-				i, redir_index, redir->delimiter ? redir->delimiter : "(null)");
-			redir = redir->next;
-			redir_index++;
-		}
-		printf("\n");
-		i++;
-	}
-
 	return (0);
 }
 
@@ -79,8 +51,6 @@ int	parse_input(t_shell *mini)
 
 // Parses the segment string of each struct
 
-/
-
 int	parse_cmd_string(t_cmd *cmd)
 {
 	int		i;
@@ -88,27 +58,28 @@ int	parse_cmd_string(t_cmd *cmd)
 
 	i = 0;
 	cmd_found = false;
-	
+
 	i = handle_redirections(cmd, i);
-	printf("index after initial redirections: %d\n", i);
+	//printf("index after initial redirections: %d\n", i);
 	if (i == -1)
 		return ((1));
 	i = handle_cmd_name(cmd, i);
-	printf("index after command name: %d\n", i);
+	//printf("index after command name: %d\n", i);
 	if (i == -1)
 		return (1);
 	cmd_found = true;
 	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
 		i = handle_cmd_args(cmd, i);
-		printf("index after args: %d\n", i);
+		// printf("index after args: %d\n", i);
 		if (i == -1)
 			return (1);
 	}
 	i = handle_redirections(cmd, i);
-	printf("index after final redirections: %d\n", i);
+	// printf("index after final redirections: %d\n", i);
 	if (i == -1)
 		return (1);
+	//handle_expands()
 	return (0);
 }
 
@@ -155,7 +126,7 @@ int handle_redirections(t_cmd *cmd, int i)
 			else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
 			{
 				i = handle_append(cmd, i);
-				if (i == -1) 
+				if (i == -1)
 					return (-1);
 			}
 			else if (cmd->segment[i] == '<')
@@ -205,5 +176,4 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	}
 	return (i);
 }
-
 

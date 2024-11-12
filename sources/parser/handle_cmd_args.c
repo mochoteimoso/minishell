@@ -25,7 +25,7 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 	char	*arg_start;
 	int		args_count;
 	int		arg_index;
-	
+
 	arg_index = 0;
 	args_count = count_args(cmd, i);
 	cmd->args = ft_calloc(args_count + 1, sizeof(char *));
@@ -37,23 +37,24 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 	{
 		arg_start = &cmd->segment[i];
 		arg_length = 0;
-		while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && 
-		!is_redirection(cmd, i))
-
+		if (!is_in_quotes(cmd->segment, i))
 		{
-			arg_length++;
-			i++;
+			while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) &&
+			!is_redirection(cmd, i))
+			{
+				arg_length++;
+				i++;
+			}
+			cmd->args[arg_index] = ft_strndup(arg_start, arg_length);
+			if (!cmd->args[arg_index])
+			{
+				printf("Failed to allocate memory for argument\n");
+				return (-1);
+			}
+			arg_index++;
+			while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+				i++;
 		}
-		cmd->args[arg_index] = ft_strndup(arg_start, arg_length);
-		if (!cmd->args[arg_index])
-
-		{
-			printf("Failed to allocate memory for argument\n");
-			return (-1);
-		}
-		arg_index++;
-		while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-			i++;
 	}
 	cmd->args[arg_index] = NULL;
 	//printf("index after handle_args: %d\n", i);
@@ -74,7 +75,7 @@ int	count_args(t_cmd *cmd, int i)
 		if (cmd->segment[i] && !is_redirection(cmd, i))
 		{
 			args_count++;
-			while (cmd->segment[i]&& !ft_isspace(cmd->segment[i]) && 
+			while (cmd->segment[i]&& !ft_isspace(cmd->segment[i]) &&
 			!is_redirection(cmd, i))
 				i++;
 		}
@@ -84,6 +85,22 @@ int	count_args(t_cmd *cmd, int i)
 
 			i++;
 	}
-	printf("Argument count: %d\n", args_count);
+	//printf("Argument count: %d\n", args_count);
 	return (args_count);
 }
+
+// int is_expandle(t_cmd *cmd)
+// {
+// 	int s;
+// 	int e;
+// 	int i;
+
+// 	i = 0;
+// 	while (cmd->segment[i])
+// 	{
+// 		if (cmd->segment[i] == "'")
+// 			s = i;
+// 		if (s &&)
+
+// 	}
+// }

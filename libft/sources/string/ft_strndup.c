@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:24:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 10:33:23 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:08:21 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-
-// Allocates memory and  duplicates a string
+#include "../../includes/libft.h"
 
 char	*ft_strndup(const char *src, size_t n)
 {

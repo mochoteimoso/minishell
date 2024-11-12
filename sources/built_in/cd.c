@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/07 13:01:07 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/12 17:02:57 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,17 @@ static void	to_path(t_shell *mini, char *path)
 
 /*Changes the current directory. Accepts a relative or absolute path as an argument.*/
 
-int	built_cd(t_shell *mini, char **cmd)
+int	built_cd(t_shell *mini, t_cmd *cmd)
 {
 	const char	*path;
 	char		*cwd;
 
-	if (ft_array_len(cmd) > 2)
+	if (ft_array_len(cmd->args) > 2)
 		error("Too many arguments\n");
 	cwd = getcwd(NULL, 0);
-	//printf("cmd[0]: %s\ncmd[1]: %s\n", cmd[0], cmd[1]);
 	if (!cwd)
 		error("Malloc fail\n");
-	if (!cmd[1])
+	if (!cmd->args[0])
 	{
 		path = getenv("HOME");
 		if (!path)
@@ -100,14 +99,12 @@ int	built_cd(t_shell *mini, char **cmd)
 		}
 		chdir(path);
 		free(cwd);
-		ft_free_array(cmd);
 		return (0);
 	}
-	else if (cmd[1][0] == '-')
+	else if (cmd->args[0][0] == '-')
 		old_pwd(mini);
 	else
-		to_path(mini, cmd[1]);
+		to_path(mini, cmd->args[0]);
 	free(cwd);
-	ft_free_array(cmd);
 	return (0);
 }
