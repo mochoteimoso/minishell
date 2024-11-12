@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   array_of_structs.c                                 :+:      :+:    :+:   */
+/*   cmd_array.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 11:29:07 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 12:47:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int			count_pipes(char *line);
-int			prepare_command_structs(t_shell *sh, char *input);
+int			prepare_command_structs(t_shell *mini, char *input);
 t_cmd		**allocate_cmd_array(int command_count);
 void		initialize_command_struct(t_cmd *cmd);
 
