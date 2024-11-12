@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 19:58:16 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 10:51:19 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 	if (!cmd->redir_tail->file)
 	{
 		printf("Failed to allocate memory for filename\n");
-		return (1);
+		return (-1);
 	}
-	printf("output file after copy: %s\n", cmd->redir_tail->file);
+	//printf("output file after copy: %s\n", cmd->redir_tail->file);
 	cmd->redir_tail->type = REDIRECT_OUT;
 	return (i);
 }
@@ -109,11 +109,11 @@ int	handle_heredoc(t_cmd *cmd, int i)
 	if (!cmd->redir_tail->delimiter)
 	{
 		printf("Failed to allocate memory for heredoc delimiter\n");
-		return (1);
+		return (-1);
 	}
 	//printf("heredoc_delim after copy: %s\n", sh->cmds[index]->heredoc_delim);
 	cmd->redir_tail->type = HEREDOC;
-	return (0);
+	return (i);
 }
 
 // Handles append redirection, finds the filename and copies data to the redir linked list  
@@ -139,8 +139,8 @@ int	handle_append(t_cmd *cmd, int i)
 	if (!cmd->redir_tail->file)
 	{
 		printf("Failed to allocate memory for filename\n");
-		return (1);
+		return (-1);
 	}
 	cmd->redir_tail->type = APPEND;
-	return (0);
+	return (i);
 }
