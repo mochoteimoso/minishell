@@ -38,16 +38,14 @@ typedef struct s_cmd
 	char	*command;
 	char	**args;
 	int		args_count;
-	char	*redirect_in;
-	char	*redirect_out;
-	int		redirect_type; //??
 	char	**env_vars; //??
 	int		env_var_count; //??
 	char	*append;
 	t_redir *redir;
 	bool	heredoc;
-	char	*heredoc_delim;
-	char	*heredoc_content;
+	int		pipe_fd[2];
+	int		stdin_fd;
+	int		stdout_fd;
 	int		exit_status;
 }	t_cmd;
 
@@ -70,17 +68,17 @@ typedef struct s_shell
 
 /*built_in*/
 	/*cd*/
-int		built_cd(t_shell *mini, char **cmd);
+int		built_cd(t_shell *mini, char *cmd);
 	/*echo.c*/
 int		built_echo(char **cmd);
 	/*exit.c*/
-int		built_exit(t_shell *mini, char **cmd);
+int		built_exit(t_shell *mini, char *cmd);
 	/*export.c*/
 int		built_export(t_shell *mini, char **args);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
-int	built_unset(t_shell *mini, char **cmd);
+int		built_unset(t_shell *mini, char *str);
 /*built_in/env*/
 	/*env_handling*/
 char	**copy_env(char **envp);

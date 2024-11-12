@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/09 17:54:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:38:18 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,21 @@ static int	init_shell(t_shell *mini, char **envp)
 	return (0);
 }
 
-static int	built_in_exe(char *input, t_shell *mini)
+static int	built_in_exe(t_shell *mini, char *cmd)
 {
-	char	**cmd;
-
-	cmd = ft_split(input, ' ');
-	if (ft_strcmp(cmd[0], "exit") == 0)
+	if (ft_strcmp(cmd, "exit") == 0)
 		return (built_exit(mini, cmd));
-	else if (ft_strcmp(cmd[0], "cd") == 0)
+	else if (ft_strcmp(cmd, "cd") == 0)
 		return (built_cd(mini, cmd));
-	else if (ft_strcmp(cmd[0], "echo") == 0)
+	else if (ft_strcmp(cmd, "echo") == 0)
 		return (built_echo(cmd));
-	else if (ft_strcmp(cmd[0], "env") == 0)
+	else if (ft_strcmp(cmd, "env") == 0)
 	 	return (built_env(mini));
-	else if (ft_strcmp(cmd[0], "pwd") == 0 && cmd[1] == NULL)
+	else if (ft_strcmp(cmd, "pwd") == 0 && cmd[1] == NULL)
 		return (built_pwd(mini));
-	else if (ft_strcmp(cmd[0], "unset") == 0)
+	else if (ft_strcmp(cmd, "unset") == 0)
 		return (built_unset(mini, cmd));
-	else if (ft_strcmp(cmd[0], "export") == 0)
+	else if (ft_strcmp(cmd, "export") == 0)
 		return (built_export(mini, cmd));
 	ft_free_array(cmd);
 	return (0);
@@ -67,10 +64,11 @@ static int user_prompt(char **envp)
 			break ;
 		if (input && *input)
 			add_history(input);
-		// if (parse_and_validate_input(input, mini))
-		// 	error("ALL IS BROKE!!\n");
-		heredoc(input);
-		built_in_exe(input, mini);
+		if (parse_and_validate_input(input, mini))
+			error("ALL IS BROKE!!\n");
+		//execution(mini);
+		//heredoc(input);
+		//built_in_exe(mini, mini->cmds);
 	}
 	return (0);
 }
