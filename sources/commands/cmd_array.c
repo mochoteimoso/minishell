@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 12:47:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 14:11:30 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_cmd	**allocate_cmd_array(int command_count)
 void	initialize_command_struct(t_cmd *cmd)
 {
 	cmd->command = NULL;
+	cmd->cmd_path = NULL;
 	cmd->args = NULL;
 	cmd->args_count = 0;
 	cmd->redir_head = NULL;
