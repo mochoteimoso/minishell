@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/11 17:41:28 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:32:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 			i++;
 	}
 	cmd->args[arg_index] = NULL;
-	printf("index after handle_args: %d\n", i);
+	//printf("index after handle_args: %d\n", i);
 	return (i);
 }
 
