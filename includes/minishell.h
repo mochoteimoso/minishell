@@ -36,6 +36,7 @@ typedef struct s_cmd
 {
 	char	*segment;
 	char	*command;
+	char	*cmd_path;
 	char	**args;
 	int		args_count;
 	char	**env_vars; //??
@@ -61,7 +62,6 @@ typedef struct s_shell
 	char	**pending;
 	int		exit_stat;
 } t_shell;
-
 
 /*built_in*/
 	/*cd*/
@@ -103,7 +103,7 @@ int		count_args(t_cmd *cmd, int i);
 	/*parser.c*/
 char	*ft_strndup(const char *src, size_t n);
 int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_cmd *cmd);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
@@ -143,5 +143,9 @@ void	error(char *str);
 
 /*signals.c*/
 void	init_sig(void);
+
+/*executor*/
+	/*find_cmd_path.c*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 #endif
