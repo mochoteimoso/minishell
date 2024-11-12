@@ -54,8 +54,6 @@ typedef struct s_env
 
 }	t_env;
 
-// struct to store general information
-
 typedef struct s_shell
 {
 	t_cmd	**cmds;
@@ -113,7 +111,46 @@ void	to_alphabetical(char **array);
 	/*env_ll*/
 t_env	*add_node(char *env);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
-
+/*commands*/
+	/*cmd_array.c*/
+int			count_pipes(char *line);
+int			prepare_command_structs(t_shell *sh, char *input);
+t_cmd	**allocate_cmd_array(int command_count);
+void		initialize_command_struct(t_cmd *cmd);
+	/*cmd_array_utils.c*/
+int	handle_cmd_args(char *cmd_string, int i, t_shell *sh, int index);
+int	count_args(char *cmd_string, int i);
+/*parser*/
+	/*parser.c*/
+char	*ft_strndup(const char *src, size_t n);
+int		parse_input(t_shell *sh);
+int		parse_cmd_string(t_shell *sh, int index);
+int		handle_redirections(char *cmd_string, int i, t_shell *sh, int index);
+int		handle_cmd_name(char *cmd_string, int i, t_shell *sh, int index);
+int			parse_and_validate_input(char *input, t_shell *sh);
+	/*parser_utils.c*/
+char	*ft_strndup(const char *src, size_t n);
+	/*split_inputs.c*/
+int		split_input_by_pipes(char *input, t_shell *sh);
+char	*trim_whitespace(char *segment);
+int		ft_isspace(char c);
+	/*syntax_checls.c*/
+int	validate_input_syntax(char *input);
+int	is_in_quotes(char *input, int i);
+int	has_quotes(char *input, int i);
+int	check_consecutive_pipes(char *input);
+int	check_pipes(char *input);
+int	check_redirects(char *input);
+int	validate_redirect(char *input, int *i, char *type);
+/*redirection*/
+	/*redir_ll*/
+t_redir	*list_redir(void);
+	/*handle_redirections.c*/
+bool	is_redirection(char *str, int index);
+int		handle_redirect_in(char *str, int *i, t_shell *sh, int index);
+int		handle_redirect_out(char *str, int *i, t_shell *sh, int index);
+int		handle_heredoc(char *str, int *i, t_shell *sh, int index);
+int		handle_append(char *str, int *i, t_shell *sh, int index);
 /*utils/freeing*/
 void	cleaner(t_env *node, char **temp);
 void	error(char *str);

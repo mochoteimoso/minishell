@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
 /*   Updated: 2024/11/12 11:31:54 by henbuska         ###   ########.fr       */
@@ -57,6 +57,7 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 		printf("\n");
 		i++;
 	}
+
 	return (0);
 }
 
@@ -76,7 +77,7 @@ int	parse_input(t_shell *mini)
 	return (0);
 }
 
-// Parses the segment string of each struct 
+// Parses the segment string of each struct
 
 /
 
@@ -183,7 +184,7 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 {
 	char	*cmd_start;
 	int		cmd_length;
-	
+
 	cmd_length = 0;
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;

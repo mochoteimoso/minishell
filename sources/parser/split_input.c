@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   split_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
 /*   Updated: 2024/11/11 10:33:30 by henbuska         ###   ########.fr       */
@@ -25,11 +25,11 @@ int	split_input_by_pipes(char *input, t_shell *mini)
 	int		start;
 	int		index;
 	char	*trimmed_segment;
-	
+
 	i = 0;
 	start = 0;
 	index = 0;
-	
+
 	while (input[i])
 	{
 		if (input[i] == '|' && !is_in_quotes(input, i))

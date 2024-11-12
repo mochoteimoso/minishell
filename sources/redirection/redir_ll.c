@@ -45,9 +45,9 @@ t_redir	*redir_add_node(void)
 
 t_redir	*list_redir(void)
 {
-	t_redir *new;
-	t_redir *ll;
-	
+	t_redir	*ll;
+	t_redir	*new;
+
 	ll = NULL;
 	new = redir_add_node();
 	redir_lstadd_back(&ll, new);

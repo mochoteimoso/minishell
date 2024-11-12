@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
 /*   Updated: 2024/11/11 13:58:31 by henbuska         ###   ########.fr       */
@@ -53,6 +53,8 @@ static int user_prompt(char **envp)
 	t_shell	*mini;
 
 	mini = malloc(sizeof(t_shell));
+	if (!mini)
+		error("Malloc failed\n");
 	init_shell(mini, envp);
 	init_sig();
 	while (1)
@@ -63,7 +65,8 @@ static int user_prompt(char **envp)
 			break ;
 		if (input && *input)
 			add_history(input);
-		parse_and_validate_input(input, mini);
+		if (parse_and_validate_input(input, mini))
+			error("ALL IS BROKE!!\n");
 		built_in_exe(input, mini);
 	}
 	return (0);
@@ -81,6 +84,3 @@ int	main(int argc, char **argv, char **envp)
 	user_prompt(envp);
 	return (0);
 }
-
-
-

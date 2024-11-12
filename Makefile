@@ -28,7 +28,6 @@ FLAGS = -Wall -Werror -Wextra -g
 LDFLAGS = -lreadline
 
 LIBFT = ./libft/libft.a
-LIBFT_DIR = ./libft
 
 LIBFT_DIR = ./libft
 
@@ -49,8 +48,8 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 		@cc $(FLAGS) -c $< -o $@
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR)
-	@echo "\n\033[0;32mLibft ready\033[0m\n"
+		@make -C $(LIBFT_DIR)
+		@echo "\n\033[0;32mLibft ready\033[0m\n"
 
 $(NAME): $(OBJS)
 		@cc $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS) > /dev/null

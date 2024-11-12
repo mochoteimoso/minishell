@@ -89,6 +89,7 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 // Handles heredoc, finds the delimiter and copies data to the redir linked list  
 
 int	handle_heredoc(t_cmd *cmd, int i)
+
 {
 	char	*delimiter_start;
 	int		delimiter_length;

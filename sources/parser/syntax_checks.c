@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checks.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
 /*   Updated: 2024/11/11 10:33:32 by henbuska         ###   ########.fr       */
@@ -79,7 +79,7 @@ int	check_pipes(char *input)
 	i = 0;
 	while (input[i] == ' ')
 		i++;
-		
+
 	// check that pipe is not first non-space character
 
 	if (input[i] == '|' && !is_in_quotes(input, i))
@@ -87,7 +87,7 @@ int	check_pipes(char *input)
 		printf("syntax error near unexpected token %c\n", input[i]);
 		return (1);
 	}
-	
+
 	// check that there are no consecutive pipes
 
 	if (check_consecutive_pipes(input))

@@ -37,6 +37,7 @@ int	count_pipes(char *line)
 
 // Sets up an array of structs and allocates memory for individual structs
 
+
 int	prepare_command_structs(t_shell *mini, char *input)
 {
 	int	i;
@@ -65,6 +66,7 @@ int	prepare_command_structs(t_shell *mini, char *input)
 			return (1);
 		}
 		initialize_command_struct(mini->cmds[i]);
+
 		i++;
 	}
 	printf("Allocated %d command struct(s)\n", command_count);

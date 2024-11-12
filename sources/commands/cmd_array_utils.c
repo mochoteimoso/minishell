@@ -1,6 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
+
 /*   handle_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
@@ -11,6 +12,7 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
 
 int	handle_cmd_args(t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
@@ -37,12 +39,14 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 		arg_length = 0;
 		while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && 
 		!is_redirection(cmd, i))
+
 		{
 			arg_length++;
 			i++;
 		}
 		cmd->args[arg_index] = ft_strndup(arg_start, arg_length);
 		if (!cmd->args[arg_index])
+
 		{
 			printf("Failed to allocate memory for argument\n");
 			return (-1);
@@ -77,6 +81,7 @@ int	count_args(t_cmd *cmd, int i)
 		else if (is_redirection(cmd, i))
 			break ;
 		while (cmd->segment[i]&& ft_isspace(cmd->segment[i]))
+
 			i++;
 	}
 	printf("Argument count: %d\n", args_count);
