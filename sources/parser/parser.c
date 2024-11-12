@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 12:39:43 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/12 18:22:29 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strndup(const char *src, size_t n);
 int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_cmd *cmd);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 
@@ -34,12 +34,12 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 	while (mini->cmds[i])
 	{
 		printf("\n");
-		printf("Struct %d: segment: %s\n", i, mini->cmds[i]->segment);
-		printf("Struct %d: command: %s\n", i, mini->cmds[i]->command);
+		printf("Struct %d: Segment: %s\n", i, mini->cmds[i]->segment);
+		printf("Struct %d: Command: %s\n", i, mini->cmds[i]->command);
 		int j = 0;
 		while (mini->cmds[i]->args[j] != NULL)
 		{
-			printf("Struct %d: arg %d: %s\n", i, j, mini->cmds[i]->args[j]);
+			printf("Struct %d: Arg %d: %s\n", i, j, mini->cmds[i]->args[j]);
 			j++;
 		}
 		t_redir *redir = mini->cmds[i]->redir_head;
@@ -54,10 +54,10 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 			redir = redir->next;
 			redir_index++;
 		}
+		printf("Struct %d: Command path: %s\n", i, mini->cmds[i]->cmd_path);
 		printf("\n");
 		i++;
 	}
-
 	return (0);
 }
 
@@ -70,7 +70,7 @@ int	parse_input(t_shell *mini)
 	index = 0;
 	while (mini->cmds[index])
 	{
-		if (parse_cmd_string(mini->cmds[index]))
+		if (parse_cmd_string(mini, mini->cmds[index]))
 			return (1);
 		index++;
 	}
@@ -79,7 +79,7 @@ int	parse_input(t_shell *mini)
 
 // Parses the segment string of each struct
 
-int	parse_cmd_string(t_cmd *cmd)
+int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 {
 	int		i;
 	bool	cmd_found;
@@ -106,6 +106,8 @@ int	parse_cmd_string(t_cmd *cmd)
 	i = handle_redirections(cmd, i);
 	printf("index after final redirections: %d\n", i);
 	if (i == -1)
+		return (1);
+	if (get_cmd_path(mini, cmd))
 		return (1);
 	return (0);
 }
