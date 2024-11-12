@@ -6,20 +6,20 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/09 16:31:02 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:33:30 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		split_input_by_pipes(char *input, t_shell *sh);
+int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 int		ft_isspace(char c);
 
 // splits input string by pipes and copies each segment into the segment member
 // of the relevant struct in the array
 
-int	split_input_by_pipes(char *input, t_shell *sh)
+int	split_input_by_pipes(char *input, t_shell *mini)
 {
 	int		i;
 	int		start;
@@ -40,7 +40,7 @@ int	split_input_by_pipes(char *input, t_shell *sh)
 				printf("Failed to allocate memory for trimmed string");
 				return (1);
 			}
-			sh->cmds[index]->segment = trimmed_segment;
+			mini->cmds[index]->segment = trimmed_segment;
 			start = i + 1;
 			index++;
 		}
@@ -52,7 +52,7 @@ int	split_input_by_pipes(char *input, t_shell *sh)
 		printf("Failed to allocate memory for trimmed string");
 		return (1);
 	}
-	sh->cmds[index]->segment = trimmed_segment;
+	mini->cmds[index]->segment = trimmed_segment;
 	return (0);
 }
 
