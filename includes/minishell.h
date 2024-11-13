@@ -41,11 +41,10 @@ typedef struct s_cmd
 	char	*cmd_path;
 	char	**args;
 	int		args_count;
-	char	**env_vars; //??
-	int		env_var_count; //??
-	char	*append;
 	t_redir *redir_head;
 	t_redir *redir_tail;
+	int		fd_in;
+	int		fd_out;
 	int		exit_status;
 }	t_cmd;
 
@@ -61,6 +60,7 @@ typedef struct s_shell
 {
 	t_cmd	**cmds;
 	t_env	*env;
+	int		pipe_count;
 	char	**pending;
 	int		exit_stat;
 } t_shell;
@@ -115,7 +115,7 @@ int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 int		ft_isspace(char c);
 
-	/*syntax_checls.c*/
+	/*syntax_checks.c*/
 int		validate_input_syntax(char *input);
 int		is_in_quotes(char *input, int i);
 int		has_quotes(char *input, int i);
@@ -131,13 +131,15 @@ void	redir_lstadd_back(t_redir **lst, t_redir *new);
 t_redir	*redir_add_node(void);
 void 	redir_update_tail(t_cmd *cmd);
 
-
 	/*handle_redirections.c*/
 bool	is_redirection(t_cmd *cmd, int i);
 int		handle_redirect_in(t_cmd *cmd, int i);
 int		handle_redirect_out(t_cmd *cmd, int i);
 int		handle_heredoc(t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
+
+	/*redirector.c*/
+int		resolve_fd(t_cmd *cmd);
 
 /*utils/freeing*/
 void	cleaner(t_env *node, char **temp);
@@ -149,5 +151,7 @@ void	init_sig(void);
 /*executor*/
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+	/*pipeline.c*/
+int		execute_pipeline(t_shell *mini);
 
 #endif
