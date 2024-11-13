@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 10:51:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:13:26 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,20 @@ int		handle_append(t_cmd *cmd, int i);
 
 bool	is_redirection(t_cmd *cmd, int i)
 {
-	if ((cmd->segment[i] == '>' || cmd->segment[i] == '<') && 
-		!is_in_quotes(cmd->segment, i))
+	if ((cmd->segment[i] == '>' || cmd->segment[i] == '<') &&
+		!check_quotes(cmd->segment, i))
 		return (true);
 	else
 		return (false);
 }
 
-// Handles < redirection, finds the filename and copies data to the redir linked list  
+// Handles < redirection, finds the filename and copies data to the redir linked list
 
 int	handle_redirect_in(t_cmd *cmd, int i)
 {
 	char	*filename_start;
 	int		filename_length;
-	
+
 	filename_length = 0;
 	i++;
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
@@ -47,6 +47,7 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 		filename_length++;
 		i++;
 	}
+	printf("strndup 5 \n");
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{
@@ -57,13 +58,13 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 	return (i);
 }
 
-// Handles > redirection, finds the filename and copies data to the redir linked list  
+// Handles > redirection, finds the filename and copies data to the redir linked list
 
 int	handle_redirect_out(t_cmd *cmd, int i)
 {
 	char	*filename_start;
 	int		filename_length;
-	
+
 	filename_length = 0;
 	i++;
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
@@ -75,6 +76,7 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 		filename_length++;
 		i++;
 	}
+	printf("strndup 6\n");
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{
@@ -86,7 +88,7 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 	return (i);
 }
 
-// Handles heredoc, finds the delimiter and copies data to the redir linked list  
+// Handles heredoc, finds the delimiter and copies data to the redir linked list
 
 int	handle_heredoc(t_cmd *cmd, int i)
 
@@ -106,6 +108,7 @@ int	handle_heredoc(t_cmd *cmd, int i)
 		delimiter_length++;
 		i++;
 	}
+	printf("strndup 7\n");
 	cmd->redir_tail->delimiter = ft_strndup(delimiter_start, delimiter_length);
 	if (!cmd->redir_tail->delimiter)
 	{
@@ -117,13 +120,13 @@ int	handle_heredoc(t_cmd *cmd, int i)
 	return (i);
 }
 
-// Handles append redirection, finds the filename and copies data to the redir linked list  
+// Handles append redirection, finds the filename and copies data to the redir linked list
 
 int	handle_append(t_cmd *cmd, int i)
 {
 	char	*filename_start;
 	int		filename_length;
-	
+
 	filename_length = 0;
 	i++;
 	i++;
@@ -136,6 +139,7 @@ int	handle_append(t_cmd *cmd, int i)
 		filename_length++;
 		i++;
 	}
+	printf("strndup 9\n");
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{

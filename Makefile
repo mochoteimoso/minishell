@@ -16,6 +16,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)commands/cmd_array.c\
 	$(SRC_DIR)parser/parser.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\
+	$(SRC_DIR)parser/handle_cmd_args_utils.c\
 	$(SRC_DIR)parser/split_input.c\
 	$(SRC_DIR)parser/syntax_checks.c\
 	$(SRC_DIR)redirection/redir_ll.c\
@@ -58,9 +59,8 @@ clean:
 		@rm -rf $(OBJ_DIR)
 		@make -C $(LIBFT_DIR) clean
 
-fclean:
+fclean: clean
 		@rm -f $(NAME)
-		@rm -rf $(OBJ_DIR)
 		@make -C $(LIBFT_DIR) fclean
 		@echo "\n\033[0;31mAll is gone\033[0m\n"
 

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 18:05:43 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:11:40 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ int	split_input_by_pipes(char *input, t_shell *mini)
 
 	while (input[i])
 	{
-		if (input[i] == '|' && !is_in_quotes(input, i))
+		if (input[i] == '|' && !check_quotes(input, i))
 		{
+			printf("strndup 3\n");
 			trimmed_segment = trim_whitespace(ft_strndup(input + start, i - start));
 			if (trimmed_segment == NULL)
 			{
@@ -46,6 +47,7 @@ int	split_input_by_pipes(char *input, t_shell *mini)
 		}
 		i++;
 	}
+	printf("strndup 4\n");
 	trimmed_segment = trim_whitespace(ft_strndup(input + start, i - start));
 	if (trimmed_segment == NULL)
 	{

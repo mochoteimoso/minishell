@@ -6,15 +6,15 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 16:25:37 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:57:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	validate_input_syntax(char *input);
-int	is_in_quotes(char *input, int i);
-int	has_quotes(char *input, int i);
+// int	check_quotes(char *input, int i);
+// int	has_quotes(char *input, int i);
 int	check_consecutive_pipes(char *input);
 int	check_pipes(char *input);
 int	check_redirects(char *input);
@@ -27,7 +27,7 @@ int	validate_input_syntax(char *input)
 {
 	if (!input)
 		return (1);
-	if (has_quotes(input, 0))
+	if (check_quotes(input, 0))
 	{
 		printf("syntax error: unmatched quotes");
 		return (1);
@@ -47,50 +47,67 @@ int	validate_input_syntax(char *input)
 
 
 // Checks whether special character is in quotes or not
-int	has_quotes(char *input, int i)
+// int	has_quotes(char *input, int i)
+// {
+// 	int	in_single_quote;
+// 	int	in_double_quote;
+
+// 	in_single_quote = 0;
+// 	in_double_quote = 0;
+// 	while (input[i])
+// 	{
+// 		if (input[i] == '\'' && in_double_quote)
+// 			in_single_quote = !in_single_quote;
+// 		else if (input[i] == '"' && in_single_quote)
+// 			in_double_quote = !in_double_quote;
+// 		i++;
+// 	}
+// 	if (in_double_quote || in_single_quote)
+// 		return (1);
+// 	return (0);
+// }
+
+// // This needs to be combined with check_quotes function - figure out how
+// int	check_quotes(char *input, int i)
+// {
+// 	int	in_single_quote;
+// 	int	in_double_quote;
+// 	int	index;
+
+// 	in_single_quote = 0;
+// 	in_double_quote = 0;
+// 	index = 0;
+// 	while (index <= i && input[index])
+// 	{
+// 		if (input[index] == '\'' && !in_double_quote)
+// 			in_single_quote = !in_single_quote;
+// 		else if (input[index] == '"' && !in_single_quote)
+// 			in_double_quote = !in_double_quote;
+// 		index++;
+// 	}
+// 	return (in_double_quote || in_single_quote);
+// }
+// Checks if a given index is within quotes or if there are unbalanced quotes in the string
+int check_quotes(char *input, int limit)
 {
-	int	in_single_quote;
-	int	in_double_quote;
+	int in_single_quote = 0;
+	int in_double_quote = 0;
+	int index = 0;
 
-	in_single_quote = 0;
-	in_double_quote = 0;
-	while (input[i])
+	while (input[index] && (limit == -1 || index <= limit))
 	{
-		if (input[i] == '\'' && in_double_quote)
+		if (input[index] == '\'' && !in_double_quote)
 			in_single_quote = !in_single_quote;
-		else if (input[i] == '"' && in_single_quote)
-			in_double_quote = !in_double_quote;
-		i++;
-	}
-	if (in_double_quote || in_single_quote)
-		return (1);
-	return (0);
-}
-
-// This needs to be combined with is_in_quotes function - figure out how
-int	is_in_quotes(char *input, int i)
-{
-	int	in_single_quote;
-	int	in_double_quote;
-	int	index;
-
-	in_single_quote = 0;
-	in_double_quote = 0;
-	index = 0;
-	while (index <= i && input[index])
-	{
-		if (input[index] == '\'')
-			in_single_quote = !in_single_quote;
-		else if (input[index] == '"')
+		else if (input[index] == '"' && !in_single_quote)
 			in_double_quote = !in_double_quote;
 		index++;
 	}
-	if (in_double_quote || in_single_quote)
-		return (1);
-	else
-		return (0);
+	if (limit == -1)
+	{
+		return (in_single_quote || in_double_quote);
+	}
+	return (in_single_quote || in_double_quote);
 }
-
 //Checks whether pipe is at an invalid location, i.e. at the start or end of input
 
 int	check_pipes(char *input)
@@ -103,7 +120,7 @@ int	check_pipes(char *input)
 
 	// check that pipe is not first non-space character
 
-	if (input[i] == '|' && !is_in_quotes(input, i))
+	if (input[i] == '|' && !check_quotes(input, i))
 	{
 		printf("syntax error near unexpected token %c\n", input[i]);
 		return (1);
@@ -123,7 +140,7 @@ int	check_pipes(char *input)
 		i++;
 	while (i >= 0 && input[i - 1] == ' ')
 		i--;
-	if (input[i - 1] == '|' && !is_in_quotes(input, i - 1))
+	if (input[i - 1] == '|' && !check_quotes(input, i - 1))
 	{
 		printf("syntax error near unexpected token %c\n", input[i]);
 		return (1);
@@ -142,7 +159,7 @@ int	check_consecutive_pipes(char *input)
 	pipe_found = 0;
 	while (input[i])
 	{
-		if (input[i] == '|' && !is_in_quotes(input, i))
+		if (input[i] == '|' && !check_quotes(input, i))
 		{
 			if (pipe_found)
 			{
@@ -167,7 +184,7 @@ int	check_redirects(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '>' && !is_in_quotes(input, i))
+		if (input[i] == '>' && !check_quotes(input, i))
 		{
 			if (input[i + 1] == '>')
 			{
@@ -181,7 +198,7 @@ int	check_redirects(char *input)
 					return (1);
 			}
 		}
-		else if (input[i] == '<' && !is_in_quotes(input, i))
+		else if (input[i] == '<' && !check_quotes(input, i))
 		{
 			if (input[i + 1] == '<')
 			{

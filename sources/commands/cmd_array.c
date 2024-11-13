@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 17:39:51 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:36:28 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	count_pipes(char *line)
 	pipe_count = 0;
 	while (line[i])
 	{
-		if (line[i] == '|' && !is_in_quotes(line, i))
+		if (line[i] == '|' && !check_quotes(line, i))
 			pipe_count++;
 		i++;
 	}

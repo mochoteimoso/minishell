@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:24:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 13:08:21 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:28:35 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ char	*ft_strndup(const char *src, size_t n)
 		dest[i] = src[i];
 		i++;
 	}
-	dest[size] = '\0';
+	dest[i] = '\0';
 	return (dest);
 }

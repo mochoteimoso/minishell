@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/12 16:44:22 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:13:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	built_echo(t_cmd *cmd)
 	int	i;
 
 	nl = 1;
-	i = 1;
-	if (cmd->args[0] && ft_strcmp(cmd->args[1], "-n") == 0)
+	i = 0;
+	if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
 	{
 		nl = 0;
 		i++;
