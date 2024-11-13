@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/11 13:58:31 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:50:24 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->env = list_env(envp);
 	mini->pending = copy_env(envp);
 	to_alphabetical(mini->pending);
+	mini->pipe_count = 0;
 	mini->exit_stat = 0;
 	return (0);
 }
@@ -67,6 +68,8 @@ static int user_prompt(char **envp)
 			add_history(input);
 		if (parse_and_validate_input(input, mini))
 			error("ALL IS BROKE!!\n");
+		if (execute_pipeline(mini))
+			error("ALL IS TERRIBLY BROKEN\n");
 		built_in_exe(input, mini);
 	}
 	return (0);
