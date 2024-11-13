@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 18:32:39 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:44:55 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,6 @@
 int			get_cmd_path(t_shell *mini, t_cmd *cmd);
 static char	*search_command_in_paths(char **paths, t_cmd *cmd);
 static int	check_abs_path(t_cmd *cmd);
-
-/*void	execute_command(char *cmd, char **envp)
-{
-	char	**cmd_array;
-	char	*cmd_path;
-
-	cmd_array = NULL;
-	cmd_path = NULL;
-	parse_and_validate_cmd(cmd, &cmd_array);
-	resolve_cmd_path(cmd_array, &cmd_path, envp);
-	if (execve(cmd_path, cmd_array, envp) == -1)
-	{
-		perror(cmd);
-		free_array(cmd_array);
-		free(cmd_path);
-		exit(EXIT_FAILURE);
-	}
-} */
 
 int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 {
@@ -107,7 +89,7 @@ static int	check_abs_path(t_cmd *cmd)
 		}
 		else
 		{
-			perror(cmd->command);
+			//perror(cmd->command);
 			return (127);
 		}
 	}
