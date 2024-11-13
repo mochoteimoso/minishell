@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 14:11:30 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:53:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	prepare_command_structs(t_shell *mini, char *input)
 	int	command_count;
 
 	command_count = count_pipes(input) + 1;
+	mini->pipe_count = command_count - 1;
 	mini->cmds = allocate_cmd_array(command_count);
 	if (!mini->cmds)
 	{
@@ -98,8 +99,7 @@ void	initialize_command_struct(t_cmd *cmd)
 	cmd->args_count = 0;
 	cmd->redir_head = NULL;
 	cmd->redir_tail = NULL;
-	cmd->append = NULL;
-	cmd->env_vars = NULL;
-	cmd->env_var_count = 0;
+	cmd->fd_in = -1;
+	cmd->fd_out = -1;
 	cmd->exit_status = 0;
 }
