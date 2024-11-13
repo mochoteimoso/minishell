@@ -10,6 +10,8 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
+# include <sys/wait.h>
+# include <fcntl.h>
 
 //# include </usr/include/linux/signal.h>
 
