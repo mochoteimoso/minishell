@@ -20,8 +20,10 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/syntax_checks.c\
 	$(SRC_DIR)redirection/redir_ll.c\
 	$(SRC_DIR)redirection/handle_redirections.c\
+	$(SRC_DIR)redirection/redirector.c\
 	$(SRC_DIR)utils/freeing.c\
-	$(SRC_DIR)executor/find_cmd_path.c
+	$(SRC_DIR)executor/find_cmd_path.c\
+	$(SRC_DIR)executor/pipeline.c
 
 FLAGS = -Wall -Werror -Wextra -g
 
