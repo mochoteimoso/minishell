@@ -6,24 +6,27 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 15:44:29 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:59:41 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		execute_pipeline(t_shell *mini);
-int		initialize_pipeline(int pipe_fds[][2], int count);
+int		execute_pipeline(t_shell *mini, char **envp);
 int		create_pipes(int pipe_fds[][2], int count);
-//int		resolve_all_fds(t_shell *mini, int count);
-int		fork_and_execute(t_shell *mini, int pipe_fds[][2], int count);
-int		setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i);
+//int	resolve_all_fds(t_shell *mini, int count);
+int		fork_and_execute(t_shell *mini, int pipe_fds[][2], int count, char **envp);
+int		setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i, char **envp);
 int		dup2_and_close(int old_fd, int new_fd);
 void	close_pipe_fds(int pipe_fds[][2], int count);
-void	execute_cmd(t_shell *mini, t_cmd *cmd);
-int		execute_single_cmd(t_shell *mini);
+int		execute_cmd(t_cmd *cmd, char **envp);
+int		execute_single_cmd(t_shell *mini, char **envp);
 
-int	execute_pipeline(t_shell *mini)
+// Initializes an array of pipe_fds based on the number of pipes
+// executes single command if there are no pipes
+// sets up pipeline and forks child processes
+
+int	execute_pipeline(t_shell *mini, char **envp)
 {
 	int		count = 0;
 	int		pipe_fds[count][2];
@@ -33,12 +36,12 @@ int	execute_pipeline(t_shell *mini)
 	count = mini->pipe_count;
 	if (count == 0)
 	{
-		execute_single_cmd(mini);
+		execute_single_cmd(mini, envp);
 		return (0);
 	}
-	if (initialize_pipeline(pipe_fds, count) == -1)
+	if (create_pipes(pipe_fds, count) == -1)
 		return (1);
-	if (fork_and_execute(mini, pipe_fds, count) == -1)
+	if (fork_and_execute(mini, pipe_fds, count, envp) == -1)
 	{
 		close_pipe_fds(pipe_fds, count);
 		return (1);
@@ -54,22 +57,22 @@ int	execute_pipeline(t_shell *mini)
 	return (0);
 }
 
-int	execute_single_cmd(t_shell *mini)
+// Executes single command if there are no pipes
+// duplicates fd based on fd_in and fd_out
+
+int	execute_single_cmd(t_shell *mini, char **envp)
 {
-	t_cmd	*cmd;
-	
-	cmd = mini->cmds[0];
-	if (cmd->fd_in != STDIN_FILENO)
+	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
-		if (dup2_and_close(cmd->fd_in, STDIN_FILENO))
+		if (dup2_and_close(mini->cmds[0]->fd_in, STDIN_FILENO))
 			return (1);
 	}
-	if (cmd->fd_out != STDOUT_FILENO)
+	if (mini->cmds[0]->fd_out != STDOUT_FILENO)
 	{
-		if (dup2_and_close(cmd->fd_out, STDOUT_FILENO))
+		if (dup2_and_close(mini->cmds[0]->fd_out, STDOUT_FILENO))
 			return (1);
 	}
-	execute_cmd(mini, mini->cmds[0]);
+	execute_cmd(mini->cmds[0], envp);
 	return (0);
 	/*int	i = 0;
 	while (env_array[i])
@@ -80,15 +83,6 @@ int	execute_single_cmd(t_shell *mini)
 } 
 
 // Creates pipes for the pipeline
-
-int	initialize_pipeline(int pipe_fds[][2], int count)
-{
-	if (create_pipes(pipe_fds, count) == -1)
-		return (-1);
-	//if (resolve_all_fds(mini, count) == -1)
-	//	return (-1);
-	return (0);
-}
 
 int	create_pipes(int pipe_fds[][2], int count)
 {
@@ -125,7 +119,7 @@ int	create_pipes(int pipe_fds[][2], int count)
 
 // Forks and executes each command in the pipeline
 
-int	fork_and_execute(t_shell *mini, int pipe_fds[][2], int count)
+int	fork_and_execute(t_shell *mini, int pipe_fds[][2], int count, char **envp)
 {
 	int		i;
 	pid_t	pid;
@@ -141,7 +135,7 @@ int	fork_and_execute(t_shell *mini, int pipe_fds[][2], int count)
 		}
 		else if (pid == 0)
 		{
-			if (setup_and_execute(mini, pipe_fds, count, i))
+			if (setup_and_execute(mini, pipe_fds, count, i, envp))
 				return (-1);
 		}
 		i++;
@@ -151,13 +145,13 @@ int	fork_and_execute(t_shell *mini, int pipe_fds[][2], int count)
 
 // Handles pipe and redirection setup for each child
 
-int	setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i)
+int	setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i, char **envp)
 {
 	t_cmd *cmd;
-	char **env_array;
+	//char **env_array;
 	
 	cmd = mini->cmds[i];
-	env_array = env_to_array(mini->env);
+	//env_array = env_to_array(mini->env);
 	// Input redirection
 	printf("Duplicating first input fd\n");
 	if (cmd->fd_in != -1)
@@ -188,10 +182,9 @@ int	setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i)
 	close(cmd->fd_in);
 	close(cmd->fd_out);
 	close_pipe_fds(pipe_fds, count);
-	execute_cmd(mini, cmd);
+	execute_cmd(cmd, envp);
 	return (0);
 }
-
 
 // Helper function to duplicate and close fd
 
@@ -222,16 +215,20 @@ void	close_pipe_fds(int pipe_fds[][2], int count)
 	}
 }
 
-void	execute_cmd(t_shell *mini, t_cmd *cmd)
+// Executes command
+// Check why env_array parsed based on min->env is not working
+
+int	execute_cmd(t_cmd *cmd, char **envp)
 {
-	char	**env_array;
+	//char	**env_array;
 	
-	env_array = env_to_array(mini->env);
-	if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
+	//env_array = env_to_array(mini->env);
+	if (execve(cmd->cmd_path, cmd->args, envp) == -1)
 	{
 		perror(cmd->command);
 		// free everything
-		exit(EXIT_FAILURE);
+		return (1);
 	}
+	return (0);
 }
 
