@@ -90,6 +90,9 @@ void	to_alphabetical(char **array);
 t_env	*add_node(char *env);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
+	/*env.c*/
+char	**env_to_array(t_env *env);
+
 /*commands*/
 	/*cmd_array.c*/
 int		count_pipes(char *line);
