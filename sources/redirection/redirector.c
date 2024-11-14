@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:10:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 13:21:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:54:02 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	resolve_fd(t_cmd *cmd)
 	return (0);
 }
 
+// Loops through redirection list to find last input fd
+
 int	resolve_input_fd(t_cmd *cmd)
 {
 	int		fd_in;
@@ -74,6 +76,8 @@ int	resolve_input_fd(t_cmd *cmd)
 	}
 	return (fd_in);
 }
+
+// Loops through redirection list to find last output fd
 
 int	resolve_output_fd(t_cmd *cmd)
 {
@@ -247,6 +251,4 @@ int	open_heredoc(char *delimiter)
 	close(heredoc_pipe_fd[1]);
 	return (heredoc_pipe_fd[0]);
 }
-
-
 
