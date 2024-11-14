@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 15:37:48 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:24:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,17 @@ int	parse_input(t_shell *mini)
 
 // Parses the segment string of each struct
 
+static int	no_args(t_cmd *cmd, int i)
+{
+	cmd->args = ft_calloc(2, sizeof(char *));
+	if (!cmd->args)
+		return (-1);
+	cmd->args[0] = ft_strdup(cmd->command);
+	if (!cmd->args)
+		return (-1);
+	return (i);
+}
+
 int	parse_cmd_string(t_cmd *cmd)
 {
 	int		i;
@@ -72,6 +83,8 @@ int	parse_cmd_string(t_cmd *cmd)
 	if (i == -1)
 		return (1);
 	cmd_found = true;
+	if (!cmd->segment[i] || is_redirection(cmd, i))
+		i = no_args(cmd, i);
 	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
 		i = handle_cmd_args(cmd, i);
