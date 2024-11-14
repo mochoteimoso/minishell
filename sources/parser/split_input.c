@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 18:08:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:47:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	split_input_by_pipes(char *input, t_shell *mini)
 
 	while (input[i])
 	{
-		if (input[i] == '|' && !is_in_quotes(input, i))
+		if (input[i] == '|' && !check_quotes(input, i))
 		{
 			trimmed_segment = trim_whitespace(ft_strndup(input + start, i - start));
 			if (trimmed_segment == NULL)
