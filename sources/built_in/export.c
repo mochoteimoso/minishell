@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 16:08:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:34:32 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ static int	parse_and_add(t_shell *mini, char *str)
 		update_pending(mini, str);
 		to_alphabetical(mini->pending);
 	}
+	else
+		update_pending(mini, str);
 	return (0);
 }
 

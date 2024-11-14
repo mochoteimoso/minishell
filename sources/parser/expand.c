@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 15:32:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:32:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ static char	*get_value(t_env *env, char *name)
 	t_env	*temp;
 
 	temp = env;
-	while (temp->next)
+	while (temp)
 	{
 		if (ft_strcmp(temp->name, name) == 0)
+		{
 			return (temp->value);
+		}
 		temp = temp->next;
 	}
-	return (name);
+	return (NULL);
 }
 
 char	*expand_var(t_shell *mini, char *str)
@@ -88,7 +90,7 @@ int	expand_or_not(t_shell *mini, t_cmd *cmd)
 {
 	int	i;
 	int j;
-	i = 0;
+	i = 1;
 	j = 0;
 	while (cmd->args[i])
 	{

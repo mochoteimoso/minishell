@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/12 17:03:51 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:28:25 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	unset_env(t_shell *mini, char *str)
 		if (ft_strcmp(cur->name, str) == 0)
 		{
 			if (!prev)
-				prev = cur->next;
+				mini->env = cur->next;
 			else
 				prev->next = cur->next;
 		free(cur->name);
