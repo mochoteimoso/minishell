@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 18:09:47 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 19:18:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	parse_input(t_shell *mini)
 			return (1);
 		if (expand_or_not(mini, mini->cmds[index]))
 			return (1);
+		//if (get_pat(mini, mini->cmds[index]) HEIDI!!!!
+			//return (1);
 		index++;
 	}
 	return (0);
@@ -72,11 +74,9 @@ int	parse_cmd_string(t_cmd *cmd)
 	cmd_found = false;
 
 	i = handle_redirections(cmd, i);
-	//printf("index after initial redirections: %d\n", i);
 	if (i == -1)
 		return ((1));
 	i = handle_cmd_name(cmd, i);
-	//printf("index after command name: %d\n", i);
 	if (i == -1)
 		return (1);
 	cmd_found = true;
@@ -85,12 +85,10 @@ int	parse_cmd_string(t_cmd *cmd)
 	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
 		i = handle_cmd_args(cmd, i);
-		// printf("index after args: %d\n", i);
 		if (i == -1)
 			return (1);
 	}
 	i = handle_redirections(cmd, i);
-	// printf("index after final redirections: %d\n", i);
 	if (i == -1)
 		return (1);
 	return (0);
@@ -101,56 +99,57 @@ int	parse_cmd_string(t_cmd *cmd)
 // each redirect will be its own node and will contain information about redirection type,
 // filename, delimiter and pointer to next node
 
+static int	double_redirect(t_cmd *cmd, int i)
+{
+	if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
+	{
+		i = handle_heredoc(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
+	{
+		i = handle_append(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	return (i);
+}
+
+static int	single_redirect(t_cmd *cmd, int i)
+{
+	if (cmd->segment[i] == '<')
+	{
+		i = handle_redirect_in(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	else if (cmd->segment[i] == '>')
+	{
+		i = handle_redirect_out(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	return (i);
+}
+
 int handle_redirections(t_cmd *cmd, int i)
 {
 	while (cmd->segment[i])
 	{
-		// If a redirection symbol is found, create a new node and handle the redirection
 		if (is_redirection(cmd, i))
 		{
-			// Create a new redirection node each time a redirection is encountered
-			if (!cmd->redir_head)
+			if (redirll_head_tail(cmd))
+				return (-1);
+			if ((cmd->segment[i] == '<' && cmd->segment[i + 1] == '<') || (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>'))
 			{
-				cmd->redir_head = list_redir();  // Create the first redirection node
-				if (!cmd->redir_head)
-				{
-					printf("Failed to initialize redirection list\n");
-					return (-1);
-				}
-				cmd->redir_tail = cmd->redir_head;  // Set tail to head for the first node
-			}
-			else
-			{
-				// If the list already has redirections, update the tail and create a new node
-				redir_update_tail(cmd);  // Update tail to point to the most recent redirection
-				if (!cmd->redir_tail)
-				{
-					printf("Failed to allocate memory for new redirection node\n");
-					return (-1);
-				}
-			}
-			// Handle the specific redirection types
-			if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
-			{
-				i = handle_heredoc(cmd, i);
+				i = double_redirect(cmd, i);
 				if (i == -1)
 					return (-1);
 			}
-			else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
+			else if (cmd->segment[i] == '<' || cmd->segment[i] == '>')
 			{
-				i = handle_append(cmd, i);
-				if (i == -1)
-					return (-1);
-			}
-			else if (cmd->segment[i] == '<')
-			{
-				i = handle_redirect_in(cmd, i);
-				if (i == -1)
-					return (-1);
-			}
-			else if (cmd->segment[i] == '>')
-			{
-				i = handle_redirect_out(cmd, i);
+				i = single_redirect(cmd, i);
 				if (i == -1)
 					return (-1);
 			}

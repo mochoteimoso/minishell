@@ -6,15 +6,13 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/13 13:57:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:57:47 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	validate_input_syntax(char *input);
-// int	check_quotes(char *input, int i);
-// int	has_quotes(char *input, int i);
 int	check_consecutive_pipes(char *input);
 int	check_pipes(char *input);
 int	check_redirects(char *input);
@@ -45,48 +43,6 @@ int	validate_input_syntax(char *input)
 		return (0);
 }
 
-
-// Checks whether special character is in quotes or not
-// int	has_quotes(char *input, int i)
-// {
-// 	int	in_single_quote;
-// 	int	in_double_quote;
-
-// 	in_single_quote = 0;
-// 	in_double_quote = 0;
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '\'' && in_double_quote)
-// 			in_single_quote = !in_single_quote;
-// 		else if (input[i] == '"' && in_single_quote)
-// 			in_double_quote = !in_double_quote;
-// 		i++;
-// 	}
-// 	if (in_double_quote || in_single_quote)
-// 		return (1);
-// 	return (0);
-// }
-
-// // This needs to be combined with check_quotes function - figure out how
-// int	check_quotes(char *input, int i)
-// {
-// 	int	in_single_quote;
-// 	int	in_double_quote;
-// 	int	index;
-
-// 	in_single_quote = 0;
-// 	in_double_quote = 0;
-// 	index = 0;
-// 	while (index <= i && input[index])
-// 	{
-// 		if (input[index] == '\'' && !in_double_quote)
-// 			in_single_quote = !in_single_quote;
-// 		else if (input[index] == '"' && !in_single_quote)
-// 			in_double_quote = !in_double_quote;
-// 		index++;
-// 	}
-// 	return (in_double_quote || in_single_quote);
-// }
 // Checks if a given index is within quotes or if there are unbalanced quotes in the string
 int check_quotes(char *input, int limit)
 {
@@ -108,8 +64,8 @@ int check_quotes(char *input, int limit)
 	}
 	return (in_single_quote || in_double_quote);
 }
-//Checks whether pipe is at an invalid location, i.e. at the start or end of input
 
+//Checks whether pipe is at an invalid location, i.e. at the start or end of input
 int	check_pipes(char *input)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 18:32:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 19:15:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,31 @@ static char	*get_value(t_env *env, char *name)
 		temp = temp->next;
 	}
 	return (NULL);
+}
+
+static int oh_its_a_dollar(t_shell *mini, char *str, char *expanded, int i)
+{
+	char	*temp;
+	int		indx;
+	char	*value;
+	char	name[100];
+
+	temp = ft_strjoin(expanded, ft_strndup(&str[s], i -s));
+	free(expanded);
+	expanded = temp;
+	i++;
+	indx = 0;
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+		name[indx++] = str[i++];
+	name[indx] = '\0';
+	value = get_value(mini->env, name);
+	if (value)
+	{
+		temp = ft_strjoin(expanded, value);
+		free(expanded);
+		expanded = temp;
+	}
+	s = i;
 }
 
 char	*expand_var(t_shell *mini, char *str)

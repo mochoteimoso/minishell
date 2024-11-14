@@ -137,6 +137,7 @@ t_redir	*list_redir(void);
 void	redir_lstadd_back(t_redir **lst, t_redir *new);
 t_redir	*redir_add_node(void);
 void 	redir_update_tail(t_cmd *cmd);
+int		redirll_head_tail(t_cmd *cmd);
 
 
 	/*handle_redirections.c*/
