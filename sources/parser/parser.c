@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/13 15:10:58 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:37:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ int	parse_input(t_shell *mini)
 	{
 		if (parse_cmd_string(mini->cmds[index]))
 			return (1);
+		if (mini->cmds[index]->args)
+		{
+			if (expand_or_not(mini, mini->cmds[index]))
+				return (1);
+		}
 		index++;
 	}
 	return (0);
@@ -78,7 +83,6 @@ int	parse_cmd_string(t_cmd *cmd)
 	// printf("index after final redirections: %d\n", i);
 	if (i == -1)
 		return (1);
-	//handle_expands()
 	return (0);
 }
 
@@ -167,7 +171,6 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 		cmd_length++;
 		i++;
 	}
-	printf("strndup 2\n");
 	cmd->command = ft_strndup(cmd_start, cmd_length);
 	if (!cmd->command)
 	{

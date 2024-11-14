@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/13 15:13:26 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:13:54 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 		filename_length++;
 		i++;
 	}
-	printf("strndup 5 \n");
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{
@@ -76,7 +75,6 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 		filename_length++;
 		i++;
 	}
-	printf("strndup 6\n");
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{
@@ -108,7 +106,6 @@ int	handle_heredoc(t_cmd *cmd, int i)
 		delimiter_length++;
 		i++;
 	}
-	printf("strndup 7\n");
 	cmd->redir_tail->delimiter = ft_strndup(delimiter_start, delimiter_length);
 	if (!cmd->redir_tail->delimiter)
 	{
@@ -139,7 +136,6 @@ int	handle_append(t_cmd *cmd, int i)
 		filename_length++;
 		i++;
 	}
-	printf("strndup 9\n");
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{

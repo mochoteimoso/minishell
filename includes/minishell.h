@@ -47,8 +47,8 @@ typedef struct s_cmd
 typedef struct s_env
 {
 	char			*name;
-	char			*value;
 	struct s_env	*next;
+	char			*value;
 
 }	t_env;
 
@@ -75,7 +75,10 @@ int		built_pwd(t_shell *mini);
 	/*unset.c*/
 int		built_unset(t_shell *mini, t_cmd *cmd);
 
-/*built_in/env*/
+/*built_in*/
+	/*env*/
+char	**env_to_array(t_env *env);
+int		built_env(t_shell *mini);
 	/*env_handling*/
 char	**copy_env(char **envp);
 int		built_env(t_shell *mini);
@@ -93,7 +96,6 @@ int		prepare_command_structs(t_shell *mini, char *input);
 t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
 
-
 /*parser*/
 	/*parser.c*/
 int		parse_input(t_shell *mini);
@@ -101,7 +103,9 @@ int		parse_cmd_string(t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
-
+	/*expand.c*/
+char	*expand_var(t_shell *mini, char *str);
+int	expand_or_not(t_shell *mini, t_cmd *cmd);
 	/*handle_cmd_array.c*/
 int		handle_cmd_args(t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
