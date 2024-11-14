@@ -6,13 +6,12 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 16:10:18 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:07:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*ft_strndup(const char *src, size_t n);
 int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
@@ -74,12 +73,28 @@ int	parse_input(t_shell *mini)
 	{
 		if (parse_cmd_string(mini, mini->cmds[index]))
 			return (1);
+		if (mini->cmds[index]->args)
+		{
+			if (expand_or_not(mini, mini->cmds[index]))
+				return (1);
+		}
 		index++;
 	}
 	return (0);
 }
 
 // Parses the segment string of each struct
+
+static int	no_args(t_cmd *cmd, int i)
+{
+	cmd->args = ft_calloc(2, sizeof(char *));
+	if (!cmd->args)
+		return (-1);
+	cmd->args[0] = ft_strdup(cmd->command);
+	if (!cmd->args)
+		return (-1);
+	return (i);
+}
 
 int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 {
@@ -90,23 +105,25 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	cmd_found = false;
 	
 	i = handle_redirections(cmd, i);
-	printf("index after initial redirections: %d\n", i);
+	//printf("index after initial redirections: %d\n", i);
 	if (i == -1)
-		return ((1));
+		return (1);
 	i = handle_cmd_name(cmd, i);
-	printf("index after command name: %d\n", i);
+	//printf("index after command name: %d\n", i);
 	if (i == -1)
 		return (1);
 	cmd_found = true;
+	if (!cmd->segment[i] || !is_redirection(cmd, i))
+		i = no_args(cmd, i);
 	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
 		i = handle_cmd_args(cmd, i);
-		printf("index after args: %d\n", i);
+		//printf("index after args: %d\n", i);
 		if (i == -1)
 			return (1);
 	}
 	i = handle_redirections(cmd, i);
-	printf("index after final redirections: %d\n", i);
+	//printf("index after final redirections: %d\n", i);
 	if (i == -1)
 		return (1);
 	if (get_cmd_path(mini, cmd))
