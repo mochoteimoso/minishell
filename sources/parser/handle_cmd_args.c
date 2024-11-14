@@ -13,7 +13,6 @@
 
 #include "../../includes/minishell.h"
 
-
 int	handle_cmd_args(t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
 
@@ -21,7 +20,7 @@ int	count_args(t_cmd *cmd, int i);
 
 int	handle_cmd_args(t_cmd *cmd, int i)
 {
-	int		arg_length;
+	int		arg_len;
 	char	*arg_start;
 	int		args_count;
 	int		arg_index;
@@ -32,30 +31,16 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 	if (!cmd->args)
 		return (-1);
 	cmd->args[arg_index] = ft_strdup(cmd->command);
-	arg_index++;
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-		i++;
-	while (cmd->segment[i] && arg_index < args_count)
+	i = skip_whitespace(cmd->segment, i);
+	while (cmd->segment[i] && arg_index < args_count + 1)
 	{
-		arg_start = &cmd->segment[i];
-		arg_length = 0;
-		while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && 
-		!is_redirection(cmd, i))
-
-		{
-			arg_length++;
-			i++;
-		}
-		cmd->args[arg_index] = ft_strndup(arg_start, arg_length);
-		if (!cmd->args[arg_index])
-
-		{
-			printf("Failed to allocate memory for argument\n");
+		if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
+			i = arg_in_quotes(cmd->segment, i, &arg_start, &arg_len);
+		else
+			i = arg_no_quotes(cmd, i, &arg_start, &arg_len);
+		if (append_to_array(cmd, arg_start, arg_len, &arg_index) == -1)
 			return (-1);
-		}
-		while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-			i++;
-		arg_index++;
+		i = skip_whitespace(cmd->segment, i);
 	}
 	cmd->args[arg_index] = NULL;
 	//printf("index after handle_args: %d\n", i);
@@ -86,6 +71,6 @@ int	count_args(t_cmd *cmd, int i)
 
 			i++;
 	}
-	printf("Argument count: %d\n", args_count);
+	//printf("Argument count: %d\n", args_count);
 	return (args_count);
 }
