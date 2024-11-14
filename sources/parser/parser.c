@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/13 13:14:56 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:10:18 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 		printf("\n");
 		printf("Struct %d: Segment: %s\n", i, mini->cmds[i]->segment);
 		printf("Struct %d: Command: %s\n", i, mini->cmds[i]->command);
+		printf("Struct %d: fd_in: %d\n", i, mini->cmds[i]->fd_in);
+		printf("Struct %d: fd_out: %d\n", i, mini->cmds[i]->fd_out);
 		int j = 0;
 		while (mini->cmds[i]->args[j] != NULL)
 		{
@@ -108,6 +110,8 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	if (i == -1)
 		return (1);
 	if (get_cmd_path(mini, cmd))
+		return (1);
+	if (resolve_fd(cmd) == -1)
 		return (1);
 	return (0);
 }
