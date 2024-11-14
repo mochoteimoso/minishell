@@ -28,9 +28,11 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 	
 	arg_index = 0;
 	args_count = count_args(cmd, i);
-	cmd->args = ft_calloc(args_count + 1, sizeof(char *));
+	cmd->args = ft_calloc(args_count + 2, sizeof(char *));
 	if (!cmd->args)
 		return (-1);
+	cmd->args[arg_index] = ft_strdup(cmd->command);
+	arg_index++;
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
 	while (cmd->segment[i] && arg_index < args_count)
