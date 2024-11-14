@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 10:51:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:47:46 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		handle_append(t_cmd *cmd, int i);
 bool	is_redirection(t_cmd *cmd, int i)
 {
 	if ((cmd->segment[i] == '>' || cmd->segment[i] == '<') && 
-		!is_in_quotes(cmd->segment, i))
+		!check_quotes(cmd->segment, i))
 		return (true);
 	else
 		return (false);
