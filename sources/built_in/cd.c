@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/12 17:02:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:05:12 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,15 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 	const char	*path;
 	char		*cwd;
 
-	if (ft_array_len(cmd->args) > 2)
-		error("Too many arguments\n");
+	if (cmd->args)
+	{
+		if (ft_array_len(cmd->args) > 2)
+			error("Too many arguments\n");
+	}
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		error("Malloc fail\n");
-	if (!cmd->args[0])
+	if (!cmd->args[1])
 	{
 		path = getenv("HOME");
 		if (!path)
@@ -101,10 +104,10 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 		free(cwd);
 		return (0);
 	}
-	else if (cmd->args[0][0] == '-')
+	else if (cmd->args[1][0] == '-')
 		old_pwd(mini);
 	else
-		to_path(mini, cmd->args[0]);
+		to_path(mini, cmd->args[1]);
 	free(cwd);
 	return (0);
 }

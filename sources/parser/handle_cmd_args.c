@@ -17,50 +17,6 @@
 int	handle_cmd_args(t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
 
-// Retrieves command arguments from string and copies them to struct
-
-// int	handle_cmd_args(t_cmd *cmd, int i)
-// {
-// 	int		arg_length;
-// 	char	*arg_start;
-// 	int		args_count;
-// 	int		arg_index;
-
-// 	arg_index = 0;
-// 	args_count = count_args(cmd, i);
-// 	cmd->args = ft_calloc(args_count + 1, sizeof(char *));
-// 	if (!cmd->args)
-// 		return (-1);
-// 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-// 		i++;
-// 	while (cmd->segment[i] && arg_index < args_count)
-// 	{
-// 		arg_start = &cmd->segment[i];
-// 		arg_length = 0;
-// 		if (!check_quotes(cmd->segment, i))
-// 		{
-// 			while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) &&
-// 			!is_redirection(cmd, i))
-// 			{
-// 				arg_length++;
-// 				i++;
-// 			}
-// 			cmd->args[arg_index] = ft_strndup(arg_start, arg_length);
-// 			if (!cmd->args[arg_index])
-// 			{
-// 				printf("Failed to allocate memory for argument\n");
-// 				return (-1);
-// 			}
-// 			arg_index++;
-// 			while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-// 				i++;
-// 		}
-// 	}
-// 	cmd->args[arg_index] = NULL;
-// 	//printf("index after handle_args: %d\n", i);
-// 	return (i);
-// }
-
 // Counts how many command arguments the string contains
 
 int	count_args(t_cmd *cmd, int i)
@@ -89,7 +45,6 @@ int	count_args(t_cmd *cmd, int i)
 	return (args_count);
 }
 
-	//int		start_quote = 0;
 int	handle_cmd_args(t_cmd *cmd, int i)
 {
 	int		arg_len;
@@ -98,12 +53,13 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 	char	*arg_start;
 
 	args_count = count_args(cmd, i);
-	arg_index = 0;
-	cmd->args = ft_calloc(args_count + 1, sizeof(char *));
+	cmd->args = ft_calloc(args_count + 2, sizeof(char *));
 	if (!cmd->args)
 		return (-1);
+	arg_index = 1;
+	cmd->args[0] = ft_strdup(cmd->command);
 	i = skip_whitespace(cmd->segment, i);
-	while (cmd->segment[i] && arg_index < args_count)
+	while (cmd->segment[i] && arg_index < args_count + 1)
 	{
 		if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 			i = arg_in_quotes(cmd->segment, i, &arg_start, &arg_len);

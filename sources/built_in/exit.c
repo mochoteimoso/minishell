@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 15:46:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:07:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 	ec = 0;
 	if (cmd->args)
 	{
-		if ((cmd->args[0] && !isonlynum(cmd->args[0])) || (cmd->args[0] && cmd->args[0][0] == '\0'))
+		if ((cmd->args[1] && !isonlynum(cmd->args[1])) || (cmd->args[1] && cmd->args[1][0] == '\0'))
 		{
 			ft_putstr_fd("exit: ", 2);
-			ft_putstr_fd(cmd->args[0], 2);
+			ft_putstr_fd(cmd->args[1], 2);
 			ft_putstr_fd(": needs to be numeric\n", 2);
 			cleaner(mini);
 			free(mini);
 			exit(2);
 		}
-		else if (cmd->args[1] && cmd->args[2])
+		else if (cmd->args[2] && cmd->args[3])
 		{
 			ft_putstr_fd("exit: too many arguments\n", 2);
 			mini->exit_stat = 1;

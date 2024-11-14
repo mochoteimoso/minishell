@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/12 16:53:22 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:08:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	built_export(t_shell *mini, t_cmd *cmd)
 	int		i;
 	int		sum;
 
-	sum = 0;
+	sum = 1;
 	i = 1;
 	while (cmd->args[sum])
 		sum++;
