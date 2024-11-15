@@ -6,21 +6,17 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 18:59:41 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/15 10:02:50 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int		execute_pipeline(t_shell *mini, char **envp);
-int		create_pipes(int pipe_fds[][2], int count);
-//int	resolve_all_fds(t_shell *mini, int count);
+int		execute_single_cmd(t_shell *mini, char **envp);
 int		fork_and_execute(t_shell *mini, int pipe_fds[][2], int count, char **envp);
 int		setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i, char **envp);
-int		dup2_and_close(int old_fd, int new_fd);
-void	close_pipe_fds(int pipe_fds[][2], int count);
 int		execute_cmd(t_cmd *cmd, char **envp);
-int		execute_single_cmd(t_shell *mini, char **envp);
 
 // Initializes an array of pipe_fds based on the number of pipes
 // executes single command if there are no pipes
@@ -36,8 +32,8 @@ int	execute_pipeline(t_shell *mini, char **envp)
 	count = mini->pipe_count;
 	if (count == 0)
 	{
-		execute_single_cmd(mini, envp);
-		return (0);
+		if (execute_single_cmd(mini, envp))
+			return (1);
 	}
 	if (create_pipes(pipe_fds, count) == -1)
 		return (1);
@@ -72,7 +68,8 @@ int	execute_single_cmd(t_shell *mini, char **envp)
 		if (dup2_and_close(mini->cmds[0]->fd_out, STDOUT_FILENO))
 			return (1);
 	}
-	execute_cmd(mini->cmds[0], envp);
+	if (execute_cmd(mini->cmds[0], envp))
+		return (1);
 	return (0);
 	/*int	i = 0;
 	while (env_array[i])
@@ -81,43 +78,6 @@ int	execute_single_cmd(t_shell *mini, char **envp)
 		i++;
 	} */
 } 
-
-// Creates pipes for the pipeline
-
-int	create_pipes(int pipe_fds[][2], int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		if (pipe(pipe_fds[i]) == -1)
-		{
-			perror("pipe");
-			return (-1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-// Finds fds for all commands in the pipeline
-
-/*int	resolve_all_fds(t_shell *mini, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		if (resolve_fd(mini->cmds[i]) == -1)
-			return (-1);
-		i++;
-	}
-	return (0);
-} */
-
-// Forks and executes each command in the pipeline
 
 int	fork_and_execute(t_shell *mini, int pipe_fds[][2], int count, char **envp)
 {
@@ -186,34 +146,6 @@ int	setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i, char *
 	return (0);
 }
 
-// Helper function to duplicate and close fd
-
-int	dup2_and_close(int old_fd, int new_fd)
-{
-	if (dup2(old_fd, new_fd) == -1)
-	{
-		close(old_fd);
-		perror("dup2");
-		return (1);
-	}
-	close(old_fd);
-	return (0);
-}
-
-// Close all pipes in the array
-
-void	close_pipe_fds(int pipe_fds[][2], int count)
-{
-	int	i;
-	
-	i = 0;
-	while (i < count)
-	{
-		close(pipe_fds[i][0]);
-		close(pipe_fds[i][1]);
-		i++;
-	}
-}
 
 // Executes command
 // Check why env_array parsed based on min->env is not working
