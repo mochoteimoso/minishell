@@ -25,7 +25,8 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)redirection/redirector.c\
 	$(SRC_DIR)utils/freeing.c\
 	$(SRC_DIR)executor/find_cmd_path.c\
-	$(SRC_DIR)executor/pipeline.c
+	$(SRC_DIR)executor/pipeline.c\
+	$(SRC_DIR)executor/pipeline_utils.c
 
 
 FLAGS = -Wall -Werror -Wextra -g
