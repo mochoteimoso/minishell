@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 13:06:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/15 18:19:51 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->env = list_env(envp);
 	mini->pending = copy_env(envp);
 	to_alphabetical(mini->pending);
-	mini->pipe_count = 0;
+	mini->cmd_count = 0;
 	mini->exit_stat = 0;
 	return (0);
 }
