@@ -67,17 +67,17 @@ typedef struct s_shell
 
 /*built_in*/
 	/*cd*/
-int		built_cd(t_shell *mini, char **cmd);
+int		built_cd(t_shell *mini, t_cmd *cmd);
 	/*echo.c*/
-int		built_echo(char **cmd);
+int		built_echo(t_cmd *cmd);
 	/*exit.c*/
 int		built_exit(t_shell *mini, t_cmd *cmd);
 	/*export.c*/
-int		built_export(t_shell *mini, char **args);
+int		built_export(t_shell *mini, t_cmd *cmd);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
-int	built_unset(t_shell *mini, char **cmd);
+int	built_unset(t_shell *mini, t_cmd *cmd);
 
 /*built_in/env*/
 	/*env.c*/
@@ -103,7 +103,7 @@ void	initialize_command_struct(t_cmd *cmd);
 /*parser*/
 	/*parser.c*/
 int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
+int		parse_cmd_string(t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
