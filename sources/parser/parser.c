@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/15 13:17:47 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:43:34 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,39 +30,8 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 		return (1);
 	if (parse_input(mini))
 		return (1);
-	/*int i = 0;
-	while (mini->cmds[i])
-	{
-		printf("\n");
-		printf("Struct %d: Segment: %s\n", i, mini->cmds[i]->segment);
-		printf("Struct %d: Command: %s\n", i, mini->cmds[i]->command);
-		printf("Struct %d: fd_in: %d\n", i, mini->cmds[i]->fd_in);
-		printf("Struct %d: fd_out: %d\n", i, mini->cmds[i]->fd_out);
-		int j = 0;
-		while (mini->cmds[i]->args[j] != NULL)
-		{
-			printf("Struct %d: Arg %d: %s\n", i, j, mini->cmds[i]->args[j]);
-			j++;
-		}
-		t_redir *redir = mini->cmds[i]->redir_head;
-		int redir_index = 0;
-		while (redir)
-		{
-			printf("Struct %d: Redirection %d - type: %d\n", i, redir_index, redir->type);
-			printf("Struct %d: Redirection %d - file: %s\n",
-				i, redir_index, redir->file ? redir->file : "(null)");
-			printf("Struct %d: Redirection %d - delimiter: %s\n",
-				i, redir_index, redir->delimiter ? redir->delimiter : "(null)");
-			redir = redir->next;
-			redir_index++;
-		}
-		printf("Struct %d: Command path: %s\n", i, mini->cmds[i]->cmd_path);
-		printf("\n");
-		i++;
-	} */
 	return (0);
-} 
-
+}
 // Parses information added to array of structs
 
 int	parse_input(t_shell *mini)
@@ -120,7 +89,6 @@ int	parse_cmd_string(t_cmd *cmd)
 	//printf("index after final redirections: %d\n", i);
 	if (i == -1)
 		return (1);
-	printf("Args 0: %s\n", cmd->args[0]);
 	return (0);
 }
 
@@ -223,6 +191,7 @@ int handle_redirections(t_cmd *cmd, int i)
 	}
 	return (i);
 }
+
 
 // Retrieves command name from string and copies it to struct
 
