@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/15 10:03:07 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/15 19:05:38 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 // Creates pipes for the pipeline
 
-int	create_pipes(int pipe_fds[][2], int count)
+int	create_pipes(int pipe_fds[][2], int cmd_count)
 {
 	int	i;
+	int	pipe_count;
 
 	i = 0;
-	while (i < count)
+	pipe_count = cmd_count - 1;
+	while (i < pipe_count)
 	{
 		if (pipe(pipe_fds[i]) == -1)
 		{
@@ -47,12 +49,12 @@ int	dup2_and_close(int old_fd, int new_fd)
 
 // Close all pipes in the array
 
-void	close_pipe_fds(int pipe_fds[][2], int count)
+void	close_pipe_fds(int pipe_fds[][2], int cmd_count)
 {
 	int	i;
 	
 	i = 0;
-	while (i < count)
+	while (i < cmd_count - 1)
 	{
 		close(pipe_fds[i][0]);
 		close(pipe_fds[i][1]);
