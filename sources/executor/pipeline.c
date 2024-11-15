@@ -6,17 +6,17 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/15 10:02:50 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/15 19:34:49 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		execute_pipeline(t_shell *mini, char **envp);
-int		execute_single_cmd(t_shell *mini, char **envp);
-int		fork_and_execute(t_shell *mini, int pipe_fds[][2], int count, char **envp);
-int		setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i, char **envp);
-int		execute_cmd(t_cmd *cmd, char **envp);
+int	execute_pipeline(t_shell *mini, char **envp);
+int	execute_single_cmd(t_shell *mini, char **envp);
+int	fork_and_execute(t_shell *mini, int pipe_fds[][2], int count, char **envp);
+int	setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i, char **envp);
+int	execute_cmd(t_cmd *cmd, char **envp);
 
 // Initializes an array of pipe_fds based on the number of pipes
 // executes single command if there are no pipes
@@ -24,12 +24,12 @@ int		execute_cmd(t_cmd *cmd, char **envp);
 
 int	execute_pipeline(t_shell *mini, char **envp)
 {
-	int		count = 0;
-	int		pipe_fds[count][2];
+	int		count = mini->cmd_count;
+	int		pipe_fds[count - 1][2];
 	int		i;
 
 	i = 0;
-	count = mini->pipe_count;
+	//count = mini->cmd_count;
 	if (count == 0)
 	{
 		if (execute_single_cmd(mini, envp))
@@ -37,12 +37,12 @@ int	execute_pipeline(t_shell *mini, char **envp)
 	}
 	if (create_pipes(pipe_fds, count) == -1)
 		return (1);
-	if (fork_and_execute(mini, pipe_fds, count, envp) == -1)
+	if (fork_and_execute(mini, pipe_fds, count, envp))
 	{
 		close_pipe_fds(pipe_fds, count);
 		return (1);
 	}
-	close_pipe_fds(pipe_fds, count);
+	//close_pipe_fds(pipe_fds, count);
 	
 	// Wait all children to finish executing
 	while (i < count)
@@ -79,6 +79,8 @@ int	execute_single_cmd(t_shell *mini, char **envp)
 	} */
 } 
 
+// Fork a child process for each command
+
 int	fork_and_execute(t_shell *mini, int pipe_fds[][2], int count, char **envp)
 {
 	int		i;
@@ -91,12 +93,12 @@ int	fork_and_execute(t_shell *mini, int pipe_fds[][2], int count, char **envp)
 		if (pid == -1)
 		{
 			perror("fork");
-			return (-1);
+			exit(EXIT_FAILURE);
 		}
-		else if (pid == 0)
+		else if (pid == 0)  // child process
 		{
 			if (setup_and_execute(mini, pipe_fds, count, i, envp))
-				return (-1);
+				return (EXIT_FAILURE);
 		}
 		i++;
 	}
@@ -112,40 +114,39 @@ int	setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i, char *
 	
 	cmd = mini->cmds[i];
 	//env_array = env_to_array(mini->env);
+	
 	// Input redirection
-	printf("Duplicating first input fd\n");
-	if (cmd->fd_in != -1)
+	if (cmd->fd_in != STDIN_FILENO)
 	{
 		if (dup2_and_close(cmd->fd_in, STDIN_FILENO))
 			return (1);
-		printf("First input fd ok\n");
+		printf("Input redirection handled for cmd[%d].\n", i);
 	}
-	else if (i > 0)
+	else if (i > 0)  // Use pipe for input
 	{
 		if (dup2_and_close(pipe_fds[i - 1][0], STDIN_FILENO))
 			return (1);
-		printf("Next input fd ok\n");
+		 printf("Pipe input handled for cmd[%d].\n", i);
 	}
 	// Output redirection
-	if (cmd->fd_out != -1)
+	if (cmd->fd_out != STDOUT_FILENO)
 	{
 		if (dup2_and_close(cmd->fd_out, STDOUT_FILENO))
 			return (1);
-		printf("First output fd ok\n");
+		printf("Output redirection handled for cmd[%d].\n", i);
 	}
-	else if (i < count)
+	else if (i < count - 1) // Use pipe for output
 	{
 		if (dup2_and_close(pipe_fds[i][1], STDOUT_FILENO))
 			return (1);
-		printf("Next output fd ok\n");
+		printf("Pipe output handled for cmd[%d].\n", i);
 	}
-	close(cmd->fd_in);
-	close(cmd->fd_out);
+	//close(cmd->fd_in); // not required in child process?
+	//close(cmd->fd_out); // not required in child process?
 	close_pipe_fds(pipe_fds, count);
 	execute_cmd(cmd, envp);
 	return (0);
 }
-
 
 // Executes command
 // Check why env_array parsed based on min->env is not working
@@ -159,8 +160,8 @@ int	execute_cmd(t_cmd *cmd, char **envp)
 	{
 		perror(cmd->command);
 		// free everything
-		return (1);
+		exit(EXIT_FAILURE);
 	}
-	return (0);
+	exit(EXIT_SUCCESS);
 }
 
