@@ -6,14 +6,14 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 17:55:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:42:32 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../includes/minishell.h"
 
-static void printer(t_shell *mini)
+void printer(t_shell *mini)
 {
 	int i = 0;
 
@@ -89,15 +89,9 @@ static int	built_in_exe(t_shell *mini)
 	return (0);
 }
 
-static int user_prompt(char **envp)
+static int user_prompt(t_shell *mini)
 {
 	char	*input;
-	t_shell	*mini;
-
-	mini = malloc(sizeof(t_shell));
-	if (!mini)
-		error("Malloc failed\n");
-	init_shell(mini, envp);
 	init_sig();
 	while (1)
 	{
@@ -108,13 +102,27 @@ static int user_prompt(char **envp)
 		if (input && *input)
 			add_history(input);
 		if (parse_and_validate_input(input, mini))
-			error("ALL IS BROKE!!\n");
-		printer(mini);
+			error("ALL IS BROKEN!!\n");
+		//printer(mini);
 		built_in_exe(mini);
 	}
 	return (0);
 }
 
+static int	activate_shell(char **envp)
+{
+	t_shell	*mini;
+
+	mini = malloc(sizeof(t_shell));
+	if (!mini)
+	{
+		error("Malloc failed\n");
+		return (1);
+	}
+	init_shell(mini, envp);
+	user_prompt(mini);
+	return (0);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -122,8 +130,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 	{
 		printf("Minishell doesn't take arguments\n");
-		return (0);
+		return (1);
 	}
-	user_prompt(envp);
-	return (0);
+	return(activate_shell(envp));
 }

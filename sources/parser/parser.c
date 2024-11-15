@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 19:18:07 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:15:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,26 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 	return (0);
 }
 
-// Parses information added to array of structs
+static int	is_this_built(char *str)
+{
+	if (ft_strcmp(str, "exit") == 0)
+		return (1);
+	else if (ft_strcmp(str, "cd") == 0)
+		return (1);
+	else if (ft_strcmp(str, "echo") == 0)
+		return (1);
+	else if (ft_strcmp(str, "env") == 0)
+		return (1);
+	else if (ft_strcmp(str, "pwd"))
+		return (1);
+	else if (ft_strcmp(str, "unset") == 0)
+		return (1);
+	else if (ft_strcmp(str, "export") == 0)
+		return (1);
+	return (0);
+}
 
+// Parses information added to array of structs
 int	parse_input(t_shell *mini)
 {
 	int	index;
@@ -45,8 +63,11 @@ int	parse_input(t_shell *mini)
 			return (1);
 		if (expand_or_not(mini, mini->cmds[index]))
 			return (1);
-		//if (get_pat(mini, mini->cmds[index]) HEIDI!!!!
-			//return (1);
+		if (!is_this_built(mini->cmds[index]->args[0]))
+		{
+			if (get_cmd_path(mini, mini->cmds[index]))
+				return (1);
+		}
 		index++;
 	}
 	return (0);

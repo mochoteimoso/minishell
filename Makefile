@@ -14,6 +14,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env_handling.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
 	$(SRC_DIR)commands/cmd_array.c\
+	$(SRC_DIR)executor/find_cmd_path.c\
 	$(SRC_DIR)parser/parser.c\
 	$(SRC_DIR)parser/expand.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\

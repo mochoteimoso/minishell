@@ -60,6 +60,7 @@ typedef struct s_shell
 	int		exit_stat;
 } t_shell;
 
+void printer(t_shell *mini);
 
 /*built_in*/
 	/*cd*/
@@ -95,6 +96,9 @@ int		count_pipes(char *line);
 int		prepare_command_structs(t_shell *mini, char *input);
 t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
+
+/*executor*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 /*parser*/
 	/*parser.c*/
