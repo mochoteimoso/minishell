@@ -31,6 +31,7 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 	if (!cmd->args)
 		return (-1);
 	cmd->args[arg_index] = ft_strdup(cmd->command);
+	arg_index++;
 	i = skip_whitespace(cmd->segment, i);
 	while (cmd->segment[i] && arg_index < args_count + 1)
 	{
@@ -68,7 +69,6 @@ int	count_args(t_cmd *cmd, int i)
 		else if (is_redirection(cmd, i))
 			break ;
 		while (cmd->segment[i]&& ft_isspace(cmd->segment[i]))
-
 			i++;
 	}
 	//printf("Argument count: %d\n", args_count);
