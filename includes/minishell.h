@@ -60,7 +60,7 @@ typedef struct s_shell
 {
 	t_cmd	**cmds;
 	t_env	*env;
-	int		pipe_count;
+	int		cmd_count;
 	char	**pending;
 	int		exit_stat;
 } t_shell;
@@ -117,10 +117,10 @@ int		handle_cmd_args(t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
-int	skip_whitespace(char *str, int i);
-int	arg_in_quotes(char *str, int i, char **start, int *len);
-int	arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
-int	append_to_array(t_cmd *cmd, char *start, int len, int *index);
+int		skip_whitespace(char *str, int i);
+int		arg_in_quotes(char *str, int i, char **start, int *len);
+int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
+int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
