@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:10:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 18:54:02 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:34:00 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	resolve_fd(t_cmd *cmd)
 		cmd->fd_in = STDIN_FILENO;
 	fd_out = resolve_output_fd(cmd);
 	//if (fd_out == -1 && cmd->redir_head)
-	//{disp
 	//	if (fd_in != -1)
 	//		close(fd_in);
 	//	return (EXIT_FAILURE);
@@ -252,3 +251,4 @@ int	open_heredoc(char *delimiter)
 	return (heredoc_pipe_fd[0]);
 }
 
+// add heredoc printing to print heredoc input on screen
