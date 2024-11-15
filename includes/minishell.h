@@ -71,7 +71,7 @@ int		built_cd(t_shell *mini, char **cmd);
 	/*echo.c*/
 int		built_echo(char **cmd);
 	/*exit.c*/
-int		built_exit(t_shell *mini, char **cmd);
+int		built_exit(t_shell *mini, t_cmd *cmd);
 	/*export.c*/
 int		built_export(t_shell *mini, char **args);
 	/*pwd.c*/
@@ -159,6 +159,10 @@ int		resolve_fd(t_cmd *cmd);
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 	/*pipeline.c*/
 int		execute_pipeline(t_shell *mini, char **envp);
+	/*pipeline_utils.c*/
+int		create_pipes(int pipe_fds[][2], int count);
+int		dup2_and_close(int old_fd, int new_fd);
+void	close_pipe_fds(int pipe_fds[][2], int count);
 
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);
