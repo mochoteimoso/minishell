@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/06 14:21:04 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/15 10:47:29 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,25 @@
 /*Prints the given arguments to the standard output.
 Supports the -n flag to suppress the newline at the end.*/
 
-int	built_echo(char **cmd)
+int	built_echo(t_cmd *cmd)
 {
 	int	nl;
 	int	i;
 
 	nl = 1;
 	i = 1;
-	if (cmd[1] && ft_strcmp(cmd[1], "-n") == 0)
+	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
 	{
 		nl = 0;
 		i++;
 	}
-	while (cmd[i])
+	while (cmd->args[i])
 	{
-		printf("%s", cmd[i]);
-		if (cmd[i + 1])
-			printf(" ");
+		printf("%s", cmd->args[i]);
+		printf(" ");
 		i++;
 	}
 	if (nl)
 		printf("\n");
-	ft_free_array(cmd);
 	return (0);
 }
