@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/16 14:38:37 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/16 14:51:03 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int	setup_and_execute(t_shell *mini, int pipe_fds[][2], int count, int i, char *
 
 int	dup_input(t_cmd *cmd, int pipe_fds[][2], int i)
 {
-	printf("Value of i in input: %d\n", i);
+	//printf("Value of i in input: %d\n", i);
 	if (cmd->fd_in != STDIN_FILENO)
 	{
 		if (dup2_and_close(cmd->fd_in, STDIN_FILENO))
@@ -145,7 +145,7 @@ int	dup_input(t_cmd *cmd, int pipe_fds[][2], int i)
 			perror("dup2 for fd_out");
 			return (1);
 		}
-		printf("Input redirection handled for cmd[%d].\n", i);
+		//printf("Input redirection handled for cmd[%d].\n", i);
 	}
 	else if (i > 0)  // Use pipe for input
 	{
@@ -154,7 +154,7 @@ int	dup_input(t_cmd *cmd, int pipe_fds[][2], int i)
 			perror("dup2 for pipe output");
 			return (1);
 		}
-		 printf("Pipe input handled for cmd[%d].\n", i);
+		 //printf("Pipe input handled for cmd[%d].\n", i);
 	}
 	return (0);
 }
@@ -163,19 +163,19 @@ int	dup_input(t_cmd *cmd, int pipe_fds[][2], int i)
 
 int	dup_output(t_cmd *cmd, int pipe_fds[][2], int count, int i)
 {
-	printf("Value of i in output: %d\n", i);
-	printf("Value of count: %d\n", count);
+	//printf("Value of i in output: %d\n", i);
+	//printf("Value of count: %d\n", count);
 	if (cmd->fd_out != STDOUT_FILENO)
 	{
 		if (dup2_and_close(cmd->fd_out, STDOUT_FILENO))
 			return (1);
-		printf("Output redirection handled for cmd[%d].\n", i);
+		//printf("Output redirection handled for cmd[%d].\n", i);
 	}
 	if (i < count - 1) // Use pipe for output
 	{
 		if (dup2_and_close(pipe_fds[i][1], STDOUT_FILENO))
 			return (1);
-		printf("Pipe output handled for cmd[%d].\n", i);
+		//printf("Pipe output handled for cmd[%d].\n", i);
 	}
 	return (0);
 }
