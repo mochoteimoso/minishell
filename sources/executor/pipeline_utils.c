@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/15 19:05:38 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/16 14:44:32 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,9 @@ void	close_pipe_fds(int pipe_fds[][2], int cmd_count)
 	i = 0;
 	while (i < cmd_count - 1)
 	{
+		//printf("Closing pipe_fds[%d][0]: %d\n", i, pipe_fds[i][0]);
 		close(pipe_fds[i][0]);
+		//printf("Closing pipe_fds[%d][1]: %d\n", i, pipe_fds[i][1]);
 		close(pipe_fds[i][1]);
 		i++;
 	}
