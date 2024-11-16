@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 18:52:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/16 16:42:04 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
-// Tests each possible path until finds one that works, returns correct absolute path
+// Tests each possible path until finds one that works, 
+// returns correct absolute path
 
 static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 {
