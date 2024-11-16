@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/15 13:48:01 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/16 13:22:55 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,17 @@ int	parse_cmd_string(t_cmd *cmd)
 	if (i == -1)
 		return (1);
 	cmd_found = true;
-	if (!cmd->segment[i] && is_redirection(cmd, i))
+	if (!cmd->segment[i] || is_redirection(cmd, i))
 		i = no_args(cmd, i);
-	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
+	else
 	{
-		i = handle_cmd_args(cmd, i);
-		//printf("index after args: %d\n", i);
-		if (i == -1)
-			return (1);
+		while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
+		{
+			i = handle_cmd_args(cmd, i);
+			//printf("index after args: %d\n", i);
+			if (i == -1)
+				return (1);
+		}
 	}
 	i = handle_redirections(cmd, i);
 	//printf("index after final redirections: %d\n", i);
