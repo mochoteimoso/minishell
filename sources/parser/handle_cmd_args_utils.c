@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 18:12:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:15:08 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ int	append_to_array(t_cmd *cmd, char *start, int len, int *index)
 	cmd->args[*index] = ft_strndup(start, len);
 	if (!cmd->args[*index])
 	{
-		printf("Failed to allocate memory for argument\n");
-		return -1;
+		ft_putendl_fd("Failed to allocate memory for argument", 2);
+		return (-1);
 	}
 	(*index)++;
 	return (0);
