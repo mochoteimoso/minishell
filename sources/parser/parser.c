@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/16 15:13:28 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:36:06 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
-static int	is_this_built(char *str);
+//static int	is_this_built(char *str);
 static int	no_args(t_cmd *cmd, int i);
 static int	double_redirect(t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
@@ -48,11 +48,9 @@ int	parse_input(t_shell *mini)
 			return (1);
 		if (expand_or_not(mini, mini->cmds[index]))
 			return (1);
-		if (!is_this_built(mini->cmds[index]->args[0]))
-		{
-			if (get_cmd_path(mini, mini->cmds[index]))
-				return (1);
-		}
+		//if (!is_this_built(mini->cmds[index]->args[0]))
+		if (get_cmd_path(mini, mini->cmds[index]))
+			return (1);
 		if (resolve_fd(mini->cmds[index]) == -1)
 			return (1);
 		index++;
@@ -94,7 +92,7 @@ int	parse_cmd_string(t_cmd *cmd)
 	return (0);
 }
 
-static int	is_this_built(char *str)
+/*static int	is_this_built(char *str)
 {
 	if (ft_strcmp(str, "exit") == 0)
 		return (1);
@@ -111,12 +109,7 @@ static int	is_this_built(char *str)
 	else if (ft_strcmp(str, "export") == 0)
 		return (1);
 	return (0);
-}
-
-//Loops through segment string to find redirection symbols
-// creates a linked list if redirection symbol(s) are found
-// each redirect will be its own node and will contain information about redirection type,
-// filename, delimiter and pointer to next node
+} */
 
 /*int handle_redirections(t_cmd *cmd, int i)
 {
@@ -178,6 +171,11 @@ static int	is_this_built(char *str)
 	}
 	return (i);
 } */
+
+//Loops through segment string to find redirection symbols
+// creates a linked list if redirection symbol(s) are found
+// each redirect will be its own node and will contain information about redirection type,
+// filename, delimiter and pointer to next node
 
 int	handle_redirections(t_cmd *cmd, int i)
 {
