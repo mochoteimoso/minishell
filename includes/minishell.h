@@ -154,6 +154,13 @@ int		handle_append(t_cmd *cmd, int i);
 	/*redirector.c*/
 int		resolve_fd(t_cmd *cmd);
 
+	/*open_files.c*/
+int		open_input_file(char *input_file);
+int		open_output_file(char *output_file);
+int		open_append_file(char *output_file);
+int		open_heredoc(char *delimiter);
+
+
 /*executor*/
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
