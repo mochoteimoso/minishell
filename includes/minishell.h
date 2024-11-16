@@ -142,7 +142,8 @@ int		validate_redirect(char *input, int *i, char *type);
 t_redir	*list_redir(void);
 t_redir	*redir_add_node(void);
 void	redir_lstadd_back(t_redir **lst, t_redir *new);
-void 	redir_update_tail(t_cmd *cmd);
+void	redir_update_tail(t_cmd *cmd);
+int		redirll_head_tail(t_cmd *cmd);
 
 	/*handle_redirections.c*/
 bool	is_redirection(t_cmd *cmd, int i);
@@ -160,16 +161,17 @@ int		open_output_file(char *output_file);
 int		open_append_file(char *output_file);
 int		open_heredoc(char *delimiter);
 
-
 /*executor*/
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 	/*pipeline.c*/
 int		execute_pipeline(t_shell *mini, char **envp);
 	/*pipeline_utils.c*/
-int		create_pipes(int pipe_fds[][2], int count);
+int		create_pipe(int pipe_fd[2]);
+int		dup_input(t_cmd *cmd, int pipe_fd[2], int i);
+int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
-void	close_pipe_fds(int pipe_fds[][2], int count);
+void	close_pipe_fds(int pipe_fd[2]);
 
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);
