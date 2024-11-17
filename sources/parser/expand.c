@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 15:10:09 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/17 11:50:57 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,8 @@ char	*expand_var(t_shell *mini, char *str)
 int	expand_or_not(t_shell *mini, t_cmd *cmd)
 {
 	int	i;
-	int j;
+
 	i = 0;
-	j = 0;
 	while (cmd->args[i])
 	{
 		if (cmd->args[i][0] == '"' || cmd->args[i][0] == '$' || cmd->args[i][0] == '~')
@@ -175,7 +174,7 @@ int	expand_or_not(t_shell *mini, t_cmd *cmd)
 				cmd->args[i]++;
 			cmd->args[i] = expand_var(mini, cmd->args[i]);
 		}
-		if (cmd->args[i][0] == '\'')
+		else if (cmd->args[i][0] == '\'')
 			cmd->args[i] = ft_strtrim(cmd->args[i], "'");
 		i++;
 	}
