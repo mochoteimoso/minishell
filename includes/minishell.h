@@ -59,6 +59,7 @@ typedef struct s_shell
 	int		exit_stat;
 } t_shell;
 
+
 void printer(t_shell *mini);
 
 /*built_in*/
@@ -73,12 +74,14 @@ int		built_export(t_shell *mini, t_cmd *cmd);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
+
 int		built_unset(t_shell *mini, t_cmd *cmd);
 
 /*built_in*/
 	/*env*/
 char	**env_to_array(t_env *env);
 int		built_env(t_shell *mini);
+
 	/*env_handling*/
 char	**copy_env(char **envp);
 int		built_env(t_shell *mini);
@@ -96,6 +99,7 @@ int		prepare_command_structs(t_shell *mini, char *input);
 t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
 
+
 /*executor*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
@@ -106,6 +110,7 @@ int		parse_cmd_string(t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
+
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
 int	expand_or_not(t_shell *mini, t_cmd *cmd);
@@ -122,6 +127,7 @@ int	append_to_array(t_cmd *cmd, char *start, int len, int *index);
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
+
 
 	/*syntax_checls.c*/
 int		validate_input_syntax(char *input);
@@ -140,7 +146,6 @@ void	redir_lstadd_back(t_redir **lst, t_redir *new);
 t_redir	*redir_add_node(void);
 void 	redir_update_tail(t_cmd *cmd);
 int		redirll_head_tail(t_cmd *cmd);
-
 
 	/*handle_redirections.c*/
 bool	is_redirection(t_cmd *cmd, int i);

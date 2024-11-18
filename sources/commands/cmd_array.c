@@ -13,7 +13,7 @@
 #include "../../includes/minishell.h"
 
 int			count_pipes(char *line);
-int			prepare_command_structs(t_shell *sh, char *input);
+int			prepare_command_structs(t_shell *mini, char *input);
 t_cmd		**allocate_cmd_array(int command_count);
 void		initialize_command_struct(t_cmd *cmd);
 

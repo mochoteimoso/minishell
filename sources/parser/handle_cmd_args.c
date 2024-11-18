@@ -1,7 +1,6 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-
 /*   handle_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
@@ -12,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
 
 int	handle_cmd_args(t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
@@ -45,10 +43,10 @@ int	count_args(t_cmd *cmd, int i)
 			i++;
 	}
 	return (args_count);
+
 }
 
 // Counts how many command arguments the string contains
-
 int	handle_cmd_args(t_cmd *cmd, int i)
 {
 	int		arg_len;
@@ -77,4 +75,3 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 	cmd->args[arg_index] = NULL;
 	return (i);
 }
-
