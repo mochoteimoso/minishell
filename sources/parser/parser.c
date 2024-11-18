@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 09:09:49 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 14:21:22 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ int	parse_cmd_string(t_cmd *cmd)
 
 	i = 0;
 	cmd_found = false;
-
 	i = handle_redirections(cmd, i);
 	if (i == -1)
 		return ((1));
@@ -103,6 +102,12 @@ int	parse_cmd_string(t_cmd *cmd)
 	cmd_found = true;
 	if (!cmd->segment[i] || is_redirection(cmd, i))
 		i = no_args(cmd, i);
+	else
+	{
+		i = handle_cmd_args(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
 	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
 		i = handle_cmd_args(cmd, i);

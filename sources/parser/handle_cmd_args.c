@@ -47,38 +47,25 @@ int	count_args(t_cmd *cmd, int i)
 	return (args_count);
 }
 
+// Counts how many command arguments the string contains
+
 int	handle_cmd_args(t_cmd *cmd, int i)
 {
 	int		arg_len;
-	int		arg_count;
-	int		arg_index;
 	char	*arg_start;
+	int		args_count;
+	int		arg_index;
 
-	arg_count = count_args(cmd, i);
-	arg_index = 1;
-	cmd->args = ft_calloc(arg_count + 2, sizeof(char *));
+	arg_index = 0;
+	args_count = count_args(cmd, i);
+	cmd->args = ft_calloc(args_count + 2, sizeof(char *));
 	if (!cmd->args)
 		return (-1);
-	cmd->args[0] = ft_strdup(cmd->command);
+	cmd->args[arg_index] = ft_strdup(cmd->command);
+	arg_index++;
 	i = skip_whitespace(cmd->segment, i);
-	while (cmd->segment[i])
+	while (cmd->segment[i] && arg_index < args_count + 1 && !is_redirection(cmd, i))
 	{
-		if (is_redirection(cmd, i))
-		{
-			i++;
-			i = skip_whitespace(cmd->segment, i);
-			if (cmd->segment[i] && !is_redirection(cmd, i))
-			{
-				arg_start = &cmd->segment[i];
-				arg_len = 0;
-				while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && !is_redirection(cmd, i))
-				{
-					arg_len++;
-					i++;
-				}
-			}
-			continue ;
-		}
 		if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 			i = arg_in_quotes(cmd->segment, i, &arg_start, &arg_len);
 		else
@@ -88,5 +75,7 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 		i = skip_whitespace(cmd->segment, i);
 	}
 	cmd->args[arg_index] = NULL;
+	//printf("index after handle_args: %d\n", i);
 	return (i);
 }
+
