@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/18 11:29:10 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:49:13 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void printer(t_shell *mini)
 			redir = redir->next;
 			redir_index++;
 		}
+		printf("fd_in: %d\n", mini->cmds[i]->fd_in);
+		printf("fd_out: %d\n", mini->cmds[i]->fd_out);
 		printf("|*************************************************|");
 		printf("\n");
 		i++;
@@ -74,33 +76,6 @@ static int	init_shell(t_shell *mini, char **envp)
 	return (0);
 }
 
-static int	built_in_exe(t_shell *mini)
-{
-	int i;
-
-	i = 0;
-	while (mini->cmds[i])
-	{
-		if (ft_strcmp(mini->cmds[i]->command, "exit") == 0)
-			built_exit(mini, mini->cmds[i]);
-		else if (ft_strcmp(mini->cmds[i]->command, "cd") == 0)
-			return (built_cd(mini, mini->cmds[i]));
-		else if (ft_strcmp(mini->cmds[i]->command, "echo") == 0)
-			return (built_echo(mini->cmds[i]));
-		else if (ft_strcmp(mini->cmds[i]->command, "env") == 0)
-		 	return (built_env(mini));
-		else if (ft_strcmp(mini->cmds[i]->command, "pwd") == 0 && !mini->cmds[i]->args[1])
-			return (built_pwd(mini));
-		else if (ft_strcmp(mini->cmds[i]->command, "unset") == 0)
-			return (built_unset(mini, mini->cmds[i]));
-		else if (ft_strcmp(mini->cmds[i]->command, "export") == 0)
-			return (built_export(mini, mini->cmds[i]));
-		i++;
-	}
-	return (0);
-}
-
-
 static int	is_this_empty(char *input)
 {
 	while (*input)
@@ -112,7 +87,7 @@ static int	is_this_empty(char *input)
 	return (1);
 }
 
-static int user_prompt(t_shell *mini)
+static int user_prompt(t_shell *mini, char **envp)
 {
 	char	*input;
 	init_sig();
@@ -129,6 +104,7 @@ static int user_prompt(t_shell *mini)
 				continue;
 			}
 			add_history(input);
+		}
 		if (parse_and_validate_input(input, mini))
 			error("ALL IS BROKE!!\n");
 		printer(mini);
@@ -151,7 +127,7 @@ static int	activate_shell(char **envp)
 	}
 	if (init_shell(mini, envp))
 		return (1);
-	user_prompt(mini);
+	user_prompt(mini, envp);
 	return (0);
 }
 
