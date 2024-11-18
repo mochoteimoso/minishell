@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_array.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/15 18:21:23 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:48:35 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,14 @@ static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 	printf("Allocated %d command struct(s)\n", cmd_count);
 	return (0);
 }
-	// mini->cmds = ft_calloc(command_count, sizeof(t_cmd));
+	
 int	prepare_command_structs(t_shell *mini, char *input)
 {
 	// int	i;
 	int	command_count;
 
 	command_count = count_pipes(input) + 1;
+	mini->cmd_count = command_count;
 	mini->cmds = allocate_cmd_array(command_count);
 	if (!mini->cmds)
 	{
