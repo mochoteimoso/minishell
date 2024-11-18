@@ -75,7 +75,6 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 		i = skip_whitespace(cmd->segment, i);
 	}
 	cmd->args[arg_index] = NULL;
-	//printf("index after handle_args: %d\n", i);
 	return (i);
 }
 
