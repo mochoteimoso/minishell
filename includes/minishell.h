@@ -114,7 +114,7 @@ int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
-int	expand_or_not(t_shell *mini, t_cmd *cmd);
+int		expand_or_not(t_shell *mini, t_cmd *cmd);
 
 /*handle_cmd_array.c*/
 int		handle_cmd_args(t_cmd *cmd, int i);
@@ -125,7 +125,6 @@ int		skip_whitespace(char *str, int i);
 int		arg_in_quotes(char *str, int i, char **start, int *len);
 int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
 int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
-
 
 	/*split_inputs.c*/
 
@@ -170,7 +169,7 @@ int		open_heredoc(char *delimiter);
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 	/*pipeline.c*/
-int	execute_pipeline(t_shell *mini, char **envp);
+int		execute_pipeline(t_shell *mini, char **envp);
 
 	/*pipeline_utils.c*/
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
@@ -178,6 +177,11 @@ int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
 void	close_pipe_fds(int pipe_fd[2]);
 void	close_pipes(t_shell *mini, int pipe_fd[2]);
+
+	/*handle_builtins.c*/
+int		built_in_exe(t_shell *mini, t_cmd *cmd);
+int		is_this_builtin_cmd(t_cmd *cmd);
+
 
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);
