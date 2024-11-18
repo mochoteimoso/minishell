@@ -10,7 +10,6 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
-
 //# include </usr/include/linux/signal.h>
 
 typedef enum e_redir_type
@@ -36,11 +35,9 @@ typedef struct s_cmd
 {
 	char	*segment;
 	char	*command;
+	char	*cmd_path;
 	char	**args;
 	int		args_count;
-	char	**env_vars; //??
-	int		env_var_count; //??
-	char	*append;
 	t_redir *redir_head;
 	t_redir *redir_tail;
 	int		exit_status;
@@ -49,8 +46,8 @@ typedef struct s_cmd
 typedef struct s_env
 {
 	char			*name;
-	char			*value;
 	struct s_env	*next;
+	char			*value;
 
 }	t_env;
 
@@ -63,21 +60,28 @@ typedef struct s_shell
 } t_shell;
 
 
+void printer(t_shell *mini);
+
 /*built_in*/
 	/*cd*/
-int		built_cd(t_shell *mini, char **cmd);
+int		built_cd(t_shell *mini, t_cmd *cmd);
 	/*echo.c*/
-int		built_echo(char **cmd);
+int		built_echo(t_cmd *cmd);
 	/*exit.c*/
-int		built_exit(t_shell *mini, char **cmd);
+int		built_exit(t_shell *mini, t_cmd *cmd);
 	/*export.c*/
-int		built_export(t_shell *mini, char **args);
+int		built_export(t_shell *mini, t_cmd *cmd);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
-int	built_unset(t_shell *mini, char **cmd);
 
-/*built_in/env*/
+int		built_unset(t_shell *mini, t_cmd *cmd);
+
+/*built_in*/
+	/*env*/
+char	**env_to_array(t_env *env);
+int		built_env(t_shell *mini);
+
 	/*env_handling*/
 char	**copy_env(char **envp);
 int		built_env(t_shell *mini);
@@ -95,28 +99,41 @@ int		prepare_command_structs(t_shell *mini, char *input);
 t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
 
-	/*cmd_array_utils.c*/
-int		handle_cmd_args(t_cmd *cmd, int i);
-int		count_args(t_cmd *cmd, int i);
+
+/*executor*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 /*parser*/
 	/*parser.c*/
-char	*ft_strndup(const char *src, size_t n);
 int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
 
+	/*expand.c*/
+char	*expand_var(t_shell *mini, char *str);
+int	expand_or_not(t_shell *mini, t_cmd *cmd);
+	/*handle_cmd_array.c*/
+int		handle_cmd_args(t_cmd *cmd, int i);
+int		count_args(t_cmd *cmd, int i);
+
+	/*handle_cmd_array_utils.c*/
+int	skip_whitespace(char *str, int i);
+int	arg_in_quotes(char *str, int i, char **start, int *len);
+int	arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
+int	append_to_array(t_cmd *cmd, char *start, int len, int *index);
+
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
-int		ft_isspace(char c);
+
 
 	/*syntax_checls.c*/
 int		validate_input_syntax(char *input);
-int		is_in_quotes(char *input, int i);
-int		has_quotes(char *input, int i);
+// int		check_quotes(char *input, int i);
+// int		has_quotes(char *input, int i);
+int 	check_quotes(char *input, int limit);
 int		check_consecutive_pipes(char *input);
 int		check_pipes(char *input);
 int		check_redirects(char *input);
@@ -128,7 +145,7 @@ t_redir	*list_redir(void);
 void	redir_lstadd_back(t_redir **lst, t_redir *new);
 t_redir	*redir_add_node(void);
 void 	redir_update_tail(t_cmd *cmd);
-
+int		redirll_head_tail(t_cmd *cmd);
 
 	/*handle_redirections.c*/
 bool	is_redirection(t_cmd *cmd, int i);
@@ -138,8 +155,10 @@ int		handle_heredoc(t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
 
 /*utils/freeing*/
-void	cleaner(t_env *node, char **temp);
+void	clean_env(t_env *ll, char **array);
+void	cleaner(t_shell *mini);
 void	error(char *str);
+void	clean_cmds(t_cmd **cmds);
 
 /*signals.c*/
 void	init_sig(void);

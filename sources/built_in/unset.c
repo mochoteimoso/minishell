@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/08 12:49:46 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:28:25 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	unset_env(t_shell *mini, char *str)
 		if (ft_strcmp(cur->name, str) == 0)
 		{
 			if (!prev)
-				prev = cur->next;
+				mini->env = cur->next;
 			else
 				prev->next = cur->next;
 		free(cur->name);
@@ -65,25 +65,25 @@ static int	unset_pending(t_shell *mini, char *str)
 	return (0);
 }
 
-int	built_unset(t_shell *mini, char **cmd)
+int	built_unset(t_shell *mini, t_cmd *cmd)
 {
 	int	sum;
 	int	i;
 
 	sum = 0;
 	i = 1;
-	while (cmd[sum])
+	while (cmd->args[sum])
 		sum++;
 	if (sum >= 2)
 	{
 		while (i < sum)
 		{
-			if (unset_env(mini, cmd[i]))
+			if (unset_env(mini, cmd->args[i]))
 			{
 				error("No such variable\n");
 				return (1);
 			}
-			if (unset_pending(mini, cmd[i]))
+			if (unset_pending(mini, cmd->args[i]))
 			{
 				error("No such variable\n");
 				return (1);

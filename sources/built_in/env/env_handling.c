@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:14:43 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/07 13:19:55 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:20:47 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_env	*list_env(char **envp)
 	while (envp[i])
 	{
 		new_node = add_node(envp[i]);
+		if (!new_node)
+			return (NULL);
 		ft_env_lstadd_back(&ll, new_node);
 		i++;
 	}

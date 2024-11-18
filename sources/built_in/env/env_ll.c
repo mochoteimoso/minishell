@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/08 14:48:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/12 17:38:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_env	*add_node(char *env)
 	temp = ft_split(env, '=');
 	if (!temp || !temp[0])
 	{
-		cleaner(node, NULL);
+		clean_env(node, temp);
 		return (NULL);
 	}
 	if (set_name(node, temp[0]) == 1)
@@ -80,7 +80,7 @@ t_env	*add_node(char *env)
 	}
 	if (set_value(node, temp[1]) == 1)
 	{
-		cleaner(node, temp);
+		clean_env(node, temp);
 		return (NULL);
 	}
 	node->next = NULL;

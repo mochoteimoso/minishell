@@ -1,39 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 16:05:49 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/11/17 13:37:09 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/11/17 13:44:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-
-/*Prints the given arguments to the standard output.
-Supports the -n flag to suppress the newline at the end.*/
-
-int	built_echo(t_cmd *cmd)
+int	ft_isspace(char c)
 {
-	int	nl;
-	int	i;
-
-	nl = 1;
-	i = 1;
-	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
+	if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' )
 	{
-		nl = 0;
-		i++;
+		return (1);
 	}
-	while (cmd->args[i])
-	{
-		printf("%s", cmd->args[i]);
-		printf(" ");
-		i++;
-	}
-	if (nl)
-		printf("\n");
-	return (0);
+	else
+		return (0);
 }

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:24:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/12 12:53:40 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:28:35 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
-
-// Allocates memory and  duplicates a string
 
 char	*ft_strndup(const char *src, size_t n)
 {
@@ -35,6 +33,6 @@ char	*ft_strndup(const char *src, size_t n)
 		dest[i] = src[i];
 		i++;
 	}
-	dest[size] = '\0';
+	dest[i] = '\0';
 	return (dest);
 }
