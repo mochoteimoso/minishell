@@ -62,6 +62,7 @@ typedef struct s_shell
 	t_env	*env;
 	int		cmd_count;
 	char	**pending;
+	int		prev_pipe[2];
 	int		exit_stat;
 } t_shell;
 
@@ -122,7 +123,7 @@ int		arg_in_quotes(char *str, int i, char **start, int *len);
 int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
 int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 
-	/*split_inputs.c*/
+	/*split_input.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 int		ft_isspace(char c);
@@ -164,14 +165,16 @@ int		open_heredoc(char *delimiter);
 /*executor*/
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+
 	/*pipeline.c*/
-int		execute_pipeline(t_shell *mini, char **envp);
+int	execute_pipeline(t_shell *mini, char **envp);
+
 	/*pipeline_utils.c*/
-int		create_pipe(int pipe_fd[2]);
-int		dup_input(t_cmd *cmd, int pipe_fd[2], int i);
+int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
 void	close_pipe_fds(int pipe_fd[2]);
+void	close_pipes(t_shell *mini, int pipe_fd[2]);
 
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);
