@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 15:26:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:52:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		execute_pipeline(t_shell *mini, char **envp);
 int		execute_single_cmd(t_shell *mini, char **envp);
 int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int i);
-int		execute_cmd(t_cmd *cmd, char **envp);
+int		execute_cmd(t_shell *mini, t_cmd *cmd, char **envp);
 void	setup_fds(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
 void	close_pipes(t_shell *mini, int pipe_fd[2]);
 
@@ -34,6 +34,8 @@ int	execute_pipeline(t_shell *mini, char **envp)
 	{
 		if (execute_single_cmd(mini, envp))
 			return (1);
+		else
+			return (0);
 	}
 	while (i < mini->cmd_count)
 	{
@@ -80,7 +82,7 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int
 			return (1);
 		if (dup_output(cmd, pipe_fd, mini->cmd_count, i)) //redirect output
 			return (1);
-		execute_cmd(cmd, envp);
+		execute_cmd(mini, cmd, envp);
 		return (0);
 	}
 	return (0);
@@ -101,7 +103,7 @@ int	execute_single_cmd(t_shell *mini, char **envp)
 		if (dup2_and_close(mini->cmds[0]->fd_out, STDOUT_FILENO))
 			return (1);
 	}
-	if (execute_cmd(mini->cmds[0], envp))
+	if (execute_cmd(mini, mini->cmds[0], envp))
 		return (1);
 	return (0);
 } 
@@ -109,15 +111,23 @@ int	execute_single_cmd(t_shell *mini, char **envp)
 // Executes command
 // Check why env_array parsed based on min->env is not working
 
-int	execute_cmd(t_cmd *cmd, char **envp)
+int	execute_cmd(t_shell *mini, t_cmd *cmd, char **envp)
 {
 	//char	**env_array;
 	//env_array = env_to_array(mini->env);
-	if (execve(cmd->cmd_path, cmd->args, envp) == -1)
+	if (is_this_builtin_cmd(cmd))
 	{
-		perror(cmd->command);
-		// free everything
-		exit(EXIT_FAILURE);
+		if (built_in_exe(mini, cmd) != 0)
+			exit(EXIT_FAILURE);
+	}
+	else
+	{
+		if (execve(cmd->cmd_path, cmd->args, envp) == -1)
+		{
+			perror(cmd->command);
+			// free everything
+			exit(EXIT_FAILURE);
+		}
 	}
 	return (EXIT_SUCCESS);
 }
