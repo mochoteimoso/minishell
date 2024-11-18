@@ -35,7 +35,7 @@ char	**env_to_array(t_env *env)
 	len = ft_lstsize((t_list *)temp);
 	temp = env;
 	i = 0;
-	array = (char **)malloc(sizeof(char) * len + 1);
+	array = (char **)malloc(sizeof(char *) * len + 1);
 	while (temp->next)
 	{
 		array[i] = ft_strdup("");

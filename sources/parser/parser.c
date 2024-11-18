@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 15:20:40 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/18 14:21:22 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
-//static int	is_this_built(char *str);
+static int	is_this_built(char *str);
 static int	no_args(t_cmd *cmd, int i);
 static int	double_redirect(t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
@@ -35,8 +35,26 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 		return (1);
 	return (0);
 }
-// Parses information added to array of structs
 
+static int	is_this_built(char *str)
+{
+	if (ft_strcmp(str, "exit") == 0)
+		return (1);
+	else if (ft_strcmp(str, "cd") == 0)
+		return (1);
+	else if (ft_strcmp(str, "echo") == 0)
+		return (1);
+	else if (ft_strcmp(str, "env") == 0)
+		return (1);
+	else if (ft_strcmp(str, "pwd"))
+		return (1);
+	else if (ft_strcmp(str, "unset") == 0)
+		return (1);
+	else if (ft_strcmp(str, "export") == 0)
+		return (1);
+	return (0);
+}
+// Parses information added to array of structs
 int	parse_input(t_shell *mini)
 {
 	int	index;
@@ -60,6 +78,18 @@ int	parse_input(t_shell *mini)
 
 // Parses the segment string of each struct
 
+
+static int	no_args(t_cmd *cmd, int i)
+{
+	cmd->args = ft_calloc(2, sizeof(char *));
+	if (!cmd->args)
+		return (-1);
+	cmd->args[0] = ft_strdup(cmd->command);
+	if (!cmd->args)
+		return (-1);
+	return (i);
+}
+
 int	parse_cmd_string(t_cmd *cmd)
 {
 	int		i;
@@ -67,7 +97,6 @@ int	parse_cmd_string(t_cmd *cmd)
 
 	i = 0;
 	cmd_found = false;
-
 	i = handle_redirections(cmd, i);
 	if (i == -1)
 		return ((1));
@@ -79,12 +108,15 @@ int	parse_cmd_string(t_cmd *cmd)
 		i = no_args(cmd, i);
 	else
 	{
-		while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
-		{
-			i = handle_cmd_args(cmd, i);
-			if (i == -1)
-				return (1);
-		}
+		i = handle_cmd_args(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
+	{
+		i = handle_cmd_args(cmd, i);
+		if (i == -1)
+			return (1);
 	}
 	i = handle_redirections(cmd, i);
 	if (i == -1)
@@ -116,9 +148,43 @@ int	parse_cmd_string(t_cmd *cmd)
 // each redirect will be its own node and will contain information about redirection type,
 // filename, delimiter and pointer to next node
 
-int	handle_redirections(t_cmd *cmd, int i)
+static int	double_redirect(t_cmd *cmd, int i)
 {
-	while (cmd->segment[i])
+	if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
+	{
+		i = handle_heredoc(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
+	{
+		i = handle_append(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	return (i);
+}
+
+static int	single_redirect(t_cmd *cmd, int i)
+{
+	if (cmd->segment[i] == '<')
+	{
+		i = handle_redirect_in(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	else if (cmd->segment[i] == '>')
+	{
+		i = handle_redirect_out(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	return (i);
+}
+
+int handle_redirections(t_cmd *cmd, int i)
+{
+	while (cmd->segment[i] && i < (int)ft_strlen(cmd->segment))
 	{
 		if (is_redirection(cmd, i))
 		{
@@ -204,16 +270,5 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 		ft_putendl_fd("Failed to allocate memory for command name", 2);
 		return (-1);
 	}
-	return (i);
-}
-
-static int	no_args(t_cmd *cmd, int i)
-{
-	cmd->args = ft_calloc(2, sizeof(char *));
-	if (!cmd->args)
-		return (-1);
-	cmd->args[0] = ft_strdup(cmd->command);
-	if (!cmd->args)
-		return (-1);
 	return (i);
 }

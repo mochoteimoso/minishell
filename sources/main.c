@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-static void printer(t_shell *mini)
+void printer(t_shell *mini)
 {
 	int i = 0;
 
@@ -38,16 +38,12 @@ static void printer(t_shell *mini)
 		{
 			printf("Redir\n");
 			printf("Redirection %d - type: %d\n", redir_index, redir->type);
-			printf("Redirection %d - file: %s\n", redir_index, redir->file ? redir->file : "(null)");
-			printf("Redirection %d - delimiter: %s\n", 
-			redir_index, redir->delimiter ? redir->delimiter : "(null)");
+			printf("Redirection %d - file: %s\n", redir_index, redir->file);
+			printf("Redirection %d - delimiter: %s\n", redir_index, redir->delimiter);
 			redir = redir->next;
 			redir_index++;
 		}
-		printf("fd_in: %d\n", mini->cmds[i]->fd_in);
-		printf("fd_out: %d\n", mini->cmds[i]->fd_out);
-		printf("Command path: %s\n", mini->cmds[i]->cmd_path);
-		printf("|*************************************************|\n");
+		printf("|*************************************************|");
 		printf("\n");
 		i++;
 	}
@@ -55,12 +51,21 @@ static void printer(t_shell *mini)
 
 static int	init_shell(t_shell *mini, char **envp)
 {
-	int	i;
-
-	i = 0;
 	mini->cmds = NULL;
 	mini->env = list_env(envp);
+	if (!mini->env)
+	{
+		cleaner(mini);
+		free(mini);
+		return (1);
+	}
 	mini->pending = copy_env(envp);
+	if (!mini->pending)
+	{
+		cleaner(mini);
+		free(mini);
+		return (1);
+	}
 	to_alphabetical(mini->pending);
 	mini->cmd_count = 0;
 	mini->prev_pipe[0] = -1;
@@ -95,15 +100,21 @@ static int	built_in_exe(t_shell *mini)
 	return (0);
 }
 
-static int user_prompt(char **envp)
+
+static int	is_this_empty(char *input)
+{
+	while (*input)
+	{
+		if (!ft_isspace(*input))
+			return (0);
+		input++;
+	}
+	return (1);
+}
+
+static int user_prompt(t_shell *mini)
 {
 	char	*input;
-	t_shell	*mini;
-
-	mini = malloc(sizeof(t_shell));
-	if (!mini)
-		error("Malloc failed\n");
-	init_shell(mini, envp);
 	init_sig();
 	while (1)
 	{
@@ -111,14 +122,36 @@ static int user_prompt(char **envp)
 		if (input == NULL)
 			break ;
 		if (input && *input)
+		{
+			if (is_this_empty(input))
+			{
+				free(input);
+				continue;
+			}
 			add_history(input);
 		if (parse_and_validate_input(input, mini))
 			error("ALL IS BROKE!!\n");
 		printer(mini);
 		if (execute_pipeline(mini, envp))
 			error("ALL IS TERRIBLY BROKEN\n");
-		built_in_exe(mini);
+		//built_in_exe(mini);
 	}
+	return (0);
+}
+
+static int	activate_shell(char **envp)
+{
+	t_shell	*mini;
+
+	mini = malloc(sizeof(t_shell));
+	if (!mini)
+	{
+		error("Malloc failed\n");
+		return (1);
+	}
+	if (init_shell(mini, envp))
+		return (1);
+	user_prompt(mini);
 	return (0);
 }
 
@@ -128,8 +161,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 	{
 		printf("Minishell doesn't take arguments\n");
-		return (0);
+		return (1);
 	}
-	user_prompt(envp);
-	return (0);
+	return(activate_shell(envp));
 }

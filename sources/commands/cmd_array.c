@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_array.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
 /*   Updated: 2024/11/15 18:21:23 by henbuska         ###   ########.fr       */
@@ -38,19 +38,9 @@ int	count_pipes(char *line)
 // Sets up an array of structs and allocates memory for individual structs
 
 
-int	prepare_command_structs(t_shell *mini, char *input)
+static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 {
-	int	i;
-	int	cmd_count;
-
-	cmd_count = count_pipes(input) + 1;
-	mini->cmd_count = cmd_count;
-	mini->cmds = allocate_cmd_array(cmd_count);
-	if (!mini->cmds)
-	{
-		printf("Failed to allocate memory for command array\n");
-		return (1);
-	}
+	int i;
 	i = 0;
 	while (i < cmd_count)
 	{
@@ -67,14 +57,30 @@ int	prepare_command_structs(t_shell *mini, char *input)
 			return (1);
 		}
 		initialize_command_struct(mini->cmds[i]);
-
 		i++;
 	}
 	printf("Allocated %d command struct(s)\n", cmd_count);
 	return (0);
 }
+	// mini->cmds = ft_calloc(command_count, sizeof(t_cmd));
+int	prepare_command_structs(t_shell *mini, char *input)
+{
+	// int	i;
+	int	command_count;
 
-//Allocates memory for an array of structs
+	command_count = count_pipes(input) + 1;
+	mini->cmds = allocate_cmd_array(command_count);
+	if (!mini->cmds)
+	{
+		printf("Failed to allocate memory for command array\n");
+		return (1);
+	}
+	if (cmd_struct_while(mini, command_count))
+		return (1);
+	return (0);
+}
+
+// Allocates memory for an array of structs
 
 t_cmd	**allocate_cmd_array(int cmd_count)
 {

@@ -52,7 +52,6 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 
 // Tests each possible path until finds one that works, 
 // returns correct absolute path
-
 static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 {
 	char	*cmd_path;

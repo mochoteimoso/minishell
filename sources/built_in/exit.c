@@ -35,7 +35,7 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 	(void)cmd;
 	ft_putstr_fd("exit\n", 2);
 	ec = 0;
-	if (cmd->args)
+	if (cmd->args[1])
 	{
 		if ((cmd->args[1] && !isonlynum(cmd->args[1])) || (cmd->args[1] && cmd->args[1][0] == '\0'))
 		{

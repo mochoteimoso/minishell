@@ -51,8 +51,8 @@ typedef struct s_cmd
 typedef struct s_env
 {
 	char			*name;
-	char			*value;
 	struct s_env	*next;
+	char			*value;
 
 }	t_env;
 
@@ -65,6 +65,8 @@ typedef struct s_shell
 	int		prev_pipe[2];
 	int		exit_stat;
 } t_shell;
+
+void printer(t_shell *mini);
 
 /*built_in*/
 	/*cd*/
@@ -84,6 +86,7 @@ int	built_unset(t_shell *mini, t_cmd *cmd);
 	/*env.c*/
 char	**env_to_array(t_env *env);
 int		built_env(t_shell *mini);
+
 	/*env_handling*/
 char	**copy_env(char **envp);
 int		built_env(t_shell *mini);
@@ -111,9 +114,9 @@ int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
-int		expand_or_not(t_shell *mini, t_cmd *cmd);
+int	expand_or_not(t_shell *mini, t_cmd *cmd);
 
-	/*handle_cmd_array.c*/
+/*handle_cmd_array.c*/
 int		handle_cmd_args(t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
@@ -123,15 +126,15 @@ int		arg_in_quotes(char *str, int i, char **start, int *len);
 int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
 int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 
-	/*split_input.c*/
+
+	/*split_inputs.c*/
+
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
-int		ft_isspace(char c);
+
 
 	/*syntax_checks.c*/
 int		validate_input_syntax(char *input);
-//int		is_in_quotes(char *input, int i);
-//int		has_quotes(char *input, int i);
 int 	check_quotes(char *input, int limit);
 int		check_consecutive_pipes(char *input);
 int		check_pipes(char *input);
@@ -180,6 +183,7 @@ void	close_pipes(t_shell *mini, int pipe_fd[2]);
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
 void	error(char *str);
+void	clean_cmds(t_cmd **cmds);
 
 /*signals.c*/
 void	init_sig(void);

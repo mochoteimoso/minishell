@@ -5,7 +5,7 @@ INC = -I ./includes/
 SRC_DIR = sources/
 
 SRC		= \
-		$(addprefix checks/, ft_array_len.c ft_countchar.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c)\
+		$(addprefix checks/, ft_array_len.c ft_countchar.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c ft_isspace.c)\
 		$(addprefix converters/, ft_atoi.c ft_atoi_base.c ft_itoa.c ft_tolower.c ft_toupper.c)\
 		$(addprefix ft_printf/, ft_printf.c check_f.c is_char.c is_hex.c is_nbr.c is_pointer.c is_str.c is_unsignbr.c)\
 		$(addprefix list/, ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c ft_lstdelone.c ft_lstiter.c\

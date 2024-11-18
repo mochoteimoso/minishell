@@ -53,6 +53,8 @@ static int	parse_and_add(t_shell *mini, char *str)
 		update_pending(mini, str);
 		to_alphabetical(mini->pending);
 	}
+	else
+		update_pending(mini, str);
 	return (0);
 }
 

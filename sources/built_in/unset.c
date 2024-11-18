@@ -24,7 +24,7 @@ static int	unset_env(t_shell *mini, char *str)
 		if (ft_strcmp(cur->name, str) == 0)
 		{
 			if (!prev)
-				prev = cur->next;
+				mini->env = cur->next;
 			else
 				prev->next = cur->next;
 		free(cur->name);

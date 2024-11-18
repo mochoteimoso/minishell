@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 10:45:23 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/12 12:41:24 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/17 13:39:28 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int		ft_isalpha(int ch);
 int		ft_isascii(int ch);
 int		ft_isdigit(int ch);
 int		ft_isprint(int ch);
+int		ft_isspace(char c);
 int		ft_lstsize(t_list *lst);
 int		ft_memcmp(char *ptr1, char *ptr2, size_t num);
 int		ft_strcmp(char *s1, char *s2);

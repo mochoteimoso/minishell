@@ -56,7 +56,7 @@ static void	clean_redir(t_redir *head, t_redir *tail)
 	}
 }
 
-static void	clean_cmds(t_cmd **cmds)
+void	clean_cmds(t_cmd **cmds)
 {
 	int	i;
 
@@ -67,7 +67,8 @@ static void	clean_cmds(t_cmd **cmds)
 		free(cmds[i]->command);
 		free(cmds[i]->cmd_path);
 		ft_free_array(cmds[i]->args);
-		clean_redir(cmds[i]->redir_head,  cmds[i]->redir_tail);
+		if (cmds[i]->redir_head)
+			clean_redir(cmds[i]->redir_head,  cmds[i]->redir_tail);
 		i++;
 	}
 	free(cmds);
@@ -76,7 +77,8 @@ static void	clean_cmds(t_cmd **cmds)
 void	cleaner(t_shell *mini)
 {
 	clean_env(mini->env, mini->pending);
-	clean_cmds(mini->cmds);
+	if (mini->cmds)
+		clean_cmds(mini->cmds);
 }
 
 void	error(char *str)
