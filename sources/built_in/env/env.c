@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 11:33:55 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:19:58 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	built_env(t_shell *mini)
 	return (0);
 }
 
-char **env_to_array(t_env *env)
+char	**env_to_array(t_env *env)
 {
 	t_env	*temp;
 	char	**array;
@@ -46,6 +46,7 @@ char **env_to_array(t_env *env)
 		printf("%s\n", array[i]);
 		i++;
 	}
+	// add error handling
 	array[i] = NULL;
 	return (array);
 }

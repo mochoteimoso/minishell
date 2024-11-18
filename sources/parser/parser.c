@@ -16,6 +16,10 @@ int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
+static int	is_this_built(char *str);
+static int	no_args(t_cmd *cmd, int i);
+static int	double_redirect(t_cmd *cmd, int i);
+static int	single_redirect(t_cmd *cmd, int i);
 
 // Validates input string and parses the content into an array of structs
 
@@ -50,7 +54,6 @@ static int	is_this_built(char *str)
 		return (1);
 	return (0);
 }
-
 // Parses information added to array of structs
 int	parse_input(t_shell *mini)
 {
@@ -63,11 +66,11 @@ int	parse_input(t_shell *mini)
 			return (1);
 		if (expand_or_not(mini, mini->cmds[index]))
 			return (1);
-		if (!is_this_built(mini->cmds[index]->args[0]))
-		{
-			if (get_cmd_path(mini, mini->cmds[index]))
-				return (1);
-		}
+		//if (!is_this_built(mini->cmds[index]->args[0]))
+		if (get_cmd_path(mini, mini->cmds[index]))
+			return (1);
+		if (resolve_fd(mini->cmds[index]) == -1)
+			return (1);
 		index++;
 	}
 	return (0);
@@ -121,6 +124,25 @@ int	parse_cmd_string(t_cmd *cmd)
 	return (0);
 }
 
+/*static int	is_this_built(char *str)
+{
+	if (ft_strcmp(str, "exit") == 0)
+		return (1);
+	else if (ft_strcmp(str, "cd") == 0)
+		return (1);
+	else if (ft_strcmp(str, "echo") == 0)
+		return (1);
+	else if (ft_strcmp(str, "env") == 0)
+		return (1);
+	else if (ft_strcmp(str, "pwd"))
+		return (1);
+	else if (ft_strcmp(str, "unset") == 0)
+		return (1);
+	else if (ft_strcmp(str, "export") == 0)
+		return (1);
+	return (0);
+} */
+
 //Loops through segment string to find redirection symbols
 // creates a linked list if redirection symbol(s) are found
 // each redirect will be its own node and will contain information about redirection type,
@@ -168,7 +190,8 @@ int handle_redirections(t_cmd *cmd, int i)
 		{
 			if (redirll_head_tail(cmd))
 				return (-1);
-			if ((cmd->segment[i] == '<' && cmd->segment[i + 1] == '<') || (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>'))
+			if ((cmd->segment[i] == '<' && cmd->segment[i + 1] == '<') ||
+				(cmd->segment[i] == '>' && cmd->segment[i + 1] == '>'))
 			{
 				i = double_redirect(cmd, i);
 				if (i == -1)
@@ -184,6 +207,40 @@ int handle_redirections(t_cmd *cmd, int i)
 		}
 		else
 			break;
+	}
+	return (i);
+}
+
+static int	double_redirect(t_cmd *cmd, int i)
+{
+	if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
+	{
+		i = handle_heredoc(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
+	{
+		i = handle_append(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	return (i);
+}
+
+static int	single_redirect(t_cmd *cmd, int i)
+{
+	if (cmd->segment[i] == '<')
+	{
+		i = handle_redirect_in(cmd, i);
+		if (i == -1)
+			return (-1);
+	}
+	else if (cmd->segment[i] == '>')
+	{
+		i = handle_redirect_out(cmd, i);
+		if (i == -1)
+			return (-1);
 	}
 	return (i);
 }
@@ -210,9 +267,8 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	cmd->command = ft_strndup(cmd_start, cmd_length);
 	if (!cmd->command)
 	{
-		printf("Failed to allocate memory for command name\n");
+		ft_putendl_fd("Failed to allocate memory for command name", 2);
 		return (-1);
 	}
 	return (i);
 }
-

@@ -10,6 +10,9 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+
 //# include </usr/include/linux/signal.h>
 
 typedef enum e_redir_type
@@ -40,6 +43,8 @@ typedef struct s_cmd
 	int		args_count;
 	t_redir *redir_head;
 	t_redir *redir_tail;
+	int		fd_in;
+	int		fd_out;
 	int		exit_status;
 }	t_cmd;
 
@@ -55,10 +60,11 @@ typedef struct s_shell
 {
 	t_cmd	**cmds;
 	t_env	*env;
+	int		cmd_count;
 	char	**pending;
+	int		prev_pipe[2];
 	int		exit_stat;
 } t_shell;
-
 
 void printer(t_shell *mini);
 
@@ -74,11 +80,10 @@ int		built_export(t_shell *mini, t_cmd *cmd);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
+int	built_unset(t_shell *mini, t_cmd *cmd);
 
-int		built_unset(t_shell *mini, t_cmd *cmd);
-
-/*built_in*/
-	/*env*/
+/*built_in/env*/
+	/*env.c*/
 char	**env_to_array(t_env *env);
 int		built_env(t_shell *mini);
 
@@ -99,10 +104,6 @@ int		prepare_command_structs(t_shell *mini, char *input);
 t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
 
-
-/*executor*/
-int		get_cmd_path(t_shell *mini, t_cmd *cmd);
-
 /*parser*/
 	/*parser.c*/
 int		parse_input(t_shell *mini);
@@ -114,25 +115,26 @@ int		parse_and_validate_input(char *input, t_shell *mini);
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
 int	expand_or_not(t_shell *mini, t_cmd *cmd);
-	/*handle_cmd_array.c*/
+
+/*handle_cmd_array.c*/
 int		handle_cmd_args(t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
-int	skip_whitespace(char *str, int i);
-int	arg_in_quotes(char *str, int i, char **start, int *len);
-int	arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
-int	append_to_array(t_cmd *cmd, char *start, int len, int *index);
+int		skip_whitespace(char *str, int i);
+int		arg_in_quotes(char *str, int i, char **start, int *len);
+int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
+int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
+
 
 	/*split_inputs.c*/
+
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 
 
-	/*syntax_checls.c*/
+	/*syntax_checks.c*/
 int		validate_input_syntax(char *input);
-// int		check_quotes(char *input, int i);
-// int		has_quotes(char *input, int i);
 int 	check_quotes(char *input, int limit);
 int		check_consecutive_pipes(char *input);
 int		check_pipes(char *input);
@@ -142,9 +144,9 @@ int		validate_redirect(char *input, int *i, char *type);
 /*redirection*/
 	/*redir_ll*/
 t_redir	*list_redir(void);
-void	redir_lstadd_back(t_redir **lst, t_redir *new);
 t_redir	*redir_add_node(void);
-void 	redir_update_tail(t_cmd *cmd);
+void	redir_lstadd_back(t_redir **lst, t_redir *new);
+void	redir_update_tail(t_cmd *cmd);
 int		redirll_head_tail(t_cmd *cmd);
 
 	/*handle_redirections.c*/
@@ -153,6 +155,29 @@ int		handle_redirect_in(t_cmd *cmd, int i);
 int		handle_redirect_out(t_cmd *cmd, int i);
 int		handle_heredoc(t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
+
+	/*redirector.c*/
+int		resolve_fd(t_cmd *cmd);
+
+	/*open_files.c*/
+int		open_input_file(char *input_file);
+int		open_output_file(char *output_file);
+int		open_append_file(char *output_file);
+int		open_heredoc(char *delimiter);
+
+/*executor*/
+	/*find_cmd_path.c*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+
+	/*pipeline.c*/
+int	execute_pipeline(t_shell *mini, char **envp);
+
+	/*pipeline_utils.c*/
+int		dup_input(t_shell *mini, t_cmd *cmd, int i);
+int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
+int		dup2_and_close(int old_fd, int new_fd);
+void	close_pipe_fds(int pipe_fd[2]);
+void	close_pipes(t_shell *mini, int pipe_fd[2]);
 
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);

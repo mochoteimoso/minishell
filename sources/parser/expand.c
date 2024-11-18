@@ -83,6 +83,7 @@ char	*expand_var(t_shell *mini, char *str)
 	i = 0;
 	s = 0;
 	expanded = ft_strdup("");
+
 	while (str[i] && str[i] != '"')
 	{
 		if (str[i] == '$')
@@ -124,60 +125,3 @@ int	expand_or_not(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
-// char	*expand_var(t_shell *mini, char *str)
-// {
-// 	char	*expanded;
-// 	char	*temp;
-// 	char	name[100];
-// 	char	*value;
-// 	int		s;
-// 	int		i;
-// 	int		indx;
-
-// 	i = 0;
-// 	s = 0;
-// 	expanded = ft_strdup("");
-// 	while (str[i] && str[i] != '"')
-// 	{
-// 		if (str[i] == '$')
-// 		{
-// 			temp = ft_strjoin(expanded, ft_strndup(&str[s], i - s));
-// 			free(expanded);
-// 			expanded = temp;
-// 			i++;
-// 			indx = 0;
-// 			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-// 				name[indx++] = str[i++];
-// 			name[indx] = '\0';
-// 			value = get_value(mini->env, name);
-// 			if (value)
-// 			{
-// 				temp = ft_strjoin(expanded, value);
-// 				free(expanded);
-// 				expanded = temp;
-// 			}
-// 			s = i;
-// 		}
-// 		else if (str[i] == '~')
-// 		{
-// 			temp = ft_strjoin(expanded, ft_strndup(&str[s], i -s));
-// 			free(expanded);
-// 			expanded = temp;
-// 			i++;
-// 			value = get_value(mini->env, "HOME");
-// 			if (value)
-// 			{
-// 				temp = ft_strjoin(expanded, value);
-// 				free(expanded);
-// 				expanded = temp;
-// 			}
-// 			s = i;
-// 		}
-// 		else
-// 			i++;
-// 	}
-// 	temp = ft_strjoin(expanded, ft_strndup(&str[s], i - s));
-// 	free(expanded);
-// 	expanded = temp;
-// 	return (expanded);
-// }

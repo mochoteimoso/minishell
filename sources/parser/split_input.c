@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 13:32:37 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:56:01 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static int	segment_handler(t_shell *mini, char *input, int start, int end, int *
 	char	*trimmed;
 
 	trimmed = ft_strndup(input + start, end - start);
-	//trimmed = trim_whitespace(ft_strndup(input + start, end - start));
 	if (!trimmed)
 	{
 		printf("Failed to allocate memory for trimmed string");
@@ -68,7 +67,7 @@ char	*trim_whitespace(char *segment)
 	int		end;
 	int		start;
 	int		len;
-
+  
 	if (!segment)
 		return (NULL);
 	start = 0;

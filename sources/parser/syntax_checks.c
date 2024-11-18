@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checks.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 10:51:56 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:46:38 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,4 @@ int	validate_redirect(char *input, int *i, char *type)
 	}
 	return (0);
 }
-
-
 

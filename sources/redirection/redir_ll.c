@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 18:51:54 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:27:50 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,3 +91,4 @@ int	redirll_head_tail(t_cmd *cmd)
 	}
 	return(0);
 }
+

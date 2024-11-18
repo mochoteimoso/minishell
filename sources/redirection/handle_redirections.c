@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 14:13:54 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:16:40 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 // Handles heredoc, finds the delimiter and copies data to the redir linked list
 
 int	handle_heredoc(t_cmd *cmd, int i)
-
 {
 	char	*delimiter_start;
 	int		delimiter_length;
