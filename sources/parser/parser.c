@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/15 16:15:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 09:09:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ static int	single_redirect(t_cmd *cmd, int i)
 
 int handle_redirections(t_cmd *cmd, int i)
 {
-	while (cmd->segment[i])
+	while (cmd->segment[i] && i < (int)ft_strlen(cmd->segment))
 	{
 		if (is_redirection(cmd, i))
 		{

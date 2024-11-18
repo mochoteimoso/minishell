@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 17:42:32 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:12:12 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void printer(t_shell *mini)
 			redir = redir->next;
 			redir_index++;
 		}
-		printf("|*************************************************|\n");
+		printf("|*************************************************|");
 		printf("\n");
 		i++;
 	}
@@ -52,12 +52,21 @@ void printer(t_shell *mini)
 
 static int	init_shell(t_shell *mini, char **envp)
 {
-	int	i;
-
-	i = 0;
 	mini->cmds = NULL;
 	mini->env = list_env(envp);
+	if (!mini->env)
+	{
+		cleaner(mini);
+		free(mini);
+		return (1);
+	}
 	mini->pending = copy_env(envp);
+	if (!mini->pending)
+	{
+		cleaner(mini);
+		free(mini);
+		return (1);
+	}
 	to_alphabetical(mini->pending);
 	mini->exit_stat = 0;
 	return (0);
@@ -89,6 +98,18 @@ static int	built_in_exe(t_shell *mini)
 	return (0);
 }
 
+
+static int	is_this_empty(char *input)
+{
+	while (*input)
+	{
+		if (!ft_isspace(*input))
+			return (0);
+		input++;
+	}
+	return (1);
+}
+
 static int user_prompt(t_shell *mini)
 {
 	char	*input;
@@ -100,11 +121,19 @@ static int user_prompt(t_shell *mini)
 		if (input == NULL)
 			break ;
 		if (input && *input)
+		{
+			if (is_this_empty(input))
+			{
+				free(input);
+				continue;
+			}
 			add_history(input);
-		if (parse_and_validate_input(input, mini))
-			error("ALL IS BROKEN!!\n");
-		//printer(mini);
-		built_in_exe(mini);
+			if (parse_and_validate_input(input, mini))
+				continue ;
+			// printer(mini);
+			built_in_exe(mini);
+		}
+		free(input);
 	}
 	return (0);
 }
@@ -119,7 +148,8 @@ static int	activate_shell(char **envp)
 		error("Malloc failed\n");
 		return (1);
 	}
-	init_shell(mini, envp);
+	if (init_shell(mini, envp))
+		return (1);
 	user_prompt(mini);
 	return (0);
 }

@@ -18,7 +18,6 @@ int	handle_cmd_args(t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
 
 // Counts how many command arguments the string contains
-
 int	count_args(t_cmd *cmd, int i)
 {
 	int	args_count;

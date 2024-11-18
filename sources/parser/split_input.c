@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 14:13:43 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:36:24 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,67 @@
 
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
-int		ft_isspace(char c);
+
 
 // splits input string by pipes and copies each segment into the segment member
 // of the relevant struct in the array
+static int	segment_handler(t_shell *mini, char *input, int start, int end, int *index)
+{
+	char	*trimmed;
+
+	trimmed = ft_strndup(input + start, end - start);
+	if (!trimmed)
+	{
+		printf("Failed to allocate memory for trimmed string");
+		return (1);
+	}
+	trimmed = trim_whitespace(trimmed);
+	if (!mini->cmds[*index])
+	{
+		printf("No segment in struct\n");
+		free(trimmed);
+		return (1);
+	}
+	mini->cmds[*index]->segment = trimmed;
+	(*index)++;
+	return (0);
+}
+
+static int segment_end(t_shell *mini, char *input, int start, int end, int *index)
+{
+	char	*trimmed;
+
+	trimmed = trim_whitespace(ft_strndup(input + start, end - start));
+	if (!trimmed)
+	{
+		printf("Failed to allocate memory for trimmed string");
+		return (1);
+	}
+	mini->cmds[*index]->segment = trimmed;
+	return (0);
+}
 
 int	split_input_by_pipes(char *input, t_shell *mini)
 {
 	int		i;
 	int		start;
 	int		index;
-	char	*trimmed_segment;
 
 	i = 0;
 	start = 0;
 	index = 0;
-
 	while (input[i])
 	{
 		if (input[i] == '|' && !check_quotes(input, i))
 		{
-			trimmed_segment = trim_whitespace(ft_strndup(input + start, i - start));
-			if (trimmed_segment == NULL)
-			{
-				printf("Failed to allocate memory for trimmed string");
+			if (segment_handler(mini, input, start, i, &index))
 				return (1);
-			}
-			mini->cmds[index]->segment = trimmed_segment;
 			start = i + 1;
-			index++;
 		}
 		i++;
 	}
-	trimmed_segment = trim_whitespace(ft_strndup(input + start, i - start));
-	if (trimmed_segment == NULL)
-	{
-		printf("Failed to allocate memory for trimmed string");
+	if (segment_end(mini, input,  start, i, &index))
 		return (1);
-	}
-	mini->cmds[index]->segment = trimmed_segment;
 	return (0);
 }
 
@@ -60,13 +82,10 @@ int	split_input_by_pipes(char *input, t_shell *mini)
 
 char	*trim_whitespace(char *segment)
 {
-	int		i;
 	int		end;
 	int		start;
 	int		len;
-	char	*trimmed_segment;
 
-	i = 0;
 	start = 0;
 	end = ft_strlen(segment) - 1;
 	while (segment[start] && ft_isspace(segment[start]))
@@ -74,27 +93,7 @@ char	*trim_whitespace(char *segment)
 	while (end >= start && ft_isspace(segment[end]))
 		end--;
 	len = end - start + 1;
-	trimmed_segment = malloc(sizeof(char) * (len + 1));
-	if (!trimmed_segment)
-		return (NULL);
-	while (i < len)
-	{
-		trimmed_segment[i] = segment[start + i];
-		i++;
-	}
-	trimmed_segment[len] = '\0';
-	free(segment);
-	return (trimmed_segment);
-}
-
-// checks if a character is a whitespace
-
-int	ft_isspace(char c)
-{
-	if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' )
-	{
-		return (1);
-	}
-	else
-		return (0);
+	ft_memmove(segment, segment + start, len + 1);
+	segment[len] = '\0';
+	return (segment);
 }

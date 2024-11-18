@@ -10,7 +10,6 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
-
 //# include </usr/include/linux/signal.h>
 
 typedef enum e_redir_type
@@ -123,7 +122,6 @@ int	append_to_array(t_cmd *cmd, char *start, int len, int *index);
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
-int		ft_isspace(char c);
 
 	/*syntax_checls.c*/
 int		validate_input_syntax(char *input);
@@ -155,6 +153,7 @@ int		handle_append(t_cmd *cmd, int i);
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
 void	error(char *str);
+void	clean_cmds(t_cmd **cmds);
 
 /*signals.c*/
 void	init_sig(void);
