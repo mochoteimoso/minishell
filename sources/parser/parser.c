@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/16 15:36:06 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/18 15:20:40 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,67 +109,6 @@ int	parse_cmd_string(t_cmd *cmd)
 	else if (ft_strcmp(str, "export") == 0)
 		return (1);
 	return (0);
-} */
-
-/*int handle_redirections(t_cmd *cmd, int i)
-{
-	while (cmd->segment[i])
-	{
-		// If a redirection symbol is found, create a new node and handle the redirection
-		if (is_redirection(cmd, i))
-		{
-			// Create a new redirection node each time a redirection is encountered
-			if (!cmd->redir_head)
-			{
-				cmd->redir_head = list_redir();  // Create the first redirection node
-				if (!cmd->redir_head)
-				{
-					printf("Failed to initialize redirection list\n");
-					return (-1);
-				}
-				cmd->redir_tail = cmd->redir_head;  // Set tail to head for the first node
-			}
-			else
-			{
-				// If the list already has redirections, update the tail and create a new node
-				redir_update_tail(cmd);  // Update tail to point to the most recent redirection
-				if (!cmd->redir_tail)
-				{
-					printf("Failed to allocate memory for new redirection node\n");
-					return (-1);
-				}
-			}
-			// Handle the specific redirection types
-			if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
-			{
-				i = handle_heredoc(cmd, i);
-				if (i == -1)
-					return (-1);
-			}
-			else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
-			{
-				i = handle_append(cmd, i);
-				if (i == -1) 
-					return (-1);
-			}
-			else if (cmd->segment[i] == '<')
-			{
-				i = handle_redirect_in(cmd, i);
-				if (i == -1)
-					return (-1);
-			}
-			else if (cmd->segment[i] == '>')
-			{
-				i = handle_redirect_out(cmd, i);
-				if (i == -1)
-					return (-1);
-			}
-			i++;
-		}
-		else
-			break;
-	}
-	return (i);
 } */
 
 //Loops through segment string to find redirection symbols
