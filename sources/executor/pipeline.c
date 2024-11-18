@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 15:26:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:11:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		execute_pipeline(t_shell *mini, char **envp);
+int		execute_pipeline(t_shell *mini);
 int		execute_single_cmd(t_shell *mini, char **envp);
 int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int i);
 int		execute_cmd(t_cmd *cmd, char **envp);
@@ -23,13 +23,15 @@ void	close_pipes(t_shell *mini, int pipe_fd[2]);
 // executes a single command if there are no pipes
 // sets up pipeline and forks child processes
 
-int	execute_pipeline(t_shell *mini, char **envp) 
+int	execute_pipeline(t_shell *mini)
 {
 	int		pipe_fd[2];
 	int		i;
 	t_cmd	*cmd;
-	
+	char	**envp;
+
 	i = 0;
+	envp = env_to_array(mini->env);
 	if (mini->cmd_count == 1)
 	{
 		if (execute_single_cmd(mini, envp))
@@ -64,10 +66,10 @@ void	setup_fds(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 		cmd->fd_out = pipe_fd[1]; // Output to the next pipe
 }
 
-int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int i) 
+int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int i)
 {
 	pid_t	pid;
-	
+
 	pid = fork();
 	if (pid == -1)
 	{
@@ -76,7 +78,7 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int
 	}
 	else if (pid == 0)
 	{
-		if (dup_input(mini, cmd, i)) // redirect input 
+		if (dup_input(mini, cmd, i)) // redirect input
 			return (1);
 		if (dup_output(cmd, pipe_fd, mini->cmd_count, i)) //redirect output
 			return (1);
@@ -104,7 +106,7 @@ int	execute_single_cmd(t_shell *mini, char **envp)
 	if (execute_cmd(mini->cmds[0], envp))
 		return (1);
 	return (0);
-} 
+}
 
 // Executes command
 // Check why env_array parsed based on min->env is not working

@@ -3,54 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   find_cmd_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/16 16:42:04 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:32:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int			get_cmd_path(t_shell *mini, t_cmd *cmd);
-static char	*search_command_in_paths(char **paths, t_cmd *cmd);
-static int	check_abs_path(t_cmd *cmd);
+// int			get_cmd_path(t_shell *mini, t_cmd *cmd);
+// static char	*search_command_in_paths(char **paths, t_cmd *cmd);
+// static int	check_abs_path(t_cmd *cmd);
 
 // Resolves absolute path for command and updates in cmd->cmd_path
 
-int	get_cmd_path(t_shell *mini, t_cmd *cmd)
-{
-	char	*paths_str;
-	char	**paths;
-	t_env	*temp;
 
-	if (check_abs_path(cmd) == 0)
-		cmd->cmd_path = cmd->command;
-	else if (check_abs_path(cmd) != 1)
-		return (check_abs_path(cmd));
-	else
-	{
-		temp = mini->env;
-		while (temp)
-		{
-			if (ft_strncmp(temp->name, "PATH", 4) == 0)
-				paths_str = temp->value;
-			temp = temp->next;
-		}
-		paths = ft_split(paths_str, ':');
-		if (!paths)
-		{
-			perror("Failed to split PATH");
-			return (1);
-		}
-		cmd->cmd_path = search_command_in_paths(paths, cmd);
-		if (!cmd->cmd_path)
-			return (1);
-	}
-	return (0);
-}
-
-// Tests each possible path until finds one that works, 
+// Tests each possible path until finds one that works,
 // returns correct absolute path
 static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 {
@@ -100,4 +69,36 @@ static int	check_abs_path(t_cmd *cmd)
 		}
 	}
 	return (1);
+}
+
+int	get_cmd_path(t_shell *mini, t_cmd *cmd)
+{
+	char	*paths_str;
+	char	**paths;
+	t_env	*temp;
+
+	if (check_abs_path(cmd) == 0)
+		cmd->cmd_path = cmd->command;
+	else if (check_abs_path(cmd) != 1)
+		return (check_abs_path(cmd));
+	else
+	{
+		temp = mini->env;
+		while (temp)
+		{
+			if (ft_strncmp(temp->name, "PATH", 4) == 0)
+				paths_str = temp->value;
+			temp = temp->next;
+		}
+		paths = ft_split(paths_str, ':');
+		if (!paths)
+		{
+			perror("Failed to split PATH");
+			return (1);
+		}
+		cmd->cmd_path = search_command_in_paths(paths, cmd);
+		if (!cmd->cmd_path)
+			return (1);
+	}
+	return (0);
 }

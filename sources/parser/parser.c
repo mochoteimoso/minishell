@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 14:21:22 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:14:21 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
-static int	is_this_built(char *str);
+//static int	is_this_built(char *str);
 static int	no_args(t_cmd *cmd, int i);
 static int	double_redirect(t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
@@ -36,24 +36,24 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 	return (0);
 }
 
-static int	is_this_built(char *str)
-{
-	if (ft_strcmp(str, "exit") == 0)
-		return (1);
-	else if (ft_strcmp(str, "cd") == 0)
-		return (1);
-	else if (ft_strcmp(str, "echo") == 0)
-		return (1);
-	else if (ft_strcmp(str, "env") == 0)
-		return (1);
-	else if (ft_strcmp(str, "pwd"))
-		return (1);
-	else if (ft_strcmp(str, "unset") == 0)
-		return (1);
-	else if (ft_strcmp(str, "export") == 0)
-		return (1);
-	return (0);
-}
+// static int	is_this_built(char *str)
+// {
+// 	if (ft_strcmp(str, "exit") == 0)
+// 		return (1);
+// 	else if (ft_strcmp(str, "cd") == 0)
+// 		return (1);
+// 	else if (ft_strcmp(str, "echo") == 0)
+// 		return (1);
+// 	else if (ft_strcmp(str, "env") == 0)
+// 		return (1);
+// 	else if (ft_strcmp(str, "pwd"))
+// 		return (1);
+// 	else if (ft_strcmp(str, "unset") == 0)
+// 		return (1);
+// 	else if (ft_strcmp(str, "export") == 0)
+// 		return (1);
+// 	return (0);
+// }
 // Parses information added to array of structs
 int	parse_input(t_shell *mini)
 {
@@ -124,25 +124,6 @@ int	parse_cmd_string(t_cmd *cmd)
 	return (0);
 }
 
-/*static int	is_this_built(char *str)
-{
-	if (ft_strcmp(str, "exit") == 0)
-		return (1);
-	else if (ft_strcmp(str, "cd") == 0)
-		return (1);
-	else if (ft_strcmp(str, "echo") == 0)
-		return (1);
-	else if (ft_strcmp(str, "env") == 0)
-		return (1);
-	else if (ft_strcmp(str, "pwd"))
-		return (1);
-	else if (ft_strcmp(str, "unset") == 0)
-		return (1);
-	else if (ft_strcmp(str, "export") == 0)
-		return (1);
-	return (0);
-} */
-
 //Loops through segment string to find redirection symbols
 // creates a linked list if redirection symbol(s) are found
 // each redirect will be its own node and will contain information about redirection type,
@@ -207,40 +188,6 @@ int handle_redirections(t_cmd *cmd, int i)
 		}
 		else
 			break;
-	}
-	return (i);
-}
-
-static int	double_redirect(t_cmd *cmd, int i)
-{
-	if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
-	{
-		i = handle_heredoc(cmd, i);
-		if (i == -1)
-			return (-1);
-	}
-	else if (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')
-	{
-		i = handle_append(cmd, i);
-		if (i == -1)
-			return (-1);
-	}
-	return (i);
-}
-
-static int	single_redirect(t_cmd *cmd, int i)
-{
-	if (cmd->segment[i] == '<')
-	{
-		i = handle_redirect_in(cmd, i);
-		if (i == -1)
-			return (-1);
-	}
-	else if (cmd->segment[i] == '>')
-	{
-		i = handle_redirect_out(cmd, i);
-		if (i == -1)
-			return (-1);
 	}
 	return (i);
 }

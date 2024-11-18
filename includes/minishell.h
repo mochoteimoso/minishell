@@ -126,12 +126,10 @@ int		arg_in_quotes(char *str, int i, char **start, int *len);
 int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
 int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 
-
 	/*split_inputs.c*/
 
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
-
 
 	/*syntax_checks.c*/
 int		validate_input_syntax(char *input);
@@ -170,7 +168,7 @@ int		open_heredoc(char *delimiter);
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 	/*pipeline.c*/
-int	execute_pipeline(t_shell *mini, char **envp);
+int	execute_pipeline(t_shell *mini);
 
 	/*pipeline_utils.c*/
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
