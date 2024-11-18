@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/18 10:12:12 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:37:37 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ static int user_prompt(t_shell *mini)
 			add_history(input);
 			if (parse_and_validate_input(input, mini))
 				continue ;
-			// printer(mini);
+			printer(mini);
 			built_in_exe(mini);
 		}
 		free(input);

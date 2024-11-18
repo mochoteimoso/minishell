@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 09:30:59 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:51:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ for unmatched quotes and incorrectly placed pipes and redirects*/
 
 int	validate_input_syntax(char *input)
 {
-	if (!input)
-		return (1);
 	if (check_quotes(input, 0))
 	{
 		printf("syntax error: unmatched quotes");
@@ -43,13 +41,16 @@ int	validate_input_syntax(char *input)
 		return (0);
 }
 
-// Checks if a given index is within quotes or if there are unbalanced quotes in the string
+/* Checks if a given index is within quotes or if there are unbalanced quotes in the string*/
 int check_quotes(char *input, int limit)
 {
-	int in_single_quote = 0;
-	int in_double_quote = 0;
-	int index = 0;
+	int in_single_quote;
+	int in_double_quote;
+	int index;
 
+	in_single_quote = 0;
+	in_double_quote = 0;
+	index = 0;
 	while (input[index] && (limit == -1 || index <= limit))
 	{
 		if (input[index] == '\'' && !in_double_quote)

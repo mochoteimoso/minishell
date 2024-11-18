@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:51:41 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/13 16:23:39 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/18 13:30:30 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	arg_in_quotes(char *str, int i, char **start, int *len)
 	i++;
 	while (str[i] && str[i] != s)
 	{
+		//printf("arg_in_quotes: %c\n", str[i]);
 		(*len)++;
 		i++;
 	}
