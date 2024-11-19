@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/19 11:49:59 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:56:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	execute_pipeline(t_shell *mini, char **envp)
 		i++;
 	}
 	// Wait for all children to finish
-	while (wait(NULL) > 0);
+	//while (wait(NULL) > 0);
 	return (0);
 }
 
