@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/18 17:49:13 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:22:41 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void printer(t_shell *mini)
 {
 	int i = 0;
-
+	
 	while (mini->cmds[i])
 	{
 		printf("\n");
@@ -72,6 +72,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->cmd_count = 0;
 	mini->prev_pipe[0] = -1;
 	mini->prev_pipe[1] = -1;
+	mini->pids = NULL;
 	mini->exit_stat = 0;
 	return (0);
 }
@@ -87,7 +88,7 @@ static int	is_this_empty(char *input)
 	return (1);
 }
 
-static int user_prompt(t_shell *mini, char **envp)
+static int user_prompt(t_shell *mini)
 {
 	char	*input;
 	init_sig();
@@ -108,9 +109,8 @@ static int user_prompt(t_shell *mini, char **envp)
 		if (parse_and_validate_input(input, mini))
 			error("ALL IS BROKE!!\n");
 		printer(mini);
-		if (execute_pipeline(mini, envp))
+		if (execute_pipeline(mini))
 			error("ALL IS TERRIBLY BROKEN\n");
-		//built_in_exe(mini);
 	}
 	return (0);
 }
@@ -127,7 +127,7 @@ static int	activate_shell(char **envp)
 	}
 	if (init_shell(mini, envp))
 		return (1);
-	user_prompt(mini, envp);
+	user_prompt(mini);
 	return (0);
 }
 
