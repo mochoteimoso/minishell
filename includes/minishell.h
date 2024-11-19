@@ -62,6 +62,7 @@ typedef struct s_shell
 	t_env	*env;
 	int		cmd_count;
 	char	**pending;
+	int		*pids;
 	int		prev_pipe[2];
 	int		exit_stat;
 } t_shell;
@@ -169,7 +170,7 @@ int		open_heredoc(char *delimiter);
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 	/*pipeline.c*/
-int		execute_pipeline(t_shell *mini, char **envp);
+int		execute_pipeline(t_shell *mini);
 
 	/*pipeline_utils.c*/
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
@@ -181,7 +182,7 @@ void	close_pipes(t_shell *mini, int pipe_fd[2]);
 	/*handle_builtins.c*/
 int		built_in_exe(t_shell *mini, t_cmd *cmd);
 int		is_this_builtin_cmd(t_cmd *cmd);
-
+int		is_this_built(char *str);
 
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);
