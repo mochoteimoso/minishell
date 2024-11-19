@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/19 12:56:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:47:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ int	execute_pipeline(t_shell *mini, char **envp)
 	{
 		if (handle_single_cmd(mini, envp))
 			return (1);
-		else
-			return (0);
+		return (0);
 	}
 	while (i < mini->cmd_count)
 	{
@@ -54,7 +53,7 @@ int	execute_pipeline(t_shell *mini, char **envp)
 		mini->prev_pipe[1] = -1;  // Close the previous output for the next command
 		i++;
 	}
-	// Wait for all children to finish
+	//Wait for all children to finish
 	//while (wait(NULL) > 0);
 	return (0);
 }
@@ -130,7 +129,7 @@ int	execute_cmd(t_shell *mini, t_cmd *cmd, char **envp)
 			exit(EXIT_FAILURE);
 		}
 	}
-	return (EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
 
 int	execute_single_cmd(t_shell *mini, t_cmd *cmd, char **envp)
