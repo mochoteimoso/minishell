@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 17:08:32 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:17:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	parse_input(t_shell *mini)
 			return (1);
 		if (expand_or_not(mini, mini->cmds[index]))
 			return (1);
-		if (!is_this_built(mini->cmds[index]->args[0]))
+		if (is_this_built(mini->cmds[index]->command) != 1)
 		{
 			if (get_cmd_path(mini, mini->cmds[index]))
 				return (1);
@@ -107,7 +107,7 @@ int	is_this_built(char *str)
 		return (1);
 	else if (ft_strcmp(str, "env") == 0)
 		return (1);
-	else if (ft_strcmp(str, "pwd"))
+	else if (ft_strcmp(str, "pwd") == 0)
 		return (1);
 	else if (ft_strcmp(str, "unset") == 0)
 		return (1);
