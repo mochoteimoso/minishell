@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 17:52:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:21:10 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	execute_pipeline(t_shell *mini, char **envp)
 		{
 			perror("pipe");
 			return (1);
-		}
+		} 
 		setup_fds(mini, cmd, pipe_fd, i);
 		if (fork_and_execute(mini, cmd, pipe_fd, envp, i) == -1)
 			return (1);
