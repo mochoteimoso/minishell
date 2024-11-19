@@ -6,16 +6,17 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/19 10:21:10 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:49:59 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int		execute_pipeline(t_shell *mini, char **envp);
-int		execute_single_cmd(t_shell *mini, char **envp);
+int		handle_single_cmd(t_shell *mini, char **envp);
 int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int i);
 int		execute_cmd(t_shell *mini, t_cmd *cmd, char **envp);
+int		execute_single_cmd(t_shell *mini, t_cmd *cmd, char **envp);
 void	setup_fds(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
 void	close_pipes(t_shell *mini, int pipe_fd[2]);
 
@@ -32,7 +33,7 @@ int	execute_pipeline(t_shell *mini, char **envp)
 	i = 0;
 	if (mini->cmd_count == 1)
 	{
-		if (execute_single_cmd(mini, envp))
+		if (handle_single_cmd(mini, envp))
 			return (1);
 		else
 			return (0);
@@ -91,7 +92,7 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int
 // Executes single command if there are no pipes
 // duplicates fd based on fd_in and fd_out
 
-int	execute_single_cmd(t_shell *mini, char **envp)
+int	handle_single_cmd(t_shell *mini, char **envp)
 {
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
@@ -103,7 +104,7 @@ int	execute_single_cmd(t_shell *mini, char **envp)
 		if (dup2_and_close(mini->cmds[0]->fd_out, STDOUT_FILENO))
 			return (1);
 	}
-	if (execute_cmd(mini, mini->cmds[0], envp))
+	if (execute_single_cmd(mini, mini->cmds[0], envp))
 		return (1);
 	return (0);
 } 
@@ -132,3 +133,23 @@ int	execute_cmd(t_shell *mini, t_cmd *cmd, char **envp)
 	return (EXIT_SUCCESS);
 }
 
+int	execute_single_cmd(t_shell *mini, t_cmd *cmd, char **envp)
+{
+	//char	**env_array;
+	//env_array = env_to_array(mini->env);
+	if (is_this_builtin_cmd(cmd))
+	{
+		if (built_in_exe(mini, cmd))
+			return (1);
+	}
+	else
+	{
+		if (execve(cmd->cmd_path, cmd->args, envp) == -1)
+		{
+			perror(cmd->command);
+			// free everything
+			return (1);
+		}
+	}
+	return (0);
+}
