@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 18:19:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:44:04 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	clean_env(t_env *ll, char **array)
 	}
 }
 
-static void	clean_redir(t_redir *head, t_redir *tail)
+static void	clean_redir(t_redir *head)
 {
 	t_redir *temp;
 
@@ -40,17 +40,6 @@ static void	clean_redir(t_redir *head, t_redir *tail)
 			free(head->file);
 			free(head->delimiter);
 			head = head->next;
-			free(temp);
-		}
-	}
-	if (tail)
-	{
-		while (tail != NULL)
-		{
-			temp = tail;
-			free(tail->file);
-			free(tail->delimiter);
-			head = tail->next;
 			free(temp);
 		}
 	}
@@ -68,11 +57,47 @@ void	clean_cmds(t_cmd **cmds)
 		free(cmds[i]->cmd_path);
 		ft_free_array(cmds[i]->args);
 		if (cmds[i]->redir_head)
-			clean_redir(cmds[i]->redir_head,  cmds[i]->redir_tail);
+			clean_redir(cmds[i]->redir_head);
 		i++;
 	}
 	free(cmds);
 }
+
+/*static void	clean_redir(t_redir **head, t_redir **tail)
+{
+	t_redir *temp;
+
+	while (*head != NULL)
+	{
+		temp = *head;
+		free((*head)->file);
+		free((*head)->delimiter);
+		*head = (*head)->next;
+		free(temp);
+	}
+	*head = NULL;
+	*tail = NULL;
+} */
+
+/*void	clean_cmds(t_cmd ***cmds)
+{
+	int	i;
+
+	i = 0;
+	while (*(cmds)[i])
+	{
+		free((*cmds)[i]->segment);
+		free((*cmds)[i]->command);
+		free((*cmds)[i]->cmd_path);
+		ft_free_array((*cmds)[i]->args); 
+		if ((*cmds)[i]->redir_head)
+			clean_redir(&(*cmds)[i]->redir_head, &(*cmds)[i]->redir_tail);
+		free((*cmds)[i]);
+		i++;
+	}
+	free(*cmds);
+	*cmds = NULL;
+} */
 
 void	cleaner(t_shell *mini)
 {
@@ -80,6 +105,13 @@ void	cleaner(t_shell *mini)
 	if (mini->cmds)
 		clean_cmds(mini->cmds);
 }
+
+/*void	cleaner(t_shell *mini)
+{
+	clean_env(mini->env, mini->pending);
+	if (mini->cmds)
+		clean_cmds(&(mini->cmds));
+} */
 
 void	error(char *str)
 {
