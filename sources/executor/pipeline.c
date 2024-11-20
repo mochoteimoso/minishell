@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/19 20:43:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:38:13 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,12 @@ void	wait_children(t_shell *mini)
 	status = 0;
 	while (i < mini->cmd_count)
 	{
-		//waitpid(mini->pids[i], &status, 0);
-		//if (WIFEXITED(status))
-		//	mini->exit_stat = WIFEXITED(status);
+		waitpid(mini->pids[i], &status, 0);
+		if (WIFEXITED(status))
+			mini->exit_stat = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			printf("Child %d terminated by signal %d\n", mini->pids[i], WTERMSIG(status));
+		i++;
 	}
 }
 
