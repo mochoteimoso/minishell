@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 10:44:53 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:34:09 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,18 @@ static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 		if (!mini->cmds[i])
 		{
 			printf("Failed to allocate memory for struct\n");
-			while (i > 0)
-			{
-				i--;
-				free(mini->cmds[i]);
-			}
+			clean_cmds(mini->cmds);
 			free(mini->cmds);
 			return (1);
 		}
 		initialize_command_struct(mini->cmds[i]);
 		i++;
 	}
+	mini->cmds[cmd_count] = NULL;
 	return (0);
 }
 	// mini->cmds = ft_calloc(command_count, sizeof(t_cmd));
+
 int	prepare_command_structs(t_shell *mini, char *input)
 {
 	// int	i;

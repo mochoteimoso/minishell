@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 11:16:12 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/20 16:54:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static int	no_args(t_cmd *cmd, int i)
 	cmd->args[0] = ft_strdup(cmd->command);
 	if (!cmd->args)
 		return (-1);
+	cmd->args[1] = NULL;
 	return (i);
 }
 
@@ -85,7 +86,9 @@ int	parse_cmd_string(t_cmd *cmd)
 		return (1);
 	cmd_found = true;
 	if (!cmd->segment[i] || is_redirection(cmd, i))
+	{
 		i = no_args(cmd, i);
+	}
 	else
 	{
 		i = handle_cmd_args(cmd, i);

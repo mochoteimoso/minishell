@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmd_args_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/16 15:15:08 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:54:57 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	arg_in_quotes(char *str, int i, char **start, int *len)
 	i++;
 	while (str[i] && str[i] != s)
 	{
-		//printf("arg_in_quotes: %c\n", str[i]);
 		(*len)++;
 		i++;
 	}
@@ -45,7 +44,7 @@ int	arg_no_quotes(t_cmd *cmd, int i, char **start, int *len)
 {
 	*start = &cmd->segment[i];
 	*len = 0;
-  
+
 	while (cmd->segment[i] && (!ft_isspace(cmd->segment[i]) ||
 		check_quotes(cmd->segment, i)) && !is_redirection(cmd, i))
 	{

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:04:07 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:36:01 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ void	ft_free_array(char **array)
 		free(array[a]);
 		a++;
 	}
+	//printf("Lucas\n");
 	free(array);
 }

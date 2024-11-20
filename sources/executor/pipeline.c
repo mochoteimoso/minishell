@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 14:27:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:27:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	execute_pipeline(t_shell *mini)
 	{
 		if (handle_single_cmd(mini))
 			return (1);
+		clean_cmds(mini->cmds);
 		return (0);
 	}
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
@@ -71,7 +72,6 @@ int	execute_pipeline(t_shell *mini)
 	}
 	*/
 	clean_cmds(mini->cmds);
-	// printer(mini);
 	wait_children(mini);
 	return (0);
 }

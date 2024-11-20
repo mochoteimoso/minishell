@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 16:26:02 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:56:01 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 	if (!cmd->args)
 		return (-1);
 	cmd->args[arg_index] = ft_strdup(cmd->command);
+	if (!cmd->args[0])
+	{
+		ft_free_array(cmd->args);
+		return (-1);
+	}
 	arg_index++;
 	i = skip_whitespace(cmd->segment, i);
 	while (cmd->segment[i] && arg_index < args_count + 1 && !is_redirection(cmd, i))
@@ -70,7 +75,10 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 		else
 			i = arg_no_quotes(cmd, i, &arg_start, &arg_len);
 		if (append_to_array(cmd, arg_start, arg_len, &arg_index) == -1)
+		{
+			ft_free_array(cmd->args);
 			return (-1);
+		}
 		i = skip_whitespace(cmd->segment, i);
 	}
 	cmd->args[arg_index] = NULL;

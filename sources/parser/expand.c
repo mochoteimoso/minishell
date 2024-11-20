@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/18 09:19:44 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/20 18:12:33 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,12 @@ static int oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int
 	char	*temp;
 	int		indx;
 	char	*value;
+	char 	*temp2;
 	char	name[100];
 
-	temp = ft_strjoin(*expanded, ft_strndup(&str[*s], i - *s));
+	temp2 = ft_strndup(&str[*s], i - *s);
+	temp = ft_strjoin(*expanded, temp2);
+	free(temp2);
 	free(*expanded);
 	*expanded = temp;
 	i++;
@@ -77,13 +80,13 @@ char	*expand_var(t_shell *mini, char *str)
 {
 	char	*expanded;
 	char	*temp;
+	char	*temp2;
 	int		i;
 	int		s;
 
 	i = 0;
 	s = 0;
 	expanded = ft_strdup("");
-
 	while (str[i] && str[i] != '"')
 	{
 		if (str[i] == '$')
@@ -99,8 +102,11 @@ char	*expand_var(t_shell *mini, char *str)
 		else
 			i++;
 	}
-	temp = ft_strjoin(expanded, ft_strndup(&str[s], i - s));
+	temp2 = ft_strndup(&str[s], i - s);
+	temp = ft_strjoin(expanded, temp2);
 	free(expanded);
+	free(temp2);
+	free(str);
 	expanded = temp;
 	return (expanded);
 }
