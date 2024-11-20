@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/18 16:12:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:15:29 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	{
 		cleaner(mini);
 		free(mini);
+		ft_putendl_fd("failed to create envp", 2);
 		return (1);
 	}
 	mini->pending = copy_env(envp);
@@ -64,42 +65,17 @@ static int	init_shell(t_shell *mini, char **envp)
 	{
 		cleaner(mini);
 		free(mini);
+		ft_putendl_fd("pending list malloc failed", 2);
 		return (1);
 	}
 	to_alphabetical(mini->pending);
 	mini->cmd_count = 0;
+	mini->pids = NULL;
 	mini->prev_pipe[0] = -1;
 	mini->prev_pipe[1] = -1;
 	mini->exit_stat = 0;
 	return (0);
 }
-
-// static int	built_in_exe(t_shell *mini)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while (mini->cmds[i])
-// 	{
-// 		if (ft_strcmp(mini->cmds[i]->command, "exit") == 0)
-// 			built_exit(mini, mini->cmds[i]);
-// 		else if (ft_strcmp(mini->cmds[i]->command, "cd") == 0)
-// 			return (built_cd(mini, mini->cmds[i]));
-// 		else if (ft_strcmp(mini->cmds[i]->command, "echo") == 0)
-// 			return (built_echo(mini->cmds[i]));
-// 		else if (ft_strcmp(mini->cmds[i]->command, "env") == 0)
-// 		 	return (built_env(mini));
-// 		else if (ft_strcmp(mini->cmds[i]->command, "pwd") == 0 && !mini->cmds[i]->args[1])
-// 			return (built_pwd(mini));
-// 		else if (ft_strcmp(mini->cmds[i]->command, "unset") == 0)
-// 			return (built_unset(mini, mini->cmds[i]));
-// 		else if (ft_strcmp(mini->cmds[i]->command, "export") == 0)
-// 			return (built_export(mini, mini->cmds[i]));
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
 
 static int	is_this_empty(char *input)
 {
@@ -115,9 +91,9 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini)
 {
 	char	*input;
-	init_sig();
 	while (1)
 	{
+		init_sig();
 		input = readline("minishell> ");
 		if (input == NULL)
 			break ;
@@ -131,10 +107,10 @@ static int user_prompt(t_shell *mini)
 			add_history(input);
 		if (parse_and_validate_input(input, mini))
 			error("ALL IS BROKE!!\n");
-		printer(mini);
+		//printer(mini);
 		if (execute_pipeline(mini))
 			error("ALL IS TERRIBLY BROKEN\n");
-		//built_in_exe(mini);
+		free(input);
 		}
 	}
 	return (0);
@@ -147,7 +123,7 @@ static int	activate_shell(char **envp)
 	mini = malloc(sizeof(t_shell));
 	if (!mini)
 	{
-		error("Malloc failed\n");
+		ft_putendl_fd("mini struct malloc failed", 2);
 		return (1);
 	}
 	if (init_shell(mini, envp))

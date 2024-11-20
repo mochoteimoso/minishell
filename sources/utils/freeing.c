@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 18:19:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:07:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	clean_env(t_env *ll, char **array)
 	}
 }
 
-static void	clean_redir(t_redir *head, t_redir *tail)
+static void	clean_redir(t_redir *head)
 {
 	t_redir *temp;
 
@@ -43,17 +43,17 @@ static void	clean_redir(t_redir *head, t_redir *tail)
 			free(temp);
 		}
 	}
-	if (tail)
-	{
-		while (tail != NULL)
-		{
-			temp = tail;
-			free(tail->file);
-			free(tail->delimiter);
-			head = tail->next;
-			free(temp);
-		}
-	}
+	// if (tail)
+	// {
+	// 	while (tail != NULL)
+	// 	{
+	// 		temp = tail;
+	// 		free(tail->file);
+	// 		free(tail->delimiter);
+	// 		head = tail->next;
+	// 		free(temp);
+	// 	}
+	// }
 }
 
 void	clean_cmds(t_cmd **cmds)
@@ -68,17 +68,36 @@ void	clean_cmds(t_cmd **cmds)
 		free(cmds[i]->cmd_path);
 		ft_free_array(cmds[i]->args);
 		if (cmds[i]->redir_head)
-			clean_redir(cmds[i]->redir_head,  cmds[i]->redir_tail);
+			clean_redir(cmds[i]->redir_head);
 		i++;
 	}
 	free(cmds);
 }
+
+void	ft_free_int_arr(int **array)
+{
+	int	a;
+
+	a = 0;
+	if (!array)
+		return ;
+	while (array[a] != NULL)
+	{
+		free(array[a]);
+		a++;
+	}
+	free(array);
+}
+
 
 void	cleaner(t_shell *mini)
 {
 	clean_env(mini->env, mini->pending);
 	if (mini->cmds)
 		clean_cmds(mini->cmds);
+	if (mini->pids)
+		free(mini->pids);
+
 }
 
 void	error(char *str)

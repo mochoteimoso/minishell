@@ -62,6 +62,7 @@ typedef struct s_shell
 	t_env	*env;
 	int		cmd_count;
 	char	**pending;
+	int		*pids;
 	int		prev_pipe[2];
 	int		exit_stat;
 } t_shell;
@@ -103,6 +104,25 @@ int		count_pipes(char *line);
 int		prepare_command_structs(t_shell *mini, char *input);
 t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
+
+/*executor*/
+	/*find_cmd_path.c*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+
+	/*handle_builtins.c*/
+int		built_in_exe(t_shell *mini, t_cmd *cmd);
+int		is_this_built(char *str);
+int		is_this_builtin_cmd(t_cmd *cmd);
+
+	/*pipeline.c*/
+int		execute_pipeline(t_shell *mini);
+
+	/*pipeline_utils.c*/
+int		dup_input(t_shell *mini, t_cmd *cmd, int i);
+int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
+int		dup2_and_close(int old_fd, int new_fd);
+void	close_pipe_fds(int pipe_fd[2]);
+void	close_pipes(t_shell *mini, int pipe_fd[2]);
 
 /*parser*/
 	/*parser.c*/
@@ -163,20 +183,6 @@ int		open_output_file(char *output_file);
 int		open_append_file(char *output_file);
 int		open_heredoc(char *delimiter);
 
-/*executor*/
-	/*find_cmd_path.c*/
-int		get_cmd_path(t_shell *mini, t_cmd *cmd);
-
-	/*pipeline.c*/
-int	execute_pipeline(t_shell *mini);
-
-	/*pipeline_utils.c*/
-int		dup_input(t_shell *mini, t_cmd *cmd, int i);
-int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
-int		dup2_and_close(int old_fd, int new_fd);
-void	close_pipe_fds(int pipe_fd[2]);
-void	close_pipes(t_shell *mini, int pipe_fd[2]);
-
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
@@ -185,5 +191,8 @@ void	clean_cmds(t_cmd **cmds);
 
 /*signals.c*/
 void	init_sig(void);
+void	sig_reseted(void);
+void	sig_handler_changer(void);
+
 
 #endif

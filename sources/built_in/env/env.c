@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/14 14:19:58 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:39 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	**env_to_array(t_env *env)
 		array[i] = ft_strjoin(array[i], "=");
 		array[i] = ft_strjoin(array[i], temp->value);
 		temp = temp->next;
-		printf("%s\n", array[i]);
+		// printf("%s\n", array[i]);
 		i++;
 	}
 	// add error handling

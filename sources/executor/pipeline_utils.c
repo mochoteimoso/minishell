@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 15:25:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 12:01:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	dup2_and_close(int old_fd, int new_fd)
 		fprintf(stderr, "Invalid file descriptor: %d\n", old_fd);
 		return (1);
 	}
-		
+
 	if (dup2(old_fd, new_fd) == -1)
 	{
 		close(old_fd);
@@ -101,6 +101,6 @@ void	close_pipes(t_shell *mini, int pipe_fd[2])
 {
 	if (mini->prev_pipe[0] != -1)
 		close(mini->prev_pipe[0]);
-	if (pipe_fd[1] != -1)
+	if (pipe_fd[1] > 1)
 		close(pipe_fd[1]);
 }
