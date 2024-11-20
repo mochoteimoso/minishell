@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 11:34:40 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:56:50 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,9 @@ int	dup2_and_close(int old_fd, int new_fd)
 {
 	if (old_fd < 0)
 	{
-		fprintf(stderr, "Invalid file descriptor: %d\n", old_fd);
+		ft_putendl_fd("Invalid file descriptor", 2);
 		return (1);
 	}
-		
 	if (dup2(old_fd, new_fd) == -1)
 	{
 		close(old_fd);
