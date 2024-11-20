@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 14:24:13 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:27:30 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	setup_fds(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 
 int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 {
+	sig_handler_changer();
 	mini->pids[i] = fork();
 	if (mini->pids[i] == -1)
 	{
@@ -159,6 +160,8 @@ int	execute_cmd(t_shell *mini, t_cmd *cmd)
 	char	**env_array;
 
 	env_array = env_to_array(mini->env);
+
+	sig_reseted();
 	if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
 	{
 		perror(cmd->command);
