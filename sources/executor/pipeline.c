@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 11:43:36 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:55:52 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int		execute_pipeline(t_shell *mini);
 int		handle_single_cmd(t_shell *mini);
 int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
 int		execute_cmd(t_shell *mini, t_cmd *cmd);
-//int		execute_single_cmd(t_shell *mini, t_cmd *cmd);
 void	setup_fds(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
 void	close_pipes(t_shell *mini, int pipe_fd[2]);
 void	wait_children(t_shell *mini);
@@ -41,7 +40,7 @@ int	execute_pipeline(t_shell *mini)
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
 	if (!mini->pids)
 	{
-		clean_cmds(mini->cmds);   // create a function that also sets pointers to null!
+		clean_cmds(mini->cmds);   // create a function that also sets pointer to null!
 		return (1);
 	}
 	while (i < mini->cmd_count)
@@ -63,6 +62,14 @@ int	execute_pipeline(t_shell *mini)
 		}
 		i++;
 	}
+	/* print child process PIDS for debugging purposes - remove!
+	int j = 0;
+	while (j < mini->cmd_count)
+	{
+		printf("PID %d: %d\n", j, mini->pids[j]);
+		j++;
+	}
+	*/
 	clean_cmds(mini->cmds);
 	wait_children(mini);
 	return (0);
@@ -108,8 +115,14 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 			return (1);
 		if (dup_output(cmd, pipe_fd, mini->cmd_count, i)) //redirect output
 			return (1);
-		execute_cmd(mini, cmd);
-		return (0);
+		if (is_this_built(cmd->command))
+		{
+			if (built_in_exe(mini, cmd))
+				exit(EXIT_FAILURE);
+			exit(EXIT_SUCCESS);
+		}
+		else
+			execute_cmd(mini, cmd);
 	}
 	return (0);
 }
@@ -144,21 +157,14 @@ int	execute_cmd(t_shell *mini, t_cmd *cmd)
 	char	**env_array;
 	
 	env_array = env_to_array(mini->env);
-	if (is_this_builtin_cmd(cmd))
+	if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
 	{
-		if (built_in_exe(mini, cmd) != 0)
-			exit(EXIT_FAILURE);
-	}
-	else
-	{
-		if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
-		{
-			perror(cmd->command);
-			exit(EXIT_FAILURE);
-		}
+		perror(cmd->command);
+		exit(EXIT_FAILURE);
 	}
 	exit(EXIT_SUCCESS);
 }
+
 
 /*
 int	execute_single_cmd(t_shell *mini, t_cmd *cmd)
