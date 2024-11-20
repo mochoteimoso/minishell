@@ -64,6 +64,8 @@ typedef struct s_shell
 	char	**pending;
 	int		*pids;
 	int		prev_pipe[2];
+	int		stdin_saved;
+	int		stdout_saved;
 	int		exit_stat;
 } t_shell;
 
@@ -184,6 +186,10 @@ int		built_in_exe(t_shell *mini, t_cmd *cmd);
 int		is_this_builtin_cmd(t_cmd *cmd);
 int		is_this_built(char *str);
 
+	/*fd_handler.c*/
+int		save_fds(t_shell *mini);
+int		reset_fds(t_shell *mini);
+
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
@@ -192,5 +198,7 @@ void	clean_cmds(t_cmd **cmds);
 
 /*signals.c*/
 void	init_sig(void);
+void	sig_handler_changer(void);
+void	sig_reseted(void);
 
 #endif
