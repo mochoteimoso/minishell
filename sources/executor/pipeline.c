@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 10:38:13 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 11:43:36 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ int	execute_pipeline(t_shell *mini)
 	}
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
 	if (!mini->pids)
+	{
+		clean_cmds(mini->cmds);   // create a function that also sets pointers to null!
 		return (1);
+	}
 	while (i < mini->cmd_count)
 	{
 		cmd = mini->cmds[i];
@@ -52,9 +55,12 @@ int	execute_pipeline(t_shell *mini)
 		setup_fds(mini, cmd, pipe_fd, i);
 		if (fork_and_execute(mini, cmd, pipe_fd, i) == -1)
 			return (1);
-		close_pipes(mini, pipe_fd);
-		mini->prev_pipe[0] = pipe_fd[0];
-		mini->prev_pipe[1] = -1;  // Close the previous output for the next command
+		if (mini->cmd_count > 1)
+		{
+			close_pipes(mini, pipe_fd);
+			mini->prev_pipe[0] = pipe_fd[0];
+			mini->prev_pipe[1] = -1;  // Closes the previous output for the next command
+		}
 		i++;
 	}
 	clean_cmds(mini->cmds);
