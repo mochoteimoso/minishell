@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/20 10:46:31 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:40:03 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->cmd_count = 0;
 	mini->prev_pipe[0] = -1;
 	mini->prev_pipe[1] = -1;
+	mini->stdin_saved = -1;
+	mini->stdout_saved = -1;
 	mini->pids = NULL;
 	mini->exit_stat = 0;
 	return (0);
