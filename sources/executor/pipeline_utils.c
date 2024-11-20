@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 16:50:11 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/20 11:34:40 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,6 @@ void	close_pipes(t_shell *mini, int pipe_fd[2])
 {
 	if (mini->prev_pipe[0] != -1)
 		close(mini->prev_pipe[0]);
-	if (pipe_fd[1] != -1)
+	if (pipe_fd[1] > 1)
 		close(pipe_fd[1]);
 }
