@@ -6,14 +6,14 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 16:54:06 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:25:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_cmd *cmd);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 static int	no_args(t_cmd *cmd, int i);
@@ -42,10 +42,11 @@ int	parse_input(t_shell *mini)
 	index = 0;
 	while (mini->cmds[index])
 	{
-		if (parse_cmd_string(mini->cmds[index]))
+		if (parse_cmd_string(mini, mini->cmds[index]))
 			return (1);
-		if (expand_or_not(mini, mini->cmds[index]))
-			return (1);
+		printer(mini);
+		// if (expand_or_not(mini, mini->cmds[index]))
+		// 	return (1);
 		if (is_this_built(mini->cmds[index]->command) != 1)
 		{
 			if (get_cmd_path(mini, mini->cmds[index]))
@@ -71,7 +72,7 @@ static int	no_args(t_cmd *cmd, int i)
 	return (i);
 }
 
-int	parse_cmd_string(t_cmd *cmd)
+int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 {
 	int		i;
 	bool	cmd_found;
@@ -91,13 +92,13 @@ int	parse_cmd_string(t_cmd *cmd)
 	}
 	else
 	{
-		i = handle_cmd_args(cmd, i);
+		i = handle_cmd_args(mini, cmd, i);
 		if (i == -1)
 			return (-1);
 	}
 	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
-		i = handle_cmd_args(cmd, i);
+		i = handle_cmd_args(mini, cmd, i);
 		if (i == -1)
 			return (1);
 	}
@@ -111,7 +112,6 @@ int	parse_cmd_string(t_cmd *cmd)
 // creates a linked list if redirection symbol(s) are found
 // each redirect will be its own node and will contain information about redirection type,
 // filename, delimiter and pointer to next node
-
 static int	double_redirect(t_cmd *cmd, int i)
 {
 	if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
@@ -176,7 +176,6 @@ int handle_redirections(t_cmd *cmd, int i)
 }
 
 // Retrieves command name from string and copies it to struct
-
 int	handle_cmd_name(t_cmd *cmd, int i)
 {
 	char	*cmd_start;

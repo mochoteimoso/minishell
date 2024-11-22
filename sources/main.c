@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/20 14:15:29 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/22 13:42:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->pids = NULL;
 	mini->prev_pipe[0] = -1;
 	mini->prev_pipe[1] = -1;
+	mini->stdin_saved = -1;
+	mini->stdout_saved = -1;
 	mini->exit_stat = 0;
 	return (0);
 }
@@ -104,12 +106,15 @@ static int user_prompt(t_shell *mini)
 				free(input);
 				continue;
 			}
-			add_history(input);
+		add_history(input);
 		if (parse_and_validate_input(input, mini))
-			error("ALL IS BROKE!!\n");
+		{
+			free(input);
+			continue ;
+		}
 		//printer(mini);
 		if (execute_pipeline(mini))
-			error("ALL IS TERRIBLY BROKEN\n");
+			ft_putendl_fd("execution failed", 2);
 		free(input);
 		}
 	}

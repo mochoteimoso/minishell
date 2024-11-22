@@ -64,6 +64,8 @@ typedef struct s_shell
 	char	**pending;
 	int		*pids;
 	int		prev_pipe[2];
+	int		stdin_saved;
+	int		stdout_saved;
 	int		exit_stat;
 } t_shell;
 
@@ -73,7 +75,7 @@ void printer(t_shell *mini);
 	/*cd*/
 int		built_cd(t_shell *mini, t_cmd *cmd);
 	/*echo.c*/
-int		built_echo(t_cmd *cmd);
+int		built_echo(t_shell *mini, t_cmd *cmd);
 	/*exit.c*/
 int		built_exit(t_shell *mini, t_cmd *cmd);
 	/*export.c*/
@@ -123,11 +125,13 @@ int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
 void	close_pipe_fds(int pipe_fd[2]);
 void	close_pipes(t_shell *mini, int pipe_fd[2]);
-
+	/*fd_handlers.c*/
+int		save_fds(t_shell *mini);
+int		reset_fds(t_shell *mini);
 /*parser*/
 	/*parser.c*/
 int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_cmd *cmd);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
@@ -137,7 +141,7 @@ char	*expand_var(t_shell *mini, char *str);
 int	expand_or_not(t_shell *mini, t_cmd *cmd);
 
 /*handle_cmd_array.c*/
-int		handle_cmd_args(t_cmd *cmd, int i);
+int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
@@ -193,6 +197,5 @@ void	clean_cmds(t_cmd **cmds);
 void	init_sig(void);
 void	sig_reseted(void);
 void	sig_handler_changer(void);
-
 
 #endif

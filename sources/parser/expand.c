@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/20 18:12:33 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:25:51 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static int oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		name[indx++] = str[i++];
 	name[indx] = '\0';
+	if (indx == 0)
+		return (i);
 	value = get_value(mini->env, name);
 	if (value)
 	{
@@ -87,7 +89,7 @@ char	*expand_var(t_shell *mini, char *str)
 	i = 0;
 	s = 0;
 	expanded = ft_strdup("");
-	while (str[i] && str[i] != '"')
+	while (str[i])
 	{
 		if (str[i] == '$')
 		{
@@ -107,27 +109,100 @@ char	*expand_var(t_shell *mini, char *str)
 	free(expanded);
 	free(temp2);
 	free(str);
-	expanded = temp;
-	return (expanded);
+	return (temp);
 }
 
-int	expand_or_not(t_shell *mini, t_cmd *cmd)
-{
-	int	i;
+// static void	add_char(char **str, char c)
+// {
+// 	char	temp[2];
+// 	char	*new_str;
 
-	i = 0;
-	while (cmd->args[i])
-	{
-		if (cmd->args[i][0] == '"' || cmd->args[i][0] == '$' || cmd->args[i][0] == '~')
-		{
-			if (cmd->args[i][0] == '"')
-				cmd->args[i]++;
-			cmd->args[i] = expand_var(mini, cmd->args[i]);
-		}
-		else if (cmd->args[i][0] == '\'')
-			cmd->args[i] = ft_strtrim(cmd->args[i], "'");
-		i++;
-	}
-	return (0);
-}
+// 	temp[0] = c;
+// 	temp[1] = '\0';
+// 	new_str = ft_strjoin(*str, temp);
+// 	free(*str);
+// 	*str = new_str;
+// }
+
+// static	char	*its_in_quotes(t_shell *mini, char *str)
+// {
+// 	char	*expanded;
+// 	char	quote;
+// 	int		i;
+
+
+// 	i = 1;
+// 	expanded = ft_strdup("");
+// 	quote = str[0];
+// 	while (str[i])
+// 	{
+// 		if (str[i] == quote)
+// 		{
+// 			i++;
+// 			break ;
+// 		}
+// 		else if (str[i] == '$' && quote == '"')
+// 			i = oh_its_a_dollar(mini, str, &expanded, i, &i);
+// 		else
+// 			add_char(&expanded, str[i++]);
+// 	}
+// 	return (expanded);
+// }
+
+// int	expand_or_not(t_shell *mini, t_cmd *cmd)
+// {
+// 	int		i;
+// 	char	*arg;
+// 	char	*expanded;
+
+// 	i = 0;
+// 	while (cmd->args[i])
+// 	{
+// 		arg = cmd->args[i];
+// 		if (arg[0] == '"' || arg[0] == '\'')
+// 		{
+// 			expanded = its_in_quotes(mini, arg);
+// 			//free(arg);
+// 			cmd->args[i] = expanded;
+// 		}
+// 		else if (cmd->args[i][0] == '$' || cmd->args[i][0] == '~')
+// 		{
+// 			expanded =  expand_var(mini, arg);
+// 			//free(arg);
+// 			cmd->args[i] = expanded;
+// 		}
+// 		printf("arg[%d]: %s\n", i, cmd->args[i]);
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
+// int	expand_or_not(t_shell *mini, t_cmd *cmd)
+// {
+// 	int		i;
+// 	char	*temp;
+
+// 	i = 0;
+// 	while (cmd->args[i])
+// 	{
+// 		if (cmd->args[i][0] == '"')
+// 		{
+// 			temp = ft_strdup(cmd->args[i] + 1);
+// 			free(cmd->args[i]);
+// 			cmd->args[i] = expand_var(mini, temp);
+// 		}
+// 		else if (cmd->args[i][0] == '$' || cmd->args[i][0] == '~')
+// 		{
+// 			cmd->args[i] = expand_var(mini, cmd->args[i]);
+// 		}
+// 		else if (cmd->args[i][0] == '\'')
+// 		{
+// 			temp = ft_strtrim(cmd->args[i], "'");
+// 			free(cmd->args[i]);
+// 			cmd->args[i] = temp;
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }
 

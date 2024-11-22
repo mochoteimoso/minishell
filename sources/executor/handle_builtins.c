@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:53:40 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/19 19:53:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/21 10:58:11 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	built_in_exe(t_shell *mini, t_cmd *cmd)
 	else if (ft_strcmp(cmd->command, "cd") == 0)
 		return (built_cd(mini, cmd));
 	else if (ft_strcmp(cmd->command, "echo") == 0)
-		return (built_echo(cmd));
+		return (built_echo(mini, cmd));
 	else if (ft_strcmp(cmd->command, "env") == 0)
 		return (built_env(mini));
 	else if (ft_strcmp(cmd->command, "pwd") == 0 && !cmd->args[1])

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 17:27:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/21 10:26:54 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,9 @@ void	setup_fds(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 
 int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 {
+
+	// add save_fds and reset_fds here somewhere
+
 	sig_handler_changer();
 	mini->pids[i] = fork();
 	if (mini->pids[i] == -1)
@@ -121,7 +124,6 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 		{
 			if (built_in_exe(mini, cmd))
 				exit(EXIT_FAILURE);
-			clean_cmds(mini->cmds);
 			exit(EXIT_SUCCESS);
 		}
 		else
@@ -135,20 +137,32 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 
 int	handle_single_cmd(t_shell *mini)
 {
+	if (save_fds(mini))
+		return (1);
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
 		if (dup2_and_close(mini->cmds[0]->fd_in, STDIN_FILENO))
+		{
+			reset_fds(mini);
 			return (1);
+		}
 	}
 	if (mini->cmds[0]->fd_out != STDOUT_FILENO)
 	{
 		if (dup2_and_close(mini->cmds[0]->fd_out, STDOUT_FILENO))
+		{
+			reset_fds(mini);
 			return (1);
+		}
 	}
 	if (built_in_exe(mini, mini->cmds[0]))
 	{
+		clean_cmds(mini->cmds);
+		reset_fds(mini);
 		return (1);
 	}
+	if (reset_fds(mini))
+		return (1);
 	return (0);
 }
 
@@ -160,7 +174,6 @@ int	execute_cmd(t_shell *mini, t_cmd *cmd)
 	char	**env_array;
 
 	env_array = env_to_array(mini->env);
-
 	sig_reseted();
 	if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
 	{

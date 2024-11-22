@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 17:54:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/22 14:53:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,38 @@ int	skip_whitespace(char *str, int i)
 
 int	arg_in_quotes(char *str, int i, char **start, int *len)
 {
-	int	s;
+	int		s;
+	char	quote;
+	char	*temp;
+	char	*res;
 
-	s = str[i];
-	*start = &str[i];
-	*len = 1;
+	quote = str[i];
+	s = i + 1;
 	i++;
-	while (str[i] && str[i] != s)
+	*len = 0;
+	res = ft_strdup("");
+	while (str[i])
 	{
-		(*len)++;
+		if (str[i] == quote)
+		{
+			if (str[i + 1] == quote)
+			{
+				i++;
+				continue ;
+			}
+			else
+			{
+				i++;
+				break ;
+			}
+		}
+		temp = ft_strjoin(res, ft_strndup(&str[i], 1));
+		free(res);
+		res = temp;
 		i++;
 	}
-	if (str[i] == s)
-	{
-		(*len)++;
-		i++;
-	}
+	*start = res;
+	*len = ft_strlen(res);
 	return (i);
 }
 
@@ -62,6 +78,7 @@ int	append_to_array(t_cmd *cmd, char *start, int len, int *index)
 		ft_putendl_fd("Failed to allocate memory for argument", 2);
 		return (-1);
 	}
+	printf("before args[%d]: %s\n", *index, cmd->args[*index]);
 	(*index)++;
 	return (0);
 }

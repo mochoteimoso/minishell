@@ -6,13 +6,13 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 17:56:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:24:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	handle_cmd_args(t_cmd *cmd, int i);
+int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
 
 // Counts how many command arguments the string contains
@@ -48,12 +48,13 @@ int	count_args(t_cmd *cmd, int i)
 }
 
 // Counts how many command arguments the string contains
-int	handle_cmd_args(t_cmd *cmd, int i)
+int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 {
 	int		arg_len;
 	char	*arg_start;
 	int		args_count;
 	int		arg_index;
+	char	*expanded;
 
 	arg_index = 0;
 	args_count = count_args(cmd, i);
@@ -74,11 +75,19 @@ int	handle_cmd_args(t_cmd *cmd, int i)
 			i = arg_in_quotes(cmd->segment, i, &arg_start, &arg_len);
 		else
 			i = arg_no_quotes(cmd, i, &arg_start, &arg_len);
-		if (append_to_array(cmd, arg_start, arg_len, &arg_index) == -1)
+		expanded = expand_var(mini, ft_strndup(arg_start, arg_len));
+		if (!expanded)
 		{
 			ft_free_array(cmd->args);
 			return (-1);
 		}
+		if (append_to_array(cmd, expanded, ft_strlen(expanded), &arg_index) == -1)
+		{
+			free(expanded);
+			ft_free_array(cmd->args);
+			return (-1);
+		}
+		free(expanded);
 		i = skip_whitespace(cmd->segment, i);
 	}
 	cmd->args[arg_index] = NULL;
