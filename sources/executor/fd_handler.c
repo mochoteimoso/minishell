@@ -6,11 +6,13 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:18:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 15:48:40 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:19:52 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// Saves original STDIN and STDOUT before possible duplication 
 
 int	save_fds(t_shell *mini)
 {
@@ -25,6 +27,8 @@ int	save_fds(t_shell *mini)
 	}
 	return (0);
 }
+
+// Restores original STDIN and STDOUT after possible duplication
 
 int	reset_fds(t_shell *mini)
 {
