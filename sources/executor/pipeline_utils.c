@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 14:56:50 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:11:28 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,24 @@ int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 {
 	if (cmd->fd_in != STDIN_FILENO)
 	{
-		//printf("Redirecting input: cmd->fd_in = %d\n", cmd->fd_in);
-		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+		printf("Redirecting input: cmd->fd_in = %d\n", cmd->fd_in);
+		if (dup2_and_close(cmd->fd_in, STDIN_FILENO))
 		{
 			perror("dup2 for input redirection");
 			return (1);
 		}
-		//printf("Input redirection handled for cmd[%d].\n", i);
+		printf("Input redirection handled for cmd[%d].\n", i);
 	}
 	else if (i > 0) // Middle or last command
 	{
-		//printf("Using pipe for input: pipe_fd[0] = %d\n", mini->prev_pipe[0]);
-		if (dup2(mini->prev_pipe[0], STDIN_FILENO) == -1)
+		printf("Using pipe for input: pipe_fd[0] = %d\n", mini->prev_pipe);
+		if (dup2(mini->prev_pipe, STDIN_FILENO) == -1)
 		{
 			perror("dup2 for pipe input");
 			return (1);
 		}
-		//printf("Pipe input handled for cmd[%d].\n", i);
+		close(cmd->fd_in);
+		printf("Pipe input handled for cmd[%d].\n", i);
 	}
 	return (0);
 }
@@ -51,8 +52,8 @@ int	dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i)
 {
 	if (cmd->fd_out != STDOUT_FILENO)
 	{
-		//printf("Redirecting output: cmd->fd_out = %d\n", cmd->fd_out);
-		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+		printf("Redirecting output: cmd->fd_out = %d\n", cmd->fd_out);
+		if (dup2_and_close(cmd->fd_out, STDOUT_FILENO))
 		{
 			perror("dup2 for output redirection");
 			return (1);
@@ -60,12 +61,13 @@ int	dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i)
 	}
 	else if (i < count - 1)
 	{
-		//printf("Using pipe for output: pipe_fd[1] = %d\n", pipe_fd[1]);
-		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+		printf("Using pipe for output: pipe_fd[1] = %d\n", pipe_fd[1]);
+		if (dup2_and_close(pipe_fd[1], STDOUT_FILENO))
 		{
 			perror("dup2 for restoring stdout");
 			return (1);
 		}
+		close(cmd->fd_out);
 	}
 	return (0);
 }
@@ -98,8 +100,14 @@ void	close_pipe_fds(int pipe_fd[2])
 
 void	close_pipes(t_shell *mini, int pipe_fd[2])
 {
-	if (mini->prev_pipe[0] != -1)
-		close(mini->prev_pipe[0]);
-	if (pipe_fd[1] > 1)
-		close(pipe_fd[1]);
+	if (mini->prev_pipe != -1)
+	{
+		close(mini->prev_pipe); // Close the previous read end
+		mini->prev_pipe = -1;  // Reset it
+	}
+	if (pipe_fd[1] != -1)
+	{
+		close(pipe_fd[1]); // Close the current write end
+		pipe_fd[1] = -1;   // Reset it
+	}
 }
