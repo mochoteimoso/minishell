@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 09:59:20 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:26:25 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ static int	activate_shell(char **envp)
 {
 	t_shell	*mini;
 
-	mini = malloc(sizeof(t_shell));
+	mini = ft_calloc(1, sizeof(t_shell));
 	if (!mini)
 	{
 		error("Malloc failed\n");
