@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 10:41:52 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:25:33 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int			count_pipes(char *line);
 int			prepare_command_structs(t_shell *mini, char *input);
-t_cmd		**allocate_cmd_array(int command_count);
 void		initialize_command_struct(t_cmd *cmd);
 
 // Counts the number of pipes in input string
@@ -57,14 +56,16 @@ static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 	mini->cmds[cmd_count] = NULL;
 	return (0);
 }
-	
+
+// Allocates memory for an array of structs
+
 int	prepare_command_structs(t_shell *mini, char *input)
 {
 	int	command_count;
 
 	command_count = count_pipes(input) + 1;
 	mini->cmd_count = command_count;
-	mini->cmds = ft_calloc(command_count, sizeof(t_cmd));//allocate_cmd_array(command_count);
+	mini->cmds = ft_calloc(command_count, sizeof(t_cmd));
 	if (!mini->cmds)
 	{
 		printf("Failed to allocate memory for command array\n");
@@ -74,21 +75,6 @@ int	prepare_command_structs(t_shell *mini, char *input)
 		return (1);
 	return (0);
 }
-
-// Allocates memory for an array of structs
-
-/*t_cmd	**allocate_cmd_array(int cmd_count)
-{
-	t_cmd	**cmds;
-
-	cmds = ft_calloc(cmd_count, sizeof(t_cmd));
-	if (!cmds)
-	{
-		printf("Failed to allocate memory for array of structs\n");
-		return (NULL);
-	}
-	return (cmds);
-} */
 
 // Initializes individual structs in the array
 
