@@ -63,7 +63,7 @@ typedef struct s_shell
 	int		cmd_count;
 	char	**pending;
 	int		*pids;
-	int		prev_pipe[2];
+	int		prev_pipe;
 	int		stdin_saved;
 	int		stdout_saved;
 	int		exit_stat;
