@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 12:50:39 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:35:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 			perror("dup2 for input redirection");
 			return (1);
 		}
-		if (i > 0)
+		if (mini->prev_pipe != -1)
 			close(mini->prev_pipe);
 		printf("Input redirection handled for cmd[%d].\n", i);
 	}
