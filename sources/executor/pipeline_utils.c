@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 10:11:28 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:50:39 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,18 @@ int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 			perror("dup2 for input redirection");
 			return (1);
 		}
+		if (i > 0)
+			close(mini->prev_pipe);
 		printf("Input redirection handled for cmd[%d].\n", i);
 	}
 	else if (i > 0) // Middle or last command
 	{
 		printf("Using pipe for input: pipe_fd[0] = %d\n", mini->prev_pipe);
-		if (dup2(mini->prev_pipe, STDIN_FILENO) == -1)
+		if (dup2_and_close(mini->prev_pipe, STDIN_FILENO) == -1)
 		{
 			perror("dup2 for pipe input");
 			return (1);
 		}
-		close(cmd->fd_in);
 		printf("Pipe input handled for cmd[%d].\n", i);
 	}
 	return (0);
@@ -58,6 +59,11 @@ int	dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i)
 			perror("dup2 for output redirection");
 			return (1);
 		}
+		if (i < count - 1)
+		{
+			close(pipe_fd[0]);
+			close(pipe_fd[1]);
+		}
 	}
 	else if (i < count - 1)
 	{
@@ -67,7 +73,8 @@ int	dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i)
 			perror("dup2 for restoring stdout");
 			return (1);
 		}
-		close(cmd->fd_out);
+		//close(cmd->fd_out);
+		close(pipe_fd[0]);
 	}
 	return (0);
 }
