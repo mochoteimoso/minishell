@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/18 09:19:44 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:33:47 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,12 @@ static int oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int
 	char	*temp;
 	int		indx;
 	char	*value;
+	char 	*temp2;
 	char	name[100];
 
-	temp = ft_strjoin(*expanded, ft_strndup(&str[*s], i - *s));
+	temp2 = ft_strndup(&str[*s], i - *s);
+	temp = ft_strjoin(*expanded, temp2);
+	free(temp2);
 	free(*expanded);
 	*expanded = temp;
 	i++;
@@ -44,6 +47,8 @@ static int oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		name[indx++] = str[i++];
 	name[indx] = '\0';
+	if (indx == 0)
+		return (i);
 	value = get_value(mini->env, name);
 	if (value)
 	{
@@ -77,14 +82,14 @@ char	*expand_var(t_shell *mini, char *str)
 {
 	char	*expanded;
 	char	*temp;
+	char	*temp2;
 	int		i;
 	int		s;
 
 	i = 0;
 	s = 0;
 	expanded = ft_strdup("");
-
-	while (str[i] && str[i] != '"')
+	while (str[i])
 	{
 		if (str[i] == '$')
 		{
@@ -99,13 +104,15 @@ char	*expand_var(t_shell *mini, char *str)
 		else
 			i++;
 	}
-	temp = ft_strjoin(expanded, ft_strndup(&str[s], i - s));
+	temp2 = ft_strndup(&str[s], i - s);
+	temp = ft_strjoin(expanded, temp2);
 	free(expanded);
-	expanded = temp;
-	return (expanded);
+	free(temp2);
+	free(str);
+	return (temp);
 }
 
-int	expand_or_not(t_shell *mini, t_cmd *cmd)
+/*int	expand_or_not(t_shell *mini, t_cmd *cmd)
 {
 	int	i;
 
@@ -123,5 +130,5 @@ int	expand_or_not(t_shell *mini, t_cmd *cmd)
 		i++;
 	}
 	return (0);
-}
+} */
 
