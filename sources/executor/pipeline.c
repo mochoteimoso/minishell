@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 13:17:13 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:42:28 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int		execute_forked_cmd(t_shell *mini, t_cmd *cmd);
 void	close_fds_and_pipes(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
 void	close_pipes(t_shell *mini, int pipe_fd[2]);
 void	wait_children(t_shell *mini);
+void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i);
+
 
 // Initializes an array of pipe_fds based on the number of pipes
 // executes a single command if there are no pipes
@@ -147,6 +149,7 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 		printf("cmd->fd_in: %d, cmd->fd_out: %d\n", cmd->fd_in, cmd->fd_out);
 		printf("mini->prev_pipe: %d\n", mini->prev_pipe);
 		printf("pipe_fd[0]: %d, pipe_fd[1]: %d\n", pipe_fd[0], pipe_fd[1]);
+		close_unused_fds(mini, cmd, i);
 		if (dup_input(mini, cmd, i)) // redirect input 
 			return (1);
 		if (dup_output(cmd, pipe_fd, mini->cmd_count, i)) //redirect output
@@ -164,6 +167,18 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 		}
 	}
 	return (0);
+}
+
+void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i)
+{
+	while (i < mini->cmd_count)  // close other commands' fds that child inherits from parent
+	{
+		if (mini->cmds[i]->fd_in != -1 && mini->cmds[i]->fd_in != cmd->fd_in)
+			close(mini->cmds[i]->fd_in);
+		if (mini->cmds[i]->fd_out != -1 && mini->cmds[i]->fd_out != cmd->fd_out)
+			close(mini->cmds[i]->fd_out);
+		i++;
+	}
 }
 
 // Executes single command if there are no pipes
