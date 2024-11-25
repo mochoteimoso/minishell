@@ -83,7 +83,7 @@ int		built_export(t_shell *mini, t_cmd *cmd);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
-int	built_unset(t_shell *mini, t_cmd *cmd);
+int		built_unset(t_shell *mini, t_cmd *cmd);
 
 /*built_in/env*/
 	/*env.c*/
@@ -104,20 +104,18 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new);
 	/*cmd_array.c*/
 int		count_pipes(char *line);
 int		prepare_command_structs(t_shell *mini, char *input);
-t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
 
 /*parser*/
 	/*parser.c*/
 int		parse_input(t_shell *mini);
-int	parse_cmd_string(t_shell *mini, t_cmd *cmd);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
-int	expand_or_not(t_shell *mini, t_cmd *cmd);
 
 /*handle_cmd_array.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
@@ -133,7 +131,6 @@ int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
-
 
 	/*syntax_checks.c*/
 int		validate_input_syntax(char *input);
@@ -174,12 +171,18 @@ int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 	/*pipeline.c*/
 int		execute_pipeline(t_shell *mini);
 
-	/*pipeline_utils.c*/
+	/*parent_process_utils.c*/
+void	close_fds_and_pipes(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
+void	wait_children(t_shell *mini);
+
+	/*child_process.c*/
+int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
+
+	/*child_process_utils.c*/
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
-void	close_pipe_fds(int pipe_fd[2]);
-void	close_pipes(t_shell *mini, int pipe_fd[2]);
+void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i);
 
 	/*handle_builtins.c*/
 int		built_in_exe(t_shell *mini, t_cmd *cmd);
