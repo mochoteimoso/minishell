@@ -110,17 +110,17 @@ void	initialize_command_struct(t_cmd *cmd);
 /*parser*/
 	/*parser.c*/
 int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_cmd *cmd);
+int	parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
-int		expand_or_not(t_shell *mini, t_cmd *cmd);
+int	expand_or_not(t_shell *mini, t_cmd *cmd);
 
 /*handle_cmd_array.c*/
-int		handle_cmd_args(t_cmd *cmd, int i);
+int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
