@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:53:40 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 10:52:22 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:18:26 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	built_in_exe(t_shell *mini, t_cmd *cmd);
 int	is_this_builtin_cmd(t_cmd *cmd);
+
+// Executes relevant builtin function
 
 int	built_in_exe(t_shell *mini, t_cmd *cmd)
 {
@@ -33,6 +35,8 @@ int	built_in_exe(t_shell *mini, t_cmd *cmd)
 		return (built_export(mini, cmd));
 	return (0);
 }
+
+// Checks whether the command is a builtin
 
 int	is_this_builtin_cmd(t_cmd *cmd)
 {
