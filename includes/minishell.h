@@ -45,7 +45,7 @@ typedef struct s_cmd
 	t_redir *redir_tail;
 	int		fd_in;
 	int		fd_out;
-	//int		exit_status;
+	int		cmd_exit;
 }	t_cmd;
 
 typedef struct s_env
@@ -140,6 +140,9 @@ int		check_pipes(char *input);
 int		check_redirects(char *input);
 int		validate_redirect(char *input, int *i, char *type);
 
+	/*find_cmd_path.c*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+
 /*redirection*/
 	/*redir_ll*/
 t_redir	*list_redir(void);
@@ -159,19 +162,18 @@ int		handle_append(t_cmd *cmd, int i);
 int		resolve_fd(t_cmd *cmd);
 
 	/*open_files.c*/
-int		open_input_file(char *input_file);
-int		open_output_file(char *output_file);
-int		open_append_file(char *output_file);
-int		open_heredoc(char *delimiter);
+int		open_input_file(t_cmd *cmd, char *input_file);
+int		open_output_file(t_cmd *cmd, char *output_file);
+int		open_append_file(t_cmd *cmd, char *output_file);
+int		open_heredoc(t_cmd *cmd, char *delimiter);
 
 /*executor*/
-	/*find_cmd_path.c*/
-int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 	/*pipeline.c*/
 int		execute_pipeline(t_shell *mini);
 
 	/*parent_process_utils.c*/
+int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
 void	close_fds_and_pipes(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
 void	wait_children(t_shell *mini);
 
@@ -193,11 +195,16 @@ int		is_this_built(char *str);
 int		save_fds(t_shell *mini);
 int		reset_fds(t_shell *mini);
 
-/*utils/freeing*/
+/*utils*/
+	/*freeing*/
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
 void	error(char *str);
 void	clean_cmds(t_cmd **cmds);
+
+	/*exit_and_clean.c*/
+void	exit_handler(t_shell *mini, int exit_status);
+void	cleaner_for_main(t_shell *mini);
 
 /*signals.c*/
 void	init_sig(void);
