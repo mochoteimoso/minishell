@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 18:24:11 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 11:32:29 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,13 @@ int	dup2_and_close(int old_fd, int new_fd)
 	return (0);
 }
 
-// Closes fds of the next commands in the pipeline that child inherits from parent
+// Closes fds of the next commands in the pipeline that child 
+// inherits from parent
 // only the fds of the current command are used
 
 void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i)
 {
-	while (i < mini->cmd_count)  
+	while (i < mini->cmd_count)
 	{
 		if (mini->cmds[i]->fd_in != -1 && mini->cmds[i]->fd_in != cmd->fd_in)
 			close(mini->cmds[i]->fd_in);
@@ -111,26 +112,4 @@ void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i)
 		i++;
 	}
 }
-
-// Close all pipes in the array
-
-/*void	close_pipe_fds(int pipe_fd[2])
-{
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-} */
-
-/*void	close_pipes(t_shell *mini, int pipe_fd[2])
-{
-	if (mini->prev_pipe != -1)
-	{
-		close(mini->prev_pipe); // Close the previous read end
-		mini->prev_pipe = -1;  // Reset it
-	}
-	if (pipe_fd[1] != -1)
-	{
-		close(pipe_fd[1]); // Close the current write end
-		pipe_fd[1] = -1;   // Reset it
-	}
-} */
 
