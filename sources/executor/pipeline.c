@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 10:04:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:02:25 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,30 @@ int	execute_pipeline(t_shell *mini)
 	if (mini->cmd_count == 1 && is_this_built(mini->cmds[0]->command))
 	{
 		if (handle_single_builtin_cmd(mini))
-			return (1);
+		{
+			clean_cmds(mini->cmds);
+			mini->exit_stat = 1;
+			return (mini->exit_stat);
+		}
 		return (0);
 	}
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
 	if (!mini->pids)
 	{
-		clean_cmds(mini->cmds); // create a function that also sets pointer to null!
-		return (1);
+		clean_cmds(mini->cmds);
+		mini->exit_stat = 1;
+		return (mini->exit_stat);
 	}
 	if (pipe_and_fork(mini, pipe_fd))
+	{
+		cleaner_for_main(mini);
 		return (1);
-	if (mini->prev_pipe != -1)
-		close(mini->prev_pipe);
-	clean_cmds(mini->cmds);
+	}
+	//if (mini->prev_pipe != -1)
+	//	close(mini->prev_pipe);
 	wait_children(mini);
+	close(pipe_fd[0]);
+	cleaner_for_main(mini);
 	return (0);
 }
 
@@ -51,21 +60,17 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 {
 	if (save_fds(mini))
 		return (1);
+	if (resolve_fd(mini->cmds[0]))
+		return (1);
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
-		if (dup2_and_close(mini->cmds[0]->fd_in, STDIN_FILENO))
-		{
-			reset_fds(mini);
+		if (dup2_and_close_in_main(mini, mini->cmds[0]->fd_in, STDIN_FILENO))
 			return (1);
-		}
 	}
 	if (mini->cmds[0]->fd_out != STDOUT_FILENO)
 	{
-		if (dup2_and_close(mini->cmds[0]->fd_out, STDOUT_FILENO))
-		{
-			reset_fds(mini);
+		if (dup2_and_close_in_main(mini, mini->cmds[0]->fd_out, STDOUT_FILENO))
 			return (1);
-		}
 	}
 	if (built_in_exe(mini, mini->cmds[0]))
 	{
@@ -90,11 +95,13 @@ static int	pipe_and_fork(t_shell *mini, int pipe_fd[2])
 	while (i < mini->cmd_count)
 	{
 		cmd = mini->cmds[i];
-		if (mini->cmd_count > 1 && i < mini->cmd_count - 1
-			&& pipe(pipe_fd) == -1)
+		if (mini->cmd_count > 1 && i < mini->cmd_count - 1)
 		{
-			perror("pipe");
-			return (1);
+			if (pipe(pipe_fd) == -1)
+			{
+				perror("pipe");
+				return (1);
+			}
 		}
 		if (fork_and_execute(mini, cmd, pipe_fd, i) == -1)
 			return (1);
