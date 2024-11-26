@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 18:25:33 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:28:36 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,5 @@ void	initialize_command_struct(t_cmd *cmd)
 	cmd->redir_tail = NULL;
 	cmd->fd_in = -1;
 	cmd->fd_out = -1;
-	cmd->exit_status = 0;
+	cmd->cmd_exit = 0;
 }
