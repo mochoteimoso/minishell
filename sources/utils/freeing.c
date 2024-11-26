@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/20 17:26:23 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:06:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ void	ft_free_int_arr(int **array)
 
 void	cleaner(t_shell *mini)
 {
-	clean_env(mini->env, mini->pending);
+	if (mini->env)
+		clean_env(mini->env, NULL);
+	if (mini->pending)
+		ft_free_array(mini->pending);
 	if (mini->cmds)
 		clean_cmds(mini->cmds);
 	if (mini->pids)

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/22 13:42:48 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/26 11:25:15 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void printer(t_shell *mini)
 
 static int	init_shell(t_shell *mini, char **envp)
 {
-	mini->cmds = NULL;
 	mini->env = list_env(envp);
 	if (!mini->env)
 	{
@@ -69,10 +68,10 @@ static int	init_shell(t_shell *mini, char **envp)
 		return (1);
 	}
 	to_alphabetical(mini->pending);
+	mini->cmds = NULL;
 	mini->cmd_count = 0;
 	mini->pids = NULL;
-	mini->prev_pipe[0] = -1;
-	mini->prev_pipe[1] = -1;
+	mini->prev_pipe = -1;
 	mini->stdin_saved = -1;
 	mini->stdout_saved = -1;
 	mini->exit_stat = 0;
@@ -125,7 +124,7 @@ static int	activate_shell(char **envp)
 {
 	t_shell	*mini;
 
-	mini = malloc(sizeof(t_shell));
+	mini = ft_calloc(1, sizeof(t_shell));
 	if (!mini)
 	{
 		ft_putendl_fd("mini struct malloc failed", 2);

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/22 15:25:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/26 11:07:25 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,6 @@ int	parse_input(t_shell *mini)
 	{
 		if (parse_cmd_string(mini, mini->cmds[index]))
 			return (1);
-		printer(mini);
-		// if (expand_or_not(mini, mini->cmds[index]))
-		// 	return (1);
 		if (is_this_built(mini->cmds[index]->command) != 1)
 		{
 			if (get_cmd_path(mini, mini->cmds[index]))
@@ -107,6 +104,7 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 		return (1);
 	return (0);
 }
+
 
 //Loops through segment string to find redirection symbols
 // creates a linked list if redirection symbol(s) are found

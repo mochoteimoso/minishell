@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checks.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/14 18:46:38 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 16:27:52 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ for unmatched quotes and incorrectly placed pipes and redirects*/
 
 int	validate_input_syntax(char *input)
 {
-	if (check_quotes(input, 0))
+	if (check_quotes(input, -1))
 	{
-		printf("syntax error: unmatched quotes");
+		ft_putendl_fd("syntax error: unmatched quotes", 2);
 		return (1);
 	}
 	if (check_pipes(input))
@@ -74,7 +74,7 @@ int	check_pipes(char *input)
 	i = 0;
 	while (input[i] == ' ')
 		i++;
-	if (input[i] == '|' && !check_quotes(input, i))
+	if (input[i] == '|' && !check_quotes(input, -1))
 	{
 		printf("syntax error near unexpected token %c\n", input[i]);
 		return (1);
@@ -88,7 +88,7 @@ int	check_pipes(char *input)
 		i++;
 	while (i >= 0 && input[i - 1] == ' ')
 		i--;
-	if (input[i - 1] == '|' && !check_quotes(input, i - 1))
+	if (input[i] == '|' && !check_quotes(input, -1))
 	{
 		printf("syntax error near unexpected token %c\n", input[i]);
 		return (1);

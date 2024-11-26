@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/22 14:53:46 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/26 12:52:04 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,64 @@ int	skip_whitespace(char *str, int i)
 	return (i);
 }
 
+// int	arg_in_quotes(char *str, int i, char **start, int *len)
+// {
+// 	int		s;
+// 	char	quote;
+// 	char	*temp;
+// 	char	*res;
+
+// 	quote = str[i];
+// 	s = i + 1;
+// 	i++;
+// 	*len = 0;
+// 	res = ft_strdup("");
+// 	while (str[i])
+// 	{
+// 		if (str[i] == quote)
+// 		{
+// 			if (str[i + 1] == quote)
+// 			{
+// 				i++;
+// 				continue ;
+// 			}
+// 			else
+// 			{
+// 				i++;
+// 				break ;
+// 			}
+// 		}
+// 		temp = ft_strjoin(res, ft_strndup(&str[i], 1));
+// 		free(res);
+// 		res = temp;
+// 		i++;
+// 	}
+// 	*start = res;
+// 	*len = ft_strlen(res);
+// 	return (i);
+// }
+
 int	arg_in_quotes(char *str, int i, char **start, int *len)
 {
 	int		s;
 	char	quote;
-	char	*temp;
-	char	*res;
 
 	quote = str[i];
 	s = i + 1;
 	i++;
-	*len = 0;
-	res = ft_strdup("");
-	while (str[i])
+	while (str[i] && str[i] != quote)
+		i++;
+	if (str[i] == quote)
 	{
-		if (str[i] == quote)
-		{
-			if (str[i + 1] == quote)
-			{
-				i++;
-				continue ;
-			}
-			else
-			{
-				i++;
-				break ;
-			}
-		}
-		temp = ft_strjoin(res, ft_strndup(&str[i], 1));
-		free(res);
-		res = temp;
+		*start = &str[s];
+		*len = i - s;
 		i++;
 	}
-	*start = res;
-	*len = ft_strlen(res);
+	else
+	{
+		*start = &str[s];
+		*len = i - s;
+	}
 	return (i);
 }
 
@@ -78,7 +102,6 @@ int	append_to_array(t_cmd *cmd, char *start, int len, int *index)
 		ft_putendl_fd("Failed to allocate memory for argument", 2);
 		return (-1);
 	}
-	printf("before args[%d]: %s\n", *index, cmd->args[*index]);
 	(*index)++;
 	return (0);
 }

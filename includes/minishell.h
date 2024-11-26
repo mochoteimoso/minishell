@@ -63,7 +63,7 @@ typedef struct s_shell
 	int		cmd_count;
 	char	**pending;
 	int		*pids;
-	int		prev_pipe[2];
+	int		prev_pipe;
 	int		stdin_saved;
 	int		stdout_saved;
 	int		exit_stat;
@@ -104,7 +104,7 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new);
 	/*cmd_array.c*/
 int		count_pipes(char *line);
 int		prepare_command_structs(t_shell *mini, char *input);
-t_cmd	**allocate_cmd_array(int command_count);
+//t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
 
 /*executor*/
@@ -138,7 +138,7 @@ int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
-int	expand_or_not(t_shell *mini, t_cmd *cmd);
+//int	expand_or_not(t_shell *mini, t_cmd *cmd);
 
 /*handle_cmd_array.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
