@@ -6,16 +6,16 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 13:26:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:21:55 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void printer(t_shell *mini)
+void	printer(t_shell *mini)
 {
 	int i = 0;
-	
+
 	while (mini->cmds[i])
 	{
 		printf("\n");
@@ -59,6 +59,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	{
 		cleaner(mini);
 		free(mini);
+		ft_putendl_fd("failed to create envp", 2);
 		return (1);
 	}
 	mini->pending = copy_env(envp);
@@ -66,6 +67,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	{
 		cleaner(mini);
 		free(mini);
+		ft_putendl_fd("pending list malloc failed", 2);
 		return (1);
 	}
 	to_alphabetical(mini->pending);
@@ -92,9 +94,10 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini)
 {
 	char	*input;
-	init_sig();
+	
 	while (1)
 	{
+		init_sig();
 		input = readline("minishell> ");
 		if (input == NULL)
 			break ;
@@ -103,15 +106,19 @@ static int user_prompt(t_shell *mini)
 			if (is_this_empty(input))
 			{
 				free(input);
-				continue;
+				continue ;
 			}
 			add_history(input);
 		}
 		if (parse_and_validate_input(input, mini))
-			error("ALL IS BROKE!!\n");
+		{
+			free(input);
+			continue ;
+		}
 		printer(mini);
 		if (execute_pipeline(mini))
-			error("ALL IS TERRIBLY BROKEN\n");
+			ft_putendl_fd("execution failed", 2);
+		free(input);
 	}
 	return (0);
 }
@@ -123,7 +130,7 @@ static int	activate_shell(char **envp)
 	mini = ft_calloc(1, sizeof(t_shell));
 	if (!mini)
 	{
-		error("Malloc failed\n");
+		ft_putendl_fd("mini struct malloc failed", 2);
 		return (1);
 	}
 	if (init_shell(mini, envp))
@@ -140,5 +147,5 @@ int	main(int argc, char **argv, char **envp)
 		printf("Minishell doesn't take arguments\n");
 		return (1);
 	}
-	return(activate_shell(envp));
+	return (activate_shell(envp));
 }
