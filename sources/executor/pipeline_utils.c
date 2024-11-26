@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:01:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 18:17:26 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:08:15 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,9 @@ void	close_fds_and_pipes(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 		close(mini->prev_pipe);
 		//mini->prev_pipe = -1;
 	}
-	
 	if (i < mini->cmd_count - 1)
 	{
-		mini->prev_pipe = pipe_fd[0];  // Store the current pipe's read end for the next command
+		mini->prev_pipe = pipe_fd[0]; // Store the current pipe's read end for the next command
 		close(pipe_fd[1]);
 	}
 }
@@ -42,7 +41,7 @@ void	wait_children(t_shell *mini)
 {
 	int	i;
 	int	status;
-	
+
 	i = 0;
 	status = 0;
 	while (i < mini->cmd_count)
@@ -55,4 +54,3 @@ void	wait_children(t_shell *mini)
 		i++;
 	}
 }
-
