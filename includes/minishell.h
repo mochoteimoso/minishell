@@ -45,7 +45,7 @@ typedef struct s_cmd
 	t_redir *redir_tail;
 	int		fd_in;
 	int		fd_out;
-	int		exit_status;
+	//int		exit_status;
 }	t_cmd;
 
 typedef struct s_env
@@ -62,7 +62,10 @@ typedef struct s_shell
 	t_env	*env;
 	int		cmd_count;
 	char	**pending;
-	int		prev_pipe[2];
+	int		*pids;
+	int		prev_pipe;
+	int		stdin_saved;
+	int		stdout_saved;
 	int		exit_stat;
 } t_shell;
 
@@ -80,7 +83,7 @@ int		built_export(t_shell *mini, t_cmd *cmd);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
-int	built_unset(t_shell *mini, t_cmd *cmd);
+int		built_unset(t_shell *mini, t_cmd *cmd);
 
 /*built_in/env*/
 	/*env.c*/
@@ -101,23 +104,21 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new);
 	/*cmd_array.c*/
 int		count_pipes(char *line);
 int		prepare_command_structs(t_shell *mini, char *input);
-t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
 
 /*parser*/
 	/*parser.c*/
 int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_cmd *cmd);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
-int	expand_or_not(t_shell *mini, t_cmd *cmd);
 
 /*handle_cmd_array.c*/
-int		handle_cmd_args(t_cmd *cmd, int i);
+int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
@@ -126,12 +127,10 @@ int		arg_in_quotes(char *str, int i, char **start, int *len);
 int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
 int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 
-
 	/*split_inputs.c*/
 
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
-
 
 	/*syntax_checks.c*/
 int		validate_input_syntax(char *input);
@@ -170,14 +169,29 @@ int		open_heredoc(char *delimiter);
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 	/*pipeline.c*/
-int	execute_pipeline(t_shell *mini, char **envp);
+int		execute_pipeline(t_shell *mini);
 
-	/*pipeline_utils.c*/
+	/*parent_process_utils.c*/
+void	close_fds_and_pipes(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
+void	wait_children(t_shell *mini);
+
+	/*child_process.c*/
+int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
+
+	/*child_process_utils.c*/
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
-void	close_pipe_fds(int pipe_fd[2]);
-void	close_pipes(t_shell *mini, int pipe_fd[2]);
+void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i);
+
+	/*handle_builtins.c*/
+int		built_in_exe(t_shell *mini, t_cmd *cmd);
+int		is_this_builtin_cmd(t_cmd *cmd);
+int		is_this_built(char *str);
+
+	/*fd_handler.c*/
+int		save_fds(t_shell *mini);
+int		reset_fds(t_shell *mini);
 
 /*utils/freeing*/
 void	clean_env(t_env *ll, char **array);
@@ -187,5 +201,7 @@ void	clean_cmds(t_cmd **cmds);
 
 /*signals.c*/
 void	init_sig(void);
+void	sig_handler_changer(void);
+void	sig_reseted(void);
 
 #endif

@@ -6,119 +6,100 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 15:26:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:04:51 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		execute_pipeline(t_shell *mini, char **envp);
-int		execute_single_cmd(t_shell *mini, char **envp);
-int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int i);
-int		execute_cmd(t_cmd *cmd, char **envp);
-void	setup_fds(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
-void	close_pipes(t_shell *mini, int pipe_fd[2]);
+int			execute_pipeline(t_shell *mini);
+static int	handle_single_builtin_cmd(t_shell *mini);
+static int	pipe_and_fork(t_shell *mini, int pipe_fd[2]);
 
-// Initializes an array of pipe_fds based on the number of pipes
-// executes a single command if there are no pipes
-// sets up pipeline and forks child processes
+// Sets up pipeline and forks child processes when needed
+// Allocates memory for an array of pids to store IDs of child processes
 
-int	execute_pipeline(t_shell *mini, char **envp) 
+int	execute_pipeline(t_shell *mini)
 {
-	int		pipe_fd[2];
-	int		i;
-	t_cmd	*cmd;
-	
-	i = 0;
-	if (mini->cmd_count == 1)
-	{
-		if (execute_single_cmd(mini, envp))
-			return (1);
-	}
-	while (i < mini->cmd_count)
-	{
-		cmd = mini->cmds[i];
-		if (i < mini->cmd_count - 1 && pipe(pipe_fd) == -1)
-		{
-			perror("pipe");
-			return (1);
-		}
-		setup_fds(mini, cmd, pipe_fd, i);
-		if (fork_and_execute(mini, cmd, pipe_fd, envp, i) == -1)
-			return (1);
-		close_pipes(mini, pipe_fd);
-		mini->prev_pipe[0] = pipe_fd[0];
-		mini->prev_pipe[1] = -1;  // Close the previous output for the next command
-		i++;
-	}
-	// Wait for all children to finish
-	while (wait(NULL) > 0);
-	return (0);
-}
+	int	pipe_fd[2];
 
-void	setup_fds(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
-{
-	if (i != 0 && cmd->fd_in == STDIN_FILENO)
-		cmd->fd_in = mini->prev_pipe[0]; // get input from previous command
-	if (i < mini->cmd_count - 1 && cmd->fd_out == STDOUT_FILENO)
-		cmd->fd_out = pipe_fd[1]; // Output to the next pipe
-}
-
-int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], char **envp, int i) 
-{
-	pid_t	pid;
-	
-	pid = fork();
-	if (pid == -1)
+	if (mini->cmd_count == 1 && is_this_built(mini->cmds[0]->command))
 	{
-		perror("fork");
-		return (-1);
-	}
-	else if (pid == 0)
-	{
-		if (dup_input(mini, cmd, i)) // redirect input 
+		if (handle_single_builtin_cmd(mini))
 			return (1);
-		if (dup_output(cmd, pipe_fd, mini->cmd_count, i)) //redirect output
-			return (1);
-		execute_cmd(cmd, envp);
 		return (0);
 	}
+	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
+	if (!mini->pids)
+	{
+		clean_cmds(mini->cmds); // create a function that also sets pointer to null!
+		return (1);
+	}
+	if (pipe_and_fork(mini, pipe_fd))
+		return (1);
+	if (mini->prev_pipe != -1)
+		close(mini->prev_pipe);
+	clean_cmds(mini->cmds);
+	wait_children(mini);
 	return (0);
 }
 
-// Executes single command if there are no pipes
-// duplicates fd based on fd_in and fd_out
+// Executes single builtin command in parent process
+// duplicates fd based on fd_in and fd_out and resets STDIN and STDOUT
 
-int	execute_single_cmd(t_shell *mini, char **envp)
+static int	handle_single_builtin_cmd(t_shell *mini)
 {
+	if (save_fds(mini))
+		return (1);
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
 		if (dup2_and_close(mini->cmds[0]->fd_in, STDIN_FILENO))
+		{
+			reset_fds(mini);
 			return (1);
+		}
 	}
 	if (mini->cmds[0]->fd_out != STDOUT_FILENO)
 	{
 		if (dup2_and_close(mini->cmds[0]->fd_out, STDOUT_FILENO))
+		{
+			reset_fds(mini);
 			return (1);
+		}
 	}
-	if (execute_cmd(mini->cmds[0], envp))
+	if (built_in_exe(mini, mini->cmds[0]))
+	{
+		clean_cmds(mini->cmds);
+		reset_fds(mini);
+		return (1);
+	}
+	if (reset_fds(mini))
 		return (1);
 	return (0);
-} 
-
-// Executes command
-// Check why env_array parsed based on min->env is not working
-
-int	execute_cmd(t_cmd *cmd, char **envp)
-{
-	//char	**env_array;
-	//env_array = env_to_array(mini->env);
-	if (execve(cmd->cmd_path, cmd->args, envp) == -1)
-	{
-		perror(cmd->command);
-		// free everything
-		exit(EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
 }
 
+// Creates pipes when needed and forks child processes
+// After forking, closes cmd-specific fds that were passed to child
+
+static int	pipe_and_fork(t_shell *mini, int pipe_fd[2])
+{
+	int		i;
+	t_cmd	*cmd;
+
+	i = 0;
+	while (i < mini->cmd_count)
+	{
+		cmd = mini->cmds[i];
+		if (mini->cmd_count > 1 && i < mini->cmd_count - 1
+			&& pipe(pipe_fd) == -1)
+		{
+			perror("pipe");
+			return (1);
+		}
+		if (fork_and_execute(mini, cmd, pipe_fd, i) == -1)
+			return (1);
+		close_fds_and_pipes(mini, cmd, pipe_fd, i);
+		i++;
+	}
+	return (0);
+}
