@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/26 10:21:55 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:37:41 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	printer(t_shell *mini)
 			redir = redir->next;
 			redir_index++;
 		}
-		printf("fd_in: %d\n", mini->cmds[i]->fd_in);
-		printf("fd_out: %d\n", mini->cmds[i]->fd_out);
+		//printf("fd_in: %d\n", mini->cmds[i]->fd_in);
+		//printf("fd_out: %d\n", mini->cmds[i]->fd_out);
 		printf("|*************************************************|");
 		printf("\n");
 		i++;
@@ -113,6 +113,7 @@ static int user_prompt(t_shell *mini)
 		if (parse_and_validate_input(input, mini))
 		{
 			free(input);
+			//cleaner(mini);
 			continue ;
 		}
 		printer(mini);
