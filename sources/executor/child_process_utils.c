@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 11:32:29 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:16:50 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 		if (dup2_and_close(cmd->fd_in, STDIN_FILENO))
 		{
 			perror("dup2 for input redirection");
+			cmd->cmd_exit = 1;
 			return (1);
 		}
 		if (mini->prev_pipe != -1)
@@ -40,6 +41,7 @@ int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 		if (dup2_and_close(mini->prev_pipe, STDIN_FILENO) == -1)
 		{
 			perror("dup2 for pipe input");
+			cmd->cmd_exit = 1;
 			return (1);
 		}
 		//printf("Pipe input handled for cmd[%d].\n", i);
@@ -58,6 +60,7 @@ int	dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i)
 		if (dup2_and_close(cmd->fd_out, STDOUT_FILENO))
 		{
 			perror("dup2 for output redirection");
+			cmd->cmd_exit = 1;
 			return (1);
 		}
 		if (i < count - 1)
@@ -68,10 +71,11 @@ int	dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i)
 	}
 	else if (i < count - 1)
 	{
-		//printf("Using pipe for output: pipe_fd[1] = %d\n", pipe_fd[1]);
+		printf("Using pipe for output in cmd %d: pipe_fd[1] = %d\n", i, pipe_fd[1]);
 		if (dup2_and_close(pipe_fd[1], STDOUT_FILENO))
 		{
-			perror("dup2 for restoring stdout");
+			perror("dup2 for output to pipe");
+			cmd->cmd_exit = 1;
 			return (1);
 		}
 		close(pipe_fd[0]);
