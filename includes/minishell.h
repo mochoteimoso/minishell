@@ -25,6 +25,14 @@ typedef enum e_redir_type
 
 // linked list for redirects in each command struct
 
+typedef struct s_expand
+{
+	int		sgl;
+	int		dbl;
+	int		i;
+	char	*value;
+}	t_expand;
+
 typedef struct s_redir
 {
 	char			*file;
@@ -138,7 +146,7 @@ int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
-//int	expand_or_not(t_shell *mini, t_cmd *cmd);
+int 	expand_variable(t_shell *mini, char *str, int i, char **expanded, int *s);
 
 /*handle_cmd_array.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
@@ -146,7 +154,7 @@ int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
 int		skip_whitespace(char *str, int i);
-int		arg_in_quotes(char *str, int i, char **start, int *len);
+int		arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len);
 int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
 int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/26 11:53:07 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:27:44 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,30 +112,32 @@ char	*expand_var(t_shell *mini, char *str)
 	return (temp);
 }
 
-// int	expand_or_not(t_shell *mini, t_cmd *cmd)
-// {
-// 	int		i;
-// 	char	*arg;
-// 	char	*expanded;
 
-// 	i = 0;
-// 	while (cmd->args[i])
-// 	{
-// 		arg = cmd->args[i];
-// 		if (arg[0] == '"' || arg[0] == '\'')
-// 		{
-// 			expanded = its_in_quotes(mini, arg);
-// 			free(arg);
-// 			cmd->args[i] = expanded;
-// 		}
-// 		else if (cmd->args[i][0] == '$' || cmd->args[i][0] == '~')
-// 		{
-// 			expanded =  expand_var(mini, arg);
-// 			free(arg);
-// 			cmd->args[i] = expanded;
-// 		}
-// 		printf("arg[%d]: %s\n", i, cmd->args[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }
+int expand_variable(t_shell *mini, char *str, int i, char **expanded, int *s)
+{
+    char name[100];
+    char *temp;
+    int name_len = 0;
+
+    temp = ft_strndup(&str[*s], i - *s);
+    char *new_expanded = ft_strjoin(*expanded, temp);
+    free(temp);
+    free(*expanded);
+    *expanded = new_expanded;
+    i++;
+    while (str[i] && (ft_isalnum(str[i]) || str[i] == '_')) {
+        if (name_len < (int)sizeof(name) - 1) {
+            name[name_len++] = str[i];
+        }
+        i++;
+    }
+    name[name_len] = '\0';
+    char *value = get_value(mini->env, name);
+    if (value) {
+        temp = ft_strjoin(*expanded, value);
+        free(*expanded);
+        *expanded = temp;
+    }
+    *s = i;
+    return i;
+}

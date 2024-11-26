@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 12:52:04 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:47:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,65 +19,174 @@ int	skip_whitespace(char *str, int i)
 	return (i);
 }
 
-// int	arg_in_quotes(char *str, int i, char **start, int *len)
+// int	arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len)
 // {
-// 	int		s;
 // 	char	quote;
-// 	char	*temp;
 // 	char	*res;
+// 	char	*temp;
+// 	char	*new_res;
+// 	int		start_exp;
 
+// 	printf("at the beginning str: {%s}\n", str);
 // 	quote = str[i];
-// 	s = i + 1;
-// 	i++;
-// 	*len = 0;
 // 	res = ft_strdup("");
-// 	while (str[i])
+// 	i++;
+// 	while (str[i] && str[i] != quote)
 // 	{
-// 		if (str[i] == quote)
+// 		if (quote == '"' && str[i] == '$')
 // 		{
-// 			if (str[i + 1] == quote)
-// 			{
-// 				i++;
-// 				continue ;
-// 			}
-// 			else
-// 			{
-// 				i++;
-// 				break ;
-// 			}
+// 			start_exp = i;
+// 			temp = ft_strdup("");
+// 			i = expand_variable(mini, str, i, &temp, &start_exp);
+// 			new_res = ft_strjoin(res, temp);
+// 			free(res);
+// 			free(temp);
+// 			res = new_res;
 // 		}
-// 		temp = ft_strjoin(res, ft_strndup(&str[i], 1));
-// 		free(res);
-// 		res = temp;
-// 		i++;
+// 		else
+// 		{
+// 			temp = ft_strjoin(res, ft_strndup(&str[i], 1));
+// 			free(res);
+// 			res = temp;
+// 		}
+// 		if (str[i + 1] != )
 // 	}
+// 	printf("at the end str: {%s}\n", res);
+// 	if (str[i] == quote)
+// 		i++;
 // 	*start = res;
 // 	*len = ft_strlen(res);
 // 	return (i);
 // }
 
-int	arg_in_quotes(char *str, int i, char **start, int *len)
-{
-	int		s;
-	char	quote;
+// int	arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len)
+// {
+// 	char	quote;
+// 	char	*res;
+// 	char	*temp;
+// 	char	*new_res;
+// 	char	inner;
+// 	int		inner_s;
+// 	int		start_exp;
 
-	quote = str[i];
-	s = i + 1;
-	i++;
-	while (str[i] && str[i] != quote)
-		i++;
-	if (str[i] == quote)
+// 	printf("at the beginning str: {%s}\ni: %d\n", &str[i], i);
+// 	quote = str[i];
+// 	res = ft_strdup("");
+// 	i++;
+// 	while (str[i])
+// 	{
+// 		if (quote == '"' && str[i] == '$')
+// 		{
+// 			start_exp = i;
+// 			temp = ft_strdup("");
+// 			i = expand_variable(mini, str, i, &temp, &start_exp);
+// 			new_res = ft_strjoin(res, temp);
+// 			free(res);
+// 			free(temp);
+// 			res = new_res;
+// 		}
+// 		else if (str[i] == '\'' || str[i] == '"')
+// 		{
+// 			inner = str[i];
+// 			inner_s = i;
+// 			if (str[i + 1] != '\0' && str[i + 1] != ' ')
+// 			{
+// 				temp = ft_strjoin(res, ft_strndup(&str[i], 1));
+// 				free(res);
+// 				res = temp;
+// 				i++;
+// 			}
+// 			else
+// 			{
+// 				i++;
+// 				break;
+// 			}
+// 		}
+// 		else
+// 		{
+// 			temp = ft_strjoin(res, ft_strndup(&str[i], 1));
+// 			free(res);
+// 			res = temp;
+// 			i++;
+// 		}
+// 	}
+// 	printf("at the end str: {%s}\n", res);
+// 	*start = res;
+// 	*len = ft_strlen(res);
+// 	return (i);
+// }
+
+int	arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len)
+{
+	t_expand	arg;
+	char		*temp;
+	char		*new_res;
+	int			s_exp;
+
+	//printf("start: {%s}\nlen: %d\n", &str[i], *len);
+	arg.sgl = 0;
+	arg.dbl = 0;
+	arg.i = i;
+	arg.value = ft_strdup("");
+	if (str[arg.i] == '\'')
+		arg.sgl = 1;
+	else if (str[arg.i] == '"')
+		arg.dbl = 1;
+	arg.i++;
+	while (str[arg.i])
 	{
-		*start = &str[s];
-		*len = i - s;
-		i++;
+		if (str[arg.i] == ' ' && !arg.sgl &&  !arg.dbl)
+		{
+			*start = arg.value;
+			*len = ft_strlen(arg.value);
+			return (arg.i);
+		}
+		if ((arg.dbl && str[arg.i] == '$') || (!arg.sgl && str[arg.i] == '$'))
+		{
+			s_exp = arg.i;
+			temp = ft_strdup("");
+			arg.i = expand_variable(mini, str, arg.i, &temp, &s_exp);
+			new_res = ft_strjoin(arg.value, temp);
+			free(arg.value);
+			free(temp);
+			arg.value = new_res;
+		}
+		else if ((arg.sgl && str[arg.i] == '\'') || (arg.dbl && str[arg.i] == '"'))
+		{
+			if ((arg.sgl && str[arg.i] == '\'') || (arg.dbl && str[arg.i] == '"'))
+			{
+				if (str[arg.i + 1] != '\0' || str[arg.i] != ' ')
+				{
+					arg.sgl = 0;
+					arg.dbl = 0;
+					arg.i++;
+				}
+				else
+				{
+					arg.i++;
+					break;
+				}
+			}
+		}
+		else if (!arg.sgl && !arg.dbl && (str[arg.i] == '\'' || str[arg.i] == '"'))
+		{
+			if (str[arg.i] == '\'')
+				arg.sgl = 1;
+			else if (str[arg.i] == '"')
+				arg.dbl = 1;
+			arg.i++;
+		}
+		else
+		{
+			temp = ft_strjoin(arg.value, ft_strndup(&str[arg.i], 1));
+			free(arg.value);
+			arg.value = temp;
+			arg.i++;
+		}
 	}
-	else
-	{
-		*start = &str[s];
-		*len = i - s;
-	}
-	return (i);
+	*start = arg.value;
+	*len = ft_strlen(arg.value);
+	return (arg.i);
 }
 
 int	arg_no_quotes(t_cmd *cmd, int i, char **start, int *len)
