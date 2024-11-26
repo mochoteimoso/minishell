@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 19:33:29 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 11:33:37 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			get_cmd_path(t_shell *mini, t_cmd *cmd);
 static char	*search_command_in_paths(char **paths, t_cmd *cmd);
-static int	check_abs_path(t_cmd *cmd);
+static int	check_abs_path(t_shell *mini, t_cmd *cmd);
 
 // Resolves absolute path for command and updates in cmd->cmd_path
 
@@ -24,10 +24,10 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 	char	**paths;
 	t_env	*temp;
 
-	if (check_abs_path(cmd) == 0)
+	if (check_abs_path(mini, cmd) == 0)
 		cmd->cmd_path = cmd->command;
-	else if (check_abs_path(cmd) != 1)
-		return (check_abs_path(cmd));
+	else if (check_abs_path(mini, cmd) != 1)
+		return (check_abs_path(mini, cmd));
 	else
 	{
 		temp = mini->env;
@@ -83,7 +83,7 @@ static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 
 // Checks whether command is already an absolute path
 
-static int	check_abs_path(t_cmd *cmd)
+static int	check_abs_path(t_shell *mini, t_cmd *cmd)
 {
 	if (cmd->command[0] == '/' || cmd->command[0] == '.')
 	{
@@ -91,12 +91,16 @@ static int	check_abs_path(t_cmd *cmd)
 			return (0);
 		if (access(cmd->command, F_OK) == 0 && access(cmd->command, X_OK) != 0)
 		{
-			//error_no_permission(cmd->command);
+			ft_putstr_fd(cmd->command, 2);
+			ft_putendl_fd(": Permission denied", 2);
+			mini->exit_stat = 126;
 			return (126);
 		}
 		else
 		{
-			// perror(cmd->command);
+			ft_putstr_fd(cmd->command, 2);
+			ft_putendl_fd(": command not found", 2);
+			mini->exit_stat = 127;
 			return (127);
 		}
 	}
