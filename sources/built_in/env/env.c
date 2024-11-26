@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/19 17:05:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:40:18 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ char	**env_to_array(t_env *env)
 	temp = env;
 	i = 0;
 	array = (char **)malloc(sizeof(char *) * len + 1);
+	if (!array)
+		return (NULL);
 	while (temp->next)
 	{
 		array[i] = ft_strdup("");
