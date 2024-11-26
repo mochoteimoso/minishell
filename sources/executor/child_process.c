@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 18:20:13 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:03:29 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd);
 // Forks child processes based on number of commands
 // duplicates input/output
 
-int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i) 
+int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 {
 	sig_handler_changer();
 	mini->pids[i] = fork();
@@ -31,9 +31,9 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 	else if (mini->pids[i] == 0)
 	{
 		close_unused_fds(mini, cmd, i);
-		if (dup_input(mini, cmd, i)) // redirect input 
+		if (dup_input(mini, cmd, i))
 			return (1);
-		if (dup_output(cmd, pipe_fd, mini->cmd_count, i)) //redirect output
+		if (dup_output(cmd, pipe_fd, mini->cmd_count, i))
 			return (1);
 		if (is_this_built(cmd->command))
 		{
@@ -67,7 +67,7 @@ static int	execute_forked_builtin_cmd(t_shell *mini, t_cmd *cmd)
 static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd)
 {
 	char	**env_array;
-	
+
 	env_array = env_to_array(mini->env);
 	sig_reseted();
 	if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
