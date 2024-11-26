@@ -45,7 +45,7 @@ typedef struct s_cmd
 	t_redir *redir_tail;
 	int		fd_in;
 	int		fd_out;
-	int		exit_status;
+	//int		exit_status;
 }	t_cmd;
 
 typedef struct s_env
