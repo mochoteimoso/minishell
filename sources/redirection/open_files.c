@@ -6,20 +6,20 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:18:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 11:39:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:48:00 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	open_input_file(char *input_file);
-int	open_output_file(char *output_file);
-int	open_append_file(char *output_file);
-int	open_heredoc(char *delimiter);
+int	open_input_file(t_cmd *cmd, char *input_file);
+int	open_output_file(t_cmd *cmd, char *output_file);
+int	open_append_file(t_cmd *cmd, char *output_file);
+int	open_heredoc(t_cmd *cmd, char *delimiter);
 
 // Tries to open input file and prints correct error in case of failure
 
-int	open_input_file(char *input_file)
+int	open_input_file(t_cmd *cmd, char *input_file)
 {
 	int	fd_in;
 
@@ -29,23 +29,22 @@ int	open_input_file(char *input_file)
 		if (access(input_file, F_OK) != 0)
 		{
 			ft_putstr_fd(input_file, 2);
-			ft_putendl_fd(": No such file or directory", 2);
-			// exit_handler(mini, 1);
+			ft_putendl_fd(": No such file or directory", 2);	
 		}
 		else
 		{
 			ft_putstr_fd(input_file, 2);
 			ft_putendl_fd(": Permission denied", 2);
-			// exit_handler(mini, 1);
 		}
-		return (-1);
+		cmd->cmd_exit = 1;
+		return (-2);
 	}
 	return (fd_in);
 }
 
 // Tries to open output file and prints correct error in case of failure
 
-int	open_output_file(char *output_file)
+int	open_output_file(t_cmd *cmd, char *output_file)
 {
 	int	fd_out;
 
@@ -56,22 +55,21 @@ int	open_output_file(char *output_file)
 		{
 			ft_putstr_fd(output_file, 2);
 			ft_putendl_fd(": No such file or directory", 2);
-			// exit_handler(mini, 1);
 		}
 		else
 		{
 			ft_putstr_fd(output_file, 2);
 			ft_putendl_fd(": Permission denied", 2);
-			// exit_handler(mini, 1);
 		}
-		return (-1);
+		cmd->cmd_exit = 1;
+		return (-2);
 	}
 	return (fd_out);
 }
 
 // Tries to open output append file and prints correct error in case of failure
 
-int	open_append_file(char *output_file)
+int	open_append_file(t_cmd *cmd, char *output_file)
 {
 	int	fd_out;
 
@@ -82,22 +80,21 @@ int	open_append_file(char *output_file)
 		{
 			ft_putstr_fd(output_file, 2);
 			ft_putendl_fd(": No such file or directory", 2);
-			// exit_handler(mini, 1);
 		}
 		else
 		{
 			ft_putstr_fd(output_file, 2);
 			ft_putendl_fd(": Permission denied", 2);
-			// exit_handler(mini, 1);
 		}
-		return (-1);
+		cmd->cmd_exit = 1;
+		return (-2);
 	}
 	return (fd_out);
 }
 
 // Opens heredoc
 
-int	open_heredoc(char *delimiter)
+int	open_heredoc(t_cmd *cmd, char *delimiter)
 {
 	int		heredoc_pipe_fd[2];
 	char	*line;
@@ -105,7 +102,8 @@ int	open_heredoc(char *delimiter)
 	if (pipe(heredoc_pipe_fd) == -1)
 	{
 		perror("pipe error");
-		return (-1);
+		cmd->cmd_exit = 1;
+		return (-2);
 	}
 	while (1)
 	{
