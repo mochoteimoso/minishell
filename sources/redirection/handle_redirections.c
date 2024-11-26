@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/16 15:16:40 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 11:15:18 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,15 @@ int		handle_append(t_cmd *cmd, int i);
 
 bool	is_redirection(t_cmd *cmd, int i)
 {
-	if ((cmd->segment[i] == '>' || cmd->segment[i] == '<') &&
-		!check_quotes(cmd->segment, i))
+	if ((cmd->segment[i] == '>' || cmd->segment[i] == '<')
+		&& !check_quotes(cmd->segment, i))
 		return (true);
 	else
 		return (false);
 }
 
-// Handles < redirection, finds the filename and copies data to the redir linked list
+// Handles < redirection, finds the filename and copies data 
+// to the redir linked list
 
 int	handle_redirect_in(t_cmd *cmd, int i)
 {
@@ -40,9 +41,10 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 	i++;
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
-	filename_start = &cmd->segment[i] ;
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && !is_redirection(cmd, i) &&
-		cmd->segment[i] != '|' && cmd->segment[i] != '$')
+	filename_start = &cmd->segment[i];
+	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
+		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
+		&& cmd->segment[i] != '$')
 	{
 		filename_length++;
 		i++;
@@ -50,14 +52,15 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{
-		printf("Failed to allocate memory for filename\n");
+		ft_putendl_fd("Failed to allocate memory for filename", 2);
 		return (-1);
 	}
 	cmd->redir_tail->type = REDIRECT_IN;
 	return (i);
 }
 
-// Handles > redirection, finds the filename and copies data to the redir linked list
+// Handles > redirection, finds the filename and copies data 
+// to the redir linked list
 
 int	handle_redirect_out(t_cmd *cmd, int i)
 {
@@ -68,9 +71,10 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 	i++;
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
-	filename_start = &cmd->segment[i] ;
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && !is_redirection(cmd, i) &&
-		cmd->segment[i] != '|' &&cmd->segment[i] != '$')
+	filename_start = &cmd->segment[i];
+	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
+		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
+		&& cmd->segment[i] != '$')
 	{
 		filename_length++;
 		i++;
@@ -78,10 +82,9 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{
-		printf("Failed to allocate memory for filename\n");
+		ft_putendl_fd("Failed to allocate memory for filename", 2);
 		return (-1);
 	}
-	//printf("output file after copy: %s\n", cmd->redir_tail->file);
 	cmd->redir_tail->type = REDIRECT_OUT;
 	return (i);
 }
@@ -99,8 +102,9 @@ int	handle_heredoc(t_cmd *cmd, int i)
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
 	delimiter_start = &cmd->segment[i];
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && !is_redirection(cmd, i) &&
-		cmd->segment[i] != '|' && cmd->segment[i] != '$')
+	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
+		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
+		&& cmd->segment[i] != '$')
 	{
 		delimiter_length++;
 		i++;
@@ -108,15 +112,15 @@ int	handle_heredoc(t_cmd *cmd, int i)
 	cmd->redir_tail->delimiter = ft_strndup(delimiter_start, delimiter_length);
 	if (!cmd->redir_tail->delimiter)
 	{
-		printf("Failed to allocate memory for heredoc delimiter\n");
+		ft_putendl_fd("Failed to allocate memory for heredoc delimiter", 2);
 		return (-1);
 	}
-	//printf("heredoc_delim after copy: %s\n", sh->cmds[index]->heredoc_delim);
 	cmd->redir_tail->type = HEREDOC;
 	return (i);
 }
 
-// Handles append redirection, finds the filename and copies data to the redir linked list
+// Handles append redirection, finds the filename and copies data 
+// to the redir linked list
 
 int	handle_append(t_cmd *cmd, int i)
 {
@@ -126,11 +130,12 @@ int	handle_append(t_cmd *cmd, int i)
 	filename_length = 0;
 	i++;
 	i++;
-	while (cmd->segment[i]&& ft_isspace(cmd->segment[i]))
+	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
 	filename_start = &cmd->segment[i];
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && !is_redirection(cmd, i) &&
-		cmd->segment[i] != '|' &&cmd->segment[i] != '$')
+	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
+		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
+		&& cmd->segment[i] != '$')
 	{
 		filename_length++;
 		i++;
@@ -138,7 +143,7 @@ int	handle_append(t_cmd *cmd, int i)
 	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
 	if (!cmd->redir_tail->file)
 	{
-		printf("Failed to allocate memory for filename\n");
+		ft_putendl_fd("Failed to allocate memory for filename", 2);
 		return (-1);
 	}
 	cmd->redir_tail->type = APPEND;
