@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:18:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 18:19:52 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:06:04 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	save_fds(t_shell *mini)
 
 int	reset_fds(t_shell *mini)
 {
-	if (dup2(mini->stdin_saved, STDIN_FILENO) == -1 ||
-		dup2(mini->stdout_saved, STDOUT_FILENO) == -1)
+	if (dup2(mini->stdin_saved, STDIN_FILENO) == -1
+		|| dup2(mini->stdout_saved, STDOUT_FILENO) == -1)
 	{
 		perror("Failed to restore original FDs");
 		close(mini->stdin_saved);
