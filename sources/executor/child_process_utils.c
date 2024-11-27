@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 19:16:50 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/27 10:53:45 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
-void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i);
+//void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i);
 
 // Duplicates input from fd_in if there is a redirection or from previous pipe
 // Redirection takes precendence over pipe
@@ -105,7 +105,7 @@ int	dup2_and_close(int old_fd, int new_fd)
 // inherits from parent
 // only the fds of the current command are used
 
-void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i)
+/*void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i)
 {
 	while (i < mini->cmd_count)
 	{
@@ -115,5 +115,5 @@ void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i)
 			close(mini->cmds[i]->fd_out);
 		i++;
 	}
-}
+} */
 
