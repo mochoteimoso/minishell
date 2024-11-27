@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 15:19:02 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/27 10:16:13 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,14 +159,15 @@ static int	single_redirect(t_cmd *cmd, int i)
 
 int handle_redirections(t_cmd *cmd, int i)
 {
-	while (cmd->segment[i] && i < (int)ft_strlen(cmd->segment))
+	while (i < (int)ft_strlen(cmd->segment) && cmd->segment[i])
 	{
 		if (is_redirection(cmd, i))
 		{
 			if (redirll_head_tail(cmd))
 				return (-1);
-			if ((cmd->segment[i] == '<' && cmd->segment[i + 1] == '<') ||
-				(cmd->segment[i] == '>' && cmd->segment[i + 1] == '>'))
+			if ((i + 1 < (int)ft_strlen(cmd->segment))
+				&& ((cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
+				|| (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')))
 			{
 				i = double_redirect(cmd, i);
 				if (i == -1)
