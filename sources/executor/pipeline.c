@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 19:02:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:01:50 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ int	execute_pipeline(t_shell *mini)
 		cleaner_for_main(mini);
 		return (1);
 	}
-	//if (mini->prev_pipe != -1)
-	//	close(mini->prev_pipe);
+	if (mini->prev_pipe != -1)
+		close(mini->prev_pipe);
 	wait_children(mini);
-	close(pipe_fd[0]);
+	//close(pipe_fd[0]);
 	cleaner_for_main(mini);
 	return (0);
 }
@@ -58,9 +58,9 @@ int	execute_pipeline(t_shell *mini)
 
 static int	handle_single_builtin_cmd(t_shell *mini)
 {
-	if (save_fds(mini))
-		return (1);
 	if (resolve_fd(mini->cmds[0]))
+		return (1);
+	if (save_fds(mini))
 		return (1);
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
@@ -78,8 +78,11 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 		reset_fds(mini);
 		return (1);
 	}
-	if (reset_fds(mini))
-		return (1);
+	if (mini->cmds[0]->fd_in != STDIN_FILENO || (mini->cmds[0]->fd_out != STDOUT_FILENO))
+	{
+		if (reset_fds(mini))
+			return (1);
+	}
 	return (0);
 }
 
