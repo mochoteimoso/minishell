@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/26 13:27:44 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:05:30 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,29 +115,40 @@ char	*expand_var(t_shell *mini, char *str)
 
 int expand_variable(t_shell *mini, char *str, int i, char **expanded, int *s)
 {
-    char name[100];
-    char *temp;
-    int name_len = 0;
+	char	name[100];
+	char	*temp;
+	char	*new_expanded;
+	char	*value;
+	int		name_len = 0;
 
-    temp = ft_strndup(&str[*s], i - *s);
-    char *new_expanded = ft_strjoin(*expanded, temp);
-    free(temp);
-    free(*expanded);
-    *expanded = new_expanded;
-    i++;
-    while (str[i] && (ft_isalnum(str[i]) || str[i] == '_')) {
-        if (name_len < (int)sizeof(name) - 1) {
-            name[name_len++] = str[i];
-        }
-        i++;
-    }
-    name[name_len] = '\0';
-    char *value = get_value(mini->env, name);
-    if (value) {
-        temp = ft_strjoin(*expanded, value);
-        free(*expanded);
-        *expanded = temp;
-    }
-    *s = i;
-    return i;
-}
+	temp = ft_strndup(&str[*s], i - *s);
+	if (!temp)
+		return (-1);
+	new_expanded = ft_strjoin(*expanded, temp);
+	if (!new_expanded)
+		return (-1);
+	free(temp);
+	free(*expanded);
+	*expanded = new_expanded;
+	i++;
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+	{
+		if (name_len < (int)sizeof(name) - 1)
+		{
+			name[name_len++] = str[i];
+		}
+		i++;
+	}
+	name[name_len] = '\0';
+	value = get_value(mini->env, name);
+	if (value)
+	{
+		temp = ft_strjoin(*expanded, value);
+		if (!temp)
+			return (-1);
+		free(*expanded);
+		*expanded = temp;
+	}
+	*s = i;
+	return i;
+} 

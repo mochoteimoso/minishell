@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 18:04:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:05:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	count_args(t_cmd *cmd, int i)
 }
 
 // Counts how many command arguments the string contains
+
 int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 {
 	int		arg_len;

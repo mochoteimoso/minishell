@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 19:47:49 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:07:47 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,173 +19,90 @@ int	skip_whitespace(char *str, int i)
 	return (i);
 }
 
-// int	arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len)
-// {
-// 	char	quote;
-// 	char	*res;
-// 	char	*temp;
-// 	char	*new_res;
-// 	int		start_exp;
+void	what_quote(char *str, t_expand *arg)
+{
+	if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
+	{
+		if (str[arg->i + 1] != '\0' || str[arg->i] != ' ')
+		{
+			arg->sgl = 0;
+			arg->dbl = 0;
+			arg->i++;
+		}
+		else
+		{
+			arg->i++;
+			return ;
+		}
+	}
+	if (str[arg->i] == '\'')
+		arg->sgl = 1;
+	if (str[arg->i] == '"')
+		arg->dbl = 1;
+}
 
-// 	printf("at the beginning str: {%s}\n", str);
-// 	quote = str[i];
-// 	res = ft_strdup("");
-// 	i++;
-// 	while (str[i] && str[i] != quote)
-// 	{
-// 		if (quote == '"' && str[i] == '$')
-// 		{
-// 			start_exp = i;
-// 			temp = ft_strdup("");
-// 			i = expand_variable(mini, str, i, &temp, &start_exp);
-// 			new_res = ft_strjoin(res, temp);
-// 			free(res);
-// 			free(temp);
-// 			res = new_res;
-// 		}
-// 		else
-// 		{
-// 			temp = ft_strjoin(res, ft_strndup(&str[i], 1));
-// 			free(res);
-// 			res = temp;
-// 		}
-// 		if (str[i + 1] != )
-// 	}
-// 	printf("at the end str: {%s}\n", res);
-// 	if (str[i] == quote)
-// 		i++;
-// 	*start = res;
-// 	*len = ft_strlen(res);
-// 	return (i);
-// }
+void	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
+{
+	int		s_exp;
+	char	*temp;
+	char	*new_res;
+	s_exp = arg->i;
+	temp = ft_strdup("");
+	arg->i = expand_variable(mini, str, arg->i, &temp, &s_exp);
+	new_res = ft_strjoin(arg->value, temp);
+	free(arg->value);
+	free(temp);
+	arg->value = new_res;
+}
 
-// int	arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len)
-// {
-// 	char	quote;
-// 	char	*res;
-// 	char	*temp;
-// 	char	*new_res;
-// 	char	inner;
-// 	int		inner_s;
-// 	int		start_exp;
+void	add_char(char *str, t_expand *arg)
+{
+	char	*temp;
 
-// 	printf("at the beginning str: {%s}\ni: %d\n", &str[i], i);
-// 	quote = str[i];
-// 	res = ft_strdup("");
-// 	i++;
-// 	while (str[i])
-// 	{
-// 		if (quote == '"' && str[i] == '$')
-// 		{
-// 			start_exp = i;
-// 			temp = ft_strdup("");
-// 			i = expand_variable(mini, str, i, &temp, &start_exp);
-// 			new_res = ft_strjoin(res, temp);
-// 			free(res);
-// 			free(temp);
-// 			res = new_res;
-// 		}
-// 		else if (str[i] == '\'' || str[i] == '"')
-// 		{
-// 			inner = str[i];
-// 			inner_s = i;
-// 			if (str[i + 1] != '\0' && str[i + 1] != ' ')
-// 			{
-// 				temp = ft_strjoin(res, ft_strndup(&str[i], 1));
-// 				free(res);
-// 				res = temp;
-// 				i++;
-// 			}
-// 			else
-// 			{
-// 				i++;
-// 				break;
-// 			}
-// 		}
-// 		else
-// 		{
-// 			temp = ft_strjoin(res, ft_strndup(&str[i], 1));
-// 			free(res);
-// 			res = temp;
-// 			i++;
-// 		}
-// 	}
-// 	printf("at the end str: {%s}\n", res);
-// 	*start = res;
-// 	*len = ft_strlen(res);
-// 	return (i);
-// }
+	temp = ft_strjoin(arg->value, ft_strndup(&str[arg->i], 1));
+	free(arg->value);
+	arg->value = temp;
+	arg->i++;
+}
+
+void	finalizer(t_expand *arg, char **start, int *len)
+{
+	*start = arg->value;
+	*len = ft_strlen(arg->value);
+}
+
+void	the_arg(t_expand *arg, int i)
+{
+	arg->sgl = 0;
+	arg->dbl = 0;
+	arg->i = i;
+	arg->value = ft_strdup("");
+}
 
 int	arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len)
 {
 	t_expand	arg;
-	char		*temp;
-	char		*new_res;
-	int			s_exp;
 
-	//printf("start: {%s}\nlen: %d\n", &str[i], *len);
-	arg.sgl = 0;
-	arg.dbl = 0;
-	arg.i = i;
-	arg.value = ft_strdup("");
-	if (str[arg.i] == '\'')
-		arg.sgl = 1;
-	else if (str[arg.i] == '"')
-		arg.dbl = 1;
+	the_arg(&arg, i);
+	what_quote(str, &arg);
 	arg.i++;
 	while (str[arg.i])
 	{
 		if (str[arg.i] == ' ' && !arg.sgl &&  !arg.dbl)
 		{
-			*start = arg.value;
-			*len = ft_strlen(arg.value);
+			finalizer(&arg, start, len);
 			return (arg.i);
 		}
 		if ((arg.dbl && str[arg.i] == '$') || (!arg.sgl && str[arg.i] == '$'))
-		{
-			s_exp = arg.i;
-			temp = ft_strdup("");
-			arg.i = expand_variable(mini, str, arg.i, &temp, &s_exp);
-			new_res = ft_strjoin(arg.value, temp);
-			free(arg.value);
-			free(temp);
-			arg.value = new_res;
-		}
+			we_have_dollar(mini, &arg, str);
 		else if ((arg.sgl && str[arg.i] == '\'') || (arg.dbl && str[arg.i] == '"'))
-		{
-			if ((arg.sgl && str[arg.i] == '\'') || (arg.dbl && str[arg.i] == '"'))
-			{
-				if (str[arg.i + 1] != '\0' || str[arg.i] != ' ')
-				{
-					arg.sgl = 0;
-					arg.dbl = 0;
-					arg.i++;
-				}
-				else
-				{
-					arg.i++;
-					break;
-				}
-			}
-		}
+			what_quote(str, &arg);
 		else if (!arg.sgl && !arg.dbl && (str[arg.i] == '\'' || str[arg.i] == '"'))
-		{
-			if (str[arg.i] == '\'')
-				arg.sgl = 1;
-			else if (str[arg.i] == '"')
-				arg.dbl = 1;
-			arg.i++;
-		}
+			what_quote(str, &arg);
 		else
-		{
-			temp = ft_strjoin(arg.value, ft_strndup(&str[arg.i], 1));
-			free(arg.value);
-			arg.value = temp;
-			arg.i++;
-		}
+			add_char(str, &arg);
 	}
-	*start = arg.value;
-	*len = ft_strlen(arg.value);
+	finalizer(&arg, start, len);
 	return (arg.i);
 }
 
