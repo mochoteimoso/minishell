@@ -20,6 +20,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils.c\
 	$(SRC_DIR)parser/split_input.c\
 	$(SRC_DIR)parser/syntax_checks.c\
+	$(SRC_DIR)parser/syntax_check_utils.c\
 	$(SRC_DIR)parser/find_cmd_path.c\
 	$(SRC_DIR)redirection/redir_ll.c\
 	$(SRC_DIR)redirection/handle_redirections.c\
