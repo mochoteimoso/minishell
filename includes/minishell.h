@@ -41,8 +41,8 @@ typedef struct s_cmd
 	char	*cmd_path;
 	char	**args;
 	int		args_count;
-	t_redir *redir_head;
-	t_redir *redir_tail;
+	t_redir	*redir_head;
+	t_redir	*redir_tail;
 	int		fd_in;
 	int		fd_out;
 	int		cmd_exit;
@@ -139,6 +139,8 @@ int		check_consecutive_pipes(char *input);
 int		check_pipes(char *input);
 int		check_redirects(char *input);
 int		validate_redirect(char *input, int *i, char *type);
+	/*syntax_check_utils.c*/
+int		check_redirects(char *input);
 
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
@@ -184,7 +186,6 @@ int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
-void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i);
 
 	/*handle_builtins.c*/
 int		built_in_exe(t_shell *mini, t_cmd *cmd);
