@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 19:15:59 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:10:49 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 	}
 	else if (mini->pids[i] == 0)
 	{
-		//close_unused_fds(mini, cmd, i);
 		if (resolve_fd(cmd))
 			exit_handler(mini, cmd->cmd_exit);
-		printf("Cmds[%d]: fd_in = %d, fd_out = %d\n", i, cmd->fd_in, cmd->fd_out);
-		printf("Cmds[%d]: pipe_fd[0] = %d, pipe_fd[1] = %d\n", i, pipe_fd[0], pipe_fd[1]);
+		//printf("Cmd[%d]: fd_in = %d, fd_out = %d\n", i, cmd->fd_in, cmd->fd_out);
+		//printf("Cmd[%d]: pipe_fd[0] = %d, pipe_fd[1] = %d\n", i, pipe_fd[0], pipe_fd[1]);
 		if (dup_input(mini, cmd, i))
 			exit_handler(mini, cmd->cmd_exit);
 		if (dup_output(cmd, pipe_fd, mini->cmd_count, i))
