@@ -132,18 +132,21 @@ int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 
-	/*syntax_checks.c*/
-int		validate_input_syntax(char *input);
-int 	check_quotes(char *input, int limit);
-int		check_consecutive_pipes(char *input);
-int		check_pipes(char *input);
-int		check_redirects(char *input);
-int		validate_redirect(char *input, int *i, char *type);
-	/*syntax_check_utils.c*/
-int		check_redirects(char *input);
-
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+
+/*syntax*/
+
+	/*syntax_checker.c*/
+int		validate_input_syntax(char **input);
+int		check_quotes(char *input, int limit);
+int		check_non_whitespace(char *str);
+
+	/*redirection_syntax.c*/
+int		check_redirects(char *input);
+
+	/*pipe_syntax.c*/
+int		check_pipes(char **input);
 
 /*redirection*/
 	/*redir_ll*/
@@ -203,7 +206,7 @@ void	cleaner(t_shell *mini);
 void	error(char *str);
 void	clean_cmds(t_cmd **cmds);
 
-	/*exit_and_clean.c*/
+	/*exit_handler.c*/
 void	exit_handler(t_shell *mini, int exit_status);
 void	cleaner_for_main(t_shell *mini);
 
