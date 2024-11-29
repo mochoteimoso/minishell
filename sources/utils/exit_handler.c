@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/27 11:05:46 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:49:47 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,3 +31,4 @@ void	cleaner_for_main(t_shell *mini)
 	//free(mini);    //when should this be freed?
 	//mini = NULL;
 }
+
