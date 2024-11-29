@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/27 10:53:45 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:46:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
-//void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i);
 
 // Duplicates input from fd_in if there is a redirection or from previous pipe
 // Redirection takes precendence over pipe
@@ -101,19 +100,4 @@ int	dup2_and_close(int old_fd, int new_fd)
 	return (0);
 }
 
-// Closes fds of the next commands in the pipeline that child 
-// inherits from parent
-// only the fds of the current command are used
-
-/*void	close_unused_fds(t_shell *mini, t_cmd *cmd, int i)
-{
-	while (i < mini->cmd_count)
-	{
-		if (mini->cmds[i]->fd_in != -1 && mini->cmds[i]->fd_in != cmd->fd_in)
-			close(mini->cmds[i]->fd_in);
-		if (mini->cmds[i]->fd_out != -1 && mini->cmds[i]->fd_out != cmd->fd_out)
-			close(mini->cmds[i]->fd_out);
-		i++;
-	}
-} */
 
