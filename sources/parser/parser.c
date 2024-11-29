@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/27 10:16:13 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:33:11 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ int		is_this_built(char *str);
 static int	no_args(t_cmd *cmd, int i);
 static int	double_redirect(t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
+static int	output_no_cmd(t_cmd *cmd);
+static int	input_no_cmd(t_cmd *cmd);
 
 // Validates input string and parses the content into an array of structs
 
 int	parse_and_validate_input(char *input, t_shell *mini)
 {
-	if (validate_input_syntax(input))
+	if (validate_input_syntax(&input))
 		return (1);
 	if (prepare_command_structs(mini, input))
 		return (1);
@@ -46,16 +48,15 @@ int	parse_input(t_shell *mini)
 	while (mini->cmds[index])
 	{
 		if (parse_cmd_string(mini, mini->cmds[index]))
+		{
+			clean_cmds(mini->cmds);
 			return (1);
-		//if (expand_or_not(mini, mini->cmds[index]))
-		//	return (1);
+		}
 		if (is_this_built(mini->cmds[index]->command) != 1)
 		{
 			if (get_cmd_path(mini, mini->cmds[index]))
 				return (1);
 		}
-		//if (resolve_fd(mini, mini->cmds[index]))
-		//	return (1);
 		index++;
 	}
 	return (0);
@@ -78,9 +79,7 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 		return (1);
 	cmd_found = true;
 	if (!cmd->segment[i] || is_redirection(cmd, i))
-	{
 		i = no_args(cmd, i);
-	}
 	else
 	{
 		i = handle_cmd_args(mini, cmd, i);
@@ -195,6 +194,8 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	int		cmd_length;
 
 	cmd_length = 0;
+	if (output_no_cmd(cmd))
+		return (-1);
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
 	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
@@ -212,8 +213,31 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 		ft_putendl_fd("Failed to allocate memory for command name", 2);
 		return (-1);
 	}
+	if (input_no_cmd(cmd))
+		return (-1);
 	return (i);
 }
+
+static int	output_no_cmd(t_cmd *cmd)
+{
+	if (cmd->segment[0] == '>')
+	{
+		ft_putendl_fd("syntax error: empty command", 2);
+		return (-1);
+	}
+	return (0);
+}
+
+static int	input_no_cmd(t_cmd *cmd)
+{
+	if (cmd->command == NULL && cmd->segment[0] == '<')
+	{
+		ft_putendl_fd("syntax error: empty command", 2);
+		return (-1);
+	}
+	return (0);
+}
+
 
 static int	no_args(t_cmd *cmd, int i)
 {
