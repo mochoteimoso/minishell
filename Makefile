@@ -19,9 +19,10 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils.c\
 	$(SRC_DIR)parser/split_input.c\
-	$(SRC_DIR)parser/syntax_checks.c\
-	$(SRC_DIR)parser/syntax_check_utils.c\
 	$(SRC_DIR)parser/find_cmd_path.c\
+	$(SRC_DIR)syntax/syntax_checker.c\
+	$(SRC_DIR)syntax/redirection_syntax.c\
+	$(SRC_DIR)syntax/pipe_syntax.c\
 	$(SRC_DIR)redirection/redir_ll.c\
 	$(SRC_DIR)redirection/handle_redirections.c\
 	$(SRC_DIR)redirection/redirector.c\
