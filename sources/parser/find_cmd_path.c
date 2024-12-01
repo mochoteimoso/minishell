@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/29 15:32:07 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:29:47 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,31 +25,26 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 	char	**paths;
 	t_env	*temp;
 
-	if (check_abs_path(mini, cmd))
-		return (1);
-	else if (check_abs_path(mini, cmd) == 0)
-		return (0);
-	else
+	if (check_abs_path(mini, cmd) != 1)
+		return (mini->exit_stat != 0);
+	temp = mini->env;
+	while (temp)
 	{
-		temp = mini->env;
-		while (temp)
-		{
-			if (ft_strncmp(temp->name, "PATH", 4) == 0)
-				paths_str = temp->value;
-			temp = temp->next;
-		}
-		paths = ft_split(paths_str, ':');
-		if (!paths)
-		{
-			perror("Failed to split PATH");
-			return (1);
-		}
-		cmd->cmd_path = search_command_in_paths(paths, cmd);
-		if (!cmd->cmd_path)
-		{
-			cmd_error_and_exit_stat(mini, cmd, 127);
-			return (1);
-		}
+		if (ft_strncmp(temp->name, "PATH", 4) == 0)
+			paths_str = temp->value;
+		temp = temp->next;
+	}
+	paths = ft_split(paths_str, ':');
+	if (!paths)
+	{
+		perror("Failed to split PATH");
+		return (1);
+	}
+	cmd->cmd_path = search_command_in_paths(paths, cmd);
+	if (!cmd->cmd_path)
+	{
+		cmd_error_and_exit_stat(mini, cmd, 127);
+		return (1);
 	}
 	return (0);
 }
@@ -108,6 +103,7 @@ static int	check_abs_path(t_shell *mini, t_cmd *cmd)
 			ft_putendl_fd(": command not found", 2);
 			mini->exit_stat = 127;
 		}
+		return (-1);
 	}
 	return (1);
 }
