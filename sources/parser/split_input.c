@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 10:56:01 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/01 15:19:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	split_input_by_pipes(char *input, t_shell *mini)
 }
 
 //trims leading and trailing whitespaces from the segment string
+
 char	*trim_whitespace(char *segment)
 {
 	int		end;
