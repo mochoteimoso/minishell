@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/29 13:41:03 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/01 18:08:45 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	execute_pipeline(t_shell *mini)
 	if (mini->prev_pipe != -1)
 		close(mini->prev_pipe);
 	wait_children(mini);
-	//close(pipe_fd[0]);
+	close(pipe_fd[0]);
 	cleaner_for_main(mini);
 	return (0);
 }
