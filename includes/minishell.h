@@ -207,6 +207,7 @@ void	error(char *str);
 void	clean_cmds(t_cmd **cmds);
 
 	/*exit_handler.c*/
+void	exit_for_pipes(t_shell *mini, int pipe_fd[2], int i, int exit_status);
 void	exit_handler(t_shell *mini, int exit_status);
 void	cleaner_for_main(t_shell *mini);
 
