@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/28 13:46:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/01 17:12:55 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i)
 			cmd->cmd_exit = 1;
 			return (1);
 		}
-		close(pipe_fd[0]);
+		//close(pipe_fd[0]);
 	}
 	return (0);
 }
