@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/29 13:49:03 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/01 17:40:09 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,13 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 	else if (mini->pids[i] == 0)
 	{
 		if (resolve_fd(cmd))
-		{
-			if (i > 0 && i < mini->cmd_count - 1)
-			{
-				close(pipe_fd[0]);
-				close(pipe_fd[1]);
-			}
-			exit_handler(mini, cmd->cmd_exit);
-		}
+			exit_for_pipes(mini, pipe_fd, i, cmd->cmd_exit);
 		//printf("Cmd[%d]: fd_in = %d, fd_out = %d\n", i, cmd->fd_in, cmd->fd_out);
 		//printf("Cmd[%d]: pipe_fd[0] = %d, pipe_fd[1] = %d\n", i, pipe_fd[0], pipe_fd[1]);
 		if (dup_input(mini, cmd, i))
-			exit_handler(mini, cmd->cmd_exit);
+			exit_for_pipes(mini, pipe_fd, i, cmd->cmd_exit);
 		if (dup_output(cmd, pipe_fd, mini->cmd_count, i))
-			exit_handler(mini, cmd->cmd_exit);
+			exit_for_pipes(mini, pipe_fd, i, cmd->cmd_exit);
 		if (is_this_built(cmd->command))
 			execute_forked_builtin_cmd(mini, cmd);
 		else
