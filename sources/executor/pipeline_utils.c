@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:01:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 19:00:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/01 18:07:32 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	close_fds_and_pipes(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
 		close(cmd->fd_in);
 	if (cmd->fd_out != STDOUT_FILENO && cmd->fd_out != -1)
 		close(cmd->fd_out);
-	if (i > 0)
+	if (i > 0 && mini->prev_pipe != -1)
 	{
 		close(mini->prev_pipe);
 		//mini->prev_pipe = -1;
