@@ -6,22 +6,21 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/29 17:33:11 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:03:56 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
-int		handle_redirections(t_cmd *cmd, int i);
-int		handle_cmd_name(t_cmd *cmd, int i);
-int		is_this_built(char *str);
+int			parse_input(t_shell *mini);
+int			parse_cmd_string(t_shell *mini, t_cmd *cmd);
+int			handle_redirections(t_cmd *cmd, int i);
+int			handle_cmd_name(t_cmd *cmd, int i);
+int			is_this_built(char *str);
 static int	no_args(t_cmd *cmd, int i);
 static int	double_redirect(t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
-static int	output_no_cmd(t_cmd *cmd);
-static int	input_no_cmd(t_cmd *cmd);
+static bool	is_empty_command(t_cmd *cmd, int i);
 
 // Validates input string and parses the content into an array of structs
 
@@ -73,7 +72,9 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	cmd_found = false;
 	i = handle_redirections(cmd, i);
 	if (i == -1)
-		return ((1));
+		return ((1));	
+	if (is_empty_command(cmd, i))
+		return (1);
 	i = handle_cmd_name(cmd, i);
 	if (i == -1)
 		return (1);
@@ -178,12 +179,23 @@ int handle_redirections(t_cmd *cmd, int i)
 				if (i == -1)
 					return (-1);
 			}
-			i++;
 		}
 		else
 			break;
 	}
 	return (i);
+}
+
+static bool	is_empty_command(t_cmd *cmd, int i)
+{
+	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+		i++;
+	if (!cmd->segment[i] || cmd->segment[i] == '|')
+	{
+		ft_putendl_fd("syntax error: expected a command", 2);
+		return (true);
+	}
+	return (false);
 }
 
 // Retrieves command name from string and copies it to struct
@@ -194,8 +206,6 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	int		cmd_length;
 
 	cmd_length = 0;
-	if (output_no_cmd(cmd))
-		return (-1);
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
 	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
@@ -213,31 +223,8 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 		ft_putendl_fd("Failed to allocate memory for command name", 2);
 		return (-1);
 	}
-	if (input_no_cmd(cmd))
-		return (-1);
 	return (i);
 }
-
-static int	output_no_cmd(t_cmd *cmd)
-{
-	if (cmd->segment[0] == '>')
-	{
-		ft_putendl_fd("syntax error: empty command", 2);
-		return (-1);
-	}
-	return (0);
-}
-
-static int	input_no_cmd(t_cmd *cmd)
-{
-	if (cmd->command == NULL && cmd->segment[0] == '<')
-	{
-		ft_putendl_fd("syntax error: empty command", 2);
-		return (-1);
-	}
-	return (0);
-}
-
 
 static int	no_args(t_cmd *cmd, int i)
 {
