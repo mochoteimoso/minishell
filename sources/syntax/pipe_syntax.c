@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/29 15:48:06 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/01 15:38:58 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static int	validate_pipe(char *input)
 			i++;
 			while (input[i] == ' ')
 				i++;
-			if (input[i] == '>') // input[i] == '<')
+			if (input[i] == '>')
 			{
-				printf("syntax error near token %d\n", input[i]);
+				ft_putendl_fd("Syntax error: expected a command", 2);
 				return (1);
 			}
 		}
