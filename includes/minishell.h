@@ -146,7 +146,8 @@ int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
 char	*expand_var(t_shell *mini, char *str);
-int 	expand_variable(t_shell *mini, char *str, int i, char **expanded, int *s);
+int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int *s);
+int 	expand_variable(t_shell *mini, char *str, char **expanded, int i, int *s);
 
 /*handle_cmd_array.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
@@ -155,7 +156,7 @@ int		count_args(t_cmd *cmd, int i);
 	/*handle_cmd_array_utils.c*/
 int		skip_whitespace(char *str, int i);
 int		arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len);
-int		arg_no_quotes(t_cmd *cmd, int i, char **start, int *len);
+int		arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, char **start, int *len);
 int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
 
 	/*split_inputs.c*/

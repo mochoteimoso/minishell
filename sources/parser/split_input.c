@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/20 14:42:15 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/28 09:49:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ static int	segment_handler(t_shell *mini, char *input, int start, int end, int *
 	trimmed = ft_strndup(input + start, end - start);
 	if (!trimmed)
 	{
-		printf("Failed to allocate memory for trimmed string");
+		ft_putendl_fd("Failed to allocate memory for trimmed string", 2);
 		return (1);
 	}
 	trimmed = trim_whitespace(trimmed);
+	mini->cmds[*index]->segment = trimmed;
 	if (!mini->cmds[*index])
 	{
-		printf("No segment in struct\n");
+		ft_putendl_fd("No segment in struct", 2);
 		free(trimmed);
 		return (1);
 	}
-	mini->cmds[*index]->segment = trimmed;
 	(*index)++;
 	return (0);
 }

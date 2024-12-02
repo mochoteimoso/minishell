@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 15:59:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:32:55 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	execute_pipeline(t_shell *mini)
 	{
 		if (handle_single_cmd(mini))
 			return (1);
+		clean_cmds(mini->cmds);
 		return (0);
 	}
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/21 11:22:36 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/29 08:56:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 		{
 			printf("Failed to allocate memory for struct\n");
 			clean_cmds(mini->cmds);
-			free(mini->cmds);
 			return (1);
 		}
 		initialize_command_struct(mini->cmds[i]);
@@ -58,39 +57,36 @@ static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 	mini->cmds[cmd_count] = NULL;
 	return (0);
 }
-	// mini->cmds = ft_calloc(command_count, sizeof(t_cmd));
 
 int	prepare_command_structs(t_shell *mini, char *input)
 {
-	int	command_count;
 
-	command_count = count_pipes(input) + 1;
-	mini->cmd_count = command_count;
-	mini->cmds = ft_calloc(command_count, sizeof(t_cmd));//allocate_cmd_array(command_count);
+	mini->cmd_count = count_pipes(input) + 1;
+	mini->cmds = allocate_cmd_array(mini->cmd_count);//ft_calloc(mini->cmd_count, sizeof(t_cmd));
 	if (!mini->cmds)
 	{
 		printf("Failed to allocate memory for command array\n");
 		return (1);
 	}
-	if (cmd_struct_while(mini, command_count))
+	if (cmd_struct_while(mini, mini->cmd_count))
 		return (1);
 	return (0);
 }
 
 // Allocates memory for an array of structs
 
-// t_cmd	**allocate_cmd_array(int cmd_count)
-// {
-// 	t_cmd	**cmds;
+t_cmd	**allocate_cmd_array(int cmd_count)
+{
+	t_cmd	**cmds;
 
-// 	cmds = ft_calloc(cmd_count, sizeof(t_cmd));
-// 	if (!cmds)
-// 	{
-// 		printf("Failed to allocate memory for array of structs\n");
-// 		return (NULL);
-// 	}
-// 	return (cmds);
-// }
+	cmds = ft_calloc(cmd_count, sizeof(t_cmd));
+	if (!cmds)
+	{
+		printf("Failed to allocate memory for array of structs\n");
+		return (NULL);
+	}
+	return (cmds);
+}
 
 // Initializes individual structs in the array
 

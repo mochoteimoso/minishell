@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/27 13:05:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:57:32 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,56 +15,64 @@
 static char	*get_value(t_env *env, char *name)
 {
 	t_env	*temp;
+	char	*value;
 
 	temp = env;
 	while (temp)
 	{
 		if (ft_strcmp(temp->name, name) == 0)
 		{
-			return (temp->value);
+			value = ft_strdup(temp->value);
+			if (!value)
+			{
+				ft_putendl_fd("malloc fail", 2);
+				return (char *) -1;
+			}
+			return (value);
 		}
 		temp = temp->next;
 	}
 	return (NULL);
 }
 
-
-static int oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int *s)
+int	new_expanded(char *temp, char **expanded)
 {
-	char	*temp;
-	int		indx;
-	char	*value;
-	char 	*temp2;
-	char	name[100];
-
-	temp2 = ft_strndup(&str[*s], i - *s);
-	temp = ft_strjoin(*expanded, temp2);
-	free(temp2);
+	char	*new_expanded;
+	new_expanded = ft_strjoin(*expanded, temp);
+	if (!new_expanded)
+	{
+		ft_putendl_fd("malloc failed", 2);
+		return (-1);
+	}
+	free(temp);
 	free(*expanded);
-	*expanded = temp;
-	i++;
-	indx = 0;
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		name[indx++] = str[i++];
-	name[indx] = '\0';
-	if (indx == 0)
-		return (i);
-	value = get_value(mini->env, name);
+	*expanded = new_expanded;
+	return (0);
+}
+
+int we_have_value(char *value, char *temp, char **expanded)
+{
 	if (value)
 	{
 		temp = ft_strjoin(*expanded, value);
+		free(value);
+		if (!temp)
+		{
+			ft_putendl_fd("malloc failed", 2);
+			return (-1);
+		}
 		free(*expanded);
 		*expanded = temp;
 	}
-	return (i);
+	return (0);
 }
 
-static int	tildes_home(t_shell *mini, char *str, char **expanded, int i, int s)
+int	tildes_home(t_shell *mini, char *str, char **expanded, int i, int *s)
 {
 	char	*temp;
 	char	*value;
 
-	temp = ft_strjoin(*expanded, ft_strndup(&str[s], i - s));
+	temp = ft_strjoin(*expanded, ft_strndup(&str[*s], i - *s));
 	free(*expanded);
 	*expanded = temp;
 	i++;
@@ -78,77 +86,61 @@ static int	tildes_home(t_shell *mini, char *str, char **expanded, int i, int s)
 	return (i);
 }
 
-char	*expand_var(t_shell *mini, char *str)
+int	handle_value(t_shell *mini, char *value, char **expanded, char *temp, char *name)
 {
-	char	*expanded;
-	char	*temp;
-	char	*temp2;
-	int		i;
-	int		s;
-
-	i = 0;
-	s = 0;
-	expanded = ft_strdup("");
-	while (str[i])
+	value = get_value(mini->env, name);
+	if (value == (char *)-1)
+		return (1);
+	if (value)
 	{
-		if (str[i] == '$')
-		{
-			i = oh_its_a_dollar(mini, str, &expanded, i, &s);
-			s = i;
-		}
-		else if (str[i] == '~')
-		{
-			i = tildes_home(mini, str, &expanded, i, s);
-			s = i;
-		}
-		else
-			i++;
+		if (we_have_value(value, temp, expanded) == -1)
+			return (1);
 	}
-	temp2 = ft_strndup(&str[s], i - s);
-	temp = ft_strjoin(expanded, temp2);
-	free(expanded);
-	free(temp2);
-	free(str);
-	return (temp);
+	return (0);
 }
 
-
-int expand_variable(t_shell *mini, char *str, int i, char **expanded, int *s)
+int handle_new_expand(char *temp, char **expanded)
 {
-	char	name[100];
+	if (new_expanded(temp, expanded) == -1)
+	{
+		free(temp);
+		return (-1);
+	}
+	return (0);
+}
+
+int oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int *s)
+{
 	char	*temp;
-	char	*new_expanded;
 	char	*value;
-	int		name_len = 0;
+	char	name[100];
+	int		indx;
 
 	temp = ft_strndup(&str[*s], i - *s);
 	if (!temp)
 		return (-1);
-	new_expanded = ft_strjoin(*expanded, temp);
-	if (!new_expanded)
+	if (handle_new_expand(temp, expanded))
 		return (-1);
-	free(temp);
-	free(*expanded);
-	*expanded = new_expanded;
 	i++;
+	indx = 0;
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 	{
-		if (name_len < (int)sizeof(name) - 1)
-		{
-			name[name_len++] = str[i];
-		}
-		i++;
+		if (indx < (int)sizeof(name) - 1)
+			name[indx++] = str[i++];
 	}
-	name[name_len] = '\0';
-	value = get_value(mini->env, name);
-	if (value)
-	{
-		temp = ft_strjoin(*expanded, value);
-		if (!temp)
-			return (-1);
-		free(*expanded);
-		*expanded = temp;
-	}
+	name[indx] = '\0';
+	value = NULL;
+	if (handle_value(mini, value, expanded, temp, name))
+		return (-1);
 	*s = i;
-	return i;
-} 
+	return (i);
+}
+
+int expand_variable(t_shell *mini, char *str, char **expanded, int i, int *s)
+{
+	if (str[i] == '$')
+		i = oh_its_a_dollar(mini, str, expanded, i, s);
+	if (str[i] == '~')
+		i = tildes_home(mini, str, expanded, i, s);
+	return (i);
+}

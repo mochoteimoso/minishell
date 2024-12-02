@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 11:07:25 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:59:44 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 	if (split_input_by_pipes(input, mini))
 		return (1);
 	if (parse_input(mini))
+	{
+		clean_cmds(mini->cmds);
 		return (1);
+	}
 	return (0);
 }
 
@@ -91,7 +94,7 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	{
 		i = handle_cmd_args(mini, cmd, i);
 		if (i == -1)
-			return (-1);
+			return (1);
 	}
 	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
