@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 10:34:40 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:46:47 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 
 int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
+
+
+int	count_if_redirection(t_cmd *cmd, int i)
+{
+	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+		i++;
+	while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) &&
+		is_redirection(cmd, i))
+		i++;
+	return (i);
+}
 
 // Counts how many command arguments the string contains
 int	count_args(t_cmd *cmd, int i)
@@ -28,34 +39,28 @@ int	count_args(t_cmd *cmd, int i)
 		if (is_redirection(cmd, i))
 		{
 			i++;
-			while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-				i++;
-			while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) && is_redirection(cmd, i))
-				i++;
+			i = count_if_redirection(cmd, i);
 		}
 		else
 		{
 			args_count++;
-			while (cmd->segment[i]&& !ft_isspace(cmd->segment[i]) &&
+			while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) &&
 			!is_redirection(cmd, i))
 				i++;
 		}
-		while (cmd->segment[i]&& ft_isspace(cmd->segment[i]))
+		while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 			i++;
 	}
 	return (args_count);
-
 }
 
 // Counts how many command arguments the string contains
 
 int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 {
-	int		arg_len;
-	char	*arg_start;
-	int		args_count;
-	int		arg_index;
-	char	*expanded;
+	int			args_count;
+	int			arg_index;
+	t_expand	arg;
 
 	arg_index = 0;
 	args_count = count_args(cmd, i);
@@ -73,22 +78,19 @@ int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 	while (cmd->segment[i] && arg_index < args_count + 1 && !is_redirection(cmd, i))
 	{
 		if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
-			i = arg_in_quotes(cmd->segment, i, &arg_start, &arg_len);
+			i = arg_in_quotes(mini, cmd->segment, i, &arg);
 		else
-			i = arg_no_quotes(cmd, i, &arg_start, &arg_len);
-		expanded = expand_var(mini, ft_strndup(arg_start, arg_len));
-		if (!expanded)
+			i = arg_no_quotes(mini, cmd, i, &arg);
+		if (i == -1)
+			return (-1);
+		arg.len = ft_strlen(arg.value);
+		if (!arg.value || append_to_array(cmd, arg.value, arg.len, &arg_index) == -1)
 		{
+			free(arg.value);
 			ft_free_array(cmd->args);
 			return (-1);
 		}
-		if (append_to_array(cmd, expanded, ft_strlen(expanded), &arg_index) == -1)
-		{
-			free(expanded);
-			ft_free_array(cmd->args);
-			return (-1);
-		}
-		free(expanded);
+		free(arg.value);
 		i = skip_whitespace(cmd->segment, i);
 	}
 	cmd->args[arg_index] = NULL;
