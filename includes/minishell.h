@@ -154,10 +154,17 @@ int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
-int		skip_whitespace(char *str, int i);
 int		arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len);
 int		arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, char **start, int *len);
 int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
+int		skip_whitespace(char *str, int i);
+void	finalizer(t_expand *arg, char **start, int *len);
+
+	/*handle_cmd_array_utils.c*/
+int		add_char(char *str, t_expand *arg);
+int		the_arg(t_expand *arg, int i);
+void	what_quote(char *str, t_expand *arg);
+int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 
 	/*split_inputs.c*/
 

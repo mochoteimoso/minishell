@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/29 13:57:32 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:20:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	*get_value(t_env *env, char *name)
 			if (!value)
 			{
 				ft_putendl_fd("malloc fail", 2);
-				return (char *) -1;
+				return ((char *) -1);
 			}
 			return (value);
 		}

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/02 09:17:26 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:54:16 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,91 +19,10 @@ int	skip_whitespace(char *str, int i)
 	return (i);
 }
 
-void	what_quote(char *str, t_expand *arg)
-{
-	if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
-	{
-		if (str[arg->i + 1] != '\0' || str[arg->i] != ' ' )
-		{
-			arg->sgl = 0;
-			arg->dbl = 0;
-			arg->i++;
-			return ;
-		}
-		else
-		{
-			arg->i++;
-			return ;
-		}
-	}
-	if (str[arg->i] == '\'' && !arg->dbl)
-	{
-		arg->sgl = 1;
-		arg->i++;
-	}
-	if (str[arg->i] == '"' && !arg->sgl)
-	{
-		arg->dbl = 1;
-		arg->i++;
-	}
-}
-
-int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
-{
-	int		s_exp;
-	char	*temp;
-	char	*new_res;
-
-	s_exp = arg->i;
-	temp = ft_strdup("");
-	if (!temp)
-		return (-1);
-	arg->i = oh_its_a_dollar(mini, str, &temp, arg->i, &s_exp);
-	if (arg->i == -1)
-	{
-		free(temp);
-		return (-1);
-	}
-	new_res = ft_strjoin(arg->value, temp);
-	if (!new_res)
-	{
-		free(temp);
-		return (-1);
-	}
-	free(arg->value);
-	free(temp);
-	arg->value = new_res;
-	return (0);
-}
-
-int	add_char(char *str, t_expand *arg)
-{
-	char	*temp;
-
-	temp = ft_strjoin(arg->value, ft_strndup(&str[arg->i], 1));
-	if (!temp)
-		return (1);
-	free(arg->value);
-	arg->value = temp;
-	arg->i++;
-	return (0);
-}
-
 void	finalizer(t_expand *arg, char **start, int *len)
 {
 	*start = arg->value;
 	*len = ft_strlen(arg->value);
-}
-
-int	the_arg(t_expand *arg, int i)
-{
-	arg->sgl = 0;
-	arg->dbl = 0;
-	arg->i = i;
-	arg->value = ft_strdup("");
-	if (!arg->value)
-		return (1);
-	return (0);
 }
 
 int	arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len)
