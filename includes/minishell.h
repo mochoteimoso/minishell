@@ -63,6 +63,7 @@ typedef struct s_shell
 	int		cmd_count;
 	char	**pending;
 	int		*pids;
+	int		**pipes;
 	int		prev_pipe;
 	int		stdin_saved;
 	int		stdout_saved;
@@ -179,15 +180,15 @@ int		execute_pipeline(t_shell *mini);
 
 	/*parent_process_utils.c*/
 int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
-void	close_fds_and_pipes(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
+void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
 
 	/*child_process.c*/
-int		fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i);
+int		fork_and_execute(t_shell *mini, t_cmd *cmd, int i);
 
 	/*child_process_utils.c*/
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
-int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
+int		dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
 
 	/*handle_builtins.c*/
@@ -204,11 +205,14 @@ int		reset_fds(t_shell *mini);
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
 void	error(char *str);
+void	ft_free_int_arr_with_size(int **array, int size);
 void	clean_cmds(t_cmd **cmds);
 
 	/*exit_handler.c*/
-void	exit_for_pipes(t_shell *mini, int pipe_fd[2], int i, int exit_status);
-void	exit_handler(t_shell *mini, int exit_status);
+//void	exit_for_pipes(t_shell *mini, int pipe_fd[2], int i, int exit_status);
+//void	exit_for_pipes(t_shell *mini, int i, int exit_status);
+void	exit_handler(t_shell *mini, int i, int exit_status);
+void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	cleaner_for_main(t_shell *mini);
 
 /*signals.c*/
