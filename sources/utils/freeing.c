@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/26 11:47:58 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:13:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,21 @@ void	ft_free_int_arr(int **array)
 	if (!array)
 		return ;
 	while (array[a] != NULL)
+	{
+		free(array[a]);
+		a++;
+	}
+	free(array);
+}
+
+void ft_free_int_arr_with_size(int **array, int size)
+{
+	int	a;
+
+	a = 0;
+	if (!array)
+		return;
+	while (a < size)
 	{
 		free(array[a]);
 		a++;
