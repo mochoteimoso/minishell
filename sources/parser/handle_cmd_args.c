@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/28 15:56:26 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:07:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,9 @@ int	count_args(t_cmd *cmd, int i)
 
 int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 {
-	int		arg_len;
-	char	*arg_start;
-	int		args_count;
-	int		arg_index;
+	int			args_count;
+	int			arg_index;
+	t_expand	arg;
 
 	arg_index = 0;
 	args_count = count_args(cmd, i);
@@ -79,18 +78,19 @@ int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 	while (cmd->segment[i] && arg_index < args_count + 1 && !is_redirection(cmd, i))
 	{
 		if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
-			i = arg_in_quotes(mini, cmd->segment, i, &arg_start, &arg_len);
+			i = arg_in_quotes(mini, cmd->segment, i, &arg);
 		else
-			i = arg_no_quotes(mini, cmd, i, &arg_start, &arg_len);
+			i = arg_no_quotes(mini, cmd, i, &arg);
 		if (i == -1)
 			return (-1);
-		if (append_to_array(cmd, arg_start, arg_len, &arg_index) == -1)
+		arg.len = ft_strlen(arg.value);
+		if (!arg.value || append_to_array(cmd, arg.value, arg.len, &arg_index) == -1)
 		{
+			free(arg.value);
 			ft_free_array(cmd->args);
-			free(arg_start);
 			return (-1);
 		}
-		free(arg_start);
+		free(arg.value);
 		i = skip_whitespace(cmd->segment, i);
 	}
 	cmd->args[arg_index] = NULL;

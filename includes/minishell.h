@@ -23,7 +23,13 @@ typedef enum e_redir_type
 	HEREDOC
 }	t_redir_type;
 
-// linked list for redirects in each command struct
+typedef struct s_vdata
+{
+	char	*value;
+	char	**expanded;
+	char	*temp;
+	char	*name;
+}	t_vdata;
 
 typedef struct s_expand
 {
@@ -31,8 +37,11 @@ typedef struct s_expand
 	int		dbl;
 	int		i;
 	char	*value;
+	int		start;
+	int		len;
 }	t_expand;
 
+// linked list for redirects in each command struct
 typedef struct s_redir
 {
 	char			*file;
@@ -145,20 +154,23 @@ int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
-char	*expand_var(t_shell *mini, char *str);
-int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int *s);
-int 	expand_variable(t_shell *mini, char *str, char **expanded, int i, int *s);
+int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
+int 	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg);
+
+	/*expand_utils.c*/
+char	*get_value(t_env *env, char *name);
+int		handle_value(t_shell *mini, t_vdata *data);
+void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name);
 
 /*handle_cmd_array.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
-int		arg_in_quotes(t_shell *mini, char *str, int i, char **start, int *len);
-int		arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, char **start, int *len);
-int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
+int		arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
+int		arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
+int		append_to_array(t_cmd *cmd, char *arg, int len, int *index);
 int		skip_whitespace(char *str, int i);
-void	finalizer(t_expand *arg, char **start, int *len);
 
 	/*handle_cmd_array_utils.c*/
 int		add_char(char *str, t_expand *arg);

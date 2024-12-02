@@ -6,38 +6,16 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/02 11:20:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:41:47 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*get_value(t_env *env, char *name)
-{
-	t_env	*temp;
-	char	*value;
-
-	temp = env;
-	while (temp)
-	{
-		if (ft_strcmp(temp->name, name) == 0)
-		{
-			value = ft_strdup(temp->value);
-			if (!value)
-			{
-				ft_putendl_fd("malloc fail", 2);
-				return ((char *) -1);
-			}
-			return (value);
-		}
-		temp = temp->next;
-	}
-	return (NULL);
-}
-
 int	new_expanded(char *temp, char **expanded)
 {
 	char	*new_expanded;
+
 	new_expanded = ft_strjoin(*expanded, temp);
 	if (!new_expanded)
 	{
@@ -50,32 +28,18 @@ int	new_expanded(char *temp, char **expanded)
 	return (0);
 }
 
-int we_have_value(char *value, char *temp, char **expanded)
-{
-	if (value)
-	{
-		temp = ft_strjoin(*expanded, value);
-		free(value);
-		if (!temp)
-		{
-			ft_putendl_fd("malloc failed", 2);
-			return (-1);
-		}
-		free(*expanded);
-		*expanded = temp;
-	}
-	return (0);
-}
-
-int	tildes_home(t_shell *mini, char *str, char **expanded, int i, int *s)
+int	tildes_home(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	char	*temp;
+	char	*temp2;
 	char	*value;
 
-	temp = ft_strjoin(*expanded, ft_strndup(&str[*s], i - *s));
+	temp2 = ft_strndup(&str[arg->start], arg->i - arg->start);
+	temp = ft_strjoin(*expanded, temp2);
+	free(temp2);
 	free(*expanded);
 	*expanded = temp;
-	i++;
+	arg->i++;
 	value = get_value(mini->env, "HOME");
 	if (value)
 	{
@@ -83,23 +47,10 @@ int	tildes_home(t_shell *mini, char *str, char **expanded, int i, int *s)
 		free(*expanded);
 		*expanded = temp;
 	}
-	return (i);
+	return (arg->i);
 }
 
-int	handle_value(t_shell *mini, char *value, char **expanded, char *temp, char *name)
-{
-	value = get_value(mini->env, name);
-	if (value == (char *)-1)
-		return (1);
-	if (value)
-	{
-		if (we_have_value(value, temp, expanded) == -1)
-			return (1);
-	}
-	return (0);
-}
-
-int handle_new_expand(char *temp, char **expanded)
+int	handle_new_expand(char *temp, char **expanded)
 {
 	if (new_expanded(temp, expanded) == -1)
 	{
@@ -109,38 +60,41 @@ int handle_new_expand(char *temp, char **expanded)
 	return (0);
 }
 
-int oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int *s)
+int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	char	*temp;
 	char	*value;
 	char	name[100];
 	int		indx;
+	t_vdata	data;
 
-	temp = ft_strndup(&str[*s], i - *s);
+	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
 	if (!temp)
 		return (-1);
 	if (handle_new_expand(temp, expanded))
 		return (-1);
-	i++;
+	arg->i++;
 	indx = 0;
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+	while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_'))
 	{
-		if (indx < (int)sizeof(name) - 1)
-			name[indx++] = str[i++];
+		if (indx < (int) sizeof(name) - 1)
+			name[indx++] = str[arg->i++];
 	}
 	name[indx] = '\0';
 	value = NULL;
-	if (handle_value(mini, value, expanded, temp, name))
+	init_vdata(&data, expanded, temp, name);
+	if (handle_value(mini, &data))
 		return (-1);
-	*s = i;
-	return (i);
+	arg->start = arg->i;
+	return (arg->i);
 }
 
-int expand_variable(t_shell *mini, char *str, char **expanded, int i, int *s)
+int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
-	if (str[i] == '$')
-		i = oh_its_a_dollar(mini, str, expanded, i, s);
-	if (str[i] == '~')
-		i = tildes_home(mini, str, expanded, i, s);
-	return (i);
+	arg->start = arg->i;
+	if (str[arg->i] == '$')
+		arg->i = oh_its_a_dollar(mini, str, expanded, arg);
+	if (str[arg->i] == '~')
+		arg->i = tildes_home(mini, str, expanded, arg);
+	return (arg->i);
 }

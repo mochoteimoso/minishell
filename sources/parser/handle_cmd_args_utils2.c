@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/02 11:14:55 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:25:18 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 	temp = ft_strdup("");
 	if (!temp)
 		return (-1);
-	arg->i = oh_its_a_dollar(mini, str, &temp, arg->i, &s_exp);
+	arg->start = arg->i;
+	arg->i = oh_its_a_dollar(mini, str, &temp, arg);
 	if (arg->i == -1)
 	{
 		free(temp);
@@ -42,7 +43,7 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 
 void	what_quote(char *str, t_expand *arg)
 {
-	if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
+	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1 && str[arg->i] == '"'))
 	{
 		if (str[arg->i + 1] != '\0' || str[arg->i] != ' ' )
 		{
@@ -57,15 +58,17 @@ void	what_quote(char *str, t_expand *arg)
 			return ;
 		}
 	}
-	if (str[arg->i] == '\'' && !arg->dbl)
+	if (str[arg->i] == '\'' && arg->sgl == 0)
 	{
 		arg->sgl = 1;
 		arg->i++;
+		return ;
 	}
-	if (str[arg->i] == '"' && !arg->sgl)
+	if (str[arg->i] == '"' && arg->dbl == 0)
 	{
 		arg->dbl = 1;
 		arg->i++;
+		return ;
 	}
 }
 
@@ -74,9 +77,13 @@ int	the_arg(t_expand *arg, int i)
 	arg->sgl = 0;
 	arg->dbl = 0;
 	arg->i = i;
+	arg->start = i;
 	arg->value = ft_strdup("");
 	if (!arg->value)
+	{
+		ft_putendl_fd("Malloc fail", 2);
 		return (1);
+	}
 	return (0);
 }
 
