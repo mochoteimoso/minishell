@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 10:37:11 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:55:02 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,66 +19,80 @@ int	skip_whitespace(char *str, int i)
 	return (i);
 }
 
-int	arg_in_quotes(char *str, int i, char **start, int *len)
+int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 {
-	int		s;
-	char	quote;
-	char	*temp;
-	char	*res;
-
-	quote = str[i];
-	s = i + 1;
-	i++;
-	*len = 0;
-	res = ft_strdup("");
-	while (str[i])
+	if (the_arg(arg, i))
+		return (-1);
+	what_quote(str, arg);
+	while (str[arg->i])
 	{
-		if (str[i] == quote)
+		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
+			break ;
+		if ((arg->dbl && str[arg->i] == '$') || (!arg->sgl && str[arg->i] == '$'))
 		{
-			if (str[i + 1] == quote)
-			{
-				i++;
-				continue ;
-			}
-			else
-			{
-				i++;
-				break ;
-			}
+			if (we_have_dollar(mini, arg, str) == -1)
+				return (free(arg->value), -1);
 		}
-		temp = ft_strjoin(res, ft_strndup(&str[i], 1));
-		free(res);
-		res = temp;
-		i++;
+		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
+			what_quote(str, arg);
+		else if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
+			what_quote(str, arg);
+		else if (add_char(str, arg))
+			return (free(arg->value), -1);
 	}
-	*start = res;
-	*len = ft_strlen(res);
+	arg->len = ft_strlen(arg->value);
+	return (arg->i);
+}
+
+static int	no_expanding(t_cmd *cmd, t_expand *arg, int i)
+{
+	char	*temp;
+	char	*temp2;
+
+	temp2 = ft_strndup(&cmd->segment[i], 1);
+	if (!temp2)
+		return (-1);
+	temp = ft_strjoin(arg->value, temp2);
+	free(temp2);
+	if (!temp)
+		return (-1);
+	free(arg->value);
+	arg->value = temp;
 	return (i);
 }
 
-int	arg_no_quotes(t_cmd *cmd, int i, char **start, int *len)
+int	arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 {
-	*start = &cmd->segment[i];
-	*len = 0;
-
-	while (cmd->segment[i] && (!ft_isspace(cmd->segment[i]) ||
-		check_quotes(cmd->segment, i)) && !is_redirection(cmd, i))
+	arg->value = ft_strdup("");
+	if (!arg->value)
+		return (-1);
+	while (cmd->segment[i] && (!ft_isspace(cmd->segment[i])
+			|| check_quotes(cmd->segment, i)) && !is_redirection(cmd, i))
 	{
-		(*len)++;
-		i++;
+		if (cmd->segment[i] == '$' || cmd->segment[i] == '~')
+		{
+			arg->i = i;
+			i = expand_variable(mini, cmd->segment, &arg->value, arg);
+		}
+		else
+		{
+			i = no_expanding(cmd, arg, i);
+			i++;
+		}
+		if (cmd->segment[i] == ' ')
+			break ;
 	}
 	return (i);
 }
 
-int	append_to_array(t_cmd *cmd, char *start, int len, int *index)
+int	append_to_array(t_cmd *cmd, char *arg, int len, int *index)
 {
-	cmd->args[*index] = ft_strndup(start, len);
+	cmd->args[*index] = ft_strndup(arg, len);
 	if (!cmd->args[*index])
 	{
 		ft_putendl_fd("Failed to allocate memory for argument", 2);
 		return (-1);
 	}
-	//printf("before args[%d]: %s\n", *index, cmd->args[*index]);
 	(*index)++;
 	return (0);
 }
