@@ -6,68 +6,40 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 10:33:47 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:45:18 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*get_value(t_env *env, char *name)
+int	new_expanded(char *temp, char **expanded)
 {
-	t_env	*temp;
+	char	*new_expanded;
 
-	temp = env;
-	while (temp)
+	new_expanded = ft_strjoin(*expanded, temp);
+	if (!new_expanded)
 	{
-		if (ft_strcmp(temp->name, name) == 0)
-		{
-			return (temp->value);
-		}
-		temp = temp->next;
+		ft_putendl_fd("malloc failed", 2);
+		return (-1);
 	}
-	return (NULL);
+	free(temp);
+	free(*expanded);
+	*expanded = new_expanded;
+	return (0);
 }
 
-
-static int oh_its_a_dollar(t_shell *mini, char *str, char **expanded, int i, int *s)
+int	tildes_home(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	char	*temp;
-	int		indx;
+	char	*temp2;
 	char	*value;
-	char 	*temp2;
-	char	name[100];
 
-	temp2 = ft_strndup(&str[*s], i - *s);
+	temp2 = ft_strndup(&str[arg->start], arg->i - arg->start);
 	temp = ft_strjoin(*expanded, temp2);
 	free(temp2);
 	free(*expanded);
 	*expanded = temp;
-	i++;
-	indx = 0;
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		name[indx++] = str[i++];
-	name[indx] = '\0';
-	if (indx == 0)
-		return (i);
-	value = get_value(mini->env, name);
-	if (value)
-	{
-		temp = ft_strjoin(*expanded, value);
-		free(*expanded);
-		*expanded = temp;
-	}
-	return (i);
-}
-
-static int	tildes_home(t_shell *mini, char *str, char **expanded, int i, int s)
-{
-	char	*temp;
-	char	*value;
-
-	temp = ft_strjoin(*expanded, ft_strndup(&str[s], i - s));
-	free(*expanded);
-	*expanded = temp;
-	i++;
+	arg->i++;
 	value = get_value(mini->env, "HOME");
 	if (value)
 	{
@@ -75,60 +47,55 @@ static int	tildes_home(t_shell *mini, char *str, char **expanded, int i, int s)
 		free(*expanded);
 		*expanded = temp;
 	}
-	return (i);
+	return (arg->i);
 }
 
-char	*expand_var(t_shell *mini, char *str)
+int	handle_new_expand(char *temp, char **expanded)
 {
-	char	*expanded;
-	char	*temp;
-	char	*temp2;
-	int		i;
-	int		s;
-
-	i = 0;
-	s = 0;
-	expanded = ft_strdup("");
-	while (str[i])
+	if (new_expanded(temp, expanded) == -1)
 	{
-		if (str[i] == '$')
-		{
-			i = oh_its_a_dollar(mini, str, &expanded, i, &s);
-			s = i;
-		}
-		else if (str[i] == '~')
-		{
-			i = tildes_home(mini, str, &expanded, i, s);
-			s = i;
-		}
-		else
-			i++;
-	}
-	temp2 = ft_strndup(&str[s], i - s);
-	temp = ft_strjoin(expanded, temp2);
-	free(expanded);
-	free(temp2);
-	free(str);
-	return (temp);
-}
-
-/*int	expand_or_not(t_shell *mini, t_cmd *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd->args[i])
-	{
-		if (cmd->args[i][0] == '"' || cmd->args[i][0] == '$' || cmd->args[i][0] == '~')
-		{
-			if (cmd->args[i][0] == '"')
-				cmd->args[i]++;
-			cmd->args[i] = expand_var(mini, cmd->args[i]);
-		}
-		else if (cmd->args[i][0] == '\'')
-			cmd->args[i] = ft_strtrim(cmd->args[i], "'");
-		i++;
+		free(temp);
+		return (-1);
 	}
 	return (0);
-} */
+}
+
+int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
+{
+	char	*temp;
+	char	*value;
+	char	name[100];
+	int		indx;
+	t_vdata	data;
+
+	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
+	if (!temp)
+		return (-1);
+	if (handle_new_expand(temp, expanded))
+		return (-1);
+	arg->i++;
+	indx = 0;
+	while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_'))
+	{
+		if (indx < (int) sizeof(name) - 1)
+			name[indx++] = str[arg->i++];
+	}
+	name[indx] = '\0';
+	value = NULL;
+	init_vdata(&data, expanded, temp, name);
+	if (handle_value(mini, &data))
+		return (-1);
+	arg->start = arg->i;
+	return (arg->i);
+}
+
+int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
+{
+	arg->start = arg->i;
+	if (str[arg->i] == '$')
+		arg->i = oh_its_a_dollar(mini, str, expanded, arg);
+	if (str[arg->i] == '~')
+		arg->i = tildes_home(mini, str, expanded, arg);
+	return (arg->i);
+}
 
