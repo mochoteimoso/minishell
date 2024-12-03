@@ -48,6 +48,7 @@ typedef struct s_redir
 	char			*file;
 	char			*delimiter;
 	t_redir_type	type;
+	bool			expand;
 	int				node_ind;
 	struct s_redir	*next;
 }	t_redir;
@@ -180,6 +181,10 @@ int		check_redirects(char *input);
 int		check_pipes(char **input);
 
 /*redirection*/
+	/*get_filename.c*/
+int		parse_filename(t_cmd *cmd, int i, bool *in_quotes, char **filename);
+int		get_filename_length(t_cmd *cmd, int i, bool in_quotes);
+
 	/*redir_ll*/
 t_redir	*list_redir(void);
 t_redir	*redir_add_node(void);
