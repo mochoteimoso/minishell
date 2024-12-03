@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 10:06:36 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:57:25 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	cleaner_for_main(t_shell *mini)
 	clean_cmds(mini->cmds);
 	free(mini->pids);
 	mini->pids = NULL;
-	ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
 	//free(mini);    //when should this be freed?
 	//mini = NULL;
 }
