@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/02 17:16:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:11:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,11 @@ static int	pipe_and_fork(t_shell *mini)
 	t_cmd	*cmd;
 
 	i = 0;
-	if (allocate_pipes(mini))
-		return (1);
+	if (mini->cmd_count > 1)
+	{
+		if (allocate_pipes(mini))
+			return (1);
+	}
 	while (i < mini->cmd_count)
 	{
 		cmd = mini->cmds[i];
@@ -140,8 +143,6 @@ static int	allocate_pipes(t_shell *mini)
 {
 	int	i;
 	
-	if (mini->cmd_count < 2)
-		return (1);
 	mini->pipes = malloc(sizeof(int*) * (mini->cmd_count - 1));
 	if (!mini->pipes)
 	{
