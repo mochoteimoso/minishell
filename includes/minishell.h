@@ -144,7 +144,6 @@ int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 	/*handle_builtins.c*/
 int		built_in_exe(t_shell *mini, t_cmd *cmd);
 int		is_this_built(char *str);
-int		is_this_builtin_cmd(t_cmd *cmd);
 
 	/*pipeline.c*/
 int		execute_pipeline(t_shell *mini);
@@ -233,11 +232,11 @@ void	exit_handler(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	exit_for_single_cmd(t_shell *mini, int exit_status);
 void	cleaner_for_main(t_shell *mini);
-void ft_free_int_arr_with_size(int **array, int size);
 
 	/*freeing*/
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
+void ft_free_int_arr_with_size(int **array, int size);
 void	error(char *str);
 void	clean_cmds(t_cmd **cmds);
 

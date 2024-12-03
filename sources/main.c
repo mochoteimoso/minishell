@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-void printer(t_shell *mini)
+void	printer(t_shell *mini)
 {
 	int i = 0;
 
@@ -43,6 +43,8 @@ void printer(t_shell *mini)
 			redir = redir->next;
 			redir_index++;
 		}
+		printf("fd_in: %d\n", mini->cmds[i]->fd_in);
+		printf("fd_out: %d\n", mini->cmds[i]->fd_out);
 		printf("|*************************************************|");
 		printf("\n");
 		i++;
@@ -92,6 +94,7 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini)
 {
 	char	*input;
+  
 	while (1)
 	{
 		init_sig();
@@ -103,7 +106,7 @@ static int user_prompt(t_shell *mini)
 			if (is_this_empty(input))
 			{
 				free(input);
-				continue;
+				continue ;
 			}
 		add_history(input);
 		if (parse_and_validate_input(input, mini))
@@ -144,5 +147,5 @@ int	main(int argc, char **argv, char **envp)
 		printf("Minishell doesn't take arguments\n");
 		return (1);
 	}
-	return(activate_shell(envp));
+	return (activate_shell(envp));
 }

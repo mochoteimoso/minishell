@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   redir_ll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
 /*   Updated: 2024/11/28 10:04:05 by nzharkev         ###   ########.fr       */
@@ -54,10 +54,10 @@ t_redir	*list_redir(void)
 	return (ll);
 }
 
-void redir_update_tail(t_cmd *cmd)
+void	redir_update_tail(t_cmd *cmd)
 {
-	t_redir *new;
-	t_redir *temp;
+	t_redir	*new;
+	t_redir	*temp;
 
 	temp = NULL;
 	new = redir_add_node();
@@ -89,6 +89,5 @@ int	redirll_head_tail(t_cmd *cmd)
 			return (-1);
 		}
 	}
-	return(0);
+	return (0);
 }
-

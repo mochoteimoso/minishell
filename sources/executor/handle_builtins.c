@@ -35,25 +35,6 @@ int	built_in_exe(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
-int	is_this_builtin_cmd(t_cmd *cmd)
-{
-	if (ft_strcmp(cmd->command, "exit") == 0)
-		return (1);
-	else if (ft_strcmp(cmd->command, "cd") == 0)
-		return (1);
-	else if (ft_strcmp(cmd->command, "echo") == 0)
-		return (1);
-	else if (ft_strcmp(cmd->command, "env") == 0)
-		return (1);
-	else if (ft_strcmp(cmd->command, "pwd") == 0)
-		return (1);
-	else if (ft_strcmp(cmd->command, "unset") == 0)
-		return (1);
-	else if (ft_strcmp(cmd->command, "export") == 0)
-		return (1);
-	return (0);
-}
-
 int	is_this_built(char *str)
 {
 	if (ft_strcmp(str, "exit") == 0)

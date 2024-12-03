@@ -93,6 +93,7 @@ int	append_to_array(t_cmd *cmd, char *arg, int len, int *index)
 		ft_putendl_fd("Failed to allocate memory for argument", 2);
 		return (-1);
 	}
+	//printf("before args[%d]: %s\n", *index, cmd->args[*index]);
 	(*index)++;
 	return (0);
 }
