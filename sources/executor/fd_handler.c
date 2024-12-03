@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:18:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 14:30:23 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:35:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	save_fds(t_shell *mini)
 
 int	reset_fds(t_shell *mini)
 {
-	if (mini->stdin_saved != -1)
+	if (mini->stdin_saved != -1 && mini->stdin_saved != STDIN_FILENO)
 	{
 		if (dup2_and_close(mini->stdin_saved, STDIN_FILENO))
 		{
@@ -54,7 +54,7 @@ int	reset_fds(t_shell *mini)
 		}
 		mini->stdin_saved = -1;
 	}
-	if (mini->stdout_saved != -1)
+	if (mini->stdout_saved != -1 && mini->stdin_saved != STDOUT_FILENO)
 	{
 		if (dup2_and_close(mini->stdout_saved, STDOUT_FILENO))
 		{
