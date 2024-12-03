@@ -17,12 +17,12 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)executor/child_process.c\
 	$(SRC_DIR)executor/child_process_utils.c\
 	$(SRC_DIR)executor/fd_handler.c\
-	$(SRC_DIR)executor/find_cmd_path.c\
 	$(SRC_DIR)executor/handle_builtins.c\
 	$(SRC_DIR)executor/pipeline.c\
 	$(SRC_DIR)executor/pipeline_utils.c\
 	$(SRC_DIR)parser/expand.c\
 	$(SRC_DIR)parser/expand_utils.c\
+	$(SRC_DIR)parser/find_cmd_path.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils2.c\

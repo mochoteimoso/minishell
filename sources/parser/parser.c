@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 10:21:17 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:12:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,14 +202,3 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	return (i);
 }
 
-static int	no_args(t_cmd *cmd, int i)
-{
-	cmd->args = ft_calloc(2, sizeof(char *));
-	if (!cmd->args)
-		return (-1);
-	cmd->args[0] = ft_strdup(cmd->command);
-	if (!cmd->args)
-		return (-1);
-	cmd->args[1] = NULL;
-	return (i);
-}

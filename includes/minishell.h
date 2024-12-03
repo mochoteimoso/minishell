@@ -236,7 +236,7 @@ void	cleaner_for_main(t_shell *mini);
 	/*freeing*/
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
-void ft_free_int_arr_with_size(int **array, int size);
+void 	ft_free_int_arr_with_size(int **array, int size);
 void	error(char *str);
 void	clean_cmds(t_cmd **cmds);
 

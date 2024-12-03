@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/03 10:22:53 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:12:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,6 @@ void	clean_cmds(t_cmd **cmds)
 	}
 	free(cmds);
 	cmds = NULL;
-}
-
-void	ft_free_int_arr(int **array)
-{
-	int	a;
-
-	a = 0;
-	if (!array)
-		return ;
-	while (array[a] != NULL)
-	{
-		free(array[a]);
-		a++;
-	}
-	free(array);
 }
 
 void	ft_free_int_arr(int **array)
