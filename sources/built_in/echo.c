@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 10:47:29 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:02:30 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	built_echo(t_cmd *cmd)
 	while (cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
-		printf(" ");
+		if (cmd->args[i + 1])
+			printf(" ");
 		i++;
 	}
 	if (nl)
