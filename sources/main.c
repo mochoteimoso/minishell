@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/03 13:35:16 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:58:28 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,8 @@ static int user_prompt(t_shell *mini)
 			continue ;
 		}
 		printer(mini);
-		if (execute_pipeline(mini))
-			ft_putendl_fd("execution failed", 2);
+		execute_pipeline(mini);
+		//ft_putendl_fd("execution failed", 2);
 		//free(input);
 	}
 	return (0);
