@@ -29,6 +29,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)redirection/handle_redirections.c\
 	$(SRC_DIR)redirection/redirector.c\
 	$(SRC_DIR)redirection/open_files.c\
+	$(SRC_DIR)redirection/get_filename.c\
 	$(SRC_DIR)executor/pipeline.c\
 	$(SRC_DIR)executor/pipeline_utils.c\
 	$(SRC_DIR)executor/child_process.c\
