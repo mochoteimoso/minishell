@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:18:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 15:48:00 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:34:59 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	open_input_file(t_cmd *cmd, char *input_file)
 		if (access(input_file, F_OK) != 0)
 		{
 			ft_putstr_fd(input_file, 2);
-			ft_putendl_fd(": No such file or directory", 2);	
+			ft_putendl_fd(": No such file or directory", 2);
 		}
 		else
 		{
