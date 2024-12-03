@@ -88,5 +88,5 @@ void	initialize_command_struct(t_cmd *cmd)
 	cmd->redir_tail = NULL;
 	cmd->fd_in = -1;
 	cmd->fd_out = -1;
-	cmd->exit_status = 0;
+	cmd->cmd_exit = 0;
 }
