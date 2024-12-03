@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:10:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 15:48:32 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:53:53 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,16 @@ static int	resolve_input_fd(t_cmd *cmd)
 		if (temp->type == 0 || temp->type == 3)
 		{
 			if (fd_in != -1)
+			{
 				close(fd_in);
+				fd_in = -1;
+			}
 			if (temp->type == 0)
 				fd_in = open_input_file(cmd, temp->file);
 			else if (temp->type == 3)
 				fd_in = open_heredoc(cmd, temp->delimiter);
+			if (fd_in == -2)
+				return (-2);
 		}
 		temp = temp->next;
 	}
@@ -81,7 +86,10 @@ static int	resolve_output_fd(t_cmd *cmd)
 		if (temp->type == 1 || temp->type == 2)
 		{
 			if (fd_out != -1)
+			{
 				close(fd_out);
+				fd_out = -1;
+			}
 			if (temp->type == 1)
 				fd_out = open_output_file(cmd, temp->file);
 			else if (temp->type == 2)
