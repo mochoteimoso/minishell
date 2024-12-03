@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 09:51:06 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:46:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 {
 	int	ec;
 
-	(void)cmd;
 	ft_putstr_fd("exit\n", 2);
 	ec = 0;
 	if (cmd->args[1])
@@ -46,7 +45,7 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 			free(mini);
 			exit(2);
 		}
-		else if (cmd->args[2] && cmd->args[3])
+		else if (cmd->args[2])
 		{
 			ft_putstr_fd("exit: too many arguments\n", 2);
 			mini->exit_stat = 1;

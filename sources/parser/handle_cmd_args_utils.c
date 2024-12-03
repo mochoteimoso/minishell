@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/02 16:49:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:29:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 		{
 			arg->i = i;
 			i = expand_variable(mini, cmd->segment, &arg->value, arg);
+			printf("segment[%d]: {%c}\n", i, cmd->segment[i]);
 		}
 		else
 		{
@@ -93,7 +94,6 @@ int	append_to_array(t_cmd *cmd, char *arg, int len, int *index)
 		ft_putendl_fd("Failed to allocate memory for argument", 2);
 		return (-1);
 	}
-	//printf("before args[%d]: %s\n", *index, cmd->args[*index]);
 	(*index)++;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/02 15:41:12 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:17:54 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,14 @@ static int	we_have_value(char *value, char *temp, char **expanded)
 
 int	handle_value(t_shell *mini, t_vdata *data)
 {
+	// if (ft_strcmp(data->name, "?") == 0)
+	if (data->name[0] == '?')
+	{
+		data->value = ft_itoa(mini->exit_stat);
+		if (we_have_value(data->value, data->temp, data->expanded) == -1)
+			return (1);
+		return (0);
+	}
 	data->value = get_value(mini->env, data->name);
 	if (data->value == (char *)-1)
 		return (1);

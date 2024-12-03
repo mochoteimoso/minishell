@@ -6,15 +6,48 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/18 16:32:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:15:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// int			get_cmd_path(t_shell *mini, t_cmd *cmd);
-// static char	*search_command_in_paths(char **paths, t_cmd *cmd);
-// static int	check_abs_path(t_cmd *cmd);
+int			get_cmd_path(t_shell *mini, t_cmd *cmd);
+static char	*search_command_in_paths(char **paths, t_cmd *cmd);
+static int	check_abs_path(t_shell *mini, t_cmd *cmd);
+void		cmd_error_and_exit_stat(t_shell *mini, t_cmd *cmd, int exit_status);
+
+// Resolves absolute path for command
+
+int	get_cmd_path(t_shell *mini, t_cmd *cmd)
+{
+	char	*paths_str;
+	char	**paths;
+	t_env	*temp;
+
+	if (check_abs_path(mini, cmd) != 1)
+		return (mini->exit_stat != 0);
+	temp = mini->env;
+	while (temp)
+	{
+		if (ft_strncmp(temp->name, "PATH", 4) == 0)
+			paths_str = temp->value;
+		temp = temp->next;
+	}
+	paths = ft_split(paths_str, ':');
+	if (!paths)
+	{
+		perror("Failed to split PATH");
+		return (1);
+	}
+	cmd->cmd_path = search_command_in_paths(paths, cmd);
+	if (!cmd->cmd_path)
+	{
+		cmd_error_and_exit_stat(mini, cmd, 127);
+		return (1);
+	}
+	return (0);
+}
 
 // Tests each possible path until finds one that works,
 // returns correct absolute path
@@ -54,53 +87,30 @@ static int	check_abs_path(t_shell *mini, t_cmd *cmd)
 	if (cmd->command[0] == '/' || cmd->command[0] == '.')
 	{
 		if (access(cmd->command, X_OK) == 0)
+		{
+			cmd->cmd_path = cmd->command;
 			return (0);
+		}
 		if (access(cmd->command, F_OK) == 0 && access(cmd->command, X_OK) != 0)
 		{
 			ft_putstr_fd(cmd->command, 2);
 			ft_putendl_fd(": Permission denied", 2);
 			mini->exit_stat = 126;
-			return (126);
 		}
 		else
 		{
 			ft_putstr_fd(cmd->command, 2);
 			ft_putendl_fd(": command not found", 2);
 			mini->exit_stat = 127;
-			return (127);
 		}
+		return (-1);
 	}
 	return (1);
 }
 
-int	get_cmd_path(t_shell *mini, t_cmd *cmd)
+void	cmd_error_and_exit_stat(t_shell *mini, t_cmd *cmd, int exit_status)
 {
-	char	*paths_str;
-	char	**paths;
-	t_env	*temp;
-
-	if (check_abs_path(cmd) == 0)
-		cmd->cmd_path = cmd->command;
-	else if (check_abs_path(cmd) != 1)
-		return (check_abs_path(cmd));
-	else
-	{
-		temp = mini->env;
-		while (temp)
-		{
-			if (ft_strncmp(temp->name, "PATH", 4) == 0)
-				paths_str = temp->value;
-			temp = temp->next;
-		}
-		paths = ft_split(paths_str, ':');
-		if (!paths)
-		{
-			perror("Failed to split PATH");
-			return (1);
-		}
-		cmd->cmd_path = search_command_in_paths(paths, cmd);
-		if (!cmd->cmd_path)
-			return (1);
-	}
-	return (0);
+	ft_putstr_fd(cmd->command, 2);
+	ft_putendl_fd(": command not found", 2);
+	mini->exit_stat = exit_status;
 }

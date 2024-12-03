@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 16:33:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:46:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*Prints the given arguments to the standard output.
 Supports the -n flag to suppress the newline at the end.*/
 
-int	built_echo(t_shell *mini, t_cmd *cmd)
+int	built_echo(t_cmd *cmd)
 {
 	int	nl;
 	int	i;
@@ -29,16 +29,12 @@ int	built_echo(t_shell *mini, t_cmd *cmd)
 			nl = 0;
 			i++;
 		}
-		else
-		{
-			printf("%d\n", mini->exit_stat);
-			return (0);
-		}
 	}
 	while (cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
-		printf(" ");
+		if (cmd->args[i + 1])
+			printf(" ");
 		i++;
 	}
 	if (nl)

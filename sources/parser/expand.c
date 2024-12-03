@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/02 15:41:47 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:16:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	char	name[100];
 	int		indx;
 	t_vdata	data;
-
 	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
 	if (!temp)
 		return (-1);
@@ -75,7 +74,7 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		return (-1);
 	arg->i++;
 	indx = 0;
-	while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_'))
+	while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_' || str[arg->i] == '?'))
 	{
 		if (indx < (int) sizeof(name) - 1)
 			name[indx++] = str[arg->i++];
@@ -91,10 +90,14 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 
 int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
+	int	cont;
 	arg->start = arg->i;
+	cont = arg->start;
 	if (str[arg->i] == '$')
 		arg->i = oh_its_a_dollar(mini, str, expanded, arg);
 	if (str[arg->i] == '~')
 		arg->i = tildes_home(mini, str, expanded, arg);
+	if (str[cont + 1] == '?')
+		arg->i = cont + 2;
 	return (arg->i);
 }
