@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:18:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/27 10:42:20 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:30:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,25 @@ int	reset_fds(t_shell *mini)
 {
 	if (mini->stdin_saved != -1)
 	{
-		if (dup2(mini->stdin_saved, STDIN_FILENO) == -1)
+		if (dup2_and_close(mini->stdin_saved, STDIN_FILENO))
 		{
 			perror("Failed to restore original STDIN");
-			close(mini->stdin_saved);
 			mini->exit_stat = 1;
+			mini->stdin_saved = -1;
 			return (1);
 		}
-		close(mini->stdin_saved);
+		mini->stdin_saved = -1;
 	}
 	if (mini->stdout_saved != -1)
 	{
-		if (dup2(mini->stdout_saved, STDOUT_FILENO) == -1)
+		if (dup2_and_close(mini->stdout_saved, STDOUT_FILENO))
 		{
 			perror("Failed to restore original STDOUT");
-			close(mini->stdout_saved);
 			mini->exit_stat = 1;
+			mini->stdout_saved = -1;
 			return (1);
 		}
-		close(mini->stdout_saved);
+		mini->stdout_saved = -1;
 	}
 	return (0);
 }
