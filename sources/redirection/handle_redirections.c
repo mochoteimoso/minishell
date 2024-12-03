@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 11:15:18 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:14:16 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,82 @@ bool	is_redirection(t_cmd *cmd, int i)
 
 int	handle_redirect_in(t_cmd *cmd, int i)
 {
+	char	*filename;
+	bool	in_quotes;
+
+	filename = NULL;
+	in_quotes = false;
+	i++;
+	i = parse_filename(cmd, i, &in_quotes, &filename);
+	if (i == -1 || !filename)
+		return (-1);
+	cmd->redir_tail->file = filename;
+	cmd->redir_tail->type = REDIRECT_IN;
+	return (i);
+}
+
+// Handles > redirection, finds the filename and copies data 
+// to the redir linked list
+
+int	handle_redirect_out(t_cmd *cmd, int i)
+{
+	bool	in_quotes;
+	char	*filename;
+
+	in_quotes = false;
+	filename = NULL;
+	i++;
+	i = parse_filename(cmd, i, &in_quotes, &filename);
+	if (i == -1 || !filename)
+		return (-1);
+	cmd->redir_tail->file = filename;
+	cmd->redir_tail->type = REDIRECT_OUT;
+	return (i);
+}
+
+// Handles heredoc, finds the delimiter and copies data to the redir linked list
+
+int	handle_heredoc(t_cmd *cmd, int i)
+{
+	bool	in_quotes;
+	char	*filename;
+
+	in_quotes = false;
+	filename = NULL;
+	i+=2;
+	i = parse_filename(cmd, i, &in_quotes, &filename);
+	if (i == -1 || !filename)
+		return (-1);
+	cmd->redir_tail->file = filename;
+	cmd->redir_tail->type = REDIRECT_OUT;
+	if (in_quotes)
+		cmd->redir_tail->expand = false;
+	else
+		cmd->redir_tail->expand = true;
+	return (i);
+}
+
+// Handles append redirection, finds the filename and copies data 
+// to the redir linked list
+
+int	handle_append(t_cmd *cmd, int i)
+{
+	bool	in_quotes;
+	char	*filename;
+
+	in_quotes = false;
+	filename = NULL;
+	i++;
+	i = parse_filename(cmd, i, &in_quotes, &filename);
+	if (i == -1 || !filename)
+		return (-1);
+	cmd->redir_tail->file = filename;
+	cmd->redir_tail->type = APPEND;
+	return (i);
+}
+
+/*int	handle_redirect_in(t_cmd *cmd, int i)
+{
 	char	*filename_start;
 	int		filename_length;
 
@@ -58,9 +134,6 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 	cmd->redir_tail->type = REDIRECT_IN;
 	return (i);
 }
-
-// Handles > redirection, finds the filename and copies data 
-// to the redir linked list
 
 int	handle_redirect_out(t_cmd *cmd, int i)
 {
@@ -89,39 +162,6 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 	return (i);
 }
 
-// Handles heredoc, finds the delimiter and copies data to the redir linked list
-
-int	handle_heredoc(t_cmd *cmd, int i)
-{
-	char	*delimiter_start;
-	int		delimiter_length;
-
-	delimiter_length = 0;
-	i++;
-	i++;
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-		i++;
-	delimiter_start = &cmd->segment[i];
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
-		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
-		&& cmd->segment[i] != '$')
-	{
-		delimiter_length++;
-		i++;
-	}
-	cmd->redir_tail->delimiter = ft_strndup(delimiter_start, delimiter_length);
-	if (!cmd->redir_tail->delimiter)
-	{
-		ft_putendl_fd("Failed to allocate memory for heredoc delimiter", 2);
-		return (-1);
-	}
-	cmd->redir_tail->type = HEREDOC;
-	return (i);
-}
-
-// Handles append redirection, finds the filename and copies data 
-// to the redir linked list
-
 int	handle_append(t_cmd *cmd, int i)
 {
 	char	*filename_start;
@@ -149,3 +189,32 @@ int	handle_append(t_cmd *cmd, int i)
 	cmd->redir_tail->type = APPEND;
 	return (i);
 }
+
+int	handle_heredoc(t_cmd *cmd, int i)
+{
+	char	*delimiter_start;
+	int		delimiter_length;
+
+	delimiter_length = 0;
+	i++;
+	i++;
+	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+		i++;
+	delimiter_start = &cmd->segment[i];
+	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
+		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
+		&& cmd->segment[i] != '$')
+	{
+		delimiter_length++;
+		i++;
+	}
+	cmd->redir_tail->delimiter = ft_strndup(delimiter_start, delimiter_length);
+	if (!cmd->redir_tail->delimiter)
+	{
+		ft_putendl_fd("Failed to allocate memory for heredoc delimiter", 2);
+		return (-1);
+	}
+	cmd->redir_tail->type = HEREDOC;
+	return (i);
+} */
+
