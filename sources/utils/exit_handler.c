@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/02 18:22:41 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:06:36 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void	exit_handler(t_shell *mini, int i, int exit_status)
 	clean_cmds(mini->cmds);
 	free(mini->pids);
 	mini->pids = NULL;
-	ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
+	if (mini->cmd_count > 1)
+		ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
 	free(mini);
 	mini = NULL;
 	exit (exit_status);
@@ -63,7 +64,8 @@ void	exit_for_success(t_shell *mini, int i, int exit_status)
 	clean_env(mini->env, mini->pending);
 	clean_cmds(mini->cmds);
 	free(mini->pids);
-	ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
+	if (mini->cmd_count > 1)
+		ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
 	mini->pids = NULL;
 	free(mini);
 	mini = NULL;
