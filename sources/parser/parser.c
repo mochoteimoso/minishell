@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/28 15:59:44 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:21:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	single_redirect(t_cmd *cmd, int i);
 
 int	parse_and_validate_input(char *input, t_shell *mini)
 {
-	if (validate_input_syntax(input))
+	if (validate_input_syntax(&input))
 		return (1);
 	if (prepare_command_structs(mini, input))
 		return (1);

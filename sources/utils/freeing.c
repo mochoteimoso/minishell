@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 13:06:43 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:22:53 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,20 @@ void	ft_free_int_arr(int **array)
 	free(array);
 }
 
+void ft_free_int_arr_with_size(int **array, int size)
+{
+	int	a;
+
+	a = 0;
+	if (!array)
+		return;
+	while (a < size)
+	{
+		free(array[a]);
+		a++;
+	}
+	free(array);
+}
 
 void	cleaner(t_shell *mini)
 {
@@ -108,3 +122,4 @@ void	error(char *str)
 {
 	ft_putstr_fd(str, 2);
 }
+

@@ -62,7 +62,7 @@ typedef struct s_cmd
 	t_redir *redir_tail;
 	int		fd_in;
 	int		fd_out;
-	int		exit_status;
+	int		cmd_exit;
 }	t_cmd;
 
 typedef struct s_env
@@ -80,6 +80,7 @@ typedef struct s_shell
 	int		cmd_count;
 	char	**pending;
 	int		*pids;
+	int		**pipes;
 	int		prev_pipe;
 	int		stdin_saved;
 	int		stdout_saved;
@@ -100,7 +101,7 @@ int		built_export(t_shell *mini, t_cmd *cmd);
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
 	/*unset.c*/
-int	built_unset(t_shell *mini, t_cmd *cmd);
+int		built_unset(t_shell *mini, t_cmd *cmd);
 
 /*built_in/env*/
 	/*env.c*/
@@ -121,10 +122,22 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new);
 	/*cmd_array.c*/
 int		count_pipes(char *line);
 int		prepare_command_structs(t_shell *mini, char *input);
-//t_cmd	**allocate_cmd_array(int command_count);
 void	initialize_command_struct(t_cmd *cmd);
 
 /*executor*/
+	/*child_process.c*/
+int		fork_and_execute(t_shell *mini, t_cmd *cmd, int i);
+void	close_unused_fds(t_shell *mini, int i);
+
+	/*child_process.c*/
+int		dup_input(t_shell *mini, t_cmd *cmd, int i);
+int		dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
+int		dup2_and_close(int old_fd, int new_fd);
+
+	/*fd_handlers.c*/
+int		save_fds(t_shell *mini);
+int		reset_fds(t_shell *mini);
+
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
@@ -137,14 +150,10 @@ int		is_this_builtin_cmd(t_cmd *cmd);
 int		execute_pipeline(t_shell *mini);
 
 	/*pipeline_utils.c*/
-int		dup_input(t_shell *mini, t_cmd *cmd, int i);
-int		dup_output(t_cmd *cmd, int pipe_fd[2], int count, int i);
-int		dup2_and_close(int old_fd, int new_fd);
-void	close_pipe_fds(int pipe_fd[2]);
-void	close_pipes(t_shell *mini, int pipe_fd[2]);
-	/*fd_handlers.c*/
-int		save_fds(t_shell *mini);
-int		reset_fds(t_shell *mini);
+int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
+void	close_fds_and_pipes(t_shell *mini, int i);
+void	wait_children(t_shell *mini);
+
 /*parser*/
 	/*parser.c*/
 int		parse_input(t_shell *mini);
@@ -162,7 +171,7 @@ char	*get_value(t_env *env, char *name);
 int		handle_value(t_shell *mini, t_vdata *data);
 void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name);
 
-/*handle_cmd_array.c*/
+	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 
@@ -172,33 +181,17 @@ int		arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 int		append_to_array(t_cmd *cmd, char *arg, int len, int *index);
 int		skip_whitespace(char *str, int i);
 
-	/*handle_cmd_array_utils.c*/
+	/*handle_cmd_array_utils2.c*/
 int		add_char(char *str, t_expand *arg);
 int		the_arg(t_expand *arg, int i);
 void	what_quote(char *str, t_expand *arg);
 int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 
 	/*split_inputs.c*/
-
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 
-	/*syntax_checks.c*/
-int		validate_input_syntax(char *input);
-int 	check_quotes(char *input, int limit);
-int		check_consecutive_pipes(char *input);
-int		check_pipes(char *input);
-int		check_redirects(char *input);
-int		validate_redirect(char *input, int *i, char *type);
-
 /*redirection*/
-	/*redir_ll*/
-t_redir	*list_redir(void);
-t_redir	*redir_add_node(void);
-void	redir_lstadd_back(t_redir **lst, t_redir *new);
-void	redir_update_tail(t_cmd *cmd);
-int		redirll_head_tail(t_cmd *cmd);
-
 	/*handle_redirections.c*/
 bool	is_redirection(t_cmd *cmd, int i);
 int		handle_redirect_in(t_cmd *cmd, int i);
@@ -206,16 +199,43 @@ int		handle_redirect_out(t_cmd *cmd, int i);
 int		handle_heredoc(t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
 
+	/*open_files.c*/
+int		open_input_file(t_cmd *cmd, char *input_file);
+int		open_output_file(t_cmd *cmd, char *output_file);
+int		open_append_file(t_cmd *cmd, char *output_file);
+int		open_heredoc(t_cmd *cmd, char *delimiter);
+
+	/*redir_ll*/
+t_redir	*list_redir(void);
+t_redir	*redir_add_node(void);
+void	redir_lstadd_back(t_redir **lst, t_redir *new);
+void	redir_update_tail(t_cmd *cmd);
+int		redirll_head_tail(t_cmd *cmd);
+
 	/*redirector.c*/
 int		resolve_fd(t_cmd *cmd);
 
-	/*open_files.c*/
-int		open_input_file(char *input_file);
-int		open_output_file(char *output_file);
-int		open_append_file(char *output_file);
-int		open_heredoc(char *delimiter);
+/*syntax*/
+	/*pipe_syntax*/
+int		check_pipes(char **input);
 
-/*utils/freeing*/
+	/*redirection_syntax.c*/
+int		check_redirects(char *input);
+
+	/*syntax_checker.c*/
+int		validate_input_syntax(char **input);
+int		check_quotes(char *input, int limit);
+int		check_non_whitespace(char *str);
+
+/*utils*/
+	/*exit_handler*/
+void	exit_handler(t_shell *mini, int i, int exit_status);
+void	exit_for_success(t_shell *mini, int i, int exit_status);
+void	exit_for_single_cmd(t_shell *mini, int exit_status);
+void	cleaner_for_main(t_shell *mini);
+void ft_free_int_arr_with_size(int **array, int size);
+
+	/*freeing*/
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
 void	error(char *str);
