@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/26 10:02:35 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:14:44 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_redir	*redir_add_node(void)
 	node->delimiter = NULL;
 	node->file = NULL;
 	node->type = 0;
+	node->expand = false;
 	node->next = NULL;
 	return (node);
 }
