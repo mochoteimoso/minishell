@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/01 16:03:56 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:33:32 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	parse_input(t_shell *mini)
 
 // Parses the segment string of each struct
 
-int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
+/*int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 {
 	int		i;
 	bool	cmd_found;
@@ -96,6 +96,43 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	i = handle_redirections(cmd, i);
 	if (i == -1)
 		return (1);
+	return (0);
+} */
+
+int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
+{
+	int		i;
+	bool	cmd_found;
+
+	i = 0;
+	cmd_found = false;
+
+	while (cmd->segment[i])
+	{
+		if (is_redirection(cmd, i))
+		{
+			i = handle_redirections(cmd, i);
+			if (i == -1)
+				return (1);
+			if (is_empty_command(cmd, i))
+				return (1);
+		}
+		else if (!cmd_found)
+		{
+			i = handle_cmd_name(cmd, i);
+			if (i == -1)
+				return (1);
+			cmd_found = true;
+		}
+		else
+		{
+			i = handle_cmd_args(mini, cmd, i);
+			if (i == -1)
+				return (1);
+		}
+	}
+	if (cmd_found && (!cmd->args || !cmd->args[0]))
+		i = no_args(cmd, i);
 	return (0);
 }
 
