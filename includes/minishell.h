@@ -144,6 +144,7 @@ int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 	/*handle_builtins.c*/
 int		built_in_exe(t_shell *mini, t_cmd *cmd);
 int		is_this_built(char *str);
+int		is_this_builtin_cmd(t_cmd *cmd);
 
 	/*pipeline.c*/
 int		execute_pipeline(t_shell *mini);
