@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 13:33:32 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:17:24 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 	if (split_input_by_pipes(input, mini))
 		return (1);
 	if (parse_input(mini))
+	{
+		clean_cmds(mini->cmds);
 		return (1);
+	}
 	return (0);
 }
 
