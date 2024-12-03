@@ -43,7 +43,6 @@ char	**env_to_array(t_env *env)
 		array[i] = ft_strjoin(array[i], "=");
 		array[i] = ft_strjoin(array[i], temp->value);
 		temp = temp->next;
-		// printf("%s\n", array[i]);
 		i++;
 	}
 	// add error handling

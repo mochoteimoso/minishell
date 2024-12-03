@@ -16,11 +16,9 @@
 // static char	*search_command_in_paths(char **paths, t_cmd *cmd);
 // static int	check_abs_path(t_cmd *cmd);
 
-// Resolves absolute path for command and updates in cmd->cmd_path
-
-
 // Tests each possible path until finds one that works,
 // returns correct absolute path
+
 static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 {
 	char	*cmd_path;
@@ -51,7 +49,7 @@ static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 
 // Checks whether command is already an absolute path
 
-static int	check_abs_path(t_cmd *cmd)
+static int	check_abs_path(t_shell *mini, t_cmd *cmd)
 {
 	if (cmd->command[0] == '/' || cmd->command[0] == '.')
 	{
@@ -59,12 +57,16 @@ static int	check_abs_path(t_cmd *cmd)
 			return (0);
 		if (access(cmd->command, F_OK) == 0 && access(cmd->command, X_OK) != 0)
 		{
-			//error_no_permission(cmd->command);
+			ft_putstr_fd(cmd->command, 2);
+			ft_putendl_fd(": Permission denied", 2);
+			mini->exit_stat = 126;
 			return (126);
 		}
 		else
 		{
-			//perror(cmd->command);
+			ft_putstr_fd(cmd->command, 2);
+			ft_putendl_fd(": command not found", 2);
+			mini->exit_stat = 127;
 			return (127);
 		}
 	}

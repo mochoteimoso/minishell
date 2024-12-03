@@ -12,8 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-#include "../../includes/minishell.h"
-
 int			fork_and_execute(t_shell *mini, t_cmd *cmd, int i);
 static void	execute_forked_builtin_cmd(t_shell *mini, t_cmd *cmd, int i);
 static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd, int i);

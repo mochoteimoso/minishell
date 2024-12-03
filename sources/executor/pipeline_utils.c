@@ -61,9 +61,7 @@ void	close_fds_and_pipes(t_shell *mini, int i)
 	}
 }
 
-
 // Waits for all child prcocesses to complete and catches their exit status
-
 void	wait_children(t_shell *mini)
 {
 	int	i;

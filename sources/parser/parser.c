@@ -108,7 +108,6 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
-
 //Loops through segment string to find redirection symbols
 // creates a linked list if redirection symbol(s) are found
 // each redirect will be its own node and will contain information about redirection type,
@@ -200,5 +199,17 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 		ft_putendl_fd("Failed to allocate memory for command name", 2);
 		return (-1);
 	}
+	return (i);
+}
+
+static int	no_args(t_cmd *cmd, int i)
+{
+	cmd->args = ft_calloc(2, sizeof(char *));
+	if (!cmd->args)
+		return (-1);
+	cmd->args[0] = ft_strdup(cmd->command);
+	if (!cmd->args)
+		return (-1);
+	cmd->args[1] = NULL;
 	return (i);
 }
