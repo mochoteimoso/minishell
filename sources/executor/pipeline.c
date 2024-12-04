@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 17:23:08 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:35:34 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int			execute_pipeline(t_shell *mini);
 static int	handle_single_builtin_cmd(t_shell *mini);
-//static int	pipe_and_fork(t_shell *mini, int pipe_fd[2]);
 static int	pipe_and_fork(t_shell *mini);
 static int	allocate_pipes(t_shell *mini);
 static int	create_pipes(t_shell *mini);
@@ -34,7 +33,8 @@ int	execute_pipeline(t_shell *mini)
 			return (mini->exit_stat);
 		}
 		clean_cmds(mini->cmds);
-		return (0);
+		mini->exit_stat = 0;
+		return (mini->exit_stat);
 	}
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
 	if (!mini->pids)
@@ -48,8 +48,6 @@ int	execute_pipeline(t_shell *mini)
 		cleaner_for_main(mini);
 		return (1);
 	}
-	//if (mini->prev_pipe != -1)
-		//close(mini->prev_pipe);
 	wait_children(mini);
 	//close(mini->pipes[i][0]);
 	cleaner_for_main(mini);
@@ -91,31 +89,6 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 
 // Creates pipes when needed and forks child processes
 // After forking, closes cmd-specific fds that were passed to child
-
-/*static int	pipe_and_fork(t_shell *mini, int pipe_fd[2])
-{
-	int		i;
-	t_cmd	*cmd;
-
-	i = 0;
-	while (i < mini->cmd_count)
-	{
-		cmd = mini->cmds[i];
-		if (mini->cmd_count > 1 && i < mini->cmd_count - 1)
-		{
-			if (pipe(pipe_fd) == -1)
-			{
-				perror("pipe");
-				return (1);
-			}
-		}
-		if (fork_and_execute(mini, cmd, pipe_fd, i) == -1)
-			return (1);
-		close_fds_and_pipes(mini, cmd, pipe_fd, i);
-		i++;
-	}
-	return (0);
-} */
 
 static int	pipe_and_fork(t_shell *mini)
 {
