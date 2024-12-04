@@ -83,7 +83,6 @@ typedef struct s_shell
 	char	**pending;
 	int		*pids;
 	int		**pipes;
-	int		prev_pipe;
 	int		stdin_saved;
 	int		stdout_saved;
 	int		exit_stat;
@@ -182,8 +181,8 @@ int		check_pipes(char **input);
 
 /*redirection*/
 	/*get_filename.c*/
-int		parse_filename(t_cmd *cmd, int i, bool *in_quotes, char **filename);
-int		get_filename_length(t_cmd *cmd, int i, bool in_quotes);
+int		parse_filename(t_cmd *cmd, int i, char **filename);
+//int		get_filename_length(t_cmd *cmd, int i, bool in_quotes);
 
 	/*redir_ll*/
 t_redir	*list_redir(void);
