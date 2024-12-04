@@ -6,49 +6,54 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:54:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 19:19:10 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:35:25 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	get_filename_length(t_cmd *cmd, int i, bool in_quotes)
+int	parse_filename(t_cmd *cmd, int i, char **filename);
+int	filename_in_quotes(char *str, int i, t_expand *arg);
+
+int	parse_filename(t_cmd *cmd, int i, char **filename)
 {
-	int	len;
+	t_expand	arg;
 
-	len = 0;
-	while (cmd->segment[i] && ((!in_quotes && !ft_isspace(cmd->segment[i])
-		&& !is_redirection(cmd, i)) ||(in_quotes && cmd->segment[i] != '"' 
-		&& cmd->segment[i] != '\'')))
-	{
-		len++;
-		i++;
-	}
-	return (len);
-}
-
-int	parse_filename(t_cmd *cmd, int i, bool *in_quotes, char **filename)
-{
-	int		filename_len;
-	char	*filename_start;
-
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-		i++;
-	if (cmd->segment[i] == '"' || cmd->segment[i] == '\'')
-	{
-		*in_quotes = true;
-		i++;
-	}
-	filename_start = &cmd->segment[i];
-	filename_len = get_filename_length(cmd, i, *in_quotes);
-	i += filename_len;
-	if (*in_quotes && (cmd->segment[i] == '"' || cmd->segment[i] == '\''))
-		i++;
-	*filename = ft_strndup(filename_start, filename_len);
+	arg.sgl = 0;
+	arg.dbl = 0;
+	arg.len = 0;
+	arg.i = i;
+	if (filename_in_quotes(cmd->segment, arg.i, &arg) == -1)
+		return (-1);
+	*filename = ft_strdup(arg.value);
 	if (!*filename)
 	{
+		free(arg.value);
 		ft_putendl_fd("Memory allocation for filename failed", 2);
 		return (-1);
 	}
+	i = arg.i;
+	free(arg.value);
 	return (i);
+}
+
+int	filename_in_quotes(char *str, int i, t_expand *arg)
+{
+	i = skip_whitespace(str, i);
+	if (the_arg(arg, i))
+		return (-1);
+	what_quote(str, arg);
+	while (str[arg->i])
+	{
+		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
+			break ;
+		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
+			what_quote(str, arg);
+		else if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
+			what_quote(str, arg);
+		else if (add_char(str, arg))
+			return (free(arg->value), -1);
+	}
+	arg->len = ft_strlen(arg->value);
+	return (arg->i);
 }
