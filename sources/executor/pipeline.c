@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:02:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:26:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	execute_pipeline(t_shell *mini)
 	{
 		if (handle_single_builtin_cmd(mini))
 		{
-			clean_cmds(mini->cmds);
 			mini->exit_stat = 1;
 			return (mini->exit_stat);
 		}
