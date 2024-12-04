@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 13:01:20 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:08:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,6 @@ static int	no_expanding(t_cmd *cmd, t_expand *arg, int i)
 	arg->value = temp;
 	return (i);
 }
-
-	// while (cmd->segment[i] && (!ft_isspace(cmd->segment[i])
-			// || check_quotes(cmd->segment, i)) && !is_redirection(cmd, i))
 
 int	arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 {

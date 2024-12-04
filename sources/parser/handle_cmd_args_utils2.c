@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 12:50:04 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:07:35 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,6 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 	int		s_exp;
 	char	*temp;
 
-	// if (str[arg->i + 1] && (!(ft_isalnum(str[arg->i + 1]) || str[arg->i + 1] == '_' || str[arg->i + 1] == '?')))
-	// 	return (0);
 	s_exp = arg->i;
 	temp = ft_strdup("");
 	if (!temp)
