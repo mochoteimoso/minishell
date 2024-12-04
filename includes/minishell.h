@@ -270,13 +270,10 @@ void	cleaner_for_main(t_shell *mini);
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
 void 	ft_free_int_arr_with_size(int **array, int size);
-void	error(char *str);
-void	ft_free_int_arr_with_size(int **array, int size);
+void	error(t_shell * mini, char *str);
 void	clean_cmds(t_cmd **cmds);
 
 	/*exit_handler.c*/
-//void	exit_for_pipes(t_shell *mini, int pipe_fd[2], int i, int exit_status);
-//void	exit_for_pipes(t_shell *mini, int i, int exit_status);
 void	exit_handler(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	cleaner_for_main(t_shell *mini);
