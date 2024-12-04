@@ -6,11 +6,38 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/02 16:25:18 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:02:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	handle_question(t_shell *mini, char *str, char **expanded, t_expand *arg)
+{
+	int	cont;
+	arg->start = arg->i;
+	cont = arg->start;
+	if (str[arg->i] == '$')
+		arg->i = oh_its_a_dollar(mini, str, expanded, arg);
+	arg->i = cont + 2;
+	return (arg->i);
+}
+
+int	new_result(t_expand *arg, char *temp)
+{
+	char	*new_res;
+
+	new_res = ft_strjoin(arg->value, temp);
+	if (!new_res)
+	{
+		free(temp);
+		return (-1);
+	}
+	free(arg->value);
+	free(temp);
+	arg->value = new_res;
+	return (0);
+}
 
 int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 {

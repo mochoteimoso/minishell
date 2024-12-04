@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 10:46:43 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:20:20 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 
 
 	if (ft_array_len(cmd->args) > 2)
-		error("Too many arguments\n");
+		error(" too many arguments\n");
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		error("Malloc fail\n");

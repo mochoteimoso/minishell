@@ -47,6 +47,7 @@ typedef struct s_redir
 	char			*file;
 	char			*delimiter;
 	t_redir_type	type;
+	bool			expand;
 	int				node_ind;
 	struct s_redir	*next;
 }	t_redir;
@@ -58,8 +59,8 @@ typedef struct s_cmd
 	char	*cmd_path;
 	char	**args;
 	int		args_count;
-	t_redir *redir_head;
-	t_redir *redir_tail;
+	t_redir	*redir_head;
+	t_redir	*redir_tail;
 	int		fd_in;
 	int		fd_out;
 	int		cmd_exit;
@@ -81,7 +82,6 @@ typedef struct s_shell
 	char	**pending;
 	int		*pids;
 	int		**pipes;
-	int		prev_pipe;
 	int		stdin_saved;
 	int		stdout_saved;
 	int		exit_stat;
@@ -186,11 +186,44 @@ int		the_arg(t_expand *arg, int i);
 void	what_quote(char *str, t_expand *arg);
 int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 
+	/*handle_cmd_array_utils.c*/
+int		add_char(char *str, t_expand *arg);
+int		the_arg(t_expand *arg, int i);
+void	what_quote(char *str, t_expand *arg);
+int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
+
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 
+	/*find_cmd_path.c*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+
+/*syntax*/
+
+	/*syntax_checker.c*/
+int		validate_input_syntax(char **input);
+int		check_quotes(char *input, int limit);
+int		check_non_whitespace(char *str);
+
+	/*redirection_syntax.c*/
+int		check_redirects(char *input);
+
+	/*pipe_syntax.c*/
+int		check_pipes(char **input);
+
 /*redirection*/
+	/*get_filename.c*/
+int		parse_filename(t_cmd *cmd, int i, char **filename);
+//int		get_filename_length(t_cmd *cmd, int i, bool in_quotes);
+
+	/*redir_ll*/
+t_redir	*list_redir(void);
+t_redir	*redir_add_node(void);
+void	redir_lstadd_back(t_redir **lst, t_redir *new);
+void	redir_update_tail(t_cmd *cmd);
+int		redirll_head_tail(t_cmd *cmd);
+
 	/*handle_redirections.c*/
 bool	is_redirection(t_cmd *cmd, int i);
 int		handle_redirect_in(t_cmd *cmd, int i);
@@ -238,7 +271,15 @@ void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
 void 	ft_free_int_arr_with_size(int **array, int size);
 void	error(char *str);
+void	ft_free_int_arr_with_size(int **array, int size);
 void	clean_cmds(t_cmd **cmds);
+
+	/*exit_handler.c*/
+//void	exit_for_pipes(t_shell *mini, int pipe_fd[2], int i, int exit_status);
+//void	exit_for_pipes(t_shell *mini, int i, int exit_status);
+void	exit_handler(t_shell *mini, int i, int exit_status);
+void	exit_for_success(t_shell *mini, int i, int exit_status);
+void	cleaner_for_main(t_shell *mini);
 
 /*signals.c*/
 void	init_sig(void);

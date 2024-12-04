@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/02 16:07:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:02:52 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
-
 
 int	count_if_redirection(t_cmd *cmd, int i)
 {
@@ -27,6 +26,7 @@ int	count_if_redirection(t_cmd *cmd, int i)
 }
 
 // Counts how many command arguments the string contains
+
 int	count_args(t_cmd *cmd, int i)
 {
 	int	args_count;
@@ -54,8 +54,6 @@ int	count_args(t_cmd *cmd, int i)
 	return (args_count);
 }
 
-// Counts how many command arguments the string contains
-
 int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 {
 	int			args_count;
@@ -75,8 +73,16 @@ int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 	}
 	arg_index++;
 	i = skip_whitespace(cmd->segment, i);
-	while (cmd->segment[i] && arg_index < args_count + 1 && !is_redirection(cmd, i))
+	while (cmd->segment[i] && arg_index < args_count + 1)
 	{
+		if (is_redirection(cmd, i))
+		{
+			i = handle_redirections(cmd, i);
+			if (i == -1)
+				return (-1);
+			i = skip_whitespace(cmd->segment, i);
+			continue;
+		}
 		if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 			i = arg_in_quotes(mini, cmd->segment, i, &arg);
 		else
@@ -96,3 +102,4 @@ int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 	cmd->args[arg_index] = NULL;
 	return (i);
 }
+

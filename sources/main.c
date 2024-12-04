@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/26 19:46:29 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:04:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	printer(t_shell *mini)
 		printf("Struct %d:\n", i);
 		printf("segment: %s\n", mini->cmds[i]->segment);
 		printf("command: %s\n", mini->cmds[i]->command);
+		printf("command path: %s\n", mini->cmds[i]->cmd_path);
 		if (mini->cmds[i]->args)
 		{
 			int j = 0;
@@ -43,8 +44,8 @@ void	printer(t_shell *mini)
 			redir = redir->next;
 			redir_index++;
 		}
-		printf("fd_in: %d\n", mini->cmds[i]->fd_in);
-		printf("fd_out: %d\n", mini->cmds[i]->fd_out);
+		//printf("fd_in: %d\n", mini->cmds[i]->fd_in);
+		//printf("fd_out: %d\n", mini->cmds[i]->fd_out);
 		printf("|*************************************************|");
 		printf("\n");
 		i++;
@@ -72,10 +73,10 @@ static int	init_shell(t_shell *mini, char **envp)
 	to_alphabetical(mini->pending);
 	mini->cmds = NULL;
 	mini->cmd_count = 0;
-	mini->pids = NULL;
-	mini->prev_pipe = -1;
 	mini->stdin_saved = -1;
 	mini->stdout_saved = -1;
+	mini->pids = NULL;
+	mini->pipes = NULL;
 	mini->exit_stat = 0;
 	return (0);
 }
@@ -94,7 +95,7 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini)
 {
 	char	*input;
-  
+
 	while (1)
 	{
 		init_sig();
@@ -112,12 +113,13 @@ static int user_prompt(t_shell *mini)
 		if (parse_and_validate_input(input, mini))
 		{
 			free(input);
+			//cleaner(mini);
 			continue ;
 		}
-		printer(mini);
-		if (execute_pipeline(mini))
-			ft_putendl_fd("execution failed", 2);
-		free(input);
+		//printer(mini);
+		execute_pipeline(mini);
+		//ft_putendl_fd("execution failed", 2);
+		//free(input);
 		}
 	}
 	return (0);

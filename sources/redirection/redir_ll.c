@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_ll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/28 10:04:05 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:03:15 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_redir	*redir_add_node(void)
 	node->delimiter = NULL;
 	node->file = NULL;
 	node->type = 0;
+	node->expand = false;
 	node->next = NULL;
 	return (node);
 }

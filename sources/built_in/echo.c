@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 16:33:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:59:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	built_echo(t_shell *mini, t_cmd *cmd)
 	while (cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
-		printf(" ");
+		if (cmd->args[i + 1])
+			printf(" ");
 		i++;
 	}
 	if (nl)

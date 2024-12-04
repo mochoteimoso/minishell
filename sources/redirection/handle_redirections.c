@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 11:15:18 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:25:50 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,16 @@ bool	is_redirection(t_cmd *cmd, int i)
 
 int	handle_redirect_in(t_cmd *cmd, int i)
 {
-	char	*filename_start;
-	int		filename_length;
+	char	*filename;
+	bool	in_quotes;
 
-	filename_length = 0;
+	filename = NULL;
+	in_quotes = false;
 	i++;
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-		i++;
-	filename_start = &cmd->segment[i];
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
-		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
-		&& cmd->segment[i] != '$')
-	{
-		filename_length++;
-		i++;
-	}
-	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
-	if (!cmd->redir_tail->file)
-	{
-		ft_putendl_fd("Failed to allocate memory for filename", 2);
+	i = parse_filename(cmd, i, &filename);
+	if (i == -1 || !filename)
 		return (-1);
-	}
+	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_IN;
 	return (i);
 }
@@ -64,27 +53,16 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 
 int	handle_redirect_out(t_cmd *cmd, int i)
 {
-	char	*filename_start;
-	int		filename_length;
+	bool	in_quotes;
+	char	*filename;
 
-	filename_length = 0;
+	in_quotes = false;
+	filename = NULL;
 	i++;
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-		i++;
-	filename_start = &cmd->segment[i];
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
-		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
-		&& cmd->segment[i] != '$')
-	{
-		filename_length++;
-		i++;
-	}
-	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
-	if (!cmd->redir_tail->file)
-	{
-		ft_putendl_fd("Failed to allocate memory for filename", 2);
+	i = parse_filename(cmd, i, &filename);
+	if (i == -1 || !filename)
 		return (-1);
-	}
+	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_OUT;
 	return (i);
 }
@@ -93,29 +71,21 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 
 int	handle_heredoc(t_cmd *cmd, int i)
 {
-	char	*delimiter_start;
-	int		delimiter_length;
+	bool	in_quotes;
+	char	*filename;
 
-	delimiter_length = 0;
-	i++;
-	i++;
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-		i++;
-	delimiter_start = &cmd->segment[i];
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
-		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
-		&& cmd->segment[i] != '$')
-	{
-		delimiter_length++;
-		i++;
-	}
-	cmd->redir_tail->delimiter = ft_strndup(delimiter_start, delimiter_length);
-	if (!cmd->redir_tail->delimiter)
-	{
-		ft_putendl_fd("Failed to allocate memory for heredoc delimiter", 2);
+	in_quotes = false;
+	filename = NULL;
+	i+=2;
+	i = parse_filename(cmd, i, &filename);
+	if (i == -1 || !filename)
 		return (-1);
-	}
-	cmd->redir_tail->type = HEREDOC;
+	cmd->redir_tail->file = filename;
+	cmd->redir_tail->type = REDIRECT_OUT;
+	if (in_quotes)
+		cmd->redir_tail->expand = false;
+	else
+		cmd->redir_tail->expand = true;
 	return (i);
 }
 
@@ -124,28 +94,16 @@ int	handle_heredoc(t_cmd *cmd, int i)
 
 int	handle_append(t_cmd *cmd, int i)
 {
-	char	*filename_start;
-	int		filename_length;
+	bool	in_quotes;
+	char	*filename;
 
-	filename_length = 0;
+	in_quotes = false;
+	filename = NULL;
 	i++;
-	i++;
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-		i++;
-	filename_start = &cmd->segment[i];
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i])
-		&& !is_redirection(cmd, i) && cmd->segment[i] != '|'
-		&& cmd->segment[i] != '$')
-	{
-		filename_length++;
-		i++;
-	}
-	cmd->redir_tail->file = ft_strndup(filename_start, filename_length);
-	if (!cmd->redir_tail->file)
-	{
-		ft_putendl_fd("Failed to allocate memory for filename", 2);
+	i = parse_filename(cmd, i, &filename);
+	if (i == -1 || !filename)
 		return (-1);
-	}
+	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = APPEND;
 	return (i);
 }
