@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 16:02:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:10:51 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,41 +103,3 @@ int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	return (arg->i);
 }
 
-int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
-{
-	char	*temp;
-	char	*value;
-	char	name[100];
-	int		indx;
-	t_vdata	data;
-
-	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
-	if (!temp)
-		return (-1);
-	if (handle_new_expand(temp, expanded))
-		return (-1);
-	arg->i++;
-	indx = 0;
-	while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_'))
-	{
-		if (indx < (int) sizeof(name) - 1)
-			name[indx++] = str[arg->i++];
-	}
-	name[indx] = '\0';
-	value = NULL;
-	init_vdata(&data, expanded, temp, name);
-	if (handle_value(mini, &data))
-		return (-1);
-	arg->start = arg->i;
-	return (arg->i);
-}
-
-int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
-{
-	arg->start = arg->i;
-	if (str[arg->i] == '$')
-		arg->i = oh_its_a_dollar(mini, str, expanded, arg);
-	if (str[arg->i] == '~')
-		arg->i = tildes_home(mini, str, expanded, arg);
-	return (arg->i);
-}
