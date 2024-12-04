@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/02 17:36:44 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:34:36 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,57 +19,6 @@ void		close_unused_fds(t_shell *mini, int i);
 
 // Forks child processes based on number of commands
 // duplicates input/output
-
-/*int	fork_and_execute(t_shell *mini, t_cmd *cmd, int pipe_fd[2], int i)
-{
-	sig_handler_changer();
-	mini->pids[i] = fork();
-	if (mini->pids[i] == -1)
-	{
-		perror("fork");
-		return (-1);
-	}
-	else if (mini->pids[i] == 0)
-	{
-		close(pipe_fd[0]);
-		if (resolve_fd(cmd))
-			exit_for_pipes(mini, pipe_fd, i, cmd->cmd_exit);
-		if (dup_input(mini, cmd, i))
-			exit_for_pipes(mini, pipe_fd, i, cmd->cmd_exit);
-		if (dup_output(cmd, pipe_fd, mini->cmd_count, i))
-			exit_for_pipes(mini, pipe_fd, i, cmd->cmd_exit);
-		if (is_this_built(cmd->command))
-			execute_forked_builtin_cmd(mini, cmd);
-		else
-			execute_forked_cmd(mini, cmd);
-	}
-	return (0);
-}
-
-int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
-{
-	sig_handler_changer();
-	mini->pids[i] = fork();
-	if (mini->pids[i] == -1)
-	{
-		perror("fork");
-		return (-1);
-	}
-	else if (mini->pids[i] == 0)
-	{
-		if (resolve_fd(cmd))
-			exit_for_pipes(mini i, cmd->cmd_exit);
-		if (dup_input(mini, cmd, i))
-			exit_for_pipes(mini, i, cmd->cmd_exit);
-		if (dup_output(mini, cmd, mini->cmd_count, i))
-			exit_for_pipes(mini, i, cmd->cmd_exit);
-		if (is_this_built(cmd->command))
-			execute_forked_builtin_cmd(mini, cmd);
-		else
-			execute_forked_cmd(mini, cmd);
-	}
-	return (0);
-} */
 
 int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 {
