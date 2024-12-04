@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/02 18:13:22 by henbuska         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/03 11:12:36 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 17:49:32 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +110,9 @@ void	cleaner(t_shell *mini)
 
 }
 
-void	error(char *str)
+void	error(t_shell * mini, char *str)
 {
-	ft_putstr_fd(str, 2);
+	ft_putendl_fd(str, 2);
+	mini->exit_stat = 1;
 }
 
