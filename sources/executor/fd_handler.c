@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_handler.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:18:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 11:05:39 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:01:16 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	save_fds(t_shell *mini)
 
 int	reset_fds(t_shell *mini)
 {
-<<<<<<< HEAD
 	if (mini->stdin_saved != -1 && mini->stdin_saved != STDIN_FILENO)
 	{
 		if (dup2_and_close(mini->stdin_saved, STDIN_FILENO))
@@ -66,29 +65,5 @@ int	reset_fds(t_shell *mini)
 		}
 		mini->stdout_saved = -1;
 	}
-=======
-	if (mini->stdin_saved != -1)
-	{
-		if (dup2(mini->stdin_saved, STDIN_FILENO) == -1)
-		{
-			perror("Failed to restore original STDIN");
-			close(mini->stdin_saved);
-			mini->exit_stat = 1;
-			return (1);
-		}
-		close(mini->stdin_saved);
-	}
-	if (mini->stdout_saved != -1)
-	{
-		if (dup2(mini->stdout_saved, STDOUT_FILENO) == -1)
-		{
-			perror("Failed to restore original STDOUT");
-			close(mini->stdout_saved);
-			mini->exit_stat = 1;
-			return (1);
-		}
-		close(mini->stdout_saved);
-	}
->>>>>>> main
 	return (0);
 }

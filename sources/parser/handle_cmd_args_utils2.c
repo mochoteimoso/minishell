@@ -3,23 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmd_args_utils2.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/03 14:44:55 by henbuska         ###   ########.fr       */
-=======
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/02 16:25:18 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 16:02:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-<<<<<<< HEAD
 int	handle_question(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	int	cont;
@@ -47,8 +39,6 @@ int	new_result(t_expand *arg, char *temp)
 	return (0);
 }
 
-=======
->>>>>>> main
 int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 {
 	int		s_exp;

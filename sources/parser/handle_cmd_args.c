@@ -6,11 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/04 15:26:42 by henbuska         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/02 16:07:50 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 16:02:52 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +15,6 @@
 int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int	count_args(t_cmd *cmd, int i);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 int	count_if_redirection(t_cmd *cmd, int i)
 {
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))

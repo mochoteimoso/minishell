@@ -30,21 +30,6 @@ typedef struct s_vdata
 	char	*temp;
 	char	*name;
 }	t_vdata;
-<<<<<<< HEAD
-
-typedef struct s_expand
-{
-	int		sgl;
-	int		dbl;
-	int		i;
-	char	*value;
-	int		start;
-	int		len;
-}	t_expand;
-
-// linked list for redirects in each command struct
-=======
->>>>>>> main
 
 typedef struct s_expand
 {
@@ -97,10 +82,6 @@ typedef struct s_shell
 	char	**pending;
 	int		*pids;
 	int		**pipes;
-<<<<<<< HEAD
-=======
-	int		prev_pipe;
->>>>>>> main
 	int		stdin_saved;
 	int		stdout_saved;
 	int		exit_stat;
@@ -181,18 +162,8 @@ int		handle_cmd_name(t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
-<<<<<<< HEAD
-int		oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
-int		expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg);
-
-	/*expand_utils.c*/
-char	*get_value(t_env *env, char *name);
-int		handle_value(t_shell *mini, t_vdata *data);
-void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name);
-=======
 int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
 int 	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg);
->>>>>>> main
 
 	/*expand_utils.c*/
 char	*get_value(t_env *env, char *name);
@@ -208,18 +179,12 @@ int		arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
 int		arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 int		append_to_array(t_cmd *cmd, char *arg, int len, int *index);
 int		skip_whitespace(char *str, int i);
-<<<<<<< HEAD
-int		arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
-int		arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
-int		append_to_array(t_cmd *cmd, char *start, int len, int *index);
-=======
 
 	/*handle_cmd_array_utils2.c*/
 int		add_char(char *str, t_expand *arg);
 int		the_arg(t_expand *arg, int i);
 void	what_quote(char *str, t_expand *arg);
 int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
->>>>>>> main
 
 	/*handle_cmd_array_utils.c*/
 int		add_char(char *str, t_expand *arg);
@@ -231,7 +196,6 @@ int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 
-<<<<<<< HEAD
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
@@ -260,9 +224,6 @@ void	redir_lstadd_back(t_redir **lst, t_redir *new);
 void	redir_update_tail(t_cmd *cmd);
 int		redirll_head_tail(t_cmd *cmd);
 
-=======
-/*redirection*/
->>>>>>> main
 	/*handle_redirections.c*/
 bool	is_redirection(t_cmd *cmd, int i);
 int		handle_redirect_in(t_cmd *cmd, int i);
@@ -286,53 +247,18 @@ int		redirll_head_tail(t_cmd *cmd);
 	/*redirector.c*/
 int		resolve_fd(t_cmd *cmd);
 
-<<<<<<< HEAD
-	/*open_files.c*/
-int		open_input_file(t_cmd *cmd, char *input_file);
-int		open_output_file(t_cmd *cmd, char *output_file);
-int		open_append_file(t_cmd *cmd, char *output_file);
-int		open_heredoc(t_cmd *cmd, char *delimiter);
-
-/*executor*/
-=======
 /*syntax*/
 	/*pipe_syntax*/
 int		check_pipes(char **input);
 
 	/*redirection_syntax.c*/
 int		check_redirects(char *input);
->>>>>>> main
 
 	/*syntax_checker.c*/
 int		validate_input_syntax(char **input);
 int		check_quotes(char *input, int limit);
 int		check_non_whitespace(char *str);
 
-<<<<<<< HEAD
-	/*parent_process_utils.c*/
-int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
-void	close_fds_and_pipes(t_shell *mini, int i);
-void	wait_children(t_shell *mini);
-
-	/*child_process.c*/
-int		fork_and_execute(t_shell *mini, t_cmd *cmd, int i);
-
-	/*child_process_utils.c*/
-int		dup_input(t_shell *mini, t_cmd *cmd, int i);
-int		dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
-int		dup2_and_close(int old_fd, int new_fd);
-
-	/*handle_builtins.c*/
-int		built_in_exe(t_shell *mini, t_cmd *cmd);
-int		is_this_builtin_cmd(t_cmd *cmd);
-int		is_this_built(char *str);
-
-	/*fd_handler.c*/
-int		save_fds(t_shell *mini);
-int		reset_fds(t_shell *mini);
-
-/*utils*/
-=======
 /*utils*/
 	/*exit_handler*/
 void	exit_handler(t_shell *mini, int i, int exit_status);
@@ -340,7 +266,6 @@ void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	exit_for_single_cmd(t_shell *mini, int exit_status);
 void	cleaner_for_main(t_shell *mini);
 
->>>>>>> main
 	/*freeing*/
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);

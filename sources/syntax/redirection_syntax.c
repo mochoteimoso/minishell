@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_syntax.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/27 14:06:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/28 13:49:03 by henbuska         ###   ########.fr       */
-=======
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 09:53:18 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Created: 2024/11/27 14:06:48 by henbuska          #+#    #+#             */
+/*   Updated: 2024/12/04 16:03:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +88,3 @@ static int	validate_redirect(char *input, int *i, char *type)
 	}
 	return (0);
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> main

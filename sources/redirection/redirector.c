@@ -6,11 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:10:23 by henbuska          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/03 17:53:53 by henbuska         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/03 09:56:59 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 16:03:33 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +64,8 @@ static int	resolve_input_fd(t_cmd *cmd)
 				fd_in = open_input_file(cmd, temp->file);
 			else if (temp->type == 3)
 				fd_in = open_heredoc(cmd, temp->delimiter);
-<<<<<<< HEAD
 			if (fd_in == -2)
 				return (-2);
-=======
->>>>>>> main
 		}
 		temp = temp->next;
 	}

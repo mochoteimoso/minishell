@@ -6,28 +6,17 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/03 15:17:24 by henbuska         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/03 11:12:03 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 16:02:58 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-<<<<<<< HEAD
 int			parse_input(t_shell *mini);
 int			parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int			handle_redirections(t_cmd *cmd, int i);
 int			handle_cmd_name(t_cmd *cmd, int i);
 int			is_this_built(char *str);
-=======
-int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
-int		handle_redirections(t_cmd *cmd, int i);
-int		handle_cmd_name(t_cmd *cmd, int i);
->>>>>>> main
 static int	no_args(t_cmd *cmd, int i);
 static int	double_redirect(t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
@@ -62,10 +51,7 @@ int	parse_input(t_shell *mini)
 		{
 			clean_cmds(mini->cmds);
 			return (1);
-<<<<<<< HEAD
 		}
-=======
->>>>>>> main
 		if (is_this_built(mini->cmds[index]->command) != 1)
 		{
 			if (get_cmd_path(mini, mini->cmds[index]))
@@ -98,7 +84,7 @@ static int	no_args(t_cmd *cmd, int i)
 	cmd_found = false;
 	i = handle_redirections(cmd, i);
 	if (i == -1)
-		return ((1));	
+		return ((1));
 	if (is_empty_command(cmd, i))
 		return (1);
 	i = handle_cmd_name(cmd, i);

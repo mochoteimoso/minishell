@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/03 15:01:30 by henbuska         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/02 15:41:47 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 16:02:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +59,6 @@ int	handle_new_expand(char *temp, char **expanded)
 	}
 	return (0);
 }
-<<<<<<< HEAD
 
 int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
@@ -107,8 +102,6 @@ int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		arg->i = cont + 2;
 	return (arg->i);
 }
-=======
->>>>>>> main
 
 int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {

@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_syntax.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 11:05:14 by henbuska         ###   ########.fr       */
-=======
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 09:53:46 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 16:03:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +42,7 @@ int	check_pipes(char **input)
 	return (0);
 }
 
-<<<<<<< HEAD
-// Checks that pipe is not followed by '>' without any text in between 
-=======
 // Checks that pipe is not followed by '>' without any text in between
->>>>>>> main
 
 static int	validate_pipe(char *input)
 {

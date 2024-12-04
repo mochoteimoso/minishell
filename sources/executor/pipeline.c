@@ -6,11 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/04 15:35:34 by henbuska         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/03 10:16:02 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 16:02:01 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +14,6 @@
 
 int			execute_pipeline(t_shell *mini);
 static int	handle_single_builtin_cmd(t_shell *mini);
-<<<<<<< HEAD
-=======
-//static int	pipe_and_fork(t_shell *mini, int pipe_fd[2]);
->>>>>>> main
 static int	pipe_and_fork(t_shell *mini);
 static int	allocate_pipes(t_shell *mini);
 static int	create_pipes(t_shell *mini);
@@ -41,12 +33,8 @@ int	execute_pipeline(t_shell *mini)
 			return (mini->exit_stat);
 		}
 		clean_cmds(mini->cmds);
-<<<<<<< HEAD
 		mini->exit_stat = 0;
 		return (mini->exit_stat);
-=======
-		return (0);
->>>>>>> main
 	}
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
 	if (!mini->pids)
@@ -60,11 +48,6 @@ int	execute_pipeline(t_shell *mini)
 		cleaner_for_main(mini);
 		return (1);
 	}
-<<<<<<< HEAD
-=======
-	//if (mini->prev_pipe != -1)
-		//close(mini->prev_pipe);
->>>>>>> main
 	wait_children(mini);
 	//close(mini->pipes[i][0]);
 	cleaner_for_main(mini);
@@ -104,12 +87,9 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 	return (0);
 }
 
-<<<<<<< HEAD
 // Creates pipes when needed and forks child processes
 // After forking, closes cmd-specific fds that were passed to child
 
-=======
->>>>>>> main
 static int	pipe_and_fork(t_shell *mini)
 {
 	int		i;
@@ -135,11 +115,6 @@ static int	pipe_and_fork(t_shell *mini)
 static int	allocate_pipes(t_shell *mini)
 {
 	int	i;
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> main
 	mini->pipes = malloc(sizeof(int*) * (mini->cmd_count - 1));
 	if (!mini->pipes)
 	{
@@ -153,11 +128,7 @@ static int	allocate_pipes(t_shell *mini)
 		if (!mini->pipes[i])
 		{
 			perror("malloc");
-<<<<<<< HEAD
-			while (i > 0) 
-=======
 			while (i > 0)
->>>>>>> main
 			{
 				i--;
 				free(mini->pipes[i]);
@@ -179,17 +150,10 @@ static int	create_pipes(t_shell *mini)
 	i = 0;
 	while (i < mini->cmd_count - 1)
 	{
-<<<<<<< HEAD
-		if (pipe(mini->pipes[i]) == -1) 
-		{
-			perror("pipe");
-			while (i >= 0) 
-=======
 		if (pipe(mini->pipes[i]) == -1)
 		{
 			perror("pipe");
 			while (i >= 0)
->>>>>>> main
 			{
 				free(mini->pipes[i]);
 				i--;
@@ -205,11 +169,6 @@ static int	create_pipes(t_shell *mini)
 void	close_all_pipes(t_shell *mini, int *pipes)
 {
 	int	i;
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> main
 	if (!pipes)
 		return;
 

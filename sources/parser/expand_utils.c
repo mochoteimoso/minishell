@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/03 14:47:16 by henbuska         ###   ########.fr       */
-=======
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/02 15:41:12 by nzharkev         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/12/04 16:02:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +54,6 @@ static int	we_have_value(char *value, char *temp, char **expanded)
 
 int	handle_value(t_shell *mini, t_vdata *data)
 {
-<<<<<<< HEAD
 	if (data->name[0] == '?')
 	{
 		data->value = ft_itoa(mini->exit_stat);
@@ -69,8 +61,6 @@ int	handle_value(t_shell *mini, t_vdata *data)
 			return (1);
 		return (0);
 	}
-=======
->>>>>>> main
 	data->value = get_value(mini->env, data->name);
 	if (data->value == (char *)-1)
 		return (1);

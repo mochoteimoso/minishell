@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 15:34:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:01:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
-<<<<<<< HEAD
 
 // Duplicates input from fd_in if there is a redirection or from previous pipe
 // Redirection takes precedence over pipe
-=======
->>>>>>> main
 
 int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 {
@@ -47,12 +44,9 @@ int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 	return (0);
 }
 
-<<<<<<< HEAD
 // Duplicates output to fd if there is a redirection or to write end of pipe
 // Redirection takes precedence over pipe
 
-=======
->>>>>>> main
 int	dup_output(t_shell *mini, t_cmd *cmd, int count, int i)
 {
 	if (cmd->fd_out != STDOUT_FILENO)
@@ -68,20 +62,12 @@ int	dup_output(t_shell *mini, t_cmd *cmd, int count, int i)
 	}
 	else if (i < count - 1)
 	{
-<<<<<<< HEAD
-=======
-		//printf("Using pipe for output in cmd %d: pipe_fd[1] = %d\n", i, pipe_fd[1]);
->>>>>>> main
 		if (dup2_and_close(mini->pipes[i][1], STDOUT_FILENO))
 		{
 			perror("dup2 for output to pipe");
 			cmd->cmd_exit = 1;
 			return (1);
 		}
-<<<<<<< HEAD
-=======
-		//close(mini->pipes[i][0]);
->>>>>>> main
 	}
 	return (0);
 }
@@ -103,8 +89,5 @@ int	dup2_and_close(int old_fd, int new_fd)
 	close(old_fd);
 	return (0);
 }
-<<<<<<< HEAD
 
 
-=======
->>>>>>> main
