@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/26 19:46:29 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:48:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini)
 {
 	char	*input;
-  
+
 	while (1)
 	{
 		init_sig();
@@ -134,7 +134,10 @@ static int	activate_shell(char **envp)
 		return (1);
 	}
 	if (init_shell(mini, envp))
+	{
+		mini->exit_stat = 1;
 		return (1);
+	}
 	user_prompt(mini);
 	return (0);
 }

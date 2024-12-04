@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/03 11:15:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:39:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 	if (parse_input(mini))
 	{
 		clean_cmds(mini->cmds);
+		mini->exit_stat = 1;
 		return (1);
 	}
 	return (0);
