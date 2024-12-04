@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/03 11:54:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:17:14 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	isonlynum(char *str)
 int	built_exit(t_shell *mini, t_cmd *cmd)
 {
 	int	ec;
-	ft_putstr_fd("exit\n", 2);
+	ft_putstr_fd("exit\n", 1);
 	ec = 0;
 	if (cmd->args[1])
 	{
