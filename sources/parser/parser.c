@@ -3,20 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/12/03 15:17:24 by henbuska         ###   ########.fr       */
+=======
+/*   Updated: 2024/12/03 11:12:03 by nzharkev         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+<<<<<<< HEAD
 int			parse_input(t_shell *mini);
 int			parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int			handle_redirections(t_cmd *cmd, int i);
 int			handle_cmd_name(t_cmd *cmd, int i);
 int			is_this_built(char *str);
+=======
+int		parse_input(t_shell *mini);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
+int		handle_redirections(t_cmd *cmd, int i);
+int		handle_cmd_name(t_cmd *cmd, int i);
+>>>>>>> main
 static int	no_args(t_cmd *cmd, int i);
 static int	double_redirect(t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
@@ -40,8 +51,6 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 	return (0);
 }
 
-// Parses information added to array of structs
-
 int	parse_input(t_shell *mini)
 {
 	int	index;
@@ -53,7 +62,10 @@ int	parse_input(t_shell *mini)
 		{
 			clean_cmds(mini->cmds);
 			return (1);
+<<<<<<< HEAD
 		}
+=======
+>>>>>>> main
 		if (is_this_built(mini->cmds[index]->command) != 1)
 		{
 			if (get_cmd_path(mini, mini->cmds[index]))
@@ -65,6 +77,17 @@ int	parse_input(t_shell *mini)
 }
 
 // Parses the segment string of each struct
+static int	no_args(t_cmd *cmd, int i)
+{
+	cmd->args = ft_calloc(2, sizeof(char *));
+	if (!cmd->args)
+		return (-1);
+	cmd->args[0] = ft_strdup(cmd->command);
+	if (!cmd->args)
+		return (-1);
+	cmd->args[1] = NULL;
+	return (i);
+}
 
 /*int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 {
@@ -88,7 +111,7 @@ int	parse_input(t_shell *mini)
 	{
 		i = handle_cmd_args(mini, cmd, i);
 		if (i == -1)
-			return (-1);
+			return (1);
 	}
 	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
 	{
@@ -139,30 +162,10 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
-int	is_this_built(char *str)
-{
-	if (ft_strcmp(str, "exit") == 0)
-		return (1);
-	else if (ft_strcmp(str, "cd") == 0)
-		return (1);
-	else if (ft_strcmp(str, "echo") == 0)
-		return (1);
-	else if (ft_strcmp(str, "env") == 0)
-		return (1);
-	else if (ft_strcmp(str, "pwd") == 0)
-		return (1);
-	else if (ft_strcmp(str, "unset") == 0)
-		return (1);
-	else if (ft_strcmp(str, "export") == 0)
-		return (1);
-	return (0);
-}
-
 //Loops through segment string to find redirection symbols
 // creates a linked list if redirection symbol(s) are found
 // each redirect will be its own node and will contain information about redirection type,
 // filename, delimiter and pointer to next node
-
 static int	double_redirect(t_cmd *cmd, int i)
 {
 	if (cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
@@ -239,7 +242,6 @@ static bool	is_empty_command(t_cmd *cmd, int i)
 }
 
 // Retrieves command name from string and copies it to struct
-
 int	handle_cmd_name(t_cmd *cmd, int i)
 {
 	char	*cmd_start;
@@ -266,14 +268,3 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	return (i);
 }
 
-static int	no_args(t_cmd *cmd, int i)
-{
-	cmd->args = ft_calloc(2, sizeof(char *));
-	if (!cmd->args)
-		return (-1);
-	cmd->args[0] = ft_strdup(cmd->command);
-	if (!cmd->args)
-		return (-1);
-	cmd->args[1] = NULL;
-	return (i);
-}

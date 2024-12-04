@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/12/02 18:13:22 by henbuska         ###   ########.fr       */
+=======
+/*   Updated: 2024/12/03 11:12:36 by nzharkev         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +65,6 @@ void	clean_cmds(t_cmd **cmds)
 		if (cmds[i]->redir_head)
 			clean_redir(cmds[i]->redir_head);
 		free(cmds[i]);
-		cmds[i] = NULL;
 		i++;
 	}
 	free(cmds);
@@ -100,12 +103,19 @@ void ft_free_int_arr_with_size(int **array, int size)
 
 void	cleaner(t_shell *mini)
 {
-	clean_env(mini->env, mini->pending);
+	if (mini->env)
+		clean_env(mini->env, NULL);
+	if (mini->pending)
+		ft_free_array(mini->pending);
 	if (mini->cmds)
 		clean_cmds(mini->cmds);
+	if (mini->pids)
+		free(mini->pids);
+
 }
 
 void	error(char *str)
 {
 	ft_putstr_fd(str, 2);
 }
+

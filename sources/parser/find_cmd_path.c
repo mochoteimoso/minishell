@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   find_cmd_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/12/04 11:05:24 by henbuska         ###   ########.fr       */
+=======
+/*   Updated: 2024/12/03 11:09:36 by nzharkev         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +53,7 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
-// Tests each possible path until finds one that works, 
+// Tests each possible path until finds one that works,
 // returns correct absolute path
 
 static char	*search_command_in_paths(char **paths, t_cmd *cmd)

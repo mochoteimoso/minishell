@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmd_args_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/12/04 14:46:44 by henbuska         ###   ########.fr       */
+=======
+/*   Updated: 2024/12/02 16:49:01 by nzharkev         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +32,12 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 	{
 		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
 			break ;
+<<<<<<< HEAD
 		if (((arg->dbl && str[arg->i] == '$') || (!arg->sgl && str[arg->i] == '$'))
 			&& (str[arg->i + 1] && ((ft_isalnum(str[arg->i + 1]) || str[arg->i + 1] == '_' || str[arg->i + 1] == '?'))))
+=======
+		if ((arg->dbl && str[arg->i] == '$') || (!arg->sgl && str[arg->i] == '$'))
+>>>>>>> main
 		{
 			if (we_have_dollar(mini, arg, str) == -1)
 				return (free(arg->value), -1);
@@ -50,8 +58,11 @@ static int	no_expanding(t_cmd *cmd, t_expand *arg, int i)
 	char	*temp;
 	char	*temp2;
 
+<<<<<<< HEAD
 	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 		return(i);
+=======
+>>>>>>> main
 	temp2 = ft_strndup(&cmd->segment[i], 1);
 	if (!temp2)
 		return (-1);
@@ -70,10 +81,16 @@ int	arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 	if (!arg->value)
 		return (-1);
 	while (cmd->segment[i] && (!ft_isspace(cmd->segment[i])
+<<<<<<< HEAD
 			&& !is_redirection(cmd, i)))
 	{
 		if ((cmd->segment[i] == '$' || cmd->segment[i] == '~')
 			&& (cmd->segment[i + 1] && ((ft_isalnum(cmd->segment[i + 1]) || cmd->segment[i + 1] == '_' || cmd->segment[i + 1] == '?'))))
+=======
+			|| check_quotes(cmd->segment, i)) && !is_redirection(cmd, i))
+	{
+		if (cmd->segment[i] == '$' || cmd->segment[i] == '~')
+>>>>>>> main
 		{
 			arg->i = i;
 			i = expand_variable(mini, cmd->segment, &arg->value, arg);

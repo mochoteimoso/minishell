@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_ll.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 09:54:09 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:35:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_env_lstadd_back(t_env **lst, t_env *new)
 {
 	t_env	*temp;
-
+	
 	if (!lst || !new)
 		return ;
 	if (*lst == NULL)
@@ -68,14 +68,14 @@ t_env	*add_node(char *env)
 
 	node = create_node();
 	temp = ft_split(env, '=');
-	if (!temp || !temp[0])
+	if (!node || !temp || !temp[0])
 	{
 		clean_env(node, temp);
 		return (NULL);
 	}
 	if (set_name(node, temp[0]) == 1)
 	{
-		free(node);
+		clean_env(node, temp);
 		return (NULL);
 	}
 	if (set_value(node, temp[1]) == 1)

@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtins.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:53:40 by henbuska          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/12/04 13:46:54 by henbuska         ###   ########.fr       */
+=======
+/*   Updated: 2024/11/21 10:58:11 by nzharkev         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +19,15 @@
 int	built_in_exe(t_shell *mini, t_cmd *cmd);
 int	is_this_builtin_cmd(t_cmd *cmd);
 
-// Executes relevant builtin function
-
 int	built_in_exe(t_shell *mini, t_cmd *cmd)
 {
+	sig_reseted();
 	if (ft_strcmp(cmd->command, "exit") == 0)
 		built_exit(mini, cmd);
 	else if (ft_strcmp(cmd->command, "cd") == 0)
 		return (built_cd(mini, cmd));
 	else if (ft_strcmp(cmd->command, "echo") == 0)
-		return (built_echo(cmd));
+		return (built_echo(mini, cmd));
 	else if (ft_strcmp(cmd->command, "env") == 0)
 		return (built_env(mini));
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
@@ -36,23 +39,21 @@ int	built_in_exe(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
-// Checks whether the command is a builtin
-
-int	is_this_builtin_cmd(t_cmd *cmd)
+int	is_this_built(char *str)
 {
-	if (ft_strcmp(cmd->command, "exit") == 0)
+	if (ft_strcmp(str, "exit") == 0)
 		return (1);
-	else if (ft_strcmp(cmd->command, "cd") == 0)
+	else if (ft_strcmp(str, "cd") == 0)
 		return (1);
-	else if (ft_strcmp(cmd->command, "echo") == 0)
+	else if (ft_strcmp(str, "echo") == 0)
 		return (1);
-	else if (ft_strcmp(cmd->command, "env") == 0)
+	else if (ft_strcmp(str, "env") == 0)
 		return (1);
-	else if (ft_strcmp(cmd->command, "pwd") == 0)
+	else if (ft_strcmp(str, "pwd") == 0)
 		return (1);
-	else if (ft_strcmp(cmd->command, "unset") == 0)
+	else if (ft_strcmp(str, "unset") == 0)
 		return (1);
-	else if (ft_strcmp(cmd->command, "export") == 0)
+	else if (ft_strcmp(str, "export") == 0)
 		return (1);
 	return (0);
 }

@@ -34,6 +34,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)executor/pipeline_utils.c\
 	$(SRC_DIR)executor/child_process.c\
 	$(SRC_DIR)executor/child_process_utils.c\
+	$(SRC_DIR)executor/fd_handler.c\
 	$(SRC_DIR)executor/handle_builtins.c\
 	$(SRC_DIR)executor/fd_handler.c\
 	$(SRC_DIR)utils/freeing.c\

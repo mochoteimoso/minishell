@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/12/04 15:28:34 by henbuska         ###   ########.fr       */
+=======
+/*   Updated: 2024/11/26 19:46:29 by nzharkev         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +58,6 @@ void	printer(t_shell *mini)
 
 static int	init_shell(t_shell *mini, char **envp)
 {
-	mini->cmds = NULL;
 	mini->env = list_env(envp);
 	if (!mini->env)
 	{
@@ -72,11 +75,19 @@ static int	init_shell(t_shell *mini, char **envp)
 		return (1);
 	}
 	to_alphabetical(mini->pending);
+	mini->cmds = NULL;
 	mini->cmd_count = 0;
+<<<<<<< HEAD
 	mini->stdin_saved = -1;
 	mini->stdout_saved = -1;
 	mini->pids = NULL;
 	mini->pipes = NULL;
+=======
+	mini->pids = NULL;
+	mini->prev_pipe = -1;
+	mini->stdin_saved = -1;
+	mini->stdout_saved = -1;
+>>>>>>> main
 	mini->exit_stat = 0;
 	return (0);
 }
@@ -95,7 +106,7 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini)
 {
 	char	*input;
-	
+  
 	while (1)
 	{
 		init_sig();
@@ -109,18 +120,25 @@ static int user_prompt(t_shell *mini)
 				free(input);
 				continue ;
 			}
-			add_history(input);
-		}
+		add_history(input);
 		if (parse_and_validate_input(input, mini))
 		{
 			free(input);
 			//cleaner(mini);
 			continue ;
 		}
+<<<<<<< HEAD
 		//printer(mini);
 		execute_pipeline(mini);
 		//ft_putendl_fd("execution failed", 2);
 		//free(input);
+=======
+		printer(mini);
+		if (execute_pipeline(mini))
+			ft_putendl_fd("execution failed", 2);
+		free(input);
+		}
+>>>>>>> main
 	}
 	return (0);
 }
