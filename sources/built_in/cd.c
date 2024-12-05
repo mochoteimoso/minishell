@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/05 10:38:58 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:05:30 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	old_pwd(t_shell *mini)
 	free(pwd);
 }
 
-static void	to_path(t_shell *mini, char *path)
+static int	to_path(t_shell *mini, char *path)
 {
 	char	*cwd;
 	char	*oldpwd;
@@ -69,17 +69,18 @@ static void	to_path(t_shell *mini, char *path)
 	{
 		ft_putendl_fd("No such file or directory", 2);
 		mini->exit_stat = 1;
-		return ;
+		return (1);
 	}
 	env = mini->env;
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
-		return ;
+		return (1);
 	chdir(path);
 	cwd = getcwd(NULL, 0);
 	update_pwd(env, cwd, &oldpwd, 0);
 	free(cwd);
 	free(oldpwd);
+	return (0);
 }
 
 static int	to_home(char *cwd)
@@ -104,7 +105,10 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 	char		*cwd;
 
 	if (ft_array_len(cmd->args) > 2)
+	{
 		error(mini, "Too many arguments");
+		return (1);
+	}
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		error(mini, "Malloc fail");
@@ -117,7 +121,10 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 	else if (cmd->args[1][0] == '-')
 		old_pwd(mini);
 	else
-		to_path(mini, cmd->args[1]);
+	{
+		if (to_path(mini, cmd->args[1]))
+			return (1);
+	}
 	free(cwd);
 	return (0);
 }

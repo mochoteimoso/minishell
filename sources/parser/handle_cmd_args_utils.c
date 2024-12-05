@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/05 12:57:32 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:00:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,20 +102,3 @@ int	append_to_array(t_cmd *cmd, char *arg, int len, int *index)
 	(*index)++;
 	return (0);
 }
-
-// static int	no_expanding(t_cmd *cmd, t_expand *arg, int i)
-// {
-// 	char	*temp;
-// 	char	*temp2;
-
-// 	temp2 = ft_strndup(&cmd->segment[arg->i], 1);
-// 	if (!temp2)
-// 		return (-1);
-// 	temp = ft_strjoin(arg->value, temp2);
-// 	free(temp2);
-// 	if (!temp)
-// 		return (-1);
-// 	free(arg->value);
-// 	arg->value = temp;
-// 	return (arg->i);
-// }
