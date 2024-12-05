@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 17:52:31 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:39:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,18 +87,20 @@ t_env	*add_node(char *env)
 	char	*sign;
 
 	node = create_node();
+	if (!node)
+		return(NULL);
 	sign = ft_strchr(env, '=');
 	name = ft_substr(env, 0, (sign - env));
 	if (!name)
-		return (NULL);
-	value = ft_strdup(sign + 1);
+		return (free(node), NULL);
+	value = NULL;
 	if (!value)
 	{
 		free(name);
-		return (NULL);
+		return (free(node), NULL);
 	}
 	if (fill_node(node, name, value))
-		return (NULL);
+		return (free(value), NULL);
 	node->next = NULL;
 	free(name);
 	free(value);

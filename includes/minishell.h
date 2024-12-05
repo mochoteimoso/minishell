@@ -192,6 +192,10 @@ int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
 
 /*redirection*/
+	/*get_filename.c*/
+int	parse_filename(t_cmd *cmd, int i, char **filename);
+int	filename_in_quotes(char *str, int i, t_expand *arg);
+
 	/*handle_redirections.c*/
 bool	is_redirection(t_cmd *cmd, int i);
 int		handle_redirect_in(t_cmd *cmd, int i);

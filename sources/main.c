@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/05 12:45:34 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:14:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ static int	init_shell(t_shell *mini, char **envp)
 	to_alphabetical(mini->pending);
 	mini->cmds = NULL;
 	mini->cmd_count = 0;
-	mini->pids = NULL;
-	mini->prev_pipe = -1;
 	mini->stdin_saved = -1;
 	mini->stdout_saved = -1;
+	mini->pids = NULL;
+	mini->pipes = NULL;
 	mini->exit_stat = 0;
 	return (0);
 }
@@ -135,10 +135,7 @@ static int	activate_shell(char **envp)
 		return (1);
 	}
 	if (init_shell(mini, envp))
-	{
-		mini->exit_stat = 1;
 		return (1);
-	}
 	user_prompt(mini);
 	return (0);
 }

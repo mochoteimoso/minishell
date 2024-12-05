@@ -35,7 +35,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)syntax/pipe_syntax.c\
 	$(SRC_DIR)syntax/redirection_syntax.c\
 	$(SRC_DIR)syntax/syntax_checker.c\
-	$(SRC_DIR)utils/exit_handlers.c\
+	$(SRC_DIR)utils/exit_handler.c\
 	$(SRC_DIR)utils/freeing.c
 
 

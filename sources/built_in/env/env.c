@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:39 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:54:05 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ char	**env_to_array(t_env *env)
 		temp = temp->next;
 		i++;
 	}
-	// add error handling
 	array[i] = NULL;
 	return (array);
 }
