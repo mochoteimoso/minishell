@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:10:30 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 13:45:02 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:07:48 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	built_pwd(t_shell *mini)
 	{
 		ft_putendl_fd("pwd not found", 2);
 		cwd = ft_strdup("lost");
+		if (!cwd)
+			return (1);
 	}
 	printf("%s\n", cwd);
 	free(cwd);

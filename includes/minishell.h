@@ -93,7 +93,7 @@ void printer(t_shell *mini);
 	/*cd*/
 int		built_cd(t_shell *mini, t_cmd *cmd);
 	/*echo.c*/
-int		built_echo(t_shell *mini, t_cmd *cmd);
+int		built_echo(t_cmd *cmd);
 	/*exit.c*/
 int		built_exit(t_shell *mini, t_cmd *cmd);
 	/*export.c*/
@@ -116,6 +116,7 @@ void	to_alphabetical(char **array);
 
 	/*env_ll*/
 t_env	*add_node(char *env);
+t_env	*create_node(void);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
 /*commands*/

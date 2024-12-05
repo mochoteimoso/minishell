@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 15:59:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:14:33 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ char	**env_to_array(t_env *env)
 	temp = env;
 	i = 0;
 	array = (char **)malloc(sizeof(char *) * len + 1);
-	if (!array)
-		return (NULL);
 	while (temp->next)
 	{
 		array[i] = ft_strdup("");
@@ -47,7 +45,6 @@ char	**env_to_array(t_env *env)
 		temp = temp->next;
 		i++;
 	}
-	// add error handling
 	array[i] = NULL;
 	return (array);
 }

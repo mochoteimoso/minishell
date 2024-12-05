@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 15:17:14 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:05:21 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,28 @@ static int	isonlynum(char *str)
 int	built_exit(t_shell *mini, t_cmd *cmd)
 {
 	int	ec;
+
 	ft_putstr_fd("exit\n", 1);
 	ec = 0;
 	if (cmd->args[1])
 	{
-		if (cmd->args[2])
+		if ((cmd->args[1] && !isonlynum(cmd->args[1])) || (cmd->args[1] && cmd->args[1][0] == '\0'))
+		{
+			ft_putstr_fd("exit: ", 2);
+			ft_putstr_fd(cmd->args[1], 2);
+			ft_putstr_fd(": needs to be numeric\n", 2);
+			cleaner(mini);
+			free(mini);
+			exit(2);
+		}
+		else if (cmd->args[2])
 		{
 			ft_putstr_fd("exit: too many arguments\n", 2);
 			mini->exit_stat = 1;
 			return (1);
 		}
-		else if ((cmd->args[1] && !isonlynum(cmd->args[1]))
-			|| (cmd->args[1] && cmd->args[1][0] == '\0'))
-		{
-			ft_putstr_fd("exit: ", 2);
-			ft_putstr_fd(cmd->args[1], 2);
-			ft_putstr_fd(": numeric argument required\n", 2);
-			cleaner(mini);
-			free(mini);
-			exit(2);
-		}
-		else
-		{
-			if (cmd->args[1])
-				ec = ft_atoi(cmd->args[1]);
-		}
+		if (cmd->args[1])
+			ec = ft_atoi(cmd->args[1]);
 	}
 	else
 		ec = mini->exit_stat;

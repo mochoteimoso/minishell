@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 17:15:15 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:08:54 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 
 	i = 0;
 	cmd_found = false;
-
 	while (cmd->segment[i])
 	{
 		if (is_redirection(cmd, i))
@@ -216,12 +215,18 @@ int handle_redirections(t_cmd *cmd, int i)
 
 static bool	is_empty_command(t_cmd *cmd, int i)
 {
+	int	len;
+
+	len = ft_strlen(cmd->segment);
 	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
 		i++;
-	if (!cmd->segment[i] || cmd->segment[i] == '|')
+	if (i != len - 1)
 	{
-		ft_putendl_fd("syntax error: expected a command", 2);
-		return (true);
+		if (!cmd->segment[i] || cmd->segment[i] == '|')
+		{
+			ft_putendl_fd("syntax error: expected a command", 2);
+			return (true);
+		}
 	}
 	return (false);
 }
