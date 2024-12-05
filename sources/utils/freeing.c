@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/03 11:15:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:05:05 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,9 @@ void	cleaner(t_shell *mini)
 
 }
 
-void	error(char *str)
+void	error(t_shell *mini, char *str)
 {
-	ft_putstr_fd(str, 2);
+	ft_putendl_fd(str, 2);
+	mini->exit_stat = 1;
 }
 

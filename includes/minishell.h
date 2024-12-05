@@ -116,6 +116,7 @@ void	to_alphabetical(char **array);
 
 	/*env_ll*/
 t_env	*add_node(char *env);
+t_env	*create_node(void);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
 /*commands*/
@@ -236,8 +237,8 @@ void	cleaner_for_main(t_shell *mini);
 	/*freeing*/
 void	clean_env(t_env *ll, char **array);
 void	cleaner(t_shell *mini);
-void ft_free_int_arr_with_size(int **array, int size);
-void	error(char *str);
+void	ft_free_int_arr_with_size(int **array, int size);
+void	error(t_shell *mini, char *str);
 void	clean_cmds(t_cmd **cmds);
 
 /*signals.c*/

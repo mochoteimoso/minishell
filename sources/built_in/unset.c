@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 10:48:31 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:06:45 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ int	built_unset(t_shell *mini, t_cmd *cmd)
 		{
 			if (unset_env(mini, cmd->args[i]))
 			{
-				error("No such variable\n");
+				error(mini, "No such variable");
 				return (1);
 			}
 			if (unset_pending(mini, cmd->args[i]))
 			{
-				error("No such variable\n");
+				error(mini, "No such variable");
 				return (1);
 			}
 			i++;

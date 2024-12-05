@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/15 10:46:43 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/05 10:38:58 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	old_pwd(t_shell *mini)
 	update_pwd(mini->env, pwd, &oldpwd, 1);
 	temp = ft_strdup(oldpwd);
 	if (!oldpwd)
-		error("No OLDPWD set\n");
+		error(mini, "No OLDPWD set");
 	chdir(temp);
 	free(oldpwd);
 	free(pwd);
@@ -65,6 +65,12 @@ static void	to_path(t_shell *mini, char *path)
 	char	*oldpwd;
 	t_env	*env;
 
+	if (access(path, F_OK) == -1)
+	{
+		ft_putendl_fd("No such file or directory", 2);
+		mini->exit_stat = 1;
+		return ;
+	}
 	env = mini->env;
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
@@ -76,29 +82,36 @@ static void	to_path(t_shell *mini, char *path)
 	free(oldpwd);
 }
 
-/*Changes the current directory. Accepts a relative or absolute path as an argument.*/
-
-int	built_cd(t_shell *mini, t_cmd *cmd)
+static int	to_home(char *cwd)
 {
 	const char	*path;
+
+	path = getenv("HOME");
+	if (!path)
+	{
+		printf("cd: no HOME\n");
+		return (1);
+	}
+	chdir(path);
+	free(cwd);
+	return (0);
+}
+
+/*Changes the current directory. Accepts a relative or absolute path as an argument.*/
+int	built_cd(t_shell *mini, t_cmd *cmd)
+{
+	// const char	*path;
 	char		*cwd;
 
-
 	if (ft_array_len(cmd->args) > 2)
-		error("Too many arguments\n");
+		error(mini, "Too many arguments");
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		error("Malloc fail\n");
+		error(mini, "Malloc fail");
 	if (!cmd->args[1])
 	{
-		path = getenv("HOME");
-		if (!path)
-		{
-			printf("cd: no HOME\n");
+		if (to_home(cwd))
 			return (1);
-		}
-		chdir(path);
-		free(cwd);
 		return (0);
 	}
 	else if (cmd->args[1][0] == '-')
