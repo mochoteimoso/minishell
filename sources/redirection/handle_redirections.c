@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 15:25:50 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:52:54 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	handle_append(t_cmd *cmd, int i)
 
 	in_quotes = false;
 	filename = NULL;
-	i++;
+	i+=2;
 	i = parse_filename(cmd, i, &filename);
 	if (i == -1 || !filename)
 		return (-1);

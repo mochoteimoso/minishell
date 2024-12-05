@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_syntax.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:03:38 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:12:42 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int			check_pipes(char **input);
-static int	validate_pipe(char *input);
+//static int	validate_pipe(char *input);
 static int	check_consecutive_pipes(char *input);
 static int	check_trailing_pipe(char **input);
 static char	*handle_trailing_pipe(char *input);
@@ -33,8 +33,8 @@ int	check_pipes(char **input)
 		printf("syntax error near unexpected token %c\n", (*input)[i]);
 		return (1);
 	}
-	if (validate_pipe(*input))
-		return (1);
+	//if (validate_pipe(*input))
+	//	return (1);
 	if (check_consecutive_pipes(*input))
 		return (1);
 	if (check_trailing_pipe(input))
@@ -44,7 +44,7 @@ int	check_pipes(char **input)
 
 // Checks that pipe is not followed by '>' without any text in between
 
-static int	validate_pipe(char *input)
+/*static int	validate_pipe(char *input)
 {
 	int	i;
 
@@ -54,7 +54,7 @@ static int	validate_pipe(char *input)
 		if (input[i] == '|' && !check_quotes(input, i))
 		{
 			i++;
-			while (input[i] == ' ')
+			while (ft_isspace(input[i]))
 				i++;
 			if (input[i] == '>')
 			{
@@ -65,7 +65,7 @@ static int	validate_pipe(char *input)
 		i++;
 	}
 	return (0);
-}
+} */
 
 // checks if there are consecutive pipes without text in between
 

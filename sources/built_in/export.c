@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 14:38:34 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:05:49 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	parse_and_add(t_shell *mini, char *str, int len)
 		return (1);
 	}
 	sign = ft_strchr(str, '=');
-	if (sign && str[len - 1] == '=')
+	if ((sign && str[len - 1] == '=') || !sign)
 	{
 		update_pending(mini, str);
 		return (0);
@@ -107,7 +107,11 @@ int	built_export(t_shell *mini, t_cmd *cmd)
 		{
 			len = ft_strlen(cmd->args[i]);
 			if (parse_and_add(mini, cmd->args[i], len))
+			{
 				ft_putendl_fd("Invalid identifier", 2);
+				mini->exit_stat = 1;
+				return (1);
+			}
 			len = 0;
 			i++;
 		}

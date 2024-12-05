@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_ll.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 13:35:56 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:20:10 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_env_lstadd_back(t_env **lst, t_env *new)
 {
 	t_env	*temp;
-	
+
 	if (!lst || !new)
 		return ;
 	if (*lst == NULL)
@@ -29,7 +29,7 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new)
 	temp->next = new;
 }
 
-static t_env	*create_node(void)
+t_env	*create_node(void)
 {
 	t_env	*node;
 
@@ -61,29 +61,48 @@ static int	set_value(t_env *node, char *value)
 	return (0);
 }
 
+static int	fill_node(t_env *node, char *name, char *value)
+{
+	if (set_name(node, name) == 1)
+	{
+		clean_env(node, NULL);
+		free(name);
+		return (1);
+	}
+	if (set_value(node, value))
+	{
+		clean_env(node, NULL);
+		free(name);
+		free(value);
+		return (1);
+	}
+	return (0);
+}
+
 t_env	*add_node(char *env)
 {
 	t_env	*node;
-	char	**temp;
+	char	*name;
+	char	*value;
+	char	*sign;
 
 	node = create_node();
-	temp = ft_split(env, '=');
-	if (!node || !temp || !temp[0])
+	if (!node)
+		return(NULL);
+	sign = ft_strchr(env, '=');
+	name = ft_substr(env, 0, (sign - env));
+	if (!name)
+		return (free(node), NULL);
+	value = strdup(sign + 1);
+	if (!value)
 	{
-		clean_env(node, temp);
-		return (NULL);
+		free(name);
+		return (free(node), NULL);
 	}
-	if (set_name(node, temp[0]) == 1)
-	{
-		clean_env(node, temp);
-		return (NULL);
-	}
-	if (set_value(node, temp[1]) == 1)
-	{
-		clean_env(node, temp);
-		return (NULL);
-	}
+	if (fill_node(node, name, value))
+		return (free(value), NULL);
 	node->next = NULL;
-	ft_free_array(temp);
+	free(name);
+	free(value);
 	return (node);
 }

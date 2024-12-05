@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:02:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:50:49 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	execute_pipeline(t_shell *mini)
 	{
 		if (handle_single_builtin_cmd(mini))
 		{
-			clean_cmds(mini->cmds);
 			mini->exit_stat = 1;
 			return (mini->exit_stat);
 		}
@@ -51,7 +50,7 @@ int	execute_pipeline(t_shell *mini)
 	wait_children(mini);
 	//close(mini->pipes[i][0]);
 	cleaner_for_main(mini);
-	return (0);
+	return (mini->exit_stat);
 }
 
 // Executes single builtin command in parent process

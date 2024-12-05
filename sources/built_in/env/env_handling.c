@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_handling.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:14:43 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 13:44:42 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:14:51 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

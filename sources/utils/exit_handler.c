@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 15:26:57 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:20:20 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ void	exit_handler(t_shell *mini, int i, int exit_status)
 		close(mini->pipes[i][0]);
 		close(mini->pipes[i][1]);
 	}
-	if (mini->cmds[i]->fd_out != STDOUT_FILENO && mini->cmds[i]->fd_out != -1)
+	//if (mini->cmds[i]->fd_out != STDOUT_FILENO && mini->cmds[i]->fd_out != -1)
+	if (mini->cmds[i]->fd_out > 2)
 		close(mini->cmds[i]->fd_out);
-	if (mini->cmds[i]->fd_in != STDIN_FILENO && mini->cmds[i]->fd_in != -1)
+	//if (mini->cmds[i]->fd_in != STDIN_FILENO && mini->cmds[i]->fd_in != -1)
+	if (mini->cmds[i]->fd_in > 2)
 		close(mini->cmds[i]->fd_in);
 	clean_env(mini->env, mini->pending);
 	clean_cmds(mini->cmds);
@@ -48,8 +50,8 @@ void	exit_for_success(t_shell *mini, int i, int exit_status)
 	mini->pids = NULL;
 	if (mini->cmd_count > 1)
 		ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
-	//free(mini);
-	//mini = NULL;
+	free(mini);
+	mini = NULL;
 	exit (exit_status);
 }
 
@@ -69,7 +71,7 @@ void	cleaner_for_main(t_shell *mini)
 	clean_cmds(mini->cmds);
 	free(mini->pids);
 	mini->pids = NULL;
-	//free(mini);    //when should this be freed?
-	//mini = NULL;
+	if (mini->cmd_count > 1)
+		ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
 }
 

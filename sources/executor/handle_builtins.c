@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtins.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:53:40 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:01:24 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:39:37 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	built_in_exe(t_shell *mini, t_cmd *cmd);
-int	is_this_builtin_cmd(t_cmd *cmd);
+int	is_this_built(char *str);
 
 int	built_in_exe(t_shell *mini, t_cmd *cmd)
 {
