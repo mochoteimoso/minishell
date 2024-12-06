@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 17:58:53 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:33:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int			execute_pipeline(t_shell *mini);
 static int	handle_single_builtin_cmd(t_shell *mini);
-//static int	pipe_and_fork(t_shell *mini, int pipe_fd[2]);
 static int	pipe_and_fork(t_shell *mini);
 static int	allocate_pipes(t_shell *mini);
 static int	create_pipes(t_shell *mini);
@@ -29,13 +28,12 @@ int	execute_pipeline(t_shell *mini)
 	{
 		if (handle_single_builtin_cmd(mini))
 		{
-			// clean_cmds(mini->cmds);
 			mini->exit_stat = 1;
 			return (mini->exit_stat);
 		}
 		clean_cmds(mini->cmds);
 		mini->exit_stat = 0;
-		return (0);
+		return (mini->exit_stat);
 	}
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
 	if (!mini->pids)
@@ -49,12 +47,10 @@ int	execute_pipeline(t_shell *mini)
 		cleaner_for_main(mini);
 		return (1);
 	}
-	//if (mini->prev_pipe != -1)
-		//close(mini->prev_pipe);
 	wait_children(mini);
 	//close(mini->pipes[i][0]);
 	cleaner_for_main(mini);
-	return (0);
+	return (mini->exit_stat);
 }
 
 // Executes single builtin command in parent process
@@ -90,6 +86,9 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 	return (0);
 }
 
+// Creates pipes when needed and forks child processes
+// After forking, closes cmd-specific fds that were passed to child
+
 static int	pipe_and_fork(t_shell *mini)
 {
 	int		i;
@@ -115,7 +114,6 @@ static int	pipe_and_fork(t_shell *mini)
 static int	allocate_pipes(t_shell *mini)
 {
 	int	i;
-
 	mini->pipes = malloc(sizeof(int*) * (mini->cmd_count - 1));
 	if (!mini->pipes)
 	{
@@ -170,7 +168,6 @@ static int	create_pipes(t_shell *mini)
 void	close_all_pipes(t_shell *mini, int *pipes)
 {
 	int	i;
-
 	if (!pipes)
 		return;
 

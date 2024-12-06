@@ -6,13 +6,14 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:53:40 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/05 13:10:34 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:59:21 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	built_in_exe(t_shell *mini, t_cmd *cmd);
+int	is_this_built(char *str);
 
 int	built_in_exe(t_shell *mini, t_cmd *cmd)
 {
@@ -25,7 +26,7 @@ int	built_in_exe(t_shell *mini, t_cmd *cmd)
 		return (built_echo(cmd));
 	else if (ft_strcmp(cmd->command, "env") == 0)
 		return (built_env(mini));
-	else if (ft_strcmp(cmd->command, "pwd") == 0 )
+	else if (ft_strcmp(cmd->command, "pwd") == 0)
 		return (built_pwd(mini));
 	else if (ft_strcmp(cmd->command, "unset") == 0)
 		return (built_unset(mini, cmd));

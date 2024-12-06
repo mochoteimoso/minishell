@@ -6,19 +6,20 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/05 13:38:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:30:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
-int		handle_redirections(t_cmd *cmd, int i);
-int		handle_cmd_name(t_cmd *cmd, int i);
+int			parse_input(t_shell *mini);
+int			parse_cmd_string(t_shell *mini, t_cmd *cmd);
+int			handle_redirections(t_cmd *cmd, int i);
+int			handle_cmd_name(t_cmd *cmd, int i);
 static int	no_args(t_cmd *cmd, int i);
 static int	double_redirect(t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
+static bool	is_empty_command(t_cmd *cmd, int i);
 
 // Validates input string and parses the content into an array of structs
 
@@ -33,7 +34,6 @@ int	parse_and_validate_input(char *input, t_shell *mini)
 	if (parse_input(mini))
 	{
 		clean_cmds(mini->cmds);
-		mini->exit_stat = 1;
 		return (1);
 	}
 	return (0);
@@ -74,17 +74,41 @@ static int	no_args(t_cmd *cmd, int i)
 	return (i);
 }
 
-static bool	is_empty_command(t_cmd *cmd, int i)
+/*int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 {
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
-		i++;
-	if (!cmd->segment[i] || cmd->segment[i] == '|')
+	int		i;
+	bool	cmd_found;
+
+	i = 0;
+	cmd_found = false;
+	i = handle_redirections(cmd, i);
+	if (i == -1)
+		return ((1));
+	if (is_empty_command(cmd, i))
+		return (1);
+	i = handle_cmd_name(cmd, i);
+	if (i == -1)
+		return (1);
+	cmd_found = true;
+	if (!cmd->segment[i] || is_redirection(cmd, i))
+		i = no_args(cmd, i);
+	else
 	{
-		ft_putendl_fd("syntax error: expected a command", 2);
-		return (true);
+		i = handle_cmd_args(mini, cmd, i);
+		if (i == -1)
+			return (1);
 	}
-	return (false);
-}
+	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
+	{
+		i = handle_cmd_args(mini, cmd, i);
+		if (i == -1)
+			return (1);
+	}
+	i = handle_redirections(cmd, i);
+	if (i == -1)
+		return (1);
+	return (0);
+} */
 
 int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 {
@@ -162,14 +186,15 @@ static int	single_redirect(t_cmd *cmd, int i)
 
 int handle_redirections(t_cmd *cmd, int i)
 {
-	while (cmd->segment[i] && i < (int)ft_strlen(cmd->segment))
+	while (i < (int)ft_strlen(cmd->segment) && cmd->segment[i])
 	{
 		if (is_redirection(cmd, i))
 		{
 			if (redirll_head_tail(cmd))
 				return (-1);
-			if ((cmd->segment[i] == '<' && cmd->segment[i + 1] == '<') ||
-				(cmd->segment[i] == '>' && cmd->segment[i + 1] == '>'))
+			if ((i + 1 < (int)ft_strlen(cmd->segment))
+				&& ((cmd->segment[i] == '<' && cmd->segment[i + 1] == '<')
+				|| (cmd->segment[i] == '>' && cmd->segment[i + 1] == '>')))
 			{
 				i = double_redirect(cmd, i);
 				if (i == -1)
@@ -181,7 +206,6 @@ int handle_redirections(t_cmd *cmd, int i)
 				if (i == -1)
 					return (-1);
 			}
-			i++;
 		}
 		else
 			break;
@@ -189,6 +213,23 @@ int handle_redirections(t_cmd *cmd, int i)
 	return (i);
 }
 
+static bool	is_empty_command(t_cmd *cmd, int i)
+{
+	int	len;
+
+	len = ft_strlen(cmd->segment);
+	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+		i++;
+	if (i != len - 1)
+	{
+		if (!cmd->segment[i] || cmd->segment[i] == '|')
+		{
+			ft_putendl_fd("syntax error: expected a command", 2);
+			return (true);
+		}
+	}
+	return (false);
+}
 
 // Retrieves command name from string and copies it to struct
 int	handle_cmd_name(t_cmd *cmd, int i)
