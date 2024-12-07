@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/06 15:30:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/07 18:39:08 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,77 +74,87 @@ static int	no_args(t_cmd *cmd, int i)
 	return (i);
 }
 
-/*int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
+
+int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 {
-	int		i;
-	bool	cmd_found;
-
-	i = 0;
-	cmd_found = false;
-	i = handle_redirections(cmd, i);
-	if (i == -1)
-		return ((1));
-	if (is_empty_command(cmd, i))
-		return (1);
-	i = handle_cmd_name(cmd, i);
-	if (i == -1)
-		return (1);
-	cmd_found = true;
-	if (!cmd->segment[i] || is_redirection(cmd, i))
-		i = no_args(cmd, i);
-	else
-	{
-		i = handle_cmd_args(mini, cmd, i);
-		if (i == -1)
-			return (1);
-	}
-	while (cmd->segment[i] && cmd_found && !is_redirection(cmd, i))
-	{
-		i = handle_cmd_args(mini, cmd, i);
-		if (i == -1)
-			return (1);
-	}
-	i = handle_redirections(cmd, i);
-	if (i == -1)
-		return (1);
-	return (0);
-} */
-
-int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
-{
-	int		i;
-	bool	cmd_found;
-
-	i = 0;
-	cmd_found = false;
 	while (cmd->segment[i])
 	{
 		if (is_redirection(cmd, i))
 		{
 			i = handle_redirections(cmd, i);
 			if (i == -1)
-				return (1);
+				return (-1);
 			if (is_empty_command(cmd, i))
-				return (1);
+				return (-1);
 		}
-		else if (!cmd_found)
+		else if (*cmd_found == 0)
 		{
 			i = handle_cmd_name(cmd, i);
 			if (i == -1)
-				return (1);
-			cmd_found = true;
+				return (-1);
+			*cmd_found = 1;
 		}
 		else
 		{
 			i = handle_cmd_args(mini, cmd, i);
 			if (i == -1)
-				return (1);
+				return (-1);
 		}
 	}
+	return (i);
+}
+
+int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
+{
+	int	i;
+	int	cmd_found;
+
+	i = 0;
+	cmd_found = 0;
+	i = cmd_string_while(mini, cmd, i, &cmd_found);
+	if (i == -1)
+		return (1);
 	if (cmd_found && (!cmd->args || !cmd->args[0]))
 		i = no_args(cmd, i);
 	return (0);
 }
+
+// int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
+// {
+// 	int		i;
+// 	bool	cmd_found;
+
+// 	i = 0;
+// 	cmd_found = false;
+// 	while (cmd->segment[i])
+// 	{
+// 		if (is_redirection(cmd, i))
+// 		{
+// 			i = handle_redirections(cmd, i);
+// 			if (i == -1)
+// 				return (1);
+// 			if (is_empty_command(cmd, i))
+// 				return (1);
+// 		}
+// 		else if (!cmd_found)
+// 		{
+// 			i = handle_cmd_name(cmd, i);
+// 			if (i == -1)
+// 				return (1);
+// 			cmd_found = true;
+// 		}
+// 		else
+// 		{
+// 			i = handle_cmd_args(mini, cmd, i);
+// 			if (i == -1)
+// 				return (1);
+// 		}
+// 	}
+// 	//printf("i: %d\n", i);
+// 	if (cmd_found && (!cmd->args || !cmd->args[0]))
+// 		i = no_args(cmd, i);
+// 	return (0);
+// }
 
 //Loops through segment string to find redirection symbols
 // creates a linked list if redirection symbol(s) are found
@@ -257,4 +267,3 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	}
 	return (i);
 }
-

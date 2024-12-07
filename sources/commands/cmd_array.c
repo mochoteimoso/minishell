@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_array.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/25 18:25:33 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:39:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	count_pipes(char *line)
 static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 {
 	int i;
+
 	i = 0;
 	while (i < cmd_count)
 	{
@@ -47,7 +48,6 @@ static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 		{
 			printf("Failed to allocate memory for struct\n");
 			clean_cmds(mini->cmds);
-			free(mini->cmds);
 			return (1);
 		}
 		initialize_command_struct(mini->cmds[i]);

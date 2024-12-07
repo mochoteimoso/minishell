@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/05 13:00:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/07 19:09:26 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,11 @@ int	arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 			i = expand_variable(mini, cmd->segment, &arg->value, arg);
 		}
 		else
-		{
 			i = no_expanding(cmd->segment, arg, i);
-		}
 		if (cmd->segment[i] == ' ')
 			break ;
 	}
+	arg->len = ft_strlen(arg->value);
 	return (i);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/05 17:14:14 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:19:54 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,24 +101,24 @@ static int user_prompt(t_shell *mini)
 		input = readline("minishell> ");
 		if (input == NULL)
 			break ;
-		if (input && *input)
-		{
-			if (is_this_empty(input))
-			{
-				free(input);
-				continue ;
-			}
-		add_history(input);
-		if (parse_and_validate_input(input, mini))
+		if (is_this_empty(input))
 		{
 			free(input);
 			continue ;
 		}
-		// printer(mini);
-		execute_pipeline(mini);
-		// if (execute_pipeline(mini))
-		// 	ft_putendl_fd("execution failed", 2);
-		free(input);
+		if (input && *input)
+		{
+			add_history(input);
+			if (parse_and_validate_input(input, mini))
+			{
+				free(input);
+				continue ;
+			}
+			// printer(mini);
+			execute_pipeline(mini);
+			// if (execute_pipeline(mini))
+			// 	ft_putendl_fd("execution failed", 2);
+			free(input);
 		}
 	}
 	return (0);

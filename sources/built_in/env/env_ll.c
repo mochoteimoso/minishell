@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/05 18:19:47 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:33:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_env	*create_node(void)
 
 static int	set_name(t_env *node, char *name)
 {
+	(void)name;
 	node->name = ft_strdup(name);
 	if (!node->name)
 		return (1);
@@ -73,7 +74,6 @@ static int	fill_node(t_env *node, char *name, char *value)
 	{
 		clean_env(node, NULL);
 		free(name);
-		free(value);
 		return (1);
 	}
 	return (0);
