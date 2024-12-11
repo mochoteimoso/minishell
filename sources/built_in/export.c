@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/05 18:05:49 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:37:14 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	built_export(t_shell *mini, t_cmd *cmd)
 			len = ft_strlen(cmd->args[i]);
 			if (parse_and_add(mini, cmd->args[i], len))
 			{
-				ft_putendl_fd("Invalid identifier", 2);
+				ft_putendl_fd(" not a valid identifier", 2);
 				mini->exit_stat = 1;
 				return (1);
 			}
