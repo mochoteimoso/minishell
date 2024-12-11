@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/05 18:04:44 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:26:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	to_path(t_shell *mini, char *path)
 
 	if (access(path, F_OK) == -1)
 	{
-		ft_putendl_fd("No such file or directory", 2);
+		ft_putendl_fd(" No such file or directory", 2);
 		mini->exit_stat = 1;
 		return (1);
 	}
@@ -90,7 +90,7 @@ static int	to_home(char *cwd)
 	path = getenv("HOME");
 	if (!path)
 	{
-		printf("cd: no HOME\n");
+		ft_putendl_fd("cd: no HOME", 2);
 		return (1);
 	}
 	chdir(path);
@@ -107,7 +107,7 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 
 	if (ft_array_len(cmd->args) > 2)
 	{
-		error(mini, "Too many arguments");
+		error(mini, " too many arguments");
 		return (1);
 	}
 	cwd = getcwd(NULL, 0);
