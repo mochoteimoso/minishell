@@ -3,32 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:04:02 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:51:16 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		validate_input_syntax(char **input);
-int		check_quotes(char *input, int limit);
-int		check_non_whitespace(char *str);
+int	validate_input_syntax(char **input, t_shell *mini);
+int	check_quotes(char *input, int limit);
+int	check_non_whitespace(char *str);
 
 /* Checks the syntax of the input string
 for unmatched quotes and incorrectly placed pipes and redirection symbols*/
 
-int	validate_input_syntax(char **input)
+int	validate_input_syntax(char **input, t_shell *mini)
 {
 	int	i;
 
 	if (check_quotes(*input, 0))
 	{
 		ft_putendl_fd("syntax error: unmatched quotes", 2);
+		mini->exit_stat = 2;
 		return (1);
 	}
-	if (check_pipes(input))
+	if (check_pipes(input, mini))
 		return (1);
 	i = 0;
 	while ((*input)[i])
@@ -37,11 +38,12 @@ int	validate_input_syntax(char **input)
 			((*input)[i] == ';' || (*input)[i] == '\\'))
 		{
 			ft_putendl_fd("invalid syntax", 2);
+			mini->exit_stat = 2;
 			return (1);
 		}
 		i++;
 	}
-	if (check_redirects(*input))
+	if (check_redirects(*input, mini))
 		return (1);
 	return (0);
 }
@@ -57,7 +59,7 @@ int	check_quotes(char *input, int limit)
 	in_single_quote = 0;
 	in_double_quote = 0;
 	index = 0;
-	while (input[index] && (limit == -1 || index <= limit))
+	while (input[index] && (limit == -1 || index < limit))
 	{
 		if (input[index] == '\'' && !in_double_quote)
 			in_single_quote = !in_single_quote;

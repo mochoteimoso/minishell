@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_syntax.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:06:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:03:56 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:41:01 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int			check_redirects(char *input);
-static int	check_in_redir(char *input, int *i);
-static int	check_out_redir(char *input, int *i);
-static int	validate_redirect(char *input, int *i, char *type);
+int			check_redirects(char *input, t_shell *mini);
+static int	check_in_redir(char *input, t_shell *mini, int *i);
+static int	check_out_redir(char *input, t_shell *mini, int *i);
+static int	validate_redirect(char *input, t_shell *mini, int *i, char *type);
 
 // Checks that there is a non-whitespace character after redirects
 
-int	check_redirects(char *input)
+int	check_redirects(char *input, t_shell *mini)
 {
 	int	i;
 
@@ -28,12 +28,12 @@ int	check_redirects(char *input)
 	{
 		if (input[i] == '>' && !check_quotes(input, i))
 		{
-			if (check_in_redir(input, &i))
+			if (check_in_redir(input, mini, &i))
 				return (1);
 		}
 		else if (input[i] == '<' && !check_quotes(input, i))
 		{
-			if (check_out_redir(input, &i))
+			if (check_out_redir(input, mini, &i))
 				return (1);
 		}
 		i++;
@@ -41,33 +41,33 @@ int	check_redirects(char *input)
 	return (0);
 }
 
-static int	check_in_redir(char *input, int *i)
+static int	check_in_redir(char *input, t_shell *mini, int *i)
 {
 	if (input[*i + 1] == '>')
 	{
 		(*i)++;
-		if (validate_redirect(input, i, ">>") != 0)
+		if (validate_redirect(input, mini, i, ">>") != 0)
 			return (1);
 	}
 	else
 	{
-		if (validate_redirect(input, i, ">") != 0)
+		if (validate_redirect(input, mini, i, ">") != 0)
 			return (1);
 	}
 	return (0);
 }
 
-static int	check_out_redir(char *input, int *i)
+static int	check_out_redir(char *input, t_shell *mini, int *i)
 {
 	if (input[*i + 1] == '<')
 	{
 		(*i)++;
-		if (validate_redirect(input, i, "<<") != 0)
+		if (validate_redirect(input, mini, i, "<<") != 0)
 			return (1);
 	}
 	else
 	{
-		if (validate_redirect(input, i, "<") != 0)
+		if (validate_redirect(input, mini, i, "<") != 0)
 			return (1);
 	}
 	return (0);
@@ -76,7 +76,7 @@ static int	check_out_redir(char *input, int *i)
 // Returns an error if there is no non-whitespace character after redirection symbol
 // before input ends or a pipe is encountered
 
-static int	validate_redirect(char *input, int *i, char *type)
+static int	validate_redirect(char *input, t_shell *mini, int *i, char *type)
 {
 	(*i)++;
 	while (input[*i] == ' ')
@@ -84,6 +84,7 @@ static int	validate_redirect(char *input, int *i, char *type)
 	if (!input[*i] || input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
 	{
 		printf("syntax error near unexpected token %s\n", type);
+		mini->exit_stat = 1;
 		return (1);
 	}
 	return (0);
