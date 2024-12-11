@@ -159,7 +159,7 @@ void	wait_children(t_shell *mini);
 int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int		handle_redirections(t_cmd *cmd, int i);
-int		handle_cmd_name(t_cmd *cmd, int i);
+int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
 int		parse_and_validate_input(char *input, t_shell *mini);
 
 	/*expand.c*/
@@ -200,19 +200,6 @@ char	*trim_whitespace(char *segment);
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
-/*syntax*/
-
-	/*syntax_checker.c*/
-int		validate_input_syntax(char **input);
-int		check_quotes(char *input, int limit);
-int		check_non_whitespace(char *str);
-
-	/*redirection_syntax.c*/
-int		check_redirects(char *input);
-
-	/*pipe_syntax.c*/
-int		check_pipes(char **input);
-
 /*redirection*/
 	/*get_filename.c*/
 int		parse_filename(t_cmd *cmd, int i, char **filename);
@@ -250,13 +237,13 @@ int		resolve_fd(t_cmd *cmd);
 
 /*syntax*/
 	/*pipe_syntax*/
-int		check_pipes(char **input);
+int		check_pipes(char **input, t_shell *mini);
 
 	/*redirection_syntax.c*/
-int		check_redirects(char *input);
+int		check_redirects(char *input, t_shell *mini);
 
 	/*syntax_checker.c*/
-int		validate_input_syntax(char **input);
+int		validate_input_syntax(char **input, t_shell *mini);
 int		check_quotes(char *input, int limit);
 int		check_non_whitespace(char *str);
 
