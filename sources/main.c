@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/05 17:55:43 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:03:16 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	is_this_empty(char *input)
 	return (1);
 }
 
-static int user_prompt(t_shell *mini)
+/*static int user_prompt(t_shell *mini)
 {
 	char	*input;
 
@@ -102,24 +102,67 @@ static int user_prompt(t_shell *mini)
 		input = readline("minishell> ");
 		if (input == NULL)
 			break ;
+		if (is_this_empty(input))
+		{
+			free(input);
+			continue ;
+		}
 		if (input && *input)
 		{
-			if (is_this_empty(input))
+			add_history(input);
+			if (parse_and_validate_input(input, mini))
 			{
 				free(input);
 				continue ;
 			}
-		add_history(input);
-		if (parse_and_validate_input(input, mini))
+			//printer(mini);
+			execute_pipeline(mini);
+			//if (execute_pipeline(mini))
+			//	ft_putendl_fd("execution failed", 2);
+			free(input);
+		}
+	}
+	return (0);
+} */
+
+// Edited for the tester
+
+static int user_prompt(t_shell *mini)
+{
+	char	*input;
+
+	while (1)
+	{
+		init_sig();
+		if (isatty(fileno(stdin)))
+		{
+			input = readline("minishell> ");
+			if (input == NULL)
+				break;
+		}
+		else
+		{
+			char *line = get_next_line(fileno(stdin));
+			if (line == NULL)
+				break;
+			input = ft_strtrim(line, "\n");
+			free(line);
+		}
+		if (is_this_empty(input))
 		{
 			free(input);
-			//cleaner(mini);
-			continue ;
+			continue;
 		}
-		//printer(mini);
-		execute_pipeline(mini);
-		//ft_putendl_fd("execution failed", 2);
-		//free(input);
+		if (input && *input)
+		{
+			add_history(input);
+			if (parse_and_validate_input(input, mini))
+			{
+				free(input);
+				continue;
+			}
+			execute_pipeline(mini);
+			free(input);
 		}
 	}
 	return (0);
