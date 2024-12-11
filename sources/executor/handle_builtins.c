@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:53:40 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/05 18:39:37 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:46:03 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	built_in_exe(t_shell *mini, t_cmd *cmd)
 {
 	sig_reseted();
 	if (ft_strcmp(cmd->command, "exit") == 0)
-		built_exit(mini, cmd);
+		return (built_exit(mini, cmd));
 	else if (ft_strcmp(cmd->command, "cd") == 0)
 		return (built_cd(mini, cmd));
 	else if (ft_strcmp(cmd->command, "echo") == 0)
