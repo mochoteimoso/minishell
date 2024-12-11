@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_array.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:04:07 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/20 17:36:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:25:56 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,5 @@ void	ft_free_array(char **array)
 		free(array[a]);
 		a++;
 	}
-	//printf("Lucas\n");
 	free(array);
 }
