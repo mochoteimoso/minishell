@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/11 19:03:16 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:02:29 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,10 @@ static int	is_this_empty(char *input)
 		if (input && *input)
 		{
 			add_history(input);
-			if (parse_and_validate_input(input, mini))
+			if (parse_and_validate_input(&input, mini))
 			{
-				free(input);
+				if (input)
+					free(input);
 				continue ;
 			}
 			//printer(mini);
@@ -127,7 +128,7 @@ static int	is_this_empty(char *input)
 
 // Edited for the tester
 
-static int user_prompt(t_shell *mini)
+static int user_prompt(t_shell *mini, int status)
 {
 	char	*input;
 
@@ -156,7 +157,7 @@ static int user_prompt(t_shell *mini)
 		if (input && *input)
 		{
 			add_history(input);
-			if (parse_and_validate_input(input, mini))
+			if (parse_and_validate_input(&input, mini))
 			{
 				free(input);
 				continue;
@@ -165,10 +166,11 @@ static int user_prompt(t_shell *mini)
 			free(input);
 		}
 	}
-	return (0);
+	status = mini->exit_stat;
+	return (status);
 }
 
-static int	activate_shell(char **envp)
+static int	activate_shell(int status, char **envp)
 {
 	t_shell	*mini;
 
@@ -176,21 +178,28 @@ static int	activate_shell(char **envp)
 	if (!mini)
 	{
 		ft_putendl_fd("mini struct malloc failed", 2);
-		return (1);
+		status = 1;
+		return (status);
 	}
 	if (init_shell(mini, envp))
-		return (1);
-	user_prompt(mini);
-	return (0);
+	{
+		status = 1;
+		return (status);
+	}
+	status = user_prompt(mini, status);
+	return (status);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
+	int	status;
+	
+	status = 0;
 	(void)argv;
 	if (argc != 1)
 	{
 		printf("Minishell doesn't take arguments\n");
 		return (1);
 	}
-	return (activate_shell(envp));
+	return (activate_shell(status, envp));
 }
