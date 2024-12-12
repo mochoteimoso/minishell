@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/11 18:51:34 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:33:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ int	check_pipes(char **input, t_shell *mini)
 		i++;
 	if ((*input)[i] == '|' && !check_quotes(*input, i))
 	{
-		ft_putstr_fd("syntax error near unexpected token ", 2);
-		ft_putendl_fd(input[i], 2);
+		ft_putendl_fd("syntax error near unexpected token ", 2);
 		mini->exit_stat = 2;
 		return (1);
 	}
@@ -119,6 +118,7 @@ static int	check_trailing_pipe(char **input, t_shell *mini)
 		{
 			ft_putendl_fd("syntax error: unexpected end of input", 2);
 			mini->exit_stat = 2;
+			*input = NULL;
 			return (1);
 		}
 		*input = updated_input;
@@ -142,6 +142,7 @@ static char	*handle_trailing_pipe(char *input)
 		if (!additional_input)
 		{
 			perror("readline error");
+			free(input);
 			return (NULL);
 		}
 		if (check_non_whitespace(additional_input))
@@ -151,6 +152,7 @@ static char	*handle_trailing_pipe(char *input)
 			if (!updated_input)
 			{
 				perror("malloc");
+				free(input);
 				return (NULL);
 			}
 			free(input);
