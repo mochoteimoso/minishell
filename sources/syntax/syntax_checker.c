@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/11 18:51:16 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/12 19:31:53 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ for unmatched quotes and incorrectly placed pipes and redirection symbols*/
 int	validate_input_syntax(char **input, t_shell *mini)
 {
 	int	i;
-
+	
 	if (check_quotes(*input, 0))
 	{
 		ft_putendl_fd("syntax error: unmatched quotes", 2);
