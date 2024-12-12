@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:06:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/11 18:41:01 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:24:49 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,10 @@ static int	validate_redirect(char *input, t_shell *mini, int *i, char *type)
 		(*i)++;
 	if (!input[*i] || input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
 	{
-		printf("syntax error near unexpected token %s\n", type);
-		mini->exit_stat = 1;
+		
+		ft_putstr_fd("syntax error near unexpected token ", 2);
+		ft_putendl_fd(type, 2);
+		mini->exit_stat = 2;
 		return (1);
 	}
 	return (0);
