@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   child_process_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:01:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:19:42 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		dup_input(t_shell *mini, t_cmd *cmd, int i);
-int		dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
-int		dup2_and_close(int old_fd, int new_fd);
+int	dup_input(t_shell *mini, t_cmd *cmd, int i);
+int	dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
+int	dup2_and_close(int old_fd, int new_fd);
 
 // Duplicates input from fd_in if there is a redirection or from previous pipe
 // Redirection takes precedence over pipe
@@ -30,7 +30,7 @@ int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 			return (1);
 		}
 		if (i > 0)
-		close(mini->pipes[i - 1][0]);
+			close(mini->pipes[i - 1][0]);
 	}
 	else if (i > 0)
 	{
