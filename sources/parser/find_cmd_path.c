@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/11 18:13:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:55:01 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int			get_cmd_path(t_shell *mini, t_cmd *cmd);
 static char	*search_command_in_paths(char **paths, t_cmd *cmd);
 static int	check_abs_path(t_shell *mini, t_cmd *cmd);
+int			check_special_cases(t_shell *mini, t_cmd *cmd);
 void		cmd_error_and_exit_stat(t_shell *mini, t_cmd *cmd, int exit_status);
 int			check_for_directory(t_shell *mini, t_cmd *cmd);
 
@@ -25,13 +26,17 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 	char	*paths_str;
 	char	**paths;
 	t_env	*temp;
+	int		abs_path_status;
 
 	if (cmd->command == NULL || ft_strlen(cmd->command) == 0)
 	{
 		mini->exit_stat = 0;
 		return (1);
 	}
-	if (check_abs_path(mini, cmd) != 1)
+	abs_path_status = check_abs_path(mini, cmd);
+	if (abs_path_status == 0)
+		return (0);
+	if (abs_path_status != 1)
 		return (mini->exit_stat != 0);
 	temp = mini->env;
 	while (temp)
@@ -90,7 +95,10 @@ static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 
 static int	check_abs_path(t_shell *mini, t_cmd *cmd)
 {
-	if (cmd->command[0] == '/' || cmd->command[0] == '.')
+	if (check_special_cases(mini, cmd))
+		return (-1);
+	if (cmd->command[0] == '/'
+		|| (cmd->command[0] == '.' && cmd->command[1] == '/'))
 	{
 		if (check_for_directory(mini, cmd))
 			return (-1);
@@ -114,11 +122,33 @@ static int	check_abs_path(t_shell *mini, t_cmd *cmd)
 	return (1);
 }
 
-void	cmd_error_and_exit_stat(t_shell *mini, t_cmd *cmd, int exit_status)
+int	check_special_cases(t_shell *mini, t_cmd *cmd)
 {
-	ft_putstr_fd(cmd->command, 2);
-	ft_putendl_fd(": command not found", 2);
-	mini->exit_stat = exit_status;
+	if (cmd->command[0]  == '~' && !cmd->command[1])
+	{
+		ft_putstr_fd(cmd->command, 2);
+		ft_putendl_fd(": Is a directory", 2);
+		mini->exit_stat = 126;
+		return (1);
+	}
+	if (cmd->command[0]  == '.' && !cmd->command[1])
+	{
+		ft_putstr_fd(cmd->command, 2);
+		ft_putendl_fd(": filename argument required", 2);
+		mini->exit_stat = 127;
+		return (1);
+	}
+	if (cmd->command[0] && cmd->command[1] && !cmd->command[2])
+	{
+		if (cmd->command[0] == '.' && cmd->command[1] == '.')
+		{
+			ft_putstr_fd(cmd->command, 2);
+			ft_putendl_fd(": command not found", 2);
+			mini->exit_stat = 127;
+			return (1);
+		}
+	}
+	return (0);
 }
 
 int	check_for_directory(t_shell *mini, t_cmd *cmd)
@@ -132,7 +162,14 @@ int	check_for_directory(t_shell *mini, t_cmd *cmd)
 		ft_putstr_fd(cmd->command, 2);
 		ft_putendl_fd(": Is a directory", 2);
 		mini->exit_stat = 126;
-		return (-1);
+		return (1);
 	}
 	return (0);
+}
+
+void	cmd_error_and_exit_stat(t_shell *mini, t_cmd *cmd, int exit_status)
+{
+	ft_putstr_fd(cmd->command, 2);
+	ft_putendl_fd(": command not found", 2);
+	mini->exit_stat = exit_status;
 }
