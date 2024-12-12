@@ -156,11 +156,14 @@ void	wait_children(t_shell *mini);
 
 /*parser*/
 	/*parser.c*/
+int		parse_and_validate_input(char **input, t_shell *mini);
 int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
-int		handle_redirections(t_cmd *cmd, int i);
 int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
-int		parse_and_validate_input(char *input, t_shell *mini);
+
+	/*parser_utils.c*/
+int		no_args(t_cmd *cmd, int i);
+bool	is_empty_command(t_cmd *cmd, int i);
 
 	/*expand.c*/
 int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
@@ -193,6 +196,21 @@ int		the_arg(t_expand *arg, int i);
 void	what_quote(char *str, t_expand *arg);
 int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 
+	/*handle_cmd_name.c*/
+int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
+int		skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i);
+int		process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result);
+
+	/*handle_redirections.c*/
+int		handle_redirections(t_shell *mini, t_cmd *cmd, int i);
+
+	/*handle_redirs_utils.c*/
+bool	is_redirection(t_cmd *cmd, int i);
+int		handle_redirect_in(t_shell *mini, t_cmd *cmd, int i);
+int		handle_redirect_out(t_cmd *cmd, int i);
+int		handle_heredoc(t_cmd *cmd, int i);
+int		handle_append(t_cmd *cmd, int i);
+
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *segment);
@@ -211,13 +229,6 @@ t_redir	*redir_add_node(void);
 void	redir_lstadd_back(t_redir **lst, t_redir *new);
 void	redir_update_tail(t_cmd *cmd);
 int		redirll_head_tail(t_cmd *cmd);
-
-	/*handle_redirections.c*/
-bool	is_redirection(t_cmd *cmd, int i);
-int		handle_redirect_in(t_cmd *cmd, int i);
-int		handle_redirect_out(t_cmd *cmd, int i);
-int		handle_heredoc(t_cmd *cmd, int i);
-int		handle_append(t_cmd *cmd, int i);
 
 	/*open_files.c*/
 int		open_input_file(t_cmd *cmd, char *input_file);
@@ -265,6 +276,7 @@ void	clean_cmds(t_cmd **cmds);
 void	exit_handler(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	cleaner_for_main(t_shell *mini);
+void	cleaner_for_main_success(t_shell *mini);
 
 /*signals.c*/
 void	init_sig(void);
