@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 10:28:24 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:51:41 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 	{
 		if (is_redirection(cmd, i))
 		{
-			i = handle_redirections(cmd, i);
+			i = handle_redirections(mini, cmd, i);
 			if (i == -1)
 				return (-1);
 			i = skip_whitespace(cmd->segment, i);
