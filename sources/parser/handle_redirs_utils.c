@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 10:26:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/13 19:52:01 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	is_redirection(t_cmd *cmd, int i);
 int		handle_redirect_in(t_cmd *cmd, int i);
 int		handle_redirect_out(t_cmd *cmd, int i);
-int		handle_heredoc(t_cmd *cmd, int i);
+int		handle_heredoc(t_shell *mini, t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
 
 // Checks if the input contains a redirection symbol that is not within quotes
@@ -72,23 +72,23 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 
 // Handles heredoc, finds the delimiter and copies data to the redir linked list
 
-int	handle_heredoc(t_cmd *cmd, int i)
+int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 {
-	bool	in_quotes;
-	char	*filename;
+	char	*delim;
 
-	in_quotes = false;
-	filename = NULL;
+	delim = NULL;
 	i+=2;
-	i = parse_filename(cmd, i, &filename);
-	if (i == -1 || !filename)
-		return (-1);
-	cmd->redir_tail->delimiter = filename;
-	cmd->redir_tail->type = HEREDOC;
-	if (in_quotes)
+	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 		cmd->redir_tail->expand = false;
-	else
-		cmd->redir_tail->expand = true;
+	i = parse_filename(cmd, i, &delim);
+	if (i == -1 || !delim)
+		return (-1);
+	cmd->redir_tail->delimiter = delim;
+	cmd->redir_tail->type = HEREDOC;
+	if (generate_hd_file(cmd))
+		return (-1);
+	if (open_and_write_to_heredoc(mini, cmd))
+		return (-1);
 	return (i);
 }
 
