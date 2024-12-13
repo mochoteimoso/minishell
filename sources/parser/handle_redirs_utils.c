@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_redirections.c                              :+:      :+:    :+:   */
+/*   handle_redirs_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/05 17:52:54 by henbuska         ###   ########.fr       */
+/*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
+/*   Updated: 2024/12/13 10:26:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 {
 	char	*filename;
 	bool	in_quotes;
+	int		temp_fd;
 
 	filename = NULL;
 	in_quotes = false;
@@ -45,6 +46,8 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_IN;
+	temp_fd = open_input_file(cmd, cmd->redir_tail->file);
+	close(temp_fd);
 	return (i);
 }
 
@@ -80,8 +83,8 @@ int	handle_heredoc(t_cmd *cmd, int i)
 	i = parse_filename(cmd, i, &filename);
 	if (i == -1 || !filename)
 		return (-1);
-	cmd->redir_tail->file = filename;
-	cmd->redir_tail->type = REDIRECT_OUT;
+	cmd->redir_tail->delimiter = filename;
+	cmd->redir_tail->type = HEREDOC;
 	if (in_quotes)
 		cmd->redir_tail->expand = false;
 	else

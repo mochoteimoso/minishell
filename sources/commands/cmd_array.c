@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/11/26 15:28:36 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:27:10 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ int	count_pipes(char *line)
 static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 {
 	int i;
+	
 	i = 0;
 	while (i < cmd_count)
 	{
 		mini->cmds[i] = malloc(sizeof(t_cmd));
 		if (!mini->cmds[i])
 		{
-			printf("Failed to allocate memory for struct\n");
+			ft_putendl_fd("Failed to allocate memory for struct", 2);
 			clean_cmds(mini->cmds);
-			free(mini->cmds);
 			return (1);
 		}
 		initialize_command_struct(mini->cmds[i]);
@@ -68,7 +68,7 @@ int	prepare_command_structs(t_shell *mini, char *input)
 	mini->cmds = ft_calloc(command_count, sizeof(t_cmd));
 	if (!mini->cmds)
 	{
-		printf("Failed to allocate memory for command array\n");
+		ft_putendl_fd("Failed to allocate memory for command array", 2);
 		return (1);
 	}
 	if (cmd_struct_while(mini, command_count))

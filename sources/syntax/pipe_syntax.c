@@ -6,22 +6,22 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/05 14:12:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:33:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int			check_pipes(char **input);
+int			check_pipes(char **input, t_shell *mini);
 //static int	validate_pipe(char *input);
-static int	check_consecutive_pipes(char *input);
-static int	check_trailing_pipe(char **input);
+static int	check_consecutive_pipes(char *input, t_shell *mini);
+static int	check_trailing_pipe(char **input, t_shell *mini);
 static char	*handle_trailing_pipe(char *input);
 
 /* Checks syntax for pipes, i.e. that it is not a the start or that
 there are no consecutive pipes. Also handles a trailing pipe */
 
-int	check_pipes(char **input)
+int	check_pipes(char **input, t_shell *mini)
 {
 	int	i;
 
@@ -30,14 +30,15 @@ int	check_pipes(char **input)
 		i++;
 	if ((*input)[i] == '|' && !check_quotes(*input, i))
 	{
-		printf("syntax error near unexpected token %c\n", (*input)[i]);
+		ft_putendl_fd("syntax error near unexpected token ", 2);
+		mini->exit_stat = 2;
 		return (1);
 	}
 	//if (validate_pipe(*input))
 	//	return (1);
-	if (check_consecutive_pipes(*input))
+	if (check_consecutive_pipes(*input, mini))
 		return (1);
-	if (check_trailing_pipe(input))
+	if (check_trailing_pipe(input, mini))
 		return (1);
 	return (0);
 }
@@ -69,7 +70,7 @@ int	check_pipes(char **input)
 
 // checks if there are consecutive pipes without text in between
 
-static int	check_consecutive_pipes(char *input)
+static int	check_consecutive_pipes(char *input, t_shell *mini)
 {
 	int	i;
 	int	j;
@@ -86,7 +87,9 @@ static int	check_consecutive_pipes(char *input)
 				j++;
 			if (input[j] == '|' && !check_quotes(input, j))
 			{
-				printf("syntax error near unexpected token '%c'\n", input[i]);
+				ft_putstr_fd("syntax error near unexpected token ", 2);
+				ft_putendl_fd(&input[i], 2);
+				mini->exit_stat = 2;
 				return (1);
 			}
 			pipe_found = 1;
@@ -100,7 +103,7 @@ static int	check_consecutive_pipes(char *input)
 
 // Checks for trailing pipe
 
-static int	check_trailing_pipe(char **input)
+static int	check_trailing_pipe(char **input, t_shell *mini)
 {
 	int		i;
 	char	*updated_input;
@@ -113,7 +116,9 @@ static int	check_trailing_pipe(char **input)
 		updated_input = handle_trailing_pipe(*input);
 		if (!updated_input)
 		{
-			ft_putendl_fd("syntax error: unexpected end of input\n", 2);
+			ft_putendl_fd("syntax error: unexpected end of input", 2);
+			mini->exit_stat = 2;
+			*input = NULL;
 			return (1);
 		}
 		*input = updated_input;
@@ -137,6 +142,7 @@ static char	*handle_trailing_pipe(char *input)
 		if (!additional_input)
 		{
 			perror("readline error");
+			free(input);
 			return (NULL);
 		}
 		if (check_non_whitespace(additional_input))
@@ -146,6 +152,7 @@ static char	*handle_trailing_pipe(char *input)
 			if (!updated_input)
 			{
 				perror("malloc");
+				free(input);
 				return (NULL);
 			}
 			free(input);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 16:02:14 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:17:46 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,25 @@ char	*get_value(t_env *env, char *name)
 		}
 		temp = temp->next;
 	}
-	return (NULL);
+	value = ft_strdup("");
+	if (!value) {
+		ft_putendl_fd("malloc fail", 2);
+		return ((char *) -1);
+	}
+	return (value);
 }
 
 static int	we_have_value(char *value, char *temp, char **expanded)
 {
-	if (value)
+	temp = ft_strjoin(*expanded, value);
+	free(value);
+	if (!temp)
 	{
-		temp = ft_strjoin(*expanded, value);
-		free(value);
-		if (!temp)
-		{
-			ft_putendl_fd("malloc failed", 2);
-			return (-1);
-		}
-		free(*expanded);
-		*expanded = temp;
+		ft_putendl_fd("malloc failed", 2);
+		return (-1);
 	}
+	free(*expanded);
+	*expanded = temp;
 	return (0);
 }
 
@@ -64,11 +66,8 @@ int	handle_value(t_shell *mini, t_vdata *data)
 	data->value = get_value(mini->env, data->name);
 	if (data->value == (char *)-1)
 		return (1);
-	if (data->value)
-	{
-		if (we_have_value(data->value, data->temp, data->expanded) == -1)
-			return (1);
-	}
+	if (we_have_value(data->value, data->temp, data->expanded) == -1)
+		return (1);
 	return (0);
 }
 

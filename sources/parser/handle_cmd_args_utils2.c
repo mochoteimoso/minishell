@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmd_args_utils2.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 16:02:46 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:13:33 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 
 void	what_quote(char *str, t_expand *arg)
 {
-	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1 && str[arg->i] == '"'))
+	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
+		&& str[arg->i] == '"'))
 	{
 		if (str[arg->i + 1] != '\0' || str[arg->i] != ' ' )
 		{

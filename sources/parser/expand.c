@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/04 16:10:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:24:46 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	char	name[100];
 	int		indx;
 	t_vdata	data;
+	
 	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
 	if (!temp)
 		return (-1);
