@@ -6,14 +6,14 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:06:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/12 17:42:53 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:30:00 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
-int	skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i);
+int	skip_to_next_segment(t_cmd *cmd, int i);
 int	process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result);
 
 int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
@@ -27,7 +27,7 @@ int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
 	if (cmd_name.value && ft_strlen(cmd_name.value) == 0)
 	{
 		free(cmd_name.value);
-		i = skip_to_next_segment(mini, cmd, i);
+		i = skip_to_next_segment(cmd, i);
 		if (!cmd->segment[i])
 			return (-1);
 		if (process_quoted_segment(mini, cmd->segment, i, &cmd_name) == -1)
@@ -73,14 +73,14 @@ int	process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result
 	return (result->i);
 }
 
-int	skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i)
+int	skip_to_next_segment(t_cmd *cmd, int i)
 {
 	while (cmd->segment[i])
 	{
 		i = skip_whitespace(cmd->segment, i);
 		if (is_redirection(cmd, i))
 		{
-			i = handle_redirections(mini, cmd, i);
+			i = handle_redirections(cmd, i);
 			if (i == -1)
 				return (-1);
 			continue;
