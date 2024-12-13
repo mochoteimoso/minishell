@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/03 17:40:38 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:08:34 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		return (-1);
 	arg->i++;
 	indx = 0;
-	while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_' || str[arg->i] == '?'))
+	while (str[arg->i] && (ft_isalnum(str[arg->i])
+		|| str[arg->i] == '_' || str[arg->i] == '?'))
 	{
 		if (indx < (int) sizeof(name) - 1)
 			name[indx++] = str[arg->i++];
@@ -102,3 +103,4 @@ int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		arg->i = cont + 2;
 	return (arg->i);
 }
+

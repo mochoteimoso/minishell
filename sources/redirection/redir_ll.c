@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/07 14:11:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:10:09 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	redirll_head_tail(t_cmd *cmd)
 		cmd->redir_head = list_redir();
 		if (!cmd->redir_head)
 		{
-			printf("Failed to initialize redirection list\n");
+			ft_putendl_fd("Failed to initialize redirection list", 2);
 			return (-1);
 		}
 		cmd->redir_tail = cmd->redir_head;
@@ -86,7 +86,7 @@ int	redirll_head_tail(t_cmd *cmd)
 		redir_update_tail(cmd);
 		if (!cmd->redir_tail)
 		{
-			printf("Failed to allocate memory for new redirection node\n");
+			ft_putendl_fd("Failed to allocate memory for new redirection node", 2);
 			return (-1);
 		}
 	}

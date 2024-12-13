@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/07 19:17:55 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:01:23 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,3 +113,4 @@ int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 	cmd->args[arg_index] = NULL;
 	return (i);
 }
+

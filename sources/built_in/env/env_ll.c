@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/07 15:33:07 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:06:08 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_env	*add_node(char *env)
 	name = ft_substr(env, 0, (sign - env));
 	if (!name)
 		return (free(node), NULL);
-	value = ft_strdup(sign + 1);
+	value = strdup(sign + 1);
 	if (!value)
 	{
 		free(name);

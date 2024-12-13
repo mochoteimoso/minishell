@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/07 14:52:13 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:08:11 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,10 @@ int	execute_pipeline(t_shell *mini)
 	if (pipe_and_fork(mini))
 	{
 		cleaner_for_main(mini);
-		return (1);
+		return (1);   // return exit_stat?
 	}
 	wait_children(mini);
-	//close(mini->pipes[i][0]);
-	cleaner_for_main(mini);
+	cleaner_for_main_success(mini);
 	return (mini->exit_stat);
 }
 
@@ -152,12 +151,6 @@ static int	create_pipes(t_shell *mini)
 		if (pipe(mini->pipes[i]) == -1)
 		{
 			perror("pipe");
-			while (i >= 0)
-			{
-				free(mini->pipes[i]);
-				i--;
-			}
-			free(mini->pipes);
 			return (1);
 		}
 		i++;

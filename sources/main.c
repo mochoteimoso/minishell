@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/07 20:49:59 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:57:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	printer(t_shell *mini)
 		printf("Struct %d:\n", i);
 		printf("segment: %s\n", mini->cmds[i]->segment);
 		printf("command: %s\n", mini->cmds[i]->command);
+		printf("command path: %s\n", mini->cmds[i]->cmd_path);
 		if (mini->cmds[i]->args)
 		{
 			int j = 0;
@@ -43,8 +44,8 @@ void	printer(t_shell *mini)
 			redir = redir->next;
 			redir_index++;
 		}
-		printf("fd_in: %d\n", mini->cmds[i]->fd_in);
-		printf("fd_out: %d\n", mini->cmds[i]->fd_out);
+		//printf("fd_in: %d\n", mini->cmds[i]->fd_in);
+		//printf("fd_out: %d\n", mini->cmds[i]->fd_out);
 		printf("|*************************************************|");
 		printf("\n");
 		i++;
@@ -91,7 +92,7 @@ static int	is_this_empty(char *input)
 	return (1);
 }
 
-static int user_prompt(t_shell *mini)
+/*static int user_prompt(t_shell *mini)
 {
 	char	*input;
 
@@ -109,22 +110,67 @@ static int user_prompt(t_shell *mini)
 		if (input && *input)
 		{
 			add_history(input);
-			if (parse_and_validate_input(input, mini))
+			if (parse_and_validate_input(&input, mini))
 			{
-				free(input);
+				if (input)
+					free(input);
 				continue ;
 			}
-			// printer(mini);
+			//printer(mini);
 			execute_pipeline(mini);
-			// if (execute_pipeline(mini))
-			// 	ft_putendl_fd("execution failed", 2);
+			//if (execute_pipeline(mini))
+			//	ft_putendl_fd("execution failed", 2);
 			free(input);
 		}
 	}
 	return (0);
+} */
+
+// Edited for the tester
+
+static int user_prompt(t_shell *mini, int status)
+{
+	char	*input;
+
+	while (1)
+	{
+		init_sig();
+		if (isatty(fileno(stdin)))
+		{
+			input = readline("minishell> ");
+			if (input == NULL)
+				break;
+		}
+		else
+		{
+			char *line = get_next_line(fileno(stdin));
+			if (line == NULL)
+				break;
+			input = ft_strtrim(line, "\n");
+			free(line);
+		}
+		if (is_this_empty(input))
+		{
+			free(input);
+			continue;
+		}
+		if (input && *input)
+		{
+			add_history(input);
+			if (parse_and_validate_input(&input, mini))
+			{
+				free(input);
+				continue;
+			}
+			execute_pipeline(mini);
+			free(input);
+		}
+	}
+	status = mini->exit_stat;
+	return (status);
 }
 
-static int	activate_shell(char **envp)
+static int	activate_shell(int status, char **envp)
 {
 	t_shell	*mini;
 
@@ -132,21 +178,28 @@ static int	activate_shell(char **envp)
 	if (!mini)
 	{
 		ft_putendl_fd("mini struct malloc failed", 2);
-		return (1);
+		status = 1;
+		return (status);
 	}
 	if (init_shell(mini, envp))
-		return (1);
-	user_prompt(mini);
-	return (0);
+	{
+		status = 1;
+		return (status);
+	}
+	status = user_prompt(mini, status);
+	return (status);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
+	int	status;
+
+	status = 0;
 	(void)argv;
 	if (argc != 1)
 	{
 		printf("Minishell doesn't take arguments\n");
 		return (1);
 	}
-	return (activate_shell(envp));
+	return (activate_shell(status, envp));
 }

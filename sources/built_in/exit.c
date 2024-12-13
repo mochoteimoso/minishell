@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/06 15:59:54 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:04:39 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 {
 	int	ec;
 
-	ft_putstr_fd("exit\n", 1);
+	ft_putstr_fd("exit\n", 1);    // should this be printed to stdout??
 	ec = 0;
 	if (cmd->args[1])
 	{
@@ -46,10 +46,16 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 		{
 			ft_putstr_fd("exit: ", 2);
 			ft_putstr_fd(cmd->args[1], 2);
-			ft_putstr_fd(": needs to be numeric\n", 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
 			cleaner(mini);
 			free(mini);
 			exit(2);
+		}
+		else if (cmd->args[2])
+		{
+			ft_putstr_fd("exit: too many arguments\n", 2);
+			mini->exit_stat = 1;
+			return (1);
 		}
 		if (cmd->args[1])
 			ec = ft_atoi(cmd->args[1]);
