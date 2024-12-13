@@ -6,14 +6,14 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/12 17:37:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:26:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 bool	is_redirection(t_cmd *cmd, int i);
-int		handle_redirect_in(t_shell *mini, t_cmd *cmd, int i);
+int		handle_redirect_in(t_cmd *cmd, int i);
 int		handle_redirect_out(t_cmd *cmd, int i);
 int		handle_heredoc(t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
@@ -32,7 +32,7 @@ bool	is_redirection(t_cmd *cmd, int i)
 // Handles < redirection, finds the filename and copies data 
 // to the redir linked list
 
-int	handle_redirect_in(t_shell *mini, t_cmd *cmd, int i)
+int	handle_redirect_in(t_cmd *cmd, int i)
 {
 	char	*filename;
 	bool	in_quotes;
@@ -47,11 +47,6 @@ int	handle_redirect_in(t_shell *mini, t_cmd *cmd, int i)
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_IN;
 	temp_fd = open_input_file(cmd, cmd->redir_tail->file);
-	if (temp_fd == -2)
-	{
-		mini->exit_stat = 1;
-		return (-1);
-	}
 	close(temp_fd);
 	return (i);
 }
