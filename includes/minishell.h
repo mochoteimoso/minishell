@@ -198,15 +198,15 @@ int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 
 	/*handle_cmd_name.c*/
 int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
-int		skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i);
+int		skip_to_next_segment(t_cmd *cmd, int i);
 int		process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result);
 
 	/*handle_redirections.c*/
-int		handle_redirections(t_shell *mini, t_cmd *cmd, int i);
+int		handle_redirections(t_cmd *cmd, int i);
 
 	/*handle_redirs_utils.c*/
 bool	is_redirection(t_cmd *cmd, int i);
-int		handle_redirect_in(t_shell *mini, t_cmd *cmd, int i);
+int		handle_redirect_in(t_cmd *cmd, int i);
 int		handle_redirect_out(t_cmd *cmd, int i);
 int		handle_heredoc(t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
