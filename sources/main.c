@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/12 20:02:29 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/13 19:54:11 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	printer(t_shell *mini)
 			printf("Redirection %d - type: %d\n", redir_index, redir->type);
 			printf("Redirection %d - file: %s\n", redir_index, redir->file);
 			printf("Redirection %d - delimiter: %s\n", redir_index, redir->delimiter);
+			printf("Redirection %d - heredoc file: %s\n", redir_index, redir->heredoc_name);
+			printf("Redirection %d - expand or not: %d\n", redir_index, redir->expand);
 			redir = redir->next;
 			redir_index++;
 		}
