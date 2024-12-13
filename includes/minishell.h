@@ -117,6 +117,7 @@ void	to_alphabetical(char **array);
 	/*env_ll*/
 t_env	*add_node(char *env);
 t_env	*create_node(void);
+int		set_value(t_env *node, char *value);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
 /*commands*/

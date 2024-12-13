@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:08:11 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:15:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	execute_pipeline(t_shell *mini)
 	{
 		if (handle_single_builtin_cmd(mini))
 		{
-			mini->exit_stat = 1;
+			//mini->exit_stat = 1;
 			return (mini->exit_stat);
 		}
 		clean_cmds(mini->cmds);

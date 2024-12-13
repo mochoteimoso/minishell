@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 11:57:06 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:52:40 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ static int user_prompt(t_shell *mini, int status)
 				free(input);
 				continue;
 			}
+			// printer(mini);
 			execute_pipeline(mini);
 			free(input);
 		}

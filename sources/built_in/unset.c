@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 12:05:20 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 20:07:34 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,11 @@ int	built_unset(t_shell *mini, t_cmd *cmd)
 	{
 		while (i < sum)
 		{
+			if (cmd->args[i][0] == '-')
+			{
+				ft_putendl_fd("Invalid option", 2);
+				return (2);
+			}
 			if (unset_env(mini, cmd->args[i]))
 			{
 				error(mini, "No such variable");

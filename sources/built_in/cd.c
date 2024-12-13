@@ -6,24 +6,49 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 12:04:02 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:43:39 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// static void	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
+// {
+// 	int	flg = 0;
+// 	while (env)
+// 	{
+// 		if (ft_strcmp(env->name, "OLDPWD") == 0)
+// 		{
+// 			if (n)
+// 				printf("%s\n", env->value);
+// 			// *oldpwd = ft_strdup(env->value);
+// 			env->value = ft_strdup(*oldpwd);
+// 			flg += 1;
+// 		}
+// 		if (ft_strcmp(env->name, "PWD") == 0)
+// 		{
+// 			if (n)
+// 				wd = ft_strdup(env->value);
+// 			else
+// 				env->value = ft_strdup(wd);
+// 			flg += 1;
+// 		}
+// 		if (flg == 2)
+// 			break;
+// 		env = env->next;
+// 	}
+// }
+
 static void	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
 {
-	int	flg = 0;
+	int flg;
+
+	flg = 0;
 	while (env)
 	{
 		if (ft_strcmp(env->name, "OLDPWD") == 0)
 		{
-			if (n)
-				*oldpwd = ft_strdup(env->value);
-			else
-				env->value = ft_strdup(*oldpwd);
-			flg += 1;
+			env->value = ft_strdup(*oldpwd);
 		}
 		if (ft_strcmp(env->name, "PWD") == 0)
 		{
@@ -39,22 +64,34 @@ static void	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
 	}
 }
 
+static	int	get_oldpwd(t_env *env, char **pwd)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->name, "OLDPWD") == 0)
+		{
+			printf("%s\n", env->value);
+			*pwd = ft_strdup(env->value);
+		}
+		env = env->next;
+	}
+	return (0);
+}
+
 static void	old_pwd(t_shell *mini)
 {
-	char	*temp;
 	t_env	*env;
 	char	*pwd;
 	char	*oldpwd;
 
 	env = mini->env;
-	pwd = getcwd(NULL, 0);
-	oldpwd = ft_calloc(1, sizeof(char *));
-	temp = ft_calloc(1, sizeof(char *));
+	pwd = NULL;
+	get_oldpwd(env, &pwd);
+	oldpwd = getcwd(NULL, 0);
+	chdir(pwd);
 	update_pwd(mini->env, pwd, &oldpwd, 1);
-	temp = ft_strdup(oldpwd);
 	if (!oldpwd)
 		error(mini, "No OLDPWD set");
-	chdir(temp);
 	free(oldpwd);
 	free(pwd);
 }
@@ -65,17 +102,16 @@ static int	to_path(t_shell *mini, char *path)
 	char	*oldpwd;
 	t_env	*env;
 
-	if (access(path, F_OK) == -1)
-	{
-		ft_putendl_fd(" No such file or directory", 2);
-		mini->exit_stat = 1;
-		return (1);
-	}
 	env = mini->env;
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
 		return (1);
-	chdir(path);
+	if (chdir(path))
+	{
+		ft_putendl_fd("No such file or directory", 2);
+		mini->exit_stat = 1;
+		return (1);
+	}
 	cwd = getcwd(NULL, 0);
 	update_pwd(env, cwd, &oldpwd, 0);
 	free(cwd);
