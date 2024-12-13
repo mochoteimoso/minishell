@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:10:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/12 14:59:02 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:23:42 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	resolve_input_fd(t_cmd *cmd, t_redir *redir, int *fd_in)
 	if (redir->type == 0)
 		*fd_in = open_input_file(cmd, redir->file);
 	else if (redir->type == 3)
-		*fd_in = open_heredoc(cmd, redir->delimiter);
+		*fd_in = open_heredoc(cmd, redir->heredoc_name);
 	if (*fd_in == -2)
 		return (1);
 	return (0);
