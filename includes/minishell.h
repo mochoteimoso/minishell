@@ -13,6 +13,9 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
+# define TMP_S "/tmp/heredoc"
+# define TMP_EXT ".tmp"
+
 //# include </usr/include/linux/signal.h>
 
 typedef enum e_redir_type
@@ -49,6 +52,8 @@ typedef struct s_redir
 	t_redir_type	type;
 	bool			expand;
 	int				node_ind;
+	char			*heredoc_name;
+	int				heredoc_index;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -57,6 +62,7 @@ typedef struct s_cmd
 	char	*segment;
 	char	*command;
 	char	*cmd_path;
+	int		cmd_index;
 	char	**args;
 	int		args_count;
 	t_redir	*redir_head;
@@ -198,18 +204,22 @@ int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 
 	/*handle_cmd_name.c*/
 int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
-int		skip_to_next_segment(t_cmd *cmd, int i);
+int		skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i);
 int		process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result);
 
 	/*handle_redirections.c*/
-int		handle_redirections(t_cmd *cmd, int i);
+int		handle_redirections(t_shell *mini, t_cmd *cmd, int i);
 
 	/*handle_redirs_utils.c*/
 bool	is_redirection(t_cmd *cmd, int i);
 int		handle_redirect_in(t_cmd *cmd, int i);
 int		handle_redirect_out(t_cmd *cmd, int i);
-int		handle_heredoc(t_cmd *cmd, int i);
+int		handle_heredoc(t_shell *mini, t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
+
+	/*heredoc.c*/
+int		generate_hd_file(t_cmd *cmd);
+int		open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
 
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
