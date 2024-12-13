@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 10:28:00 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:51:20 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 	{
 		if (is_redirection(cmd, i))
 		{
-			i = handle_redirections(cmd, i);
+			i = handle_redirections(mini, cmd, i);
 			if (i == -1)
 				return (-1);
 			if (is_empty_command(cmd, i))
