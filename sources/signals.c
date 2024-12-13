@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:43:57 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/07 14:06:45 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:50:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static void	sigint_handler(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 	}
+	if (sig == SIGQUIT)
+		ft_putendl_fd("Quit", 2);
 }
 
 static void	sig_handler2(int sig)
