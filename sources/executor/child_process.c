@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:06:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/15 13:29:27 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void		close_unused_fds(t_shell *mini, int i);
 
 int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 {
-	sig_handler_changer();
+	//sig_handler_changer();
+	sig_reseted();
 	mini->pids[i] = fork();
 	if (mini->pids[i] == -1)
 	{

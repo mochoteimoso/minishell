@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:43:57 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 11:50:36 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/15 13:30:33 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	sig_handler2(int sig)
 	if (sig == SIGINT)
 		printf("\n");
 	if (sig == SIGQUIT)
-		ft_putendl_fd("Quit", 2);
+		ft_putendl_fd("Quit (core dumb)", 2);
 }
 
 /*

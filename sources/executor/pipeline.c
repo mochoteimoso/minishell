@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 17:15:07 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/15 13:38:05 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ static int	pipe_and_fork(t_shell *mini)
 		cmd = mini->cmds[i];
 		if (fork_and_execute(mini, cmd, i) == -1)
 			return (1);
+		sig_handler_changer();
 		close_fds_and_pipes(mini, i);
 		i++;
 	}
