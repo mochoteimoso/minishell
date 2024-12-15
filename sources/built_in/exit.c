@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 20:10:42 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/15 14:21:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 {
 	int	ec;
 
-	ft_putstr_fd("exit\n", 1);    // should this be printed to stdout??
+	ft_putstr_fd("exit\n", 0);
 	ec = 0;
 	if (cmd->args[1])
 	{

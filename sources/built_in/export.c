@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 19:56:21 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/15 15:38:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int	update_env(t_shell *mini, char *str)
 		len++;
 	while (temp)
 	{
-		if (ft_strncmp(temp->name, str, len) == 0)
+		if ((len == (int)ft_strlen(temp->name)) && (ft_strncmp(temp->name, str, len) == 0))
 		{
 			set_new_value(temp, str);
 			return (1);

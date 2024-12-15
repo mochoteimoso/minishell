@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 19:42:32 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:50:28 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 	{
 		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
 			break ;
-		if (((arg->dbl && str[arg->i] == '$') || (!arg->sgl && str[arg->i] == '$'))
+		if (((arg->dbl && str[arg->i] == '$' && !arg->sgl) || (str[arg->i] == '$' && !arg->sgl && !arg->dbl))
 			&& (str[arg->i + 1] && !ft_isspace(str[arg->i + 1]) && ((ft_isalnum(str[arg->i + 1])
 			|| str[arg->i + 1] == '_' || str[arg->i + 1] == '?'))))
 		{
@@ -43,6 +43,7 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 			what_quote(str, arg);
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);
+		// printf("value: {%s}\nlen: %d\n", arg->value, (int)ft_strlen(arg->value));
 	}
 	arg->len = ft_strlen(arg->value);
 	return (arg->i);
@@ -70,6 +71,7 @@ static int	no_expanding(t_shell *mini, char *str, t_expand *arg, int i)
 			what_quote(str, arg);
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);
+		//printf("arg->value: {%s}\nlen: %d\n", arg->value, (int)ft_strlen(arg->value));
 	}
 	arg->len = ft_strlen(arg->value);
 	return (arg->i);
@@ -83,7 +85,7 @@ int	arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 	while (cmd->segment[i] && (!ft_isspace(cmd->segment[i])
 			&& !is_redirection(cmd, i)))
 	{
-		if (cmd->segment[i] == '$' && cmd->segment[i + 1] == '"')
+		if (cmd->segment[i] == '$' && (cmd->segment[i + 1] == '"' || cmd->segment[i + 1] == '\''))
 			i++;
 		if ((cmd->segment[i] == '~' && (ft_isspace(cmd->segment[i + 1]) || cmd->segment[i + 1] == '\0')) || (cmd->segment[i] == '$'
 			&& (cmd->segment[i + 1] && (ft_isalnum(cmd->segment[i + 1])

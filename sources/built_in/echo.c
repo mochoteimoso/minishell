@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 15:23:34 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/15 15:47:09 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,11 @@ int	built_echo(t_cmd *cmd)
 	{
 		nl = 0;
 		i++;
-		while ((cmd->args[i][0] == '-') && no_new_line(cmd->args[i]))
-			i++;
+		if (cmd->args[1][0])
+		{
+			while (cmd->args[i] && (cmd->args[i][0] == '-') && no_new_line(cmd->args[i]))
+				i++;
+		}
 	}
 	while (cmd->args[i])
 	{
