@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 19:54:11 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 17:31:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ static int user_prompt(t_shell *mini, int status)
 				free(input);
 				continue;
 			}
+			printer(mini);
 			execute_pipeline(mini);
 			free(input);
 		}
