@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/11 11:02:58 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:07:11 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	set_name(t_env *node, char *name)
 	return (0);
 }
 
-static int	set_value(t_env *node, char *value)
+int	set_value(t_env *node, char *value)
 {
 	if (value)
 		node->value = ft_strdup(value);

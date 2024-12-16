@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/11 11:37:14 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:11:02 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,47 @@ static int	validate_variable(char *name)
 	return (1);
 }
 
-static int	parse_and_add(t_shell *mini, char *str, int len)
+int	set_new_value(t_env *temp, char *str)
+{
+	char	*value;
+	char	*sign;
+
+	sign = ft_strchr(str, '=');
+	value = strdup(sign + 1);
+	if (!value)
+		return (free(temp), 1);
+	if (set_value(temp, value))
+	{
+		clean_env(temp, NULL);
+		return (1);
+	}
+	free(value);
+	return (0);
+
+}
+
+static int	update_env(t_shell *mini, char *str)
+{
+	t_env *temp;
+	int 	len;
+
+	len = 0;
+	temp = mini->env;
+	while (str[len] != '=')
+		len++;
+	while (temp)
+	{
+		if ((len == (int)ft_strlen(temp->name)) && (ft_strncmp(temp->name, str, len) == 0))
+		{
+			set_new_value(temp, str);
+			return (1);
+		}
+		temp = temp->next;
+	}
+	return (0);
+}
+
+static int	parse_and_add(t_shell *mini, char *str)
 {
 	char	*sign;
 	t_env	*new;
@@ -69,15 +109,18 @@ static int	parse_and_add(t_shell *mini, char *str, int len)
 		return (1);
 	}
 	sign = ft_strchr(str, '=');
-	if ((sign && str[len - 1] == '=') || !sign)
+	if ((sign && !sign[1]) || !sign)
 	{
 		update_pending(mini, str);
 		return (0);
 	}
 	else if (sign)
 	{
-		new = add_node(str);
-		ft_env_lstadd_back(&mini->env, new);
+		if (update_env(mini, str) == 0)
+		{
+			new = add_node(str);
+			ft_env_lstadd_back(&mini->env, new);
+		}
 		update_pending(mini, str);
 		to_alphabetical(mini->pending);
 		return (0);
@@ -93,7 +136,6 @@ int	built_export(t_shell *mini, t_cmd *cmd)
 {
 	int	i;
 	int	sum;
-	int	len;
 
 	sum = 1;
 	i = 1;
@@ -105,14 +147,17 @@ int	built_export(t_shell *mini, t_cmd *cmd)
 	{
 		while (i < sum)
 		{
-			len = ft_strlen(cmd->args[i]);
-			if (parse_and_add(mini, cmd->args[i], len))
+			if (cmd->args[i][0] == '-')
 			{
-				ft_putendl_fd(" not a valid identifier", 2);
-				mini->exit_stat = 1;
+				ft_putendl_fd("Invalid option", 2);
+				return (2);
+			}
+			if (parse_and_add(mini, cmd->args[i]))
+			{
+				ft_putendl_fd("not a valid identifier", 2);
+				// mini->exit_stat = 1;
 				return (1);
 			}
-			len = 0;
 			i++;
 		}
 	}
