@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/11 11:12:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:43:00 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 	{
 		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
 			break ;
-		if (((arg->dbl && str[arg->i] == '$') || (!arg->sgl && str[arg->i] == '$'))
-			&& (str[arg->i + 1] && ((ft_isalnum(str[arg->i + 1])
+		if (((arg->dbl && str[arg->i] == '$' && !arg->sgl) || (str[arg->i] == '$' && !arg->sgl && !arg->dbl))
+			&& (str[arg->i + 1] && !ft_isspace(str[arg->i + 1]) && ((ft_isalnum(str[arg->i + 1])
 			|| str[arg->i + 1] == '_' || str[arg->i + 1] == '?'))))
 		{
 			if (we_have_dollar(mini, arg, str) == -1)
@@ -43,13 +43,14 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 			what_quote(str, arg);
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);
+		// printf("value: {%s}\nlen: %d\n", arg->value, (int)ft_strlen(arg->value));
 	}
 	arg->len = ft_strlen(arg->value);
 	return (arg->i);
 }
 
 
-static int	no_expanding(char *str, t_expand *arg, int i)
+static int	no_expanding(t_shell *mini, char *str, t_expand *arg, int i)
 {
 	arg->sgl = 0;
 	arg->dbl = 0;
@@ -58,8 +59,10 @@ static int	no_expanding(char *str, t_expand *arg, int i)
 	what_quote(str, arg);
 	while (str[arg->i])
 	{
-		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
+		if ((str[arg->i] == ' ' || str[arg->i] == '\t') && !arg->sgl && !arg->dbl)
 			break ;
+		if ((((arg->dbl && !arg->sgl) || (!arg->dbl && !arg->sgl)) && str[arg->i] == '$' && ((str[arg->i + 1] && ft_isalnum(str[arg->i + 1])) || str[arg->i + 1] == '?')))
+			i = we_have_dollar(mini, arg, str);
 		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\''
 			|| str[arg->i] == '"'))
 			what_quote(str, arg);
@@ -68,6 +71,7 @@ static int	no_expanding(char *str, t_expand *arg, int i)
 			what_quote(str, arg);
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);
+		//printf("arg->value: {%s}\nlen: %d\n", arg->value, (int)ft_strlen(arg->value));
 	}
 	arg->len = ft_strlen(arg->value);
 	return (arg->i);
@@ -81,15 +85,17 @@ int	arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 	while (cmd->segment[i] && (!ft_isspace(cmd->segment[i])
 			&& !is_redirection(cmd, i)))
 	{
-		if ((cmd->segment[i] == '$' || cmd->segment[i] == '~')
-			&& (cmd->segment[i + 1] && ((ft_isalnum(cmd->segment[i + 1])
+		if (cmd->segment[i] == '$' && (cmd->segment[i + 1] == '"' || cmd->segment[i + 1] == '\''))
+			i++;
+		if ((cmd->segment[i] == '~' && (ft_isspace(cmd->segment[i + 1]) || cmd->segment[i + 1] == '\0')) || (cmd->segment[i] == '$'
+			&& (cmd->segment[i + 1] && (ft_isalnum(cmd->segment[i + 1])
 			|| cmd->segment[i + 1] == '_' || cmd->segment[i + 1] == '?'))))
 		{
 			arg->i = i;
 			i = expand_variable(mini, cmd->segment, &arg->value, arg);
 		}
 		else
-			i = no_expanding(cmd->segment, arg, i);
+			i = no_expanding(mini, cmd->segment, arg, i);
 		if (cmd->segment[i] == ' ')
 			break ;
 	}

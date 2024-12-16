@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/11 11:13:33 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:43:16 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,16 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 
 void	what_quote(char *str, t_expand *arg)
 {
+	//printf("str[%d]: %c\n", arg->i, str[arg->i]);
 	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
 		&& str[arg->i] == '"'))
 	{
-		if (str[arg->i + 1] != '\0' || str[arg->i] != ' ' )
+		if ((str[arg->i + 1] != '\0' || str[arg->i] != ' '))
 		{
 			arg->sgl = 0;
 			arg->dbl = 0;
 			arg->i++;
+			//printf("str[%d]: {%c}\n", arg->i, str[arg->i]);
 			return ;
 		}
 		else
@@ -90,12 +92,14 @@ void	what_quote(char *str, t_expand *arg)
 	{
 		arg->sgl = 1;
 		arg->i++;
+		//printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
 		return ;
 	}
 	if (str[arg->i] == '"' && arg->dbl == 0)
 	{
 		arg->dbl = 1;
 		arg->i++;
+		//printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
 		return ;
 	}
 }
