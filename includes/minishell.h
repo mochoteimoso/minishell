@@ -99,7 +99,7 @@ void printer(t_shell *mini);
 	/*cd*/
 int		built_cd(t_shell *mini, t_cmd *cmd);
 	/*echo.c*/
-int		built_echo(t_shell *mini, t_cmd *cmd);
+int		built_echo(t_cmd *cmd);
 	/*exit.c*/
 int		built_exit(t_shell *mini, t_cmd *cmd);
 	/*export.c*/
@@ -112,11 +112,10 @@ int		built_unset(t_shell *mini, t_cmd *cmd);
 /*built_in/env*/
 	/*env.c*/
 char	**env_to_array(t_env *env);
-int		built_env(t_shell *mini);
+int		built_env(t_shell *mini, t_cmd *cmd);
 
 	/*env_handling*/
 char	**copy_env(char **envp);
-int		built_env(t_shell *mini);
 t_env	*list_env(char **envp);
 void	to_alphabetical(char **array);
 
@@ -124,6 +123,7 @@ void	to_alphabetical(char **array);
 t_env	*add_node(char *env);
 t_env	*create_node(void);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
+int		set_value(t_env *node, char *value);
 
 /*commands*/
 	/*cmd_array.c*/
