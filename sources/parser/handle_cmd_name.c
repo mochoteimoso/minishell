@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:06:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 16:53:18 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 18:26:27 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
 		free(cmd_name.value);
 		i = skip_to_next_segment(mini, cmd, i);
 		if (!cmd->segment[i])
-			return (-1);
+			return (i);
 		if (process_quoted_segment(mini, cmd->segment, i, &cmd_name) == -1)
 			return (-1);
 	}
@@ -50,7 +50,8 @@ int	process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result
 	what_quote(segment, result);
 	while (segment[result->i])
 	{
-		if (segment[result->i] == ' ' && !result->sgl && !result->dbl)
+		if ((segment[result->i] == ' ' || segment[result->i] == '<'
+			|| segment[result->i] == '>') && (!result->sgl && !result->dbl))
 			break;
 		if (((result->dbl && segment[result->i] == '$') || (!result->sgl
 			&& segment[result->i] == '$')) && (segment[result->i + 1]
