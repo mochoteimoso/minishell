@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 16:51:20 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 18:10:46 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	parse_input(t_shell *mini)
 				return (1);
 			}
 		}
+		mini->cmds[index]->cmd_index = index;
 		index++;
 	}
 	return (0);
