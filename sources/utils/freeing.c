@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/11 17:39:33 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:50:56 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	clean_redir(t_redir *head)
 			temp = head;
 			free(head->file);
 			free(head->delimiter);
+			free(head->heredoc_name);
 			head = head->next;
 			free(temp);
 		}
