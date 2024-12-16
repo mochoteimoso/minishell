@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 19:52:01 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:32:19 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
+	int		temp_fd;
 
 	in_quotes = false;
 	filename = NULL;
@@ -67,6 +68,8 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_OUT;
+	temp_fd = open_output_file(cmd, cmd->redir_tail->file);
+	close(temp_fd);
 	return (i);
 }
 
@@ -99,6 +102,7 @@ int	handle_append(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
+	int		temp_fd;
 
 	in_quotes = false;
 	filename = NULL;
@@ -108,5 +112,7 @@ int	handle_append(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = APPEND;
+	temp_fd = open_append_file(cmd, cmd->redir_tail->file);
+	close(temp_fd);
 	return (i);
 }
