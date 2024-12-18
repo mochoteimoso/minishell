@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/16 15:43:00 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/18 12:08:31 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,70 @@ int	skip_whitespace(char *str, int i)
 
 int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 {
+	char	quote;
+	char	*temp;
+
+	arg->value = ft_strdup("");
+	if (!arg->value)
+		return (-1);
+	quote = str[i++];
+	while (str[i] && str[i] != quote)
+	{
+		if (quote == '"' && str[i] == '$')
+		{
+			i = expand_variable(mini, str, &arg->value, arg);
+			if (i == -1)
+			{
+				free(arg->value);
+				return (-1);
+			}
+		}
+		else
+		{
+			temp = arg->value;
+			arg->value = ft_strjoin(arg->value, &str[i]);
+			free(temp);
+			if (!arg->value)
+				return (-1);
+			i++;
+		}
+	}
+	if (str[i] == quote)
+		i++;
+	return (i);
+}
+
+int	arg_no_quotes(t_shell *mini, char *segment, int i, t_expand *arg)
+{
+	char	*temp;
+
+	arg->value = ft_strdup("");
+	if (!arg->value)
+		return (-1);
+
+	while (segment[i] && !ft_isspace(segment[i]) && segment[i] != '\'' && segment[i] != '"')
+	{
+		if (segment[i] == '$' || segment[i] == '~')
+		{
+			i = expand_variable(mini, segment, &arg->value, arg);
+			if (i == -1)
+				return (free(arg->value), -1);
+		}
+		else
+		{
+			temp = arg->value;
+			arg->value = ft_strjoin(arg->value, &segment[i]);
+			free(temp);
+			if (!arg->value)
+				return (-1);
+			i++;
+		}
+	}
+	return (i);
+}
+
+/*int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
+{
 	if (the_arg(arg, i))
 		return (-1);
 	what_quote(str, arg);
@@ -28,7 +92,7 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 	{
 		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
 			break ;
-		if (((arg->dbl && str[arg->i] == '$' && !arg->sgl) || (str[arg->i] == '$' && !arg->sgl && !arg->dbl))
+		| if (((arg->dbl && str[arg->i] == '$' && !arg->sgl) |(str[arg->i] == '$' && !arg->sgl && !arg->dbl))
 			&& (str[arg->i + 1] && !ft_isspace(str[arg->i + 1]) && ((ft_isalnum(str[arg->i + 1])
 			|| str[arg->i + 1] == '_' || str[arg->i + 1] == '?'))))
 		{
@@ -48,7 +112,6 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 	arg->len = ft_strlen(arg->value);
 	return (arg->i);
 }
-
 
 static int	no_expanding(t_shell *mini, char *str, t_expand *arg, int i)
 {
@@ -101,7 +164,7 @@ int	arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 	}
 	arg->len = ft_strlen(arg->value);
 	return (i);
-}
+} */
 
 int	append_to_array(t_cmd *cmd, char *arg, int len, int *index)
 {
