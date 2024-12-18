@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:43:57 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/15 13:30:33 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:42:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ static void	sigint_handler(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	if (sig == SIGQUIT)
-		ft_putendl_fd("Quit", 2);
 }
 
 static void	sig_handler2(int sig)
@@ -39,6 +37,23 @@ static void	sig_handler2(int sig)
 		printf("\n");
 	if (sig == SIGQUIT)
 		ft_putendl_fd("Quit (core dumb)", 2);
+}
+
+static void	sig_handler_heredoc(int signum)
+{
+	if (signum == SIGINT)
+	{
+		g_sig = signum;
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
+
+void	sig_handler_hd(int signal)
+{
+	close(STDIN_FILENO);
+	g_sig = signal;
 }
 
 /*
@@ -64,4 +79,10 @@ void	sig_reseted(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+}
+
+void sig_heredoc()
+{
+	signal(SIGINT, sig_handler_heredoc);
+	signal(SIGQUIT, SIG_IGN);
 }

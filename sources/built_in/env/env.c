@@ -6,17 +6,17 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 17:18:40 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:40:11 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int	built_env(t_shell *mini)
+int	built_env(t_shell *mini, t_cmd *cmd)
 {
 	t_env *temp = mini->env;
 
-	if (mini->cmds[0]->args[1])
+	if (cmd->args[1])
 	{
 		ft_putendl_fd("No such file or directory", 2);
 		// mini->exit_stat = 127;

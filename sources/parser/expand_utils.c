@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 12:08:24 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/17 11:29:57 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ char	*get_value(t_env *env, char *name)
 		temp = temp->next;
 	}
 	value = ft_strdup("");
-	if (!value) {
+	if (!value)
+	{
 		ft_putendl_fd("malloc fail", 2);
 		return ((char *) -1);
 	}

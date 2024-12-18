@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 12:10:09 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:44:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ t_redir	*redir_add_node(void)
 	node->delimiter = NULL;
 	node->file = NULL;
 	node->type = 0;
-	node->expand = false;
+	node->expand = true;
+	node->heredoc_name = NULL;
+	node->heredoc_index = 0;
 	node->next = NULL;
 	return (node);
 }

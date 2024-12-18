@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/15 15:47:09 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/16 19:20:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	no_new_line(char *arg)
 	int	i;
 
 	i = 1;
+	// trim_whitespace(arg);
 	while (arg[i])
 	{
 		if (arg[i] != 'n')
@@ -37,7 +38,7 @@ int	built_echo(t_cmd *cmd)
 
 	nl = 1;
 	i = 1;
-	if (cmd->args[1] && cmd->args[1][1] && (cmd->args[1][0] == '-') && (no_new_line(cmd->args[1]) == 1))
+	if (cmd->args[1] && cmd->args[1][0] && cmd->args[1][1] && (cmd->args[1][0] == '-') && (no_new_line(cmd->args[1]) == 1))
 	{
 		nl = 0;
 		i++;

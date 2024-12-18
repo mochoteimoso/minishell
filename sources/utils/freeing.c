@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 12:11:29 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:10:54 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	clean_redir(t_redir *head)
 			temp = head;
 			free(head->file);
 			free(head->delimiter);
+			free(head->heredoc_name);
 			head = head->next;
 			free(temp);
 		}
@@ -108,7 +109,6 @@ void	cleaner(t_shell *mini)
 		clean_cmds(mini->cmds);
 	if (mini->pids)
 		free(mini->pids);
-
 }
 
 void	error(t_shell * mini, char *str)

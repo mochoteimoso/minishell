@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:06:34 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:42:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	initialize_command_struct(t_cmd *cmd)
 {
 	cmd->command = NULL;
 	cmd->cmd_path = NULL;
+	cmd->cmd_index = 0;
 	cmd->args = NULL;
 	cmd->args_count = 0;
 	cmd->redir_head = NULL;

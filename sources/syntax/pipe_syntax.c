@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:10:31 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:17:15 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int			check_pipes(char **input, t_shell *mini);
 //static int	validate_pipe(char *input);
 static int	check_consecutive_pipes(char *input, t_shell *mini);
 static int	check_trailing_pipe(char **input, t_shell *mini);
-static char	*handle_trailing_pipe(char *input);
+static char	*handle_trailing_pipe(t_shell *mini, char *input);
 
 /* Checks syntax for pipes, i.e. that it is not a the start or that
 there are no consecutive pipes. Also handles a trailing pipe */
@@ -113,7 +113,7 @@ static int	check_trailing_pipe(char **input, t_shell *mini)
 		i--;
 	if (i >= 0 && (*input)[i] == '|' && !check_quotes(*input, i))
 	{
-		updated_input = handle_trailing_pipe(*input);
+		updated_input = handle_trailing_pipe(mini, *input);
 		if (!updated_input)
 		{
 			ft_putendl_fd("syntax error: unexpected end of input", 2);
@@ -121,6 +121,8 @@ static int	check_trailing_pipe(char **input, t_shell *mini)
 			*input = NULL;
 			return (1);
 		}
+		if (updated_input == (char *)-1)
+			return (1);
 		*input = updated_input;
 	}
 	return (0);
@@ -129,16 +131,37 @@ static int	check_trailing_pipe(char **input, t_shell *mini)
 /* Handles trailing pipe by getting additional input from user
 and joining that to the original input string */
 
-static char	*handle_trailing_pipe(char *input)
+static char	*handle_trailing_pipe(t_shell *mini, char *input)
 {
 	char	*additional_input;
 	char	*updated_input;
 
 	additional_input = NULL;
 	updated_input = NULL;
+	mini->stdin_saved = dup(STDIN_FILENO);
+	if (mini->stdin_saved == -1)
+	{
+		mini->exit_stat = 1;
+		perror("Failed to save STDIN");
+		return (NULL);
+	}
+	signal(SIGINT, sig_handler_hd);
 	while (1)
 	{
 		additional_input = readline(">");
+		if (g_sig == SIGINT)
+		{
+			g_sig = 0;
+			printf("\n");
+			if (dup2_and_close(mini->stdin_saved, STDIN_FILENO))
+			{
+				perror("Failed to restore original STDIN");
+				mini->exit_stat = 1;
+				mini->stdin_saved = -1;
+				return (NULL);
+			}
+			return ((char *) -1);
+		}
 		if (!additional_input)
 		{
 			perror("readline error");

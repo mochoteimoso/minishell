@@ -6,24 +6,21 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:54:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:09:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:06:22 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	parse_filename(t_cmd *cmd, int i, char **filename);
-int	filename_in_quotes(char *str, int i, t_expand *arg);
+int	filename_in_quotes(t_cmd * cmd, char *str, int i, t_expand *arg);
 
 int	parse_filename(t_cmd *cmd, int i, char **filename)
 {
 	t_expand	arg;
 
-	arg.sgl = 0;
-	arg.dbl = 0;
-	arg.len = 0;
 	arg.i = i;
-	if (filename_in_quotes(cmd->segment, arg.i, &arg) == -1)
+	if (filename_in_quotes(cmd, cmd->segment, arg.i, &arg) == -1)
 		return (-1);
 	*filename = ft_strdup(arg.value);
 	if (!*filename)
@@ -37,15 +34,17 @@ int	parse_filename(t_cmd *cmd, int i, char **filename)
 	return (i);
 }
 
-int	filename_in_quotes(char *str, int i, t_expand *arg)
+int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg)
 {
 	i = skip_whitespace(str, i);
 	if (the_arg(arg, i))
 		return (-1);
 	what_quote(str, arg);
+	cmd->redir_tail->expand = false;
 	while (str[arg->i])
 	{
-		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
+		if ((str[arg->i] == ' ' || str[arg->i]== '<' ||  str[arg->i]== '>')
+			&& (!arg->sgl && !arg->dbl))
 			break ;
 		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
 			what_quote(str, arg);

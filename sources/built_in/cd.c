@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 18:43:39 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:04:20 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,14 @@ static	int	get_oldpwd(t_env *env, char **pwd)
 	return (0);
 }
 
-static void	old_pwd(t_shell *mini)
+static int	old_pwd(t_shell *mini, t_cmd *cmd)
 {
 	t_env	*env;
 	char	*pwd;
 	char	*oldpwd;
 
+	if (cmd->args[1][1])
+		return (1);
 	env = mini->env;
 	pwd = NULL;
 	get_oldpwd(env, &pwd);
@@ -94,6 +96,7 @@ static void	old_pwd(t_shell *mini)
 		error(mini, "No OLDPWD set");
 	free(oldpwd);
 	free(pwd);
+	return (0);
 }
 
 static int	to_path(t_shell *mini, char *path)
@@ -155,7 +158,10 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 		return (0);
 	}
 	else if (cmd->args[1][0] == '-')
-		old_pwd(mini);
+	{
+		if (old_pwd(mini, cmd))
+			return (0);
+	}
 	else
 	{
 		if (to_path(mini, cmd->args[1]))

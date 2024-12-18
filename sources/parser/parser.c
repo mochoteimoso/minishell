@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:01:38 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:25:32 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,10 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 
 	i = 0;
 	cmd_found = 0;
+	if (cmd->segment[0] == '"' && cmd->segment[1] == '"')
+		return (1);
+	if (handle_expand(mini, &cmd))
+		return (1);
 	i = cmd_string_while(mini, cmd, i, &cmd_found);
 	if (i == -1)
 		return (1);
@@ -81,7 +85,7 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 	{
 		if (is_redirection(cmd, i))
 		{
-			i = handle_redirections(cmd, i);
+			i = handle_redirections(mini, cmd, i);
 			if (i == -1)
 				return (-1);
 			if (is_empty_command(cmd, i))

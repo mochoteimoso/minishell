@@ -6,11 +6,13 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/15 16:48:13 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:41:25 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	g_sig = 0;
 
 void	printer(t_shell *mini)
 {
@@ -134,7 +136,8 @@ static int user_prompt(t_shell *mini, int status)
 
 	while (1)
 	{
-		init_sig();
+		if (isatty(fileno(stdin)))
+			init_sig();
 		if (isatty(fileno(stdin)))
 		{
 			input = readline("minishell> ");
@@ -162,6 +165,7 @@ static int user_prompt(t_shell *mini, int status)
 				free(input);
 				continue;
 			}
+			//mini->exit_stat = 0;
 			// printer(mini);
 			execute_pipeline(mini);
 			free(input);

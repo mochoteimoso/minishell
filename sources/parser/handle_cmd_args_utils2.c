@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/15 16:30:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:56:44 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 	char	*temp;
 	char	*new_res;
 
+	//printf("str: {%s}\n", str);
 	s_exp = arg->i;
 	temp = ft_strdup("");
 	if (!temp)
@@ -74,7 +75,11 @@ void	what_quote(char *str, t_expand *arg)
 	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
 		&& str[arg->i] == '"'))
 	{
-		if ((str[arg->i + 1] != '\0' || str[arg->i] != ' '))
+		if (str[arg->i] == '\'')
+			arg->sgl = !arg->sgl;
+		else if (str[arg->i] == '\"')
+			arg->dbl = !arg->dbl;
+		/* else if ((str[arg->i + 1] != '\0' || str[arg->i] != ' '))
 		{
 			arg->sgl = 0;
 			arg->dbl = 0;
@@ -86,7 +91,9 @@ void	what_quote(char *str, t_expand *arg)
 		{
 			arg->i++;
 			return ;
-		}
+		} */
+		arg->i++;
+		return ;
 	}
 	if (str[arg->i] == '\'' && arg->sgl == 0)
 	{
@@ -110,6 +117,7 @@ int	the_arg(t_expand *arg, int i)
 	arg->dbl = 0;
 	arg->i = i;
 	arg->start = i;
+	arg->name = NULL;
 	arg->value = ft_strdup("");
 	if (!arg->value)
 	{
@@ -118,6 +126,23 @@ int	the_arg(t_expand *arg, int i)
 	}
 	return (0);
 }
+
+// int	add_char(char *str, char ** expanded, t_expand *arg)
+// {
+// 	char	*temp;
+// 	char	*temp2;
+
+// 	temp2 = ft_strdup(arg->value);
+// 	if (!temp2)
+// 		return (-1);
+// 	temp = ft_strjoin(*expanded, temp2);
+// 	free(temp2);
+// 	if (!temp)
+// 		return (-1);
+// 	free(*expanded);
+// 	expanded = temp;
+// 	return (0);
+// }
 
 int	add_char(char *str, t_expand *arg)
 {

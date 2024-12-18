@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:18:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:09:59 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/16 11:33:55 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	open_append_file(t_cmd *cmd, char *output_file)
 
 // Opens heredoc
 
-int	open_heredoc(t_cmd *cmd, char *delimiter)
+/*int	open_heredoc(t_cmd *cmd, char *delimiter)
 {
 	int		heredoc_pipe_fd[2];
 	char	*line;
@@ -119,6 +119,26 @@ int	open_heredoc(t_cmd *cmd, char *delimiter)
 	}
 	close(heredoc_pipe_fd[1]);
 	return (heredoc_pipe_fd[0]);
-}
+} */
 
-// add heredoc printing to print heredoc input on screen
+int	open_heredoc(t_cmd *cmd, char *heredoc_file)
+{
+	int fd_in;
+	fd_in = open(heredoc_file, O_RDONLY);
+	if (fd_in == -1)
+	{
+		if (access(heredoc_file, F_OK) != 0)
+		{
+			ft_putstr_fd(heredoc_file, 2);
+			ft_putendl_fd(": No such file or directory", 2);
+		}
+		else
+		{
+			ft_putstr_fd(heredoc_file, 2);
+			ft_putendl_fd(": Permission denied", 2);
+		}
+		cmd->cmd_exit = 1;
+		return (-2);
+	}
+	return (fd_in);
+}

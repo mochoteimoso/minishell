@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/15 14:21:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:25:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 		ec = mini->exit_stat;
 	cleaner(mini);
 	free(mini);
+	sig_reseted();
 	exit(ec);
 }

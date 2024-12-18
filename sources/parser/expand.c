@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 13:38:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 14:09:53 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	tildes_home(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		temp = ft_strjoin(*expanded, value);
 		free(*expanded);
 		*expanded = temp;
+		free(value);
 	}
 	return (arg->i);
 }
@@ -86,6 +87,7 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	init_vdata(&data, expanded, temp, name);
 	if (handle_value(mini, &data))
 		return (-1);
+	arg->name = ft_strdup(data.name);
 	arg->start = arg->i;
 	return (arg->i);
 }
@@ -105,3 +107,31 @@ int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	return (arg->i);
 }
 
+int	handle_expand(t_shell *mini, t_cmd **cmd)
+{
+	char		*expanded;
+	int			i;
+	t_expand	arg;
+
+	i = 0;
+	expanded = ft_strdup("");
+	the_arg(&arg, i);
+	printf("arg.i: %d\n", arg.i);
+	while ((*cmd)->segment[arg.i])
+	{
+		printf("i: %d\n", arg.i);
+		if ((*cmd)->segment[arg.i] == '"' || (*cmd)->segment[arg.i] == '\'')
+			arg.i = arg_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
+		else
+			arg.i = arg_no_quotes(mini, *cmd, arg.i, &arg);
+		printf("value: %s\n", arg.value);
+		expanded = ft_strjoin(expanded, arg.value);
+		if (arg.name)
+			arg.i += ft_strlen(arg.name);
+	}
+	printf("exp: {%s}\n", expanded);
+	free((*cmd)->segment);
+	(*cmd)->segment = expanded;
+	printf("segment: {%s}\n", (*cmd)->segment);
+	return (0);
+}
