@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:57:16 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/16 14:04:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/18 21:11:45 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	generate_hd_file(t_cmd *cmd)
 	free(full);
 	unlink(cmd->redir_tail->heredoc_name);
 	return (0);
-	
+
 }
 
 int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
@@ -81,9 +81,30 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 		ft_putendl_fd("Failed to open temp file for heredoc", 2);
 		return (1);
 	}
+	mini->stdin_saved = dup(STDIN_FILENO);
+	if (mini->stdin_saved == -1)
+	{
+		mini->exit_stat = 1;
+		return (perror("Failed to save STDIN"), 1);
+	}
+	signal(SIGINT, sig_handler_hd);
 	while (1)
 	{
 		line = readline("heredoc> ");
+		if (g_sig == SIGINT)
+		{
+			g_sig = 0;
+			printf("\n");
+			close(fd);
+			if (dup2_and_close(mini->stdin_saved, STDIN_FILENO))
+			{
+				perror("Failed to restore original STDIN");
+				mini->exit_stat = 1;
+				mini->stdin_saved = -1;
+				return (1);
+			}
+			return (0);
+		}
 		if (!line || ft_strcmp(line,cmd->redir_tail->delimiter) == 0)
 		{
 			free(line);
@@ -102,6 +123,7 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 		write(fd, "\n", 1);
 		free(line);
 	}
+	close(mini->stdin_saved);
 	close(fd);
 	return (0);
 }
