@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:54:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/16 18:04:17 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/18 20:36:54 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg)
 	if (the_arg(arg, i))
 		return (-1);
 	what_quote(str, arg);
-	cmd->redir_tail->expand = false;
+	if (arg->sgl == 1 || arg->dbl == 1)
+		cmd->redir_tail->expand = false;
 	while (str[arg->i])
 	{
 		if ((str[arg->i] == ' ' || str[arg->i]== '<' ||  str[arg->i]== '>')

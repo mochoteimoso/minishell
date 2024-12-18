@@ -6,11 +6,13 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/16 17:31:23 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/18 20:37:33 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	g_sig = 0;
 
 void	printer(t_shell *mini)
 {
@@ -133,10 +135,15 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini, int status)
 {
 	char	*input;
+	int		i;
+	int		flg;
 
 	while (1)
 	{
-		init_sig();
+		flg = 0;
+		i = 0;
+		if (isatty(fileno(stdin)))
+			init_sig();
 		if (isatty(fileno(stdin)))
 		{
 			input = readline("minishell> ");
@@ -164,8 +171,21 @@ static int user_prompt(t_shell *mini, int status)
 				free(input);
 				continue;
 			}
-			printer(mini);
-			execute_pipeline(mini);
+			//mini->exit_stat = 0;
+			//printer(mini);
+			while (mini->cmds[i])
+			{
+				if (!mini->cmds[i]->command)
+				{
+					mini->exit_stat = 0;
+					clean_cmds(mini->cmds);
+					flg = 1;
+					break ;
+				}
+				i++;
+			}
+			if (!flg)
+				execute_pipeline(mini);
 			free(input);
 		}
 	}
@@ -196,7 +216,7 @@ static int	activate_shell(int status, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	int	status;
-	
+
 	status = 0;
 	(void)argv;
 	if (argc != 1)

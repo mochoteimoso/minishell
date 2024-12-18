@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 13:15:23 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/18 19:51:29 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,17 @@ int	parse_input(t_shell *mini)
 			clean_cmds(mini->cmds);
 			return (1);
 		}
-		if (is_this_built(mini->cmds[index]->command) != 1)
+		if (mini->cmds[index]->command)
 		{
-			if (get_cmd_path(mini, mini->cmds[index]) == 1)
+			if (is_this_built(mini->cmds[index]->command) != 1)
 			{
-				clean_cmds(mini->cmds);
-				return (1);
+				if (get_cmd_path(mini, mini->cmds[index]) == 1)
+				{
+					clean_cmds(mini->cmds);
+					return (1);
+				}
 			}
 		}
-		mini->cmds[index]->cmd_index = index;
 		index++;
 	}
 	return (0);
@@ -68,6 +70,10 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 
 	i = 0;
 	cmd_found = 0;
+	if (cmd->segment[0] == '"' && cmd->segment[1] == '"')
+		return (1);
+	if (handle_expand(mini, &cmd))
+		return (1);
 	i = cmd_string_while(mini, cmd, i, &cmd_found);
 	if (i == -1)
 		return (1);
@@ -78,29 +84,12 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 
 int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 {
-	char *original_segment;
-	char *expanded;
-	
-	expanded = ft_strdup("");
-	if (!expanded)
-		return (-1); 
-	if (expand_segment(mini, cmd->segment, &expanded) == -1)
-	{
-		ft_putendl_fd("Expansion failed", 2);
-		free(expanded);
-		return (-1);
-	}
-	printf("Expanded: %s\n", expanded);
-	original_segment = cmd->segment;
-	cmd->segment = expanded;
 	while (cmd->segment[i])
 	{
 		if (is_redirection(cmd, i))
 		{
 			i = handle_redirections(mini, cmd, i);
 			if (i == -1)
-				return (-1);
-			if (is_empty_command(cmd, i))
 				return (-1);
 		}
 		else if (*cmd_found == 0)
@@ -117,6 +106,5 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 				return (-1);
 		}
 	}
-	free(original_segment);
 	return (i);
 }

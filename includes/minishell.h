@@ -16,6 +16,8 @@
 # define TMP_S "/tmp/heredoc"
 # define TMP_EXT ".tmp"
 
+extern int g_sig;
+
 //# include </usr/include/linux/signal.h>
 
 typedef enum e_redir_type
@@ -39,6 +41,7 @@ typedef struct s_expand
 	int		sgl;
 	int		dbl;
 	int		i;
+	char	*name;
 	char	*value;
 	int		start;
 	int		len;
@@ -172,15 +175,14 @@ int		no_args(t_cmd *cmd, int i);
 bool	is_empty_command(t_cmd *cmd, int i);
 
 	/*expand.c*/
-int		expand_segment(t_shell *mini, char *segment, char **expanded);
-int		oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
-int		expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg);
+int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
+int 	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg);
+int		handle_expand(t_shell *mini, t_cmd **cmd);
 
 	/*expand_utils.c*/
 char	*get_value(t_env *env, char *name);
 int		handle_value(t_shell *mini, t_vdata *data);
 void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name);
-char	*ft_strjoin_char(char *str, char c);
 
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
@@ -188,12 +190,13 @@ int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_args_utils.c*/
 int		arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
-int		arg_no_quotes(t_shell *mini, char *segment, int i, t_expand *arg);
+int		arg_no_quotes(t_shell *mini, t_cmd *cmd, t_expand *arg, int i);
+int		segment_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
+int		segment_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 int		append_to_array(t_cmd *cmd, char *arg, int len, int *index);
 int		skip_whitespace(char *str, int i);
 
 	/*handle_cmd_args_utils2.c*/
-int		add_char_in_exp(char *str, t_expand *arg, char **expanded);
 int		add_char(char *str, t_expand *arg);
 int		the_arg(t_expand *arg, int i);
 void	what_quote(char *str, t_expand *arg);
@@ -202,7 +205,7 @@ int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 	/*handle_cmd_name.c*/
 int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
 int		skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i);
-int	process_quoted_segment(char *segment, int i, t_expand *result);
+int		process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result);
 
 	/*handle_redirections.c*/
 int		handle_redirections(t_shell *mini, t_cmd *cmd, int i);
@@ -289,5 +292,7 @@ void	cleaner_for_main_success(t_shell *mini);
 void	init_sig(void);
 void	sig_reseted(void);
 void	sig_handler_changer(void);
+void	sig_heredoc();
+void	sig_handler_hd(int signal);
 
 #endif

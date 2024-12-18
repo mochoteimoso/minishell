@@ -6,9 +6,11 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 14:17:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/18 20:40:20 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 #include "../../includes/minishell.h"
 
@@ -70,7 +72,6 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 
 void	what_quote(char *str, t_expand *arg)
 {
-	//printf("str[%d]: %c\n", arg->i, str[arg->i]);
 	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
 		&& str[arg->i] == '"'))
 	{
@@ -84,52 +85,16 @@ void	what_quote(char *str, t_expand *arg)
 	if (str[arg->i] == '\'' && arg->sgl == 0)
 	{
 		arg->sgl = 1;
-		//printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
+		arg->i++;
 		return ;
 	}
 	if (str[arg->i] == '"' && arg->dbl == 0)
 	{
 		arg->dbl = 1;
-		//printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
+		arg->i++;
 		return ;
 	}
 }
-
-/*void	what_quote(char *str, t_expand *arg)
-{
-	//printf("str[%d]: %c\n", arg->i, str[arg->i]);
-	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
-		&& str[arg->i] == '"'))
-	{
-		if ((str[arg->i + 1] != '\0' || str[arg->i] != ' '))
-		{
-			arg->sgl = 0;
-			arg->dbl = 0;
-			arg->i++;
-			//printf("str[%d]: {%c}\n", arg->i, str[arg->i]);
-			return ;
-		}
-		else
-		{
-			arg->i++;
-			return ;
-		}
-	}
-	if (str[arg->i] == '\'' && arg->sgl == 0)
-	{
-		arg->sgl = 1;
-		arg->i++;
-		//printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
-		return ;
-	}
-	if (str[arg->i] == '"' && arg->dbl == 0)
-	{
-		arg->dbl = 1;
-		arg->i++;
-		//printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
-		return ;
-	}
-} */
 
 int	the_arg(t_expand *arg, int i)
 {
@@ -137,6 +102,7 @@ int	the_arg(t_expand *arg, int i)
 	arg->dbl = 0;
 	arg->i = i;
 	arg->start = i;
+	arg->name = NULL;
 	arg->value = ft_strdup("");
 	if (!arg->value)
 	{
@@ -146,29 +112,11 @@ int	the_arg(t_expand *arg, int i)
 	return (0);
 }
 
-/*int	add_char_expansion(char *str, t_expand *arg, char **expanded)
-{
-	char	*temp;
-	char	*temp2;
-
-	temp2 = ft_strndup(&str[arg->i], 1);
-	if (!temp2)
-		return (1);
-	temp = ft_strjoin(*expanded, temp2);
-	free(temp2);
-	if (!temp)
-		return (1);
-	//free(arg->value);
-	expanded = &temp;
-	arg->i++;
-	return (0);
-}*/
-
 int	add_char(char *str, t_expand *arg)
 {
 	char	*temp;
 	char	*temp2;
-	
+
 	temp2 = ft_strndup(&str[arg->i], 1);
 	if (!temp2)
 		return (1);
@@ -176,26 +124,8 @@ int	add_char(char *str, t_expand *arg)
 	free(temp2);
 	if (!temp)
 		return (1);
-	//free(arg->value);
+	free(arg->value);
 	arg->value = temp;
-	arg->i++;
-	return (0);
-}
-
-int	add_char_in_exp(char *str, t_expand *arg, char **expanded)
-{
-	char	*temp;
-	char	*temp2;
-	
-	temp2 = ft_strndup(&str[arg->i], 1);
-	if (!temp2)
-		return (1);
-	temp = ft_strjoin(*expanded, temp2);
-	free(temp2);
-	if (!temp)
-		return (1);
-	free(*expanded);
-	*expanded = temp;
 	arg->i++;
 	return (0);
 }

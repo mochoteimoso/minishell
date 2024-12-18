@@ -6,46 +6,15 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 14:20:57 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/18 20:50:43 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	expand_segment(t_shell *mini, char *segment, char **expanded)
-{
-	t_expand	arg;
-	
-	if (the_arg(&arg, 0))
-		return (-1);
-	while (segment[arg.i]) 
-	{
-		if (segment[arg.i] == '\'' || segment[arg.i] == '"')
-		{
-			what_quote(segment, &arg);
-			if (add_char_in_exp(segment, &arg, expanded) == -1)
-			{
-				free(*expanded);
-				return (-1);
-			}
-			continue;
-		}
-		else if ((arg.sgl == 0 || arg.dbl == 1) && (segment[arg.i] == '$' || segment[arg.i] == '~'))
-		{
-			arg.i = expand_variable(mini, segment, expanded, &arg);
-			if (arg.i == -1)
-				return (free(*expanded), -1);
-		}
-		else
-		{
-			if (add_char_in_exp(segment, &arg, expanded) == -1)
-				return (free(*expanded), -1);
-		}
-	}
-	return (0);
-}
+#include "../../includes/minishell.h"
 
-/*int	new_expanded(char *temp, char **expanded)
+int	new_expanded(char *temp, char **expanded)
 {
 	char	*new_expanded;
 
@@ -56,10 +25,10 @@ int	expand_segment(t_shell *mini, char *segment, char **expanded)
 		return (-1);
 	}
 	free(temp);
-	//free(*expanded);
+	free(*expanded);
 	*expanded = new_expanded;
 	return (0);
-} */
+}
 
 int	tildes_home(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
@@ -79,23 +48,18 @@ int	tildes_home(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		temp = ft_strjoin(*expanded, value);
 		free(*expanded);
 		*expanded = temp;
+		free(value);
 	}
 	return (arg->i);
 }
 
 int	handle_new_expand(char *temp, char **expanded)
 {
-	char	*new_expanded;
-	
-	new_expanded = ft_strjoin(*expanded, temp);
-	if (!new_expanded)
+	if (new_expanded(temp, expanded) == -1)
 	{
-		ft_putendl_fd("malloc failed", 2);
 		free(temp);
 		return (-1);
 	}
-	free(temp);
-	*expanded = new_expanded;
 	return (0);
 }
 
@@ -106,7 +70,7 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	char	name[100];
 	int		indx;
 	t_vdata	data;
-	
+
 	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
 	if (!temp)
 		return (-1);
@@ -125,43 +89,88 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	init_vdata(&data, expanded, temp, name);
 	if (handle_value(mini, &data))
 		return (-1);
-	arg->start = arg->i;
-	return (arg->i);
+	arg->name = ft_strdup(data.name);
+	arg->start += ft_strlen(arg->name) + 1;
+	free(arg->name);
+	return (arg->start);
 }
 
 int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	int	cont;
-	
 	arg->start = arg->i;
 	cont = arg->start;
 	if (str[arg->i] == '$')
 		arg->i = oh_its_a_dollar(mini, str, expanded, arg);
-	if (str[arg->i] == '~')
+	else if (str[arg->i] == '~')
 		arg->i = tildes_home(mini, str, expanded, arg);
 	if (str[cont + 1] == '?')
 		arg->i = cont + 2;
 	return (arg->i);
-} 
-
-/*int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
+}
+char	*ft_strjoin_char(char *str, char c)
 {
-	char	*temp_name;
+	size_t	len;
+	char	*new_str;
+	size_t	i;
 
-	start = arg->i + 1;
-	if (str[start] == '?')
+	len = 0;
+	if (str != NULL)
+		len = ft_strlen(str);
+	new_str = malloc(len + 2);
+	if (new_str == NULL)
+		return (NULL);
+	i = 0;
+	if (str != NULL)
 	{
-		temp_name = ft_strdup("?");
-		arg->i = start + 1;
+		while (str[i] != '\0')
+		{
+			new_str[i] = str[i];
+			i++;
+		}
 	}
-	else
+	new_str[i] = c;
+	new_str[i + 1] = '\0';
+	return (new_str);
+}
+
+int	handle_expand(t_shell *mini, t_cmd **cmd)
+{
+	char		*expanded;
+	int			i;
+	t_expand	arg;
+
+	i = 0;
+	expanded = ft_strdup("");
+	the_arg(&arg, i);
+	while ((*cmd)->segment[arg.i])
 	{
-		while (ft_isalnum(str[arg->i + 1]) || str[arg->i + 1] == '_')
-			arg->i++;
-		temp_name = ft_substr(str, start, arg->i - start + 1);
+		if (ft_isspace((*cmd)->segment[arg.i]) && !arg.dbl && !arg.sgl)
+		{
+			expanded = ft_strjoin_char(expanded, (*cmd)->segment[arg.i]);
+			arg.i++;
+		}
+		if ((*cmd)->segment[arg.i] == '\'')
+		{
+			expanded = ft_strjoin(expanded, "'");
+			arg.i = segment_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
+			expanded = ft_strjoin(expanded, arg.value);
+			expanded = ft_strjoin(expanded, "'");
+		}
+		else if ((*cmd)->segment[arg.i] == '"')
+		{
+			expanded = ft_strjoin(expanded, "\"");
+			arg.i = segment_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
+			expanded = ft_strjoin(expanded, arg.value);
+			expanded = ft_strjoin(expanded, "\"");
+		}
+		else
+		{
+			arg.i = segment_no_quotes(mini, *cmd, arg.i, &arg);
+			expanded = ft_strjoin(expanded, arg.value);
+		}
 	}
-	if (!temp_name)
-		return (-1);
-	free(temp_name);
-	return (arg->i + 1);
-} */
+	free((*cmd)->segment);
+	(*cmd)->segment = expanded;
+	return (0);
+}
