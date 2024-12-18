@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/16 15:43:49 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:25:15 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	handle_arg(t_shell *mini, t_cmd *cmd, int i, t_expand *arg, int *arg_index)
 	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 		i = arg_in_quotes(mini, cmd->segment, i, arg);
 	else
-		i = arg_no_quotes(mini, cmd, i, arg);
+		i = arg_no_quotes(mini, cmd->segment, i, arg);
 	if (i == -1)
 		return (-1);
 	if (!arg->value || append_to_array(cmd, arg->value, arg->len, arg_index) == -1)

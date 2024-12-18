@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/16 18:10:46 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:15:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,21 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 
 int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 {
+	char *original_segment;
+	char *expanded;
+	
+	expanded = ft_strdup("");
+	if (!expanded)
+		return (-1); 
+	if (expand_segment(mini, cmd->segment, &expanded) == -1)
+	{
+		ft_putendl_fd("Expansion failed", 2);
+		free(expanded);
+		return (-1);
+	}
+	printf("Expanded: %s\n", expanded);
+	original_segment = cmd->segment;
+	cmd->segment = expanded;
 	while (cmd->segment[i])
 	{
 		if (is_redirection(cmd, i))
@@ -102,5 +117,6 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 				return (-1);
 		}
 	}
+	free(original_segment);
 	return (i);
 }
