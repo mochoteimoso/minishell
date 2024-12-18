@@ -189,7 +189,9 @@ int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_array_utils.c*/
 int		arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
-int		arg_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
+int		arg_no_quotes(t_shell *mini, t_cmd *cmd, t_expand *arg, int i);
+int		segment_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
+int		segment_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 int		append_to_array(t_cmd *cmd, char *arg, int len, int *index);
 int		skip_whitespace(char *str, int i);
 

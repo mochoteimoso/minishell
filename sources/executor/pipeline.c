@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/17 14:41:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:54:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	create_pipes(t_shell *mini);
 
 int	execute_pipeline(t_shell *mini)
 {
-	if (mini->cmd_count == 1 && is_this_built(mini->cmds[0]->command))
+	if (mini->cmds[0]->command && mini->cmd_count == 1 && is_this_built(mini->cmds[0]->command))
 	{
 		if (handle_single_builtin_cmd(mini))
 		{

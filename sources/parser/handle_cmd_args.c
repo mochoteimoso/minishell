@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/16 11:46:44 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:43:34 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	handle_arg(t_shell *mini, t_cmd *cmd, int i, t_expand *arg, int *arg_index)
 	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 		i = arg_in_quotes(mini, cmd->segment, i, arg);
 	else
-		i = arg_no_quotes(mini, cmd, i, arg);
+		i = arg_no_quotes(mini, cmd, arg, i);
 	if (i == -1)
 		return (-1);
 	if (!arg->value || append_to_array(cmd, arg->value, arg->len, arg_index) == -1)
@@ -82,7 +82,8 @@ int	handle_arg(t_shell *mini, t_cmd *cmd, int i, t_expand *arg, int *arg_index)
 		ft_free_array(cmd->args);
 		return (-1);
 	}
-	free(arg->value);
+	// free(arg->value);
+	arg->value = ft_strdup("");
 	i = skip_whitespace(cmd->segment, i);
 	return (i);
 }
@@ -96,6 +97,7 @@ int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 		return (-1);
 	arg_index = 1;
 	i = skip_whitespace(cmd->segment, i);
+	the_arg(&arg, i);
 	while (cmd->segment[i] && arg_index < cmd->args_count + 1)
 	{
 		if (is_redirection(cmd, i))

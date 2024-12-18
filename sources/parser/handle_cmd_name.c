@@ -9,18 +9,23 @@ int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
 	t_expand cmd_name;
 
 	i = skip_whitespace(cmd->segment, i);
-	i = process_quoted_segment(mini, cmd->segment, i, &cmd_name);
-	if (i == -1)
-		return (-1);
-	if (cmd_name.value && ft_strlen(cmd_name.value) == 0)
-	{
-		free(cmd_name.value);
-		i = skip_to_next_segment(mini, cmd, i);
-		if (!cmd->segment[i])
-			return (i);
-		if (process_quoted_segment(mini, cmd->segment, i, &cmd_name) == -1)
-			return (-1);
+	the_arg(&cmd_name, i);
+	cmd_name.i = i;
+	while (cmd->segment[cmd_name.i])
+	{	if ((cmd->segment[cmd_name.i] == ' ' || cmd->segment[cmd_name.i] == '<'
+			|| cmd->segment[cmd_name.i] == '>' || cmd->segment[cmd_name.i] == '|') && (!cmd_name.sgl && !cmd_name.dbl))
+			break;
+		if (cmd->segment[cmd_name.i] == '\'' || cmd->segment[cmd_name.i] == '"')
+		{
+			cmd_name.i = process_quoted_segment(mini, cmd->segment, cmd_name.i, &cmd_name);
+			cmd->command = ft_strdup(cmd_name.value);
+			return (cmd_name.i);
+		}
+		else if (add_char(cmd->segment, &cmd_name))
+			return (free(cmd_name.value), -1);
 	}
+	if (cmd_name.i == -1)
+		return (-1);
 	cmd->command = ft_strdup(cmd_name.value);
 	free(cmd_name.value);
 	if (!cmd->command)
@@ -33,6 +38,7 @@ int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
 
 int	process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result)
 {
+	(void)mini;
 	if (the_arg(result, i))
 		return (-1);
 	what_quote(segment, result);
@@ -40,15 +46,7 @@ int	process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result
 	{
 		if ((segment[result->i] == ' ' || segment[result->i] == '<'
 			|| segment[result->i] == '>') && (!result->sgl && !result->dbl))
-			break;
-		if (((result->dbl && segment[result->i] == '$') || (!result->sgl
-			&& segment[result->i] == '$')) && (segment[result->i + 1]
-			&& ((ft_isalnum(segment[result->i + 1]) || segment[result->i + 1] == '_'
-			|| segment[result->i + 1] == '?'))))
-		{
-			if (we_have_dollar(mini, result, segment) == -1)
-				return (free(result->value), -1);
-		}
+			break ;
 		else if (!result->sgl && !result->dbl && (segment[result->i] == '\''
 			|| segment[result->i] == '"'))
 			what_quote(segment, result);

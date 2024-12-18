@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/17 14:09:25 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:30:21 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,13 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 			exit_handler(mini, i, cmd->cmd_exit);
 		if (dup_output(mini, cmd, mini->cmd_count, i))
 			exit_handler(mini, i, cmd->cmd_exit);
-		if (is_this_built(cmd->command))
-			execute_forked_builtin_cmd(mini, cmd, i);
-		else
-			execute_forked_cmd(mini, cmd, i);
+		if (cmd->command)
+		{
+			if (is_this_built(cmd->command))
+				execute_forked_builtin_cmd(mini, cmd, i);
+			else
+				execute_forked_cmd(mini, cmd, i);
+		}
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 13:25:32 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:56:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,15 @@ int	parse_input(t_shell *mini)
 			clean_cmds(mini->cmds);
 			return (1);
 		}
-		if (is_this_built(mini->cmds[index]->command) != 1)
+		if (mini->cmds[index]->command)
 		{
-			if (get_cmd_path(mini, mini->cmds[index]) == 1)
+			if (is_this_built(mini->cmds[index]->command) != 1)
 			{
-				clean_cmds(mini->cmds);
-				return (1);
+				if (get_cmd_path(mini, mini->cmds[index]) == 1)
+				{
+					clean_cmds(mini->cmds);
+					return (1);
+				}
 			}
 		}
 		index++;
@@ -87,8 +90,6 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 		{
 			i = handle_redirections(mini, cmd, i);
 			if (i == -1)
-				return (-1);
-			if (is_empty_command(cmd, i))
 				return (-1);
 		}
 		else if (*cmd_found == 0)

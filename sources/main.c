@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 11:41:25 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:20:08 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,13 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini, int status)
 {
 	char	*input;
+	int		i;
+	int		flg;
 
 	while (1)
 	{
+		flg = 0;
+		i = 0;
 		if (isatty(fileno(stdin)))
 			init_sig();
 		if (isatty(fileno(stdin)))
@@ -166,8 +170,20 @@ static int user_prompt(t_shell *mini, int status)
 				continue;
 			}
 			//mini->exit_stat = 0;
-			// printer(mini);
-			execute_pipeline(mini);
+			printer(mini);
+			while (mini->cmds[i])
+			{
+				if (!mini->cmds[i]->command)
+				{
+					mini->exit_stat = 0;
+					clean_cmds(mini->cmds);
+					flg = 1;
+					break ;
+				}
+				i++;
+			}
+			if (!flg)
+				execute_pipeline(mini);
 			free(input);
 		}
 	}

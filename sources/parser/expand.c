@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 14:09:53 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:24:11 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,9 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	if (handle_value(mini, &data))
 		return (-1);
 	arg->name = ft_strdup(data.name);
-	arg->start = arg->i;
-	return (arg->i);
+	// arg->start = arg->i;
+	arg->start += ft_strlen(arg->name) + 1;
+	return (arg->start);
 }
 
 int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
@@ -104,7 +105,33 @@ int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		arg->i = tildes_home(mini, str, expanded, arg);
 	if (str[cont + 1] == '?')
 		arg->i = cont + 2;
+	// arg->i += ft_strlen(arg->name);
 	return (arg->i);
+}
+char	*ft_strjoin_char(char *str, char c)
+{
+	size_t	len;
+	char	*new_str;
+	size_t	i;
+
+	len = 0;
+	if (str != NULL)
+		len = ft_strlen(str);
+	new_str = malloc(len + 2);
+	if (new_str == NULL)
+		return (NULL);
+	i = 0;
+	if (str != NULL)
+	{
+		while (str[i] != '\0')
+		{
+			new_str[i] = str[i];
+			i++;
+		}
+	}
+	new_str[i] = c;
+	new_str[i + 1] = '\0';
+	return (new_str);
 }
 
 int	handle_expand(t_shell *mini, t_cmd **cmd)
@@ -116,22 +143,34 @@ int	handle_expand(t_shell *mini, t_cmd **cmd)
 	i = 0;
 	expanded = ft_strdup("");
 	the_arg(&arg, i);
-	printf("arg.i: %d\n", arg.i);
 	while ((*cmd)->segment[arg.i])
 	{
-		printf("i: %d\n", arg.i);
-		if ((*cmd)->segment[arg.i] == '"' || (*cmd)->segment[arg.i] == '\'')
-			arg.i = arg_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
+		if (ft_isspace((*cmd)->segment[arg.i]) && !arg.dbl && !arg.sgl)
+		{
+			expanded = ft_strjoin_char(expanded, (*cmd)->segment[arg.i]);
+			arg.i++;
+		}
+		if ((*cmd)->segment[arg.i] == '\'')
+		{
+			expanded = ft_strjoin(expanded, "'");
+			arg.i = segment_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
+			expanded = ft_strjoin(expanded, arg.value);
+			expanded = ft_strjoin(expanded, "'");
+		}
+		else if ((*cmd)->segment[arg.i] == '"')
+		{
+			expanded = ft_strjoin(expanded, "\"");
+			arg.i = segment_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
+			expanded = ft_strjoin(expanded, arg.value);
+			expanded = ft_strjoin(expanded, "\"");
+		}
 		else
-			arg.i = arg_no_quotes(mini, *cmd, arg.i, &arg);
-		printf("value: %s\n", arg.value);
-		expanded = ft_strjoin(expanded, arg.value);
-		if (arg.name)
-			arg.i += ft_strlen(arg.name);
+		{
+			arg.i = segment_no_quotes(mini, *cmd, arg.i, &arg);
+			expanded = ft_strjoin(expanded, arg.value);
+		}
 	}
-	printf("exp: {%s}\n", expanded);
 	free((*cmd)->segment);
 	(*cmd)->segment = expanded;
-	printf("segment: {%s}\n", (*cmd)->segment);
 	return (0);
 }
