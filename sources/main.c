@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 20:37:33 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:35:44 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->env = list_env(envp);
 	if (!mini->env)
 	{
-		cleaner(mini);
+		mini_cleaner(mini);
 		free(mini);
 		ft_putendl_fd("failed to create envp", 2);
 		return (1);
@@ -69,7 +69,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->pending = copy_env(envp);
 	if (!mini->pending)
 	{
-		cleaner(mini);
+		mini_cleaner(mini);
 		free(mini);
 		ft_putendl_fd("pending list malloc failed", 2);
 		return (1);
