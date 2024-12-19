@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 14:30:18 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:12:34 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	count_pipes(char *line)
 
 static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (i < cmd_count)
 	{
