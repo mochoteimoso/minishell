@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 19:21:00 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:25:21 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	redirll_head_tail(t_cmd *cmd)
 		redir_update_tail(cmd);
 		if (!cmd->redir_tail)
 		{
-			ft_putendl_fd("Failed to allocate memory for new redirection node", 2);
+			ft_putendl_fd("Failed to allocate memory for new redir node", 2);
 			return (-1);
 		}
 	}
