@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 21:07:14 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:52:26 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 
 int	segment_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 {
+	if (arg->value)
+		free(arg->value);
 	int j = 0;
 	if (the_arg(arg, i))
 		return (-1);
@@ -134,6 +136,8 @@ int	arg_no_quotes(t_shell *mini, t_cmd *cmd, t_expand *arg, int i)
 
 int	segment_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 {
+	if (arg->value)
+		free(arg->value);
 	arg->value = ft_strdup("");
 	if (!arg->value)
 		return (-1);

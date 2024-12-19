@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 20:57:35 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:25:27 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	handle_arg(t_shell *mini, t_cmd *cmd, int i, t_expand *arg, int *arg_index)
 		ft_free_array(cmd->args);
 		return (-1);
 	}
-	//free(arg->value);
+	free(arg->value);
 	arg->value = ft_strdup("");
 	i = skip_whitespace(cmd->segment, i);
 	return (i);
