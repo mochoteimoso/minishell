@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/16 11:56:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 19:40:05 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,15 @@ int	built_echo(t_cmd *cmd)
 
 	nl = 1;
 	i = 1;
-	if (cmd->args[1] && cmd->args[1][1] && (cmd->args[1][0] == '-') && (no_new_line(cmd->args[1]) == 1))
+	if (cmd->args[1] && cmd->args[1][1] && (cmd->args[1][0] == '-')
+		&& (no_new_line(cmd->args[1]) == 1))
 	{
 		nl = 0;
 		i++;
 		if (cmd->args[1][0])
 		{
-			while (cmd->args[i] && (cmd->args[i][0] == '-') && no_new_line(cmd->args[i]))
+			while (cmd->args[i] && (cmd->args[i][0] == '-')
+				&& no_new_line(cmd->args[i]))
 				i++;
 		}
 	}
