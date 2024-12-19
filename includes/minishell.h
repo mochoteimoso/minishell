@@ -99,8 +99,6 @@ typedef struct s_shell
 void printer(t_shell *mini);
 
 /*built_in*/
-	/*cd*/
-int		built_cd(t_shell *mini, t_cmd *cmd);
 	/*echo.c*/
 int		built_echo(t_cmd *cmd);
 	/*exit.c*/
@@ -126,7 +124,19 @@ void	to_alphabetical(char **array);
 t_env	*add_node(char *env);
 t_env	*create_node(void);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
+
+	/*env_utils.c*/
 int		set_value(t_env *node, char *value);
+int		fill_node(t_env *node, char *name, char *value);
+
+/*built_in/cd*/
+	/*cd.c*/
+int		built_cd(t_shell *mini, t_cmd *cmd);
+int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+
+	/*cd_utils.c*/
+int		get_oldpwd(t_env *env, char **pwd);
+int		old_pwd(t_shell *mini, t_cmd *cmd);
 
 /*commands*/
 	/*cmd_array.c*/
@@ -159,6 +169,7 @@ int		is_this_built(char *str);
 int		execute_pipeline(t_shell *mini);
 
 	/*pipeline_utils.c*/
+int		create_pipes(t_shell *mini);
 int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
 void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
@@ -246,13 +257,6 @@ int		open_output_file(t_cmd *cmd, char *output_file);
 int		open_append_file(t_cmd *cmd, char *output_file);
 int		open_heredoc(t_cmd *cmd, char *delimiter);
 
-	/*redir_ll*/
-t_redir	*list_redir(void);
-t_redir	*redir_add_node(void);
-void	redir_lstadd_back(t_redir **lst, t_redir *new);
-void	redir_update_tail(t_cmd *cmd);
-int		redirll_head_tail(t_cmd *cmd);
-
 	/*redirector.c*/
 int		resolve_fd(t_cmd *cmd);
 
@@ -268,25 +272,27 @@ int		validate_input_syntax(char **input, t_shell *mini);
 int		check_quotes(char *input, int limit);
 int		check_non_whitespace(char *str);
 
+	/*trailing_pipe.c*/
+char	*handle_trailing_pipe(char *input);
+
 /*utils*/
-	/*exit_handler*/
-void	exit_handler(t_shell *mini, int i, int exit_status);
+	/*exit_handler.c*/
+void	exit_for_failure(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	exit_for_single_cmd(t_shell *mini, int exit_status);
-void	cleaner_for_main(t_shell *mini);
 
-	/*freeing*/
-void	clean_env(t_env *ll, char **array);
-void	cleaner(t_shell *mini);
-void 	ft_free_int_arr_with_size(int **array, int size);
-void	error(t_shell * mini, char *str);
+	/*cleaners.c*/
+void	mini_cleaner(t_shell *mini);
+void	cleaner_for_failure(t_shell *mini);
+void	cleaner_for_success(t_shell *mini);
 void	clean_cmds(t_cmd **cmds);
 
-	/*exit_handler.c*/
-void	exit_handler(t_shell *mini, int i, int exit_status);
-void	exit_for_success(t_shell *mini, int i, int exit_status);
-void	cleaner_for_main(t_shell *mini);
-void	cleaner_for_main_success(t_shell *mini);
+	/*freeing*/
+void	ft_free_int_arr(int **array);
+void 	ft_free_int_arr_with_size(int **array, int size);
+void	error(t_shell * mini, char *str);
+void	clean_env(t_env *ll, char **array);
+void	clean_redir(t_redir *head);
 
 /*signals.c*/
 void	init_sig(void);
