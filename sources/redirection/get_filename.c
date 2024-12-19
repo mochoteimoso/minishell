@@ -6,19 +6,19 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:54:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 20:36:54 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:16:52 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	parse_filename(t_cmd *cmd, int i, char **filename);
-int	filename_in_quotes(t_cmd * cmd, char *str, int i, t_expand *arg);
+int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg);
 
 int	parse_filename(t_cmd *cmd, int i, char **filename)
 {
 	t_expand	arg;
-	
+
 	arg.i = i;
 	if (filename_in_quotes(cmd, cmd->segment, arg.i, &arg) == -1)
 		return (-1);
@@ -44,12 +44,14 @@ int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg)
 		cmd->redir_tail->expand = false;
 	while (str[arg->i])
 	{
-		if ((str[arg->i] == ' ' || str[arg->i]== '<' ||  str[arg->i]== '>')
+		if ((str[arg->i] == ' ' || str[arg->i] == '<' || str[arg->i] == '>')
 			&& (!arg->sgl && !arg->dbl))
 			break ;
-		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
+		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\''
+				|| str[arg->i] == '"'))
 			what_quote(str, arg);
-		else if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
+		else if ((arg->sgl && str[arg->i] == '\'')
+			|| (arg->dbl && str[arg->i] == '"'))
 			what_quote(str, arg);
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);
