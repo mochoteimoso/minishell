@@ -6,18 +6,36 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:01:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/05 14:50:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:10:53 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+int		create_pipes(t_shell *mini);
 int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
 void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
 
 // Duplicates fds in main process and resets fds to STDIN/STDOUT when needed
 // only difference is that this resets fds in case of error here to save space
+
+int	create_pipes(t_shell *mini)
+{
+	int	i;
+
+	i = 0;
+	while (i < mini->cmd_count - 1)
+	{
+		if (pipe(mini->pipes[i]) == -1)
+		{
+			perror("pipe");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
 
 int	dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd)
 {
@@ -60,6 +78,7 @@ void	close_fds_and_pipes(t_shell *mini, int i)
 }
 
 // Waits for all child prcocesses to complete and catches their exit status
+
 void	wait_children(t_shell *mini)
 {
 	int	i;
@@ -72,8 +91,6 @@ void	wait_children(t_shell *mini)
 		waitpid(mini->pids[i], &status, 0);
 		if (WIFEXITED(status))
 			mini->exit_stat = WEXITSTATUS(status);
-		//else if (WIFSIGNALED(status))
-		//	printf("Child %d terminated by signal %d\n", mini->pids[i], WTERMSIG(status));
 		i++;
 	}
 }

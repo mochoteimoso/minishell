@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/12 17:19:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:55:30 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,3 @@ int	dup2_and_close(int old_fd, int new_fd)
 	close(old_fd);
 	return (0);
 }
-
-
