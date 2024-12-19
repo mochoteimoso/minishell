@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 20:50:43 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:17:13 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ char	*ft_strjoin_char(char *str, char c)
 			i++;
 		}
 	}
+	//free(str);
 	new_str[i] = c;
 	new_str[i + 1] = '\0';
 	return (new_str);
@@ -170,6 +171,7 @@ int	handle_expand(t_shell *mini, t_cmd **cmd)
 			expanded = ft_strjoin(expanded, arg.value);
 		}
 	}
+	free(arg.value);
 	free((*cmd)->segment);
 	(*cmd)->segment = expanded;
 	return (0);
