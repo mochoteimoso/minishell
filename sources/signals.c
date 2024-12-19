@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:43:57 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 19:33:15 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:01:28 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /*
  * sigint_handler - Signal handler for SIGINT (Ctrl-C).
  * Clears the current line, moves to a new line, and redisplays the prompt
- * to allow the user to start typing a new command after interrupting the current input.
+ * to allow the user to start typing a new command after interrupting 
+ * the current input.
  *
  * @sig: Signal number (expected to be SIGINT).
  */
@@ -81,7 +82,7 @@ void	sig_reseted(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void sig_heredoc()
+void	sig_heredoc(void)
 {
 	signal(SIGINT, sig_handler_heredoc);
 	signal(SIGQUIT, SIG_IGN);
