@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:18:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 19:35:09 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:33:53 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	open_output_file(t_cmd *cmd, char *output_file)
 	int	fd_out;
 
 	fd_out = open(output_file, O_DIRECTORY);
-	if (fd_out == -1)
+	if (fd_out != -1)
 	{
 		close(fd_out);
 		error_and_update_ex(cmd, output_file, "Is a directory", 1);
@@ -76,7 +76,7 @@ int	open_append_file(t_cmd *cmd, char *output_file)
 	int	fd_out;
 	
 	fd_out = open(output_file, O_DIRECTORY);
-	if (fd_out == -1)
+	if (fd_out != -1)
 	{
 		close(fd_out);
 		error_and_update_ex(cmd, output_file, "Is a directory", 1);
