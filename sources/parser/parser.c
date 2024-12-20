@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 19:51:29 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:48:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	parse_input(t_shell *mini)
 			clean_cmds(mini->cmds);
 			return (1);
 		}
-		if (mini->cmds[index]->command)
+		/*if (mini->cmds[index]->command)
 		{
 			if (is_this_built(mini->cmds[index]->command) != 1)
 			{
@@ -57,7 +57,7 @@ int	parse_input(t_shell *mini)
 					return (1);
 				}
 			}
-		}
+		}*/
 		index++;
 	}
 	return (0);
@@ -70,8 +70,8 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 
 	i = 0;
 	cmd_found = 0;
-	if (cmd->segment[0] == '"' && cmd->segment[1] == '"')
-		return (1);
+	//if (cmd->segment[0] == '"' && cmd->segment[1] == '"')
+	//	return (1);
 	if (handle_expand(mini, &cmd))
 		return (1);
 	i = cmd_string_while(mini, cmd, i, &cmd_found);
