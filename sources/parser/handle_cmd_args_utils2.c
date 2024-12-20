@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/19 12:18:38 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:34:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	handle_question(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	int	cont;
+
 	arg->start = arg->i;
 	cont = arg->start;
 	if (str[arg->i] == '$')
@@ -45,7 +46,6 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 	char	*temp;
 	char	*new_res;
 
-	//printf("str: {%s}\n", str);
 	s_exp = arg->i;
 	temp = ft_strdup("");
 	if (!temp)
@@ -71,9 +71,8 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 
 void	what_quote(char *str, t_expand *arg)
 {
-	// printf("str[%d]: %c\n", arg->i, str[arg->i]);
 	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
-		&& str[arg->i] == '"'))
+			&& str[arg->i] == '"'))
 	{
 		if (str[arg->i] == '\'')
 			arg->sgl = !arg->sgl;
@@ -86,14 +85,12 @@ void	what_quote(char *str, t_expand *arg)
 	{
 		arg->sgl = 1;
 		arg->i++;
-		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
 		return ;
 	}
 	if (str[arg->i] == '"' && arg->dbl == 0)
 	{
 		arg->dbl = 1;
 		arg->i++;
-		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
 		return ;
 	}
 }
@@ -111,23 +108,5 @@ int	the_arg(t_expand *arg, int i)
 		ft_putendl_fd("Malloc fail", 2);
 		return (1);
 	}
-	return (0);
-}
-
-int	add_char(char *str, t_expand *arg)
-{
-	char	*temp;
-	char	*temp2;
-
-	temp2 = ft_strndup(&str[arg->i], 1);
-	if (!temp2)
-		return (1);
-	temp = ft_strjoin(arg->value, temp2);
-	free(temp2);
-	if (!temp)
-		return (1);
-	free(arg->value);
-	arg->value = temp;
-	arg->i++;
 	return (0);
 }

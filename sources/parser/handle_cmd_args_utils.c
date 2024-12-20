@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 20:14:55 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:21:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,8 +175,8 @@ int	segment_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 			i++;
 		if (ft_isspace(cmd->segment[i]) || (cmd->segment[i] == '\'' || cmd->segment[i] == '"'))
 			break ;
-		if ((cmd->segment[i] == '~' && (ft_isspace(cmd->segment[i + 1]) || cmd->segment[i + 1] == '\0')) || (cmd->segment[i] == '$'
-			&& (cmd->segment[i + 1] && (ft_isalnum(cmd->segment[i + 1])
+		if ((cmd->segment[i] == '~' && (cmd->segment[i + 1] == '/' || ft_isspace(cmd->segment[i + 1]) || !cmd->segment[i + 1]))
+			|| (cmd->segment[i] == '$' && (cmd->segment[i + 1] && (ft_isalnum(cmd->segment[i + 1])
 			|| cmd->segment[i + 1] == '_' || cmd->segment[i + 1] == '?'))))
 		{
 			// printf("here\n");

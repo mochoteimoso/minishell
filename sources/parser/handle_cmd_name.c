@@ -1,20 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_cmd_name.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 13:35:20 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/12/20 13:36:08 by nzharkev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
-int	skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i);
-int	process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result);
 
-int quoted_cmd(t_expand *name, char *segment)
+int	quoted_cmd(t_expand *name, char *segment)
 {
 	what_quote(segment, name);
 	while (segment[name->i])
 	{
-		// printf("result value: {%s}\n", result->value);
 		if (segment[name->i] == ' ' && !name->sgl && !name->dbl)
 			break ;
 		else if (!name->sgl && !name->dbl && (segment[name->i] == '\''
-			|| segment[name->i] == '"'))
+				|| segment[name->i] == '"'))
 		{
 			what_quote(segment, name);
 		}
@@ -39,7 +47,6 @@ int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
 	the_arg(&name, i);
 	while (cmd->segment[name.i])
 	{
-		// printf("segment[%d]: {%c}\n", name.i, cmd->segment[name.i]);
 		if (cmd->segment[name.i] == ' ' || cmd->segment[name.i] == '<'
 			|| cmd->segment[name.i] == '>' || cmd->segment[name.i] == '|')
 			break ;

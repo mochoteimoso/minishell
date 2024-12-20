@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 17:23:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:39:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int		handle_heredoc(t_shell *mini, t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
 
 // Checks if the input contains a redirection symbol that is not within quotes
-
 bool	is_redirection(t_cmd *cmd, int i)
 {
 	if ((cmd->segment[i] == '>' || cmd->segment[i] == '<')
@@ -31,7 +30,6 @@ bool	is_redirection(t_cmd *cmd, int i)
 
 // Handles < redirection, finds the filename and copies data
 // to the redir linked list
-
 int	handle_redirect_in(t_cmd *cmd, int i)
 {
 	char	*filename;
@@ -53,7 +51,6 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 
 // Handles > redirection, finds the filename and copies data
 // to the redir linked list
-
 int	handle_redirect_out(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
@@ -74,7 +71,6 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 }
 
 // Handles heredoc, finds the delimiter and copies data to the redir linked list
-
 int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 {
 	char	*delim;
@@ -97,7 +93,6 @@ int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 
 // Handles append redirection, finds the filename and copies data
 // to the redir linked list
-
 int	handle_append(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
