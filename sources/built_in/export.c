@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/16 19:13:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:31:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,12 @@ int	set_new_value(t_env *temp, char *str)
 	}
 	free(value);
 	return (0);
-
 }
 
 static int	update_env(t_shell *mini, char *str)
 {
-	t_env *temp;
-	int 	len;
+	t_env	*temp;
+	int		len;
 
 	len = 0;
 	temp = mini->env;
@@ -88,7 +87,8 @@ static int	update_env(t_shell *mini, char *str)
 		len++;
 	while (temp)
 	{
-		if ((len == (int)ft_strlen(temp->name)) && (ft_strncmp(temp->name, str, len) == 0))
+		if ((len == (int)ft_strlen(temp->name))
+			&& (ft_strncmp(temp->name, str, len) == 0))
 		{
 			set_new_value(temp, str);
 			return (1);
@@ -120,9 +120,9 @@ static int	parse_and_add(t_shell *mini, char *str)
 		{
 			new = add_node(str);
 			ft_env_lstadd_back(&mini->env, new);
-			update_pending(mini, str);
-			to_alphabetical(mini->pending);
 		}
+		update_pending(mini, str);
+		to_alphabetical(mini->pending);
 		return (0);
 	}
 	mini->exit_stat = 1;

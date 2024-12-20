@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/16 14:44:00 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:26:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	redirll_head_tail(t_cmd *cmd)
 		redir_update_tail(cmd);
 		if (!cmd->redir_tail)
 		{
-			ft_putendl_fd("Failed to allocate memory for new redirection node", 2);
+			ft_putendl_fd("Failed to allocate memory for new redir node", 2);
 			return (-1);
 		}
 	}

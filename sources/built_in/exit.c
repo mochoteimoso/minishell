@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/17 13:25:06 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:31:42 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,13 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 	ec = 0;
 	if (cmd->args[1])
 	{
-		if ((cmd->args[1] && !isonlynum(cmd->args[1])) || (cmd->args[1] && cmd->args[1][0] == '\0'))
+		if ((cmd->args[1] && !isonlynum(cmd->args[1]))
+			|| (cmd->args[1] && cmd->args[1][0] == '\0'))
 		{
 			ft_putstr_fd("exit: ", 2);
 			ft_putstr_fd(cmd->args[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
-			cleaner(mini);
+			mini_cleaner(mini);
 			free(mini);
 			exit(2);
 		}
@@ -56,8 +57,7 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 	}
 	else
 		ec = mini->exit_stat;
-	cleaner(mini);
+	mini_cleaner(mini);
 	free(mini);
-	sig_reseted();
 	exit(ec);
 }

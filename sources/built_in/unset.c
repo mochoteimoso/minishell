@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/13 20:07:34 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:30:40 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ static int	unset_env(t_shell *mini, char *str)
 				mini->env = cur->next;
 			else
 				prev->next = cur->next;
-		free(cur->name);
-		free(cur->value);
-		free(cur);
-		return (0);
+			free(cur->name);
+			free(cur->value);
+			free(cur);
+			return (0);
 		}
 		prev = cur;
 		cur = cur->next;

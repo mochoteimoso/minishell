@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:06:48 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:29:13 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 int	dup_input(t_shell *mini, t_cmd *cmd, int i);
 int	dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
 int	dup2_and_close(int old_fd, int new_fd);
-
-// Duplicates input from fd_in if there is a redirection or from previous pipe
-// Redirection takes precedence over pipe
 
 // Duplicates input from fd_in if there is a redirection or from previous pipe
 // Redirection takes precedence over pipe
@@ -92,5 +89,3 @@ int	dup2_and_close(int old_fd, int new_fd)
 	close(old_fd);
 	return (0);
 }
-
-

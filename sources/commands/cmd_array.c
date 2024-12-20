@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/16 14:42:48 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:30:02 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	count_pipes(char *line)
 
 static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	while (i < cmd_count)
 	{

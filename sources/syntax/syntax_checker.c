@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/17 10:32:00 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:24:57 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	validate_input_syntax(char **input, t_shell *mini)
 	i = 0;
 	while ((*input)[i])
 	{
-		if (!check_quotes(*input, i) &&
-			((*input)[i] == ';' || (*input)[i] == '\\'))
+		if (!check_quotes(*input, i) && ((*input)[i] == ';'
+			|| (*input)[i] == '\\'))
 		{
 			ft_putendl_fd("invalid syntax", 2);
 			mini->exit_stat = 2;
@@ -48,7 +48,8 @@ int	validate_input_syntax(char **input, t_shell *mini)
 	return (0);
 }
 
-/* Checks if a given index is within quotes or if there are unbalanced quotes in the string*/
+/* Checks if a given index is within quotes or if there are unbalanced
+	quotes in the string*/
 
 int	check_quotes(char *input, int limit)
 {
