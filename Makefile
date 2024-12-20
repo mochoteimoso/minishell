@@ -28,7 +28,6 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/handle_redirs_utils.c\
 	$(SRC_DIR)parser/heredoc.c\
 	$(SRC_DIR)parser/split_input.c\
-	$(SRC_DIR)parser/find_cmd_path.c\
 	$(SRC_DIR)syntax/syntax_checker.c\
 	$(SRC_DIR)syntax/redirection_syntax.c\
 	$(SRC_DIR)syntax/pipe_syntax.c\
@@ -43,6 +42,8 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)executor/child_process_utils.c\
 	$(SRC_DIR)executor/fd_handler.c\
 	$(SRC_DIR)executor/handle_builtins.c\
+	$(SRC_DIR)executor/cmd_path.c\
+	$(SRC_DIR)executor/cmd_path_utils.c\
 	$(SRC_DIR)utils/freeing.c\
 	$(SRC_DIR)utils/exit_handler.c\
 	$(SRC_DIR)utils/cleaners.c
