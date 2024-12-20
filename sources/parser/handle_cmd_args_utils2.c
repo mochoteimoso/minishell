@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmd_args_utils2.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/11 11:13:33 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:18:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 	char	*temp;
 	char	*new_res;
 
+	//printf("str: {%s}\n", str);
 	s_exp = arg->i;
 	temp = ft_strdup("");
 	if (!temp)
@@ -70,32 +71,29 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 
 void	what_quote(char *str, t_expand *arg)
 {
+	// printf("str[%d]: %c\n", arg->i, str[arg->i]);
 	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
 		&& str[arg->i] == '"'))
 	{
-		if (str[arg->i + 1] != '\0' || str[arg->i] != ' ' )
-		{
-			arg->sgl = 0;
-			arg->dbl = 0;
-			arg->i++;
-			return ;
-		}
-		else
-		{
-			arg->i++;
-			return ;
-		}
+		if (str[arg->i] == '\'')
+			arg->sgl = !arg->sgl;
+		else if (str[arg->i] == '\"')
+			arg->dbl = !arg->dbl;
+		arg->i++;
+		return ;
 	}
 	if (str[arg->i] == '\'' && arg->sgl == 0)
 	{
 		arg->sgl = 1;
 		arg->i++;
+		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
 		return ;
 	}
 	if (str[arg->i] == '"' && arg->dbl == 0)
 	{
 		arg->dbl = 1;
 		arg->i++;
+		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
 		return ;
 	}
 }
@@ -106,6 +104,7 @@ int	the_arg(t_expand *arg, int i)
 	arg->dbl = 0;
 	arg->i = i;
 	arg->start = i;
+	arg->name = NULL;
 	arg->value = ft_strdup("");
 	if (!arg->value)
 	{

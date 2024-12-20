@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:00:04 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:29:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		close_unused_fds(t_shell *mini, int i);
 
 int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 {
-	sig_handler_changer();
+	sig_reseted();
 	mini->pids[i] = fork();
 	if (mini->pids[i] == -1)
 	{
@@ -33,11 +33,11 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 	{
 		close_unused_fds(mini, i);
 		if (resolve_fd(cmd))
-			exit_handler(mini, i, cmd->cmd_exit);
+			exit_for_failure(mini, i, cmd->cmd_exit);
 		if (dup_input(mini, cmd, i))
-			exit_handler(mini, i, cmd->cmd_exit);
+			exit_for_failure(mini, i, cmd->cmd_exit);
 		if (dup_output(mini, cmd, mini->cmd_count, i))
-			exit_handler(mini, i, cmd->cmd_exit);
+			exit_for_failure(mini, i, cmd->cmd_exit);
 		if (is_this_built(cmd->command))
 			execute_forked_builtin_cmd(mini, cmd, i);
 		else
@@ -52,7 +52,7 @@ static void	execute_forked_builtin_cmd(t_shell *mini, t_cmd *cmd, int i)
 {
 	if (built_in_exe(mini, cmd))
 	{
-		exit_handler(mini, i, EXIT_FAILURE);
+		exit_for_failure(mini, i, EXIT_FAILURE);
 	}
 	exit_for_success(mini, i, EXIT_SUCCESS);
 }
@@ -66,12 +66,12 @@ static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd, int i)
 
 	env_array = env_to_array(mini->env);
 	if (!env_array)
-		exit_handler(mini, i, 1);
+		exit_for_failure(mini, i, 1);
 	sig_reseted();
 	if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
 	{
 		perror(cmd->command);
-		exit_handler(mini, i, -1);
+		exit_for_failure(mini, i, -1);
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -80,7 +80,7 @@ void	close_unused_fds(t_shell *mini, int i)
 {
 	int	j;
 
-	j =  i + 1;
+	j = i + 1;
 	if (mini->cmd_count >= 2 && i < mini->cmd_count - 1)
 		close(mini->pipes[i][0]);
 	while (j < mini->cmd_count - 1)

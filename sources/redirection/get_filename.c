@@ -3,27 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   get_filename.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:54:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 14:35:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:26:59 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	parse_filename(t_cmd *cmd, int i, char **filename);
-int	filename_in_quotes(char *str, int i, t_expand *arg);
+int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg);
 
 int	parse_filename(t_cmd *cmd, int i, char **filename)
 {
 	t_expand	arg;
 
-	arg.sgl = 0;
-	arg.dbl = 0;
-	arg.len = 0;
 	arg.i = i;
-	if (filename_in_quotes(cmd->segment, arg.i, &arg) == -1)
+	if (filename_in_quotes(cmd, cmd->segment, arg.i, &arg) == -1)
 		return (-1);
 	*filename = ft_strdup(arg.value);
 	if (!*filename)
@@ -37,19 +34,24 @@ int	parse_filename(t_cmd *cmd, int i, char **filename)
 	return (i);
 }
 
-int	filename_in_quotes(char *str, int i, t_expand *arg)
+int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg)
 {
 	i = skip_whitespace(str, i);
 	if (the_arg(arg, i))
 		return (-1);
 	what_quote(str, arg);
+	if (arg->sgl == 1 || arg->dbl == 1)
+		cmd->redir_tail->expand = false;
 	while (str[arg->i])
 	{
-		if (str[arg->i] == ' ' && !arg->sgl && !arg->dbl)
+		if ((str[arg->i] == ' ' || str[arg->i] == '<' || str[arg->i] == '>')
+			&& (!arg->sgl && !arg->dbl))
 			break ;
-		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
+		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\''
+				|| str[arg->i] == '"'))
 			what_quote(str, arg);
-		else if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
+		else if ((arg->sgl && str[arg->i] == '\'')
+			|| (arg->dbl && str[arg->i] == '"'))
 			what_quote(str, arg);
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);

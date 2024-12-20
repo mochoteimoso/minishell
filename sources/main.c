@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/12 20:02:29 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:19:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	g_sig = 0;
 
 void	printer(t_shell *mini)
 {
@@ -21,9 +23,9 @@ void	printer(t_shell *mini)
 		printf("\n");
 		printf("|*************************************************|\n");
 		printf("Struct %d:\n", i);
-		printf("segment: %s\n", mini->cmds[i]->segment);
-		printf("command: %s\n", mini->cmds[i]->command);
-		printf("command path: %s\n", mini->cmds[i]->cmd_path);
+		printf("segment: {%s}\n", mini->cmds[i]->segment);
+		printf("command: {%s}\n", mini->cmds[i]->command);
+		printf("command path: {%s}\n", mini->cmds[i]->cmd_path);
 		if (mini->cmds[i]->args)
 		{
 			int j = 0;
@@ -57,7 +59,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->env = list_env(envp);
 	if (!mini->env)
 	{
-		cleaner(mini);
+		mini_cleaner(mini);
 		free(mini);
 		ft_putendl_fd("failed to create envp", 2);
 		return (1);
@@ -65,7 +67,7 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->pending = copy_env(envp);
 	if (!mini->pending)
 	{
-		cleaner(mini);
+		mini_cleaner(mini);
 		free(mini);
 		ft_putendl_fd("pending list malloc failed", 2);
 		return (1);
@@ -131,10 +133,15 @@ static int	is_this_empty(char *input)
 static int user_prompt(t_shell *mini, int status)
 {
 	char	*input;
+	int		i;
+	int		flg;
 
 	while (1)
 	{
-		init_sig();
+		flg = 0;
+		i = 0;
+		if (isatty(fileno(stdin)))
+			init_sig();
 		if (isatty(fileno(stdin)))
 		{
 			input = readline("minishell> ");
@@ -162,7 +169,21 @@ static int user_prompt(t_shell *mini, int status)
 				free(input);
 				continue;
 			}
-			execute_pipeline(mini);
+			//mini->exit_stat = 0;
+			// printer(mini);
+			while (mini->cmds[i])
+			{
+				if (!mini->cmds[i]->command)
+				{
+					// mini->exit_stat = 1;
+					clean_cmds(mini->cmds);
+					flg = 1;
+					break ;
+				}
+				i++;
+			}
+			if (!flg)
+				execute_pipeline(mini);
 			free(input);
 		}
 	}
@@ -193,7 +214,7 @@ static int	activate_shell(int status, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	int	status;
-	
+
 	status = 0;
 	(void)argv;
 	if (argc != 1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_ll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/11 18:27:49 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:26:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ t_redir	*redir_add_node(void)
 	node->delimiter = NULL;
 	node->file = NULL;
 	node->type = 0;
-	node->expand = false;
+	node->expand = true;
+	node->heredoc_name = NULL;
+	node->heredoc_index = 0;
 	node->next = NULL;
 	return (node);
 }
@@ -86,7 +88,7 @@ int	redirll_head_tail(t_cmd *cmd)
 		redir_update_tail(cmd);
 		if (!cmd->redir_tail)
 		{
-			ft_putendl_fd("Failed to allocate memory for new redirection node", 2);
+			ft_putendl_fd("Failed to allocate memory for new redir node", 2);
 			return (-1);
 		}
 	}

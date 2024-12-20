@@ -4,7 +4,8 @@ SRC_DIR = sources/
 
 SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)signals.c\
-	$(SRC_DIR)built_in/cd.c\
+	$(SRC_DIR)built_in/cd/cd.c\
+	$(SRC_DIR)built_in//cd/cd_utils.c\
 	$(SRC_DIR)built_in/echo.c\
 	$(SRC_DIR)built_in/exit.c\
 	$(SRC_DIR)built_in/export.c\
@@ -13,6 +14,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env.c\
 	$(SRC_DIR)built_in/env/env_handling.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
+	$(SRC_DIR)built_in/env/env_utils.c\
 	$(SRC_DIR)commands/cmd_array.c\
 	$(SRC_DIR)parser/parser.c\
 	$(SRC_DIR)parser/parser_utils.c\
@@ -24,11 +26,13 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/handle_cmd_name.c\
 	$(SRC_DIR)parser/handle_redirections.c\
 	$(SRC_DIR)parser/handle_redirs_utils.c\
+	$(SRC_DIR)parser/heredoc.c\
 	$(SRC_DIR)parser/split_input.c\
 	$(SRC_DIR)parser/find_cmd_path.c\
 	$(SRC_DIR)syntax/syntax_checker.c\
 	$(SRC_DIR)syntax/redirection_syntax.c\
 	$(SRC_DIR)syntax/pipe_syntax.c\
+	$(SRC_DIR)syntax/trailing_pipe.c\
 	$(SRC_DIR)redirection/redir_ll.c\
 	$(SRC_DIR)redirection/redirector.c\
 	$(SRC_DIR)redirection/open_files.c\
@@ -40,7 +44,8 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)executor/fd_handler.c\
 	$(SRC_DIR)executor/handle_builtins.c\
 	$(SRC_DIR)utils/freeing.c\
-	$(SRC_DIR)utils/exit_handler.c
+	$(SRC_DIR)utils/exit_handler.c\
+	$(SRC_DIR)utils/cleaners.c
 
 FLAGS = -Wall -Werror -Wextra -g
 

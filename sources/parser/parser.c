@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 10:28:00 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:53:22 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,19 @@ int	parse_input(t_shell *mini)
 	{
 		if (parse_cmd_string(mini, mini->cmds[index]))
 		{
+			mini->exit_stat = 1;
 			clean_cmds(mini->cmds);
 			return (1);
 		}
-		if (is_this_built(mini->cmds[index]->command) != 1)
+		if (mini->cmds[index]->command)
 		{
-			if (get_cmd_path(mini, mini->cmds[index]) == 1)
+			if (is_this_built(mini->cmds[index]->command) != 1)
 			{
-				clean_cmds(mini->cmds);
-				return (1);
+				if (get_cmd_path(mini, mini->cmds[index]) == 1)
+				{
+					clean_cmds(mini->cmds);
+					return (1);
+				}
 			}
 		}
 		index++;
@@ -67,9 +71,15 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 
 	i = 0;
 	cmd_found = 0;
+	if (cmd->segment[0] == '"' && cmd->segment[1] == '"' && !cmd->segment[2])
+		return (1);
+	if (handle_expand(mini, &cmd))
+		return (1);
+	// printf("segment: {%s}\n", cmd->segment);
 	i = cmd_string_while(mini, cmd, i, &cmd_found);
 	if (i == -1)
 		return (1);
+	// printer(mini);
 	if (cmd_found && (!cmd->args || !cmd->args[0]))
 		i = no_args(cmd, i);
 	return (0);
@@ -81,10 +91,8 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 	{
 		if (is_redirection(cmd, i))
 		{
-			i = handle_redirections(cmd, i);
+			i = handle_redirections(mini, cmd, i);
 			if (i == -1)
-				return (-1);
-			if (is_empty_command(cmd, i))
 				return (-1);
 		}
 		else if (*cmd_found == 0)

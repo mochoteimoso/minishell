@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirs_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 10:26:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:23:35 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	is_redirection(t_cmd *cmd, int i);
 int		handle_redirect_in(t_cmd *cmd, int i);
 int		handle_redirect_out(t_cmd *cmd, int i);
-int		handle_heredoc(t_cmd *cmd, int i);
+int		handle_heredoc(t_shell *mini, t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
 
 // Checks if the input contains a redirection symbol that is not within quotes
@@ -29,7 +29,7 @@ bool	is_redirection(t_cmd *cmd, int i)
 		return (false);
 }
 
-// Handles < redirection, finds the filename and copies data 
+// Handles < redirection, finds the filename and copies data
 // to the redir linked list
 
 int	handle_redirect_in(t_cmd *cmd, int i)
@@ -51,13 +51,14 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 	return (i);
 }
 
-// Handles > redirection, finds the filename and copies data 
+// Handles > redirection, finds the filename and copies data
 // to the redir linked list
 
 int	handle_redirect_out(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
+	int		temp_fd;
 
 	in_quotes = false;
 	filename = NULL;
@@ -67,38 +68,41 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_OUT;
+	temp_fd = open_output_file(cmd, cmd->redir_tail->file);
+	close(temp_fd);
 	return (i);
 }
 
 // Handles heredoc, finds the delimiter and copies data to the redir linked list
 
-int	handle_heredoc(t_cmd *cmd, int i)
+int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 {
-	bool	in_quotes;
-	char	*filename;
+	char	*delim;
 
-	in_quotes = false;
-	filename = NULL;
+	delim = NULL;
 	i+=2;
-	i = parse_filename(cmd, i, &filename);
-	if (i == -1 || !filename)
-		return (-1);
-	cmd->redir_tail->delimiter = filename;
-	cmd->redir_tail->type = HEREDOC;
-	if (in_quotes)
+	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 		cmd->redir_tail->expand = false;
-	else
-		cmd->redir_tail->expand = true;
+	i = parse_filename(cmd, i, &delim);
+	if (i == -1 || !delim)
+		return (-1);
+	cmd->redir_tail->delimiter = delim;
+	cmd->redir_tail->type = HEREDOC;
+	if (generate_hd_file(cmd))
+		return (-1);
+	if (open_and_write_to_heredoc(mini, cmd))
+		return (-1);
 	return (i);
 }
 
-// Handles append redirection, finds the filename and copies data 
+// Handles append redirection, finds the filename and copies data
 // to the redir linked list
 
 int	handle_append(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
+	int		temp_fd;
 
 	in_quotes = false;
 	filename = NULL;
@@ -108,5 +112,9 @@ int	handle_append(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = APPEND;
+	temp_fd = open_append_file(cmd, cmd->redir_tail->file);
+	if (temp_fd == -2)
+		return (-1);
+	close(temp_fd);
 	return (i);
 }

@@ -6,16 +6,17 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:18:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:03:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:26:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	open_input_file(t_cmd *cmd, char *input_file);
-int	open_output_file(t_cmd *cmd, char *output_file);
-int	open_append_file(t_cmd *cmd, char *output_file);
-int	open_heredoc(t_cmd *cmd, char *delimiter);
+int		open_input_file(t_cmd *cmd, char *input_file);
+int		open_output_file(t_cmd *cmd, char *output_file);
+int		open_append_file(t_cmd *cmd, char *output_file);
+int		open_heredoc(t_cmd *cmd, char *delimiter);
+void	error_and_update_ex(t_cmd * cmd, char *file, char *error, int ex);
 
 // Tries to open input file and prints correct error in case of failure
 
@@ -28,16 +29,15 @@ int	open_input_file(t_cmd *cmd, char *input_file)
 	{
 		if (access(input_file, F_OK) != 0)
 		{
-			ft_putstr_fd(input_file, 2);
-			ft_putendl_fd(": No such file or directory", 2);
+			error_and_update_ex(cmd, input_file, "No such file or directory", 1);
+			return (-2);
 		}
-		else
+		if (access(input_file, R_OK) != 0)
 		{
 			ft_putstr_fd(input_file, 2);
-			ft_putendl_fd(": Permission denied", 2);
+			error_and_update_ex(cmd, input_file, "Permission denied", 126);
+			return (-2);
 		}
-		cmd->cmd_exit = 1;
-		return (-2);
 	}
 	return (fd_in);
 }
@@ -48,20 +48,22 @@ int	open_output_file(t_cmd *cmd, char *output_file)
 {
 	int	fd_out;
 
+	fd_out = open(output_file, O_DIRECTORY);
+	if (fd_out != -1)
+	{
+		close(fd_out);
+		error_and_update_ex(cmd, output_file, "Is a directory", 1);
+		return (-2);
+	}
+	if (access(output_file, F_OK) == 0 && access(output_file, W_OK) == -1)
+	{
+		error_and_update_ex(cmd, output_file, "Permission denied", 1);
+		return (-2);
+	}
 	fd_out = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out == -1)
 	{
-		if (access(output_file, F_OK))
-		{
-			ft_putstr_fd(output_file, 2);
-			ft_putendl_fd(": No such file or directory", 2);
-		}
-		else
-		{
-			ft_putstr_fd(output_file, 2);
-			ft_putendl_fd(": Permission denied", 2);
-		}
-		cmd->cmd_exit = 1;
+		error_and_update_ex(cmd, output_file, "No such file or directory", 1);
 		return (-2);
 	}
 	return (fd_out);
@@ -73,20 +75,22 @@ int	open_append_file(t_cmd *cmd, char *output_file)
 {
 	int	fd_out;
 
+	fd_out = open(output_file, O_DIRECTORY);
+	if (fd_out != -1)
+	{
+		close(fd_out);
+		error_and_update_ex(cmd, output_file, "Is a directory", 1);
+		return (-2);
+	}
+	if (access(output_file, F_OK) == 0 && access(output_file, W_OK) == -1)
+	{
+		error_and_update_ex(cmd, output_file, "Permission denied", 1);
+		return (-2);
+	}
 	fd_out = open(output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd_out == -1)
 	{
-		if (access(output_file, F_OK))
-		{
-			ft_putstr_fd(output_file, 2);
-			ft_putendl_fd(": No such file or directory", 2);
-		}
-		else
-		{
-			ft_putstr_fd(output_file, 2);
-			ft_putendl_fd(": Permission denied", 2);
-		}
-		cmd->cmd_exit = 1;
+		error_and_update_ex(cmd, output_file, "No such file or directory", 1);
 		return (-2);
 	}
 	return (fd_out);
@@ -94,31 +98,32 @@ int	open_append_file(t_cmd *cmd, char *output_file)
 
 // Opens heredoc
 
-int	open_heredoc(t_cmd *cmd, char *delimiter)
+int	open_heredoc(t_cmd *cmd, char *heredoc_file)
 {
-	int		heredoc_pipe_fd[2];
-	char	*line;
+	int	fd_in;
 
-	if (pipe(heredoc_pipe_fd) == -1)
+	fd_in = open(heredoc_file, O_RDONLY);
+	if (fd_in == -1)
 	{
-		perror("pipe error");
-		cmd->cmd_exit = 1;
-		return (-2);
-	}
-	while (1)
-	{
-		line = readline("heredoc> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
+		if (access(heredoc_file, F_OK) != 0)
 		{
-			free(line);
-			break ;
+			error_and_update_ex(cmd, heredoc_file, "No such file or directory", 1);
+			return (-2);
 		}
-		write(heredoc_pipe_fd[1], line, ft_strlen(line));
-		write(heredoc_pipe_fd[1], "\n", 1);
-		free(line);
+		if (access(heredoc_file, R_OK) != 0)
+		{
+			error_and_update_ex(cmd, heredoc_file, "Permission denied", 1);
+			return (-2);
+		}
 	}
-	close(heredoc_pipe_fd[1]);
-	return (heredoc_pipe_fd[0]);
+	return (fd_in);
 }
 
-// add heredoc printing to print heredoc input on screen
+void	error_and_update_ex(t_cmd * cmd, char *file, char *error, int ex)
+{
+	if (file && file[0] != '\0')
+		ft_putstr_fd(file, 2);
+	write(2, ": ", 2);
+	ft_putendl_fd(error, 2);
+	cmd->cmd_exit = ex;
+}

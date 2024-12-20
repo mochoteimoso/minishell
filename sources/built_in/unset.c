@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/05 18:08:56 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:30:40 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ static int	unset_env(t_shell *mini, char *str)
 				mini->env = cur->next;
 			else
 				prev->next = cur->next;
-		free(cur->name);
-		free(cur->value);
-		free(cur);
-		return (0);
+			free(cur->name);
+			free(cur->value);
+			free(cur);
+			return (0);
 		}
 		prev = cur;
 		cur = cur->next;
@@ -78,6 +78,11 @@ int	built_unset(t_shell *mini, t_cmd *cmd)
 	{
 		while (i < sum)
 		{
+			if (cmd->args[i][0] == '-')
+			{
+				ft_putendl_fd("Invalid option", 2);
+				return (2);
+			}
 			if (unset_env(mini, cmd->args[i]))
 			{
 				error(mini, "No such variable");

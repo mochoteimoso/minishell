@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/12 19:27:00 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:28:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 int			execute_pipeline(t_shell *mini);
 static int	handle_single_builtin_cmd(t_shell *mini);
 static int	pipe_and_fork(t_shell *mini);
+static int	allocate_pipes_array(t_shell *mini);
 static int	allocate_pipes(t_shell *mini);
-static int	create_pipes(t_shell *mini);
-
 
 // Sets up pipeline and forks child processes when needed
 // Allocates memory for an array of pids to store IDs of child processes
@@ -27,10 +26,7 @@ int	execute_pipeline(t_shell *mini)
 	if (mini->cmd_count == 1 && is_this_built(mini->cmds[0]->command))
 	{
 		if (handle_single_builtin_cmd(mini))
-		{
-			mini->exit_stat = 1;
 			return (mini->exit_stat);
-		}
 		clean_cmds(mini->cmds);
 		mini->exit_stat = 0;
 		return (mini->exit_stat);
@@ -44,11 +40,11 @@ int	execute_pipeline(t_shell *mini)
 	}
 	if (pipe_and_fork(mini))
 	{
-		cleaner_for_main(mini);
-		return (1);   // return exit_stat?
+		cleaner_for_failure(mini);
+		return (1); // return exit_stat?
 	}
 	wait_children(mini);
-	cleaner_for_main_success(mini);
+	cleaner_for_success(mini);
 	return (mini->exit_stat);
 }
 
@@ -57,9 +53,7 @@ int	execute_pipeline(t_shell *mini)
 
 static int	handle_single_builtin_cmd(t_shell *mini)
 {
-	if (resolve_fd(mini->cmds[0]))
-		return (1);
-	if (save_fds(mini))
+	if (resolve_fd(mini->cmds[0]) || save_fds(mini))
 		return (1);
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
@@ -77,7 +71,8 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 		reset_fds(mini);
 		return (1);
 	}
-	if (mini->cmds[0]->fd_in != STDIN_FILENO || (mini->cmds[0]->fd_out != STDOUT_FILENO))
+	if (mini->cmds[0]->fd_in != STDIN_FILENO
+		|| (mini->cmds[0]->fd_out != STDOUT_FILENO))
 	{
 		if (reset_fds(mini))
 			return (1);
@@ -104,6 +99,7 @@ static int	pipe_and_fork(t_shell *mini)
 		cmd = mini->cmds[i];
 		if (fork_and_execute(mini, cmd, i) == -1)
 			return (1);
+		sig_handler_changer();
 		close_fds_and_pipes(mini, i);
 		i++;
 	}
@@ -112,13 +108,23 @@ static int	pipe_and_fork(t_shell *mini)
 
 static int	allocate_pipes(t_shell *mini)
 {
-	int	i;
-	mini->pipes = malloc(sizeof(int*) * (mini->cmd_count - 1));
+	mini->pipes = malloc(sizeof(int *) * (mini->cmd_count - 1));
 	if (!mini->pipes)
 	{
 		perror("malloc");
 		return (1);
 	}
+	if (allocate_pipes_array(mini))
+		return (1);
+	if (create_pipes(mini))
+		return (1);
+	return (0);
+}
+
+static int	allocate_pipes_array(t_shell *mini)
+{
+	int	i;
+
 	i = 0;
 	while (i < mini->cmd_count - 1)
 	{
@@ -136,39 +142,6 @@ static int	allocate_pipes(t_shell *mini)
 		}
 		i++;
 	}
-	if (create_pipes(mini))
-		return (1);
 	return (0);
 }
 
-static int	create_pipes(t_shell *mini)
-{
-	int	i;
-
-	i = 0;
-	while (i < mini->cmd_count - 1)
-	{
-		if (pipe(mini->pipes[i]) == -1)
-		{
-			perror("pipe");
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-void	close_all_pipes(t_shell *mini, int *pipes)
-{
-	int	i;
-	if (!pipes)
-		return;
-
-	i = 0;
-	while (i < (mini->cmd_count - 1) * 2)
-	{
-		close(pipes[i]);
-		i++;
-	}
-	free(pipes);
-}
