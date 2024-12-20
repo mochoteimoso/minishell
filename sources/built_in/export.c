@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/19 19:42:08 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:32:55 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ static int	parse_and_add(t_shell *mini, char *str)
 		return (1);
 	}
 	sign = ft_strchr(str, '=');
-	if ((sign && !sign[1]) || !sign)
+	if (!sign)
 	{
 		update_pending(mini, str);
 		return (0);
