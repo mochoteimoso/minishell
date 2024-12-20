@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:13:39 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 13:33:33 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:51:55 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,17 @@ int	add_char(char *str, t_expand *arg)
 {
 	char	*temp;
 	char	*temp2;
+	char	*temp3;
 
+	// printf("str[%d]: {%c}\n", arg->i, str[arg->i]);
+	// printf("value: {%s}\n", arg->value);
 	temp2 = ft_strndup(&str[arg->i], 1);
 	if (!temp2)
 		return (1);
-	temp = ft_strjoin(arg->value, temp2);
+	temp3 = ft_strdup(arg->value);
+	temp = ft_strjoin(temp3, temp2);
 	free(temp2);
+	free(temp3);
 	if (!temp)
 		return (1);
 	free(arg->value);

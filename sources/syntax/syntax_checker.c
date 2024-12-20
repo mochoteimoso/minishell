@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 10:24:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:13:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	validate_input_syntax(char **input, t_shell *mini)
 {
 	int	i;
 
-	if (check_quotes(*input, 0))
+	if (check_quotes(*input, ft_strlen(*input)))
 	{
 		ft_putendl_fd("syntax error: unmatched quotes", 2);
 		mini->exit_stat = 2;
