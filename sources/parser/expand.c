@@ -6,27 +6,11 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/19 17:30:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:20:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	new_expanded(char *temp, char **expanded)
-{
-	char	*new_expanded;
-
-	new_expanded = ft_strjoin(*expanded, temp);
-	if (!new_expanded)
-	{
-		ft_putendl_fd("malloc failed", 2);
-		return (-1);
-	}
-	free(temp);
-	free(*expanded);
-	*expanded = new_expanded;
-	return (0);
-}
 
 int	tildes_home(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
@@ -53,18 +37,23 @@ int	tildes_home(t_shell *mini, char *str, char **expanded, t_expand *arg)
 
 int	handle_new_expand(char *temp, char **expanded)
 {
-	if (new_expanded(temp, expanded) == -1)
+	char	*new_expanded;
+
+	new_expanded = ft_strjoin(*expanded, temp);
+	if (!new_expanded)
 	{
-		free(temp);
+		ft_putendl_fd("malloc failed", 2);
 		return (-1);
 	}
+	free(temp);
+	free(*expanded);
+	*expanded = new_expanded;
 	return (0);
 }
 
 int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	char	*temp;
-	char	*value;
 	char	name[100];
 	int		indx;
 	t_vdata	data;
@@ -77,29 +66,24 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 	arg->i++;
 	indx = 0;
 	while (str[arg->i] && (ft_isalnum(str[arg->i])
-		|| str[arg->i] == '_' || str[arg->i] == '?'))
+			|| str[arg->i] == '_' || str[arg->i] == '?'))
 	{
 		if (indx < (int) sizeof(name) - 1)
 			name[indx++] = str[arg->i++];
 	}
 	name[indx] = '\0';
-	// printf("dollar name: {%s}\n", name);
-	value = NULL;
 	init_vdata(&data, expanded, temp, name);
 	if (handle_value(mini, &data))
 		return (-1);
-	// printf("arg->value: {%s}\n", arg->value);
 	arg->name = ft_strdup(data.name);
-	// arg->start = arg->i;
 	arg->start += ft_strlen(arg->name) + 1;
-	// printf("arg->start: %d\n", arg->start);
 	return (arg->start);
 }
 
 int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	int	cont;
-	// printf("str: {%s}\nstr[arg->i]: {%c}\n", str, str[arg->i]);
+
 	arg->start = arg->i;
 	cont = arg->start;
 	if (str[arg->i] == '$')
@@ -108,59 +92,31 @@ int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		arg->i = tildes_home(mini, str, expanded, arg);
 	if (str[cont + 1] == '?')
 		arg->i = cont + 2;
-	// arg->i += ft_strlen(arg->name);
 	return (arg->i);
 }
-char	*ft_strjoin_char(char *str, char c)
-{
-	size_t	len;
-	char	*new_str;
-	size_t	i;
 
-	len = 0;
-	if (str != NULL)
-		len = ft_strlen(str);
-	new_str = malloc(len + 2);
-	if (new_str == NULL)
-		return (NULL);
-	i = 0;
-	if (str != NULL)
-	{
-		while (str[i] != '\0')
-		{
-			new_str[i] = str[i];
-			i++;
-		}
-	}
-	new_str[i] = c;
-	new_str[i + 1] = '\0';
-	return (new_str);
-}
-
-void	what_quote_segment(char *str, t_expand *arg)
+int	expand_hd_quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expanded)
 {
-	// printf("str[%d]: %c\n", arg->i, str[arg->i]);
-	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
-		&& str[arg->i] == '"'))
+	if ((*cmd)->segment[arg->i] == '<' && (*cmd)->segment[arg->i + 1] == '<')
 	{
-		if (str[arg->i] == '\'')
-			arg->sgl = !arg->sgl;
-		else if (str[arg->i] == '\"')
-			arg->dbl = !arg->dbl;
-		return ;
+		arg->i = we_have_heredoc(arg, (*cmd)->segment);
+		*expanded = ft_strjoin(*expanded, arg->value);
 	}
-	if (str[arg->i] == '\'' && arg->sgl == 0)
+	if ((*cmd)->segment[arg->i] == '\'')
 	{
-		arg->sgl = 1;
-		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
-		return ;
+		*expanded = ft_strjoin(*expanded, "'");
+		arg->i = segment_in_quotes(mini, (*cmd)->segment, arg->i, arg);
+		*expanded = ft_strjoin(*expanded, arg->value);
+		*expanded = ft_strjoin(*expanded, "'");
 	}
-	if (str[arg->i] == '"' && arg->dbl == 0)
+	else if ((*cmd)->segment[arg->i] == '"')
 	{
-		arg->dbl = 1;
-		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
-		return ;
+		*expanded = ft_strjoin(*expanded, "\"");
+		arg->i = segment_in_quotes(mini, (*cmd)->segment, arg->i, arg);
+		*expanded = ft_strjoin(*expanded, arg->value);
+		*expanded = ft_strjoin(*expanded, "\"");
 	}
+	return (arg->i);
 }
 
 int	handle_expand(t_shell *mini, t_cmd **cmd)
@@ -179,38 +135,14 @@ int	handle_expand(t_shell *mini, t_cmd **cmd)
 			expanded = ft_strjoin_char(expanded, (*cmd)->segment[arg.i]);
 			arg.i++;
 		}
-		if ((*cmd)->segment[arg.i] == '<' && (*cmd)->segment[arg.i + 1] == '<')
-		{
-			arg.i = we_have_heredoc(&arg, (*cmd)->segment);
-			expanded = ft_strjoin(expanded, arg.value);
-			// printf("expanded: %s\n", expanded);
-		}
-		if ((*cmd)->segment[arg.i] == '\'')
-		{
-			expanded = ft_strjoin(expanded, "'");
-			arg.i = segment_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
-			expanded = ft_strjoin(expanded, arg.value);
-			expanded = ft_strjoin(expanded, "'");
-			// printf("expanded sgl: {%s}\n", expanded);
-		}
-		else if ((*cmd)->segment[arg.i] == '"')
-		{
-			expanded = ft_strjoin(expanded, "\"");
-			arg.i = segment_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
-			expanded = ft_strjoin(expanded, arg.value);
-			expanded = ft_strjoin(expanded, "\"");
-			// printf("expanded dbl: {%s}\n", expanded);
-		}
+		if ((*cmd)->segment[arg.i] == '\'' || (*cmd)->segment[arg.i] == '"' || ((*cmd)->segment[arg.i] == '<' && (*cmd)->segment[arg.i + 1] == '<'))
+			arg.i = expand_hd_quoted(mini, cmd, &arg, &expanded);
 		else
 		{
-			// printf("arg->sgl: %d\narg->dbl: %d\n", arg.sgl, arg.dbl);
 			arg.i = segment_no_quotes(mini, *cmd, arg.i, &arg);
 			expanded = ft_strjoin(expanded, arg.value);
-			// printf("expanded: {%s} arg.i: %d\n", expanded, arg.i);
 		}
-		// printf("arg->i: %d\nsegment[%d]: %c\n", arg.i, arg.i, (*cmd)->segment[arg.i]);
 	}
-	// printf("final result: {%s}\n", expanded);
 	free((*cmd)->segment);
 	(*cmd)->segment = expanded;
 	return (0);

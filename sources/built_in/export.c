@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 10:31:07 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 12:35:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ static int	parse_and_add(t_shell *mini, char *str)
 		return (1);
 	}
 	sign = ft_strchr(str, '=');
-	if ((sign && !sign[1]) || !sign)
+	// if ((sign && !sign[1]) || !sign)
+	if (!sign)
 	{
 		update_pending(mini, str);
 		return (0);

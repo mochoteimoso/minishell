@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 20:51:37 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 11:34:27 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,11 @@ int only_redirect(char *str, int i)
 {
 	int n;
 	n = i;
-	while (str[n] != '=')
+	// printf("str[%d]: {%c}\n", n, str[n]);
+	while (str[n] && str[n] != '=')
 		n++;
+	if (!str[n])
+		return (0);
 	n++;
 	n++;
 	if ((str[n] == '>' || str[n] == '<') || str[n] == '|')

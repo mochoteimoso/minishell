@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/19 13:38:04 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 12:48:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,30 @@ void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name)
 	data->expanded = expanded;
 	data->temp = temp;
 	data->name = name;
+}
+
+char	*ft_strjoin_char(char *str, char c)
+{
+	size_t	len;
+	char	*new_str;
+	size_t	i;
+
+	len = 0;
+	if (str != NULL)
+		len = ft_strlen(str);
+	new_str = malloc(len + 2);
+	if (new_str == NULL)
+		return (NULL);
+	i = 0;
+	if (str != NULL)
+	{
+		while (str[i] != '\0')
+		{
+			new_str[i] = str[i];
+			i++;
+		}
+	}
+	new_str[i] = c;
+	new_str[i + 1] = '\0';
+	return (new_str);
 }

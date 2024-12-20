@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 10:34:16 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 11:36:52 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	built_env(t_shell *mini, t_cmd *cmd)
 	{
 		ft_putendl_fd("No such file or directory", 2);
 		mini->exit_stat = 127;
-		return (1);
+		return (127);
 	}
 	while (temp != NULL)
 	{
