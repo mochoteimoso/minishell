@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 13:57:37 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:59:29 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 	else if (mini->pids[i] == 0)
 	{
 		close_unused_fds(mini, i);
+		if (is_this_built(cmd->command) != 1)
+		{
+			if (get_cmd_path(mini, cmd) == 1)
+				exit_for_failure(mini, i, cmd->cmd_exit);
+		}
 		if (resolve_fd(cmd))
 			exit_for_failure(mini, i, cmd->cmd_exit);
 		if (dup_input(mini, cmd, i))
