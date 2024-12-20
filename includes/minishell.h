@@ -158,8 +158,13 @@ int		dup2_and_close(int old_fd, int new_fd);
 int		save_fds(t_shell *mini);
 int		reset_fds(t_shell *mini);
 
-	/*find_cmd_path.c*/
+	/*cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+
+	/*cmd_path_utils.c*/
+int		check_special_cases(t_cmd *cmd);
+int		check_for_directory(t_cmd *cmd);
+void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
 
 	/*handle_builtins.c*/
 int		built_in_exe(t_shell *mini, t_cmd *cmd);
@@ -189,6 +194,7 @@ bool	is_empty_command(t_cmd *cmd, int i);
 int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
 int 	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg);
 int		handle_expand(t_shell *mini, t_cmd **cmd);
+char	*ft_strjoin_char(char *str, char c);
 
 	/*expand_utils.c*/
 char	*get_value(t_env *env, char *name);
@@ -198,6 +204,7 @@ void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name);
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
+int		we_have_heredoc(t_expand *arg, char *str);
 
 	/*handle_cmd_args_utils.c*/
 int		arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
@@ -215,8 +222,7 @@ int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 
 	/*handle_cmd_name.c*/
 int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
-int		skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i);
-int		process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result);
+int		quoted_cmd(t_expand *name, char *segment);
 
 	/*handle_redirections.c*/
 int		handle_redirections(t_shell *mini, t_cmd *cmd, int i);
