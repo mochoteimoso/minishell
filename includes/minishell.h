@@ -178,6 +178,7 @@ bool	is_empty_command(t_cmd *cmd, int i);
 int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
 int 	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg);
 int		handle_expand(t_shell *mini, t_cmd **cmd);
+char	*ft_strjoin_char(char *str, char c);
 	/*expand_utils.c*/
 char	*get_value(t_env *env, char *name);
 int		handle_value(t_shell *mini, t_vdata *data);
@@ -298,5 +299,6 @@ void	sig_handler_hd(int signal);
 
 int	generate_hd_file(t_cmd *cmd);
 int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
+int	we_have_heredoc(t_expand *arg, char *str);
 
 #endif

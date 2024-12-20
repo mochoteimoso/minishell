@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 17:32:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:23:35 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ int	handle_append(t_cmd *cmd, int i)
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = APPEND;
 	temp_fd = open_append_file(cmd, cmd->redir_tail->file);
+	if (temp_fd == -2)
+		return (-1);
 	close(temp_fd);
 	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 16:56:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:53:22 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	parse_input(t_shell *mini)
 	{
 		if (parse_cmd_string(mini, mini->cmds[index]))
 		{
+			mini->exit_stat = 1;
 			clean_cmds(mini->cmds);
 			return (1);
 		}
@@ -70,13 +71,15 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 
 	i = 0;
 	cmd_found = 0;
-	if (cmd->segment[0] == '"' && cmd->segment[1] == '"')
+	if (cmd->segment[0] == '"' && cmd->segment[1] == '"' && !cmd->segment[2])
 		return (1);
 	if (handle_expand(mini, &cmd))
 		return (1);
+	// printf("segment: {%s}\n", cmd->segment);
 	i = cmd_string_while(mini, cmd, i, &cmd_found);
 	if (i == -1)
 		return (1);
+	// printer(mini);
 	if (cmd_found && (!cmd->args || !cmd->args[0]))
 		i = no_args(cmd, i);
 	return (0);

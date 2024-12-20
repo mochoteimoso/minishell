@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 18:20:08 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/20 09:55:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	printer(t_shell *mini)
 		printf("\n");
 		printf("|*************************************************|\n");
 		printf("Struct %d:\n", i);
-		printf("segment: %s\n", mini->cmds[i]->segment);
-		printf("command: %s\n", mini->cmds[i]->command);
-		printf("command path: %s\n", mini->cmds[i]->cmd_path);
+		printf("segment: {%s}\n", mini->cmds[i]->segment);
+		printf("command: {%s}\n", mini->cmds[i]->command);
+		printf("command path: {%s}\n", mini->cmds[i]->cmd_path);
 		if (mini->cmds[i]->args)
 		{
 			int j = 0;
@@ -170,12 +170,12 @@ static int user_prompt(t_shell *mini, int status)
 				continue;
 			}
 			//mini->exit_stat = 0;
-			printer(mini);
+			// printer(mini);
 			while (mini->cmds[i])
 			{
 				if (!mini->cmds[i]->command)
 				{
-					mini->exit_stat = 0;
+					// mini->exit_stat = 1;
 					clean_cmds(mini->cmds);
 					flg = 1;
 					break ;

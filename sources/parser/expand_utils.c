@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/17 11:29:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/19 13:38:04 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	*get_value(t_env *env, char *name)
 	char	*value;
 
 	temp = env;
+	// printf("name: {%s}\n", name);
 	while (temp)
 	{
 		if (ft_strcmp(temp->name, name) == 0)

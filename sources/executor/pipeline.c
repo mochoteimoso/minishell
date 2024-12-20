@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/18 16:54:36 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:07:33 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ int	execute_pipeline(t_shell *mini)
 static int	handle_single_builtin_cmd(t_shell *mini)
 {
 	if (resolve_fd(mini->cmds[0]))
+	{
+		mini->exit_stat = 1;
 		return (1);
+	}
 	if (save_fds(mini))
 		return (1);
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)

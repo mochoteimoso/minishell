@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 18:24:11 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:30:28 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,20 +83,23 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 			name[indx++] = str[arg->i++];
 	}
 	name[indx] = '\0';
+	// printf("dollar name: {%s}\n", name);
 	value = NULL;
 	init_vdata(&data, expanded, temp, name);
 	if (handle_value(mini, &data))
 		return (-1);
+	// printf("arg->value: {%s}\n", arg->value);
 	arg->name = ft_strdup(data.name);
 	// arg->start = arg->i;
 	arg->start += ft_strlen(arg->name) + 1;
+	// printf("arg->start: %d\n", arg->start);
 	return (arg->start);
 }
 
 int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
 	int	cont;
-	//printf("str: {%s}\nstr[arg->i]: {%c}\n", str, str[arg->i]);
+	// printf("str: {%s}\nstr[arg->i]: {%c}\n", str, str[arg->i]);
 	arg->start = arg->i;
 	cont = arg->start;
 	if (str[arg->i] == '$')
@@ -134,6 +137,32 @@ char	*ft_strjoin_char(char *str, char c)
 	return (new_str);
 }
 
+void	what_quote_segment(char *str, t_expand *arg)
+{
+	// printf("str[%d]: %c\n", arg->i, str[arg->i]);
+	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
+		&& str[arg->i] == '"'))
+	{
+		if (str[arg->i] == '\'')
+			arg->sgl = !arg->sgl;
+		else if (str[arg->i] == '\"')
+			arg->dbl = !arg->dbl;
+		return ;
+	}
+	if (str[arg->i] == '\'' && arg->sgl == 0)
+	{
+		arg->sgl = 1;
+		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
+		return ;
+	}
+	if (str[arg->i] == '"' && arg->dbl == 0)
+	{
+		arg->dbl = 1;
+		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
+		return ;
+	}
+}
+
 int	handle_expand(t_shell *mini, t_cmd **cmd)
 {
 	char		*expanded;
@@ -150,12 +179,19 @@ int	handle_expand(t_shell *mini, t_cmd **cmd)
 			expanded = ft_strjoin_char(expanded, (*cmd)->segment[arg.i]);
 			arg.i++;
 		}
+		if ((*cmd)->segment[arg.i] == '<' && (*cmd)->segment[arg.i + 1] == '<')
+		{
+			arg.i = we_have_heredoc(&arg, (*cmd)->segment);
+			expanded = ft_strjoin(expanded, arg.value);
+			// printf("expanded: %s\n", expanded);
+		}
 		if ((*cmd)->segment[arg.i] == '\'')
 		{
 			expanded = ft_strjoin(expanded, "'");
 			arg.i = segment_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
 			expanded = ft_strjoin(expanded, arg.value);
 			expanded = ft_strjoin(expanded, "'");
+			// printf("expanded sgl: {%s}\n", expanded);
 		}
 		else if ((*cmd)->segment[arg.i] == '"')
 		{
@@ -163,13 +199,18 @@ int	handle_expand(t_shell *mini, t_cmd **cmd)
 			arg.i = segment_in_quotes(mini, (*cmd)->segment, arg.i, &arg);
 			expanded = ft_strjoin(expanded, arg.value);
 			expanded = ft_strjoin(expanded, "\"");
+			// printf("expanded dbl: {%s}\n", expanded);
 		}
 		else
 		{
+			// printf("arg->sgl: %d\narg->dbl: %d\n", arg.sgl, arg.dbl);
 			arg.i = segment_no_quotes(mini, *cmd, arg.i, &arg);
 			expanded = ft_strjoin(expanded, arg.value);
+			// printf("expanded: {%s} arg.i: %d\n", expanded, arg.i);
 		}
+		// printf("arg->i: %d\nsegment[%d]: %c\n", arg.i, arg.i, (*cmd)->segment[arg.i]);
 	}
+	// printf("final result: {%s}\n", expanded);
 	free((*cmd)->segment);
 	(*cmd)->segment = expanded;
 	return (0);
