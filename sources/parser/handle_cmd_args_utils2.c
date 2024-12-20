@@ -6,11 +6,9 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/18 20:40:20 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:01:46 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../../includes/minishell.h"
 
 #include "../../includes/minishell.h"
 
@@ -47,6 +45,7 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 	char	*temp;
 	char	*new_res;
 
+	//printf("str: {%s}\n", str);
 	s_exp = arg->i;
 	temp = ft_strdup("");
 	if (!temp)
@@ -72,6 +71,7 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 
 void	what_quote(char *str, t_expand *arg)
 {
+	// printf("str[%d]: %c\n", arg->i, str[arg->i]);
 	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
 		&& str[arg->i] == '"'))
 	{
@@ -86,12 +86,14 @@ void	what_quote(char *str, t_expand *arg)
 	{
 		arg->sgl = 1;
 		arg->i++;
+		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
 		return ;
 	}
 	if (str[arg->i] == '"' && arg->dbl == 0)
 	{
 		arg->dbl = 1;
 		arg->i++;
+		// printf("arg->dbl: %d\narg->sgl: %d\n", arg->dbl, arg->sgl);
 		return ;
 	}
 }
