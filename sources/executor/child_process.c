@@ -6,13 +6,14 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 15:59:29 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/21 17:08:47 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int			fork_and_execute(t_shell *mini, t_cmd *cmd, int i);
+static int	setup_fds_and_check(t_shell *mini, t_cmd *cmd, int i);
 static void	execute_forked_builtin_cmd(t_shell *mini, t_cmd *cmd, int i);
 static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd, int i);
 void		close_unused_fds(t_shell *mini, int i);
@@ -32,22 +33,33 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 	else if (mini->pids[i] == 0)
 	{
 		close_unused_fds(mini, i);
-		if (is_this_built(cmd->command) != 1)
+		if (setup_fds_and_check(mini, cmd, i))
+			exit_for_failure(mini, i, cmd->cmd_exit);
+		if (cmd->command)
 		{
-			if (get_cmd_path(mini, cmd) == 1)
-				exit_for_failure(mini, i, cmd->cmd_exit);
+			if (is_this_built(cmd->command))
+				execute_forked_builtin_cmd(mini, cmd, i);
+			else
+			{
+				if (get_cmd_path(mini, cmd) == 1)
+					exit_for_failure(mini, i, cmd->cmd_exit);
+				execute_forked_cmd(mini, cmd, i);
+			}	
 		}
-		if (resolve_fd(cmd))
-			exit_for_failure(mini, i, cmd->cmd_exit);
-		if (dup_input(mini, cmd, i))
-			exit_for_failure(mini, i, cmd->cmd_exit);
-		if (dup_output(mini, cmd, mini->cmd_count, i))
-			exit_for_failure(mini, i, cmd->cmd_exit);
-		if (is_this_built(cmd->command))
-			execute_forked_builtin_cmd(mini, cmd, i);
 		else
-			execute_forked_cmd(mini, cmd, i);
+			exit_for_failure(mini, i, 1);
 	}
+	return (0);
+}
+
+static int	setup_fds_and_check(t_shell *mini, t_cmd *cmd, int i)
+{
+	if (resolve_fd(cmd))
+		return (1);
+	if (dup_input(mini, cmd, i))
+		return (1);
+	if (dup_output(mini, cmd, mini->cmd_count, i))
+		return (1);
 	return (0);
 }
 
