@@ -24,6 +24,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/expand_utils3.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils.c\
+	$(SRC_DIR)parser/handle_cmd_args_utils2.c\
 	$(SRC_DIR)parser/handle_cmd_name.c\
 	$(SRC_DIR)parser/handle_redirections.c\
 	$(SRC_DIR)parser/handle_redirs_utils.c\

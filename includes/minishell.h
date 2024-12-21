@@ -179,7 +179,6 @@ void	wait_children(t_shell *mini);
 int		parse_and_validate_input(char **input, t_shell *mini);
 int		parse_input(t_shell *mini);
 int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
-int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
 
 	/*parser_utils.c*/
 int		no_args(t_cmd *cmd, int i);
@@ -196,29 +195,33 @@ char	*get_value(t_env *env, char *name);
 int		handle_value(t_shell *mini, t_vdata *data);
 void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name);
 
+/*expand_utils2.c*/
+int		add_char(char *str, t_expand *arg);
+int		the_arg(t_expand *arg, int i);
+void	what_quote(char *str, t_expand *arg);
+int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
+
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
 int		we_have_heredoc(t_expand *arg, char *str);
 
 	/*handle_cmd_args_utils.c*/
-int		arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
-int		arg_no_quotes(t_shell *mini, t_cmd *cmd, t_expand *arg, int i);
+int		arg_in_quotes(char *str, int i, t_expand *arg);
+int		arg_no_quotes(t_cmd *cmd, t_expand *arg, int i);
 int		segment_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
 int		segment_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
-int		append_to_array(t_cmd *cmd, char *arg, int len, int *index);
+int		append_to_array(t_cmd *cmd, char *arg, int *index);
 int		skip_whitespace(char *str, int i);
 
 	/*handle_cmd_args_utils2.c*/
-int		add_char(char *str, t_expand *arg);
-int		the_arg(t_expand *arg, int i);
-void	what_quote(char *str, t_expand *arg);
-int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
+int		only_redirect(char *str, int i);
+int		init_args_array(t_cmd *cmd, int i);
+int		count_if_redirection(t_cmd *cmd, int i);
+int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_name.c*/
-int		handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
-int		skip_to_next_segment(t_shell *mini, t_cmd *cmd, int i);
-int		process_quoted_segment(t_shell *mini, char *segment, int i, t_expand *result);
+int		handle_cmd_name(t_cmd *cmd, int i);
 
 	/*handle_redirections.c*/
 int		handle_redirections(t_shell *mini, t_cmd *cmd, int i);

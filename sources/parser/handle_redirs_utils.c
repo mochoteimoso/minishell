@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 13:39:46 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 13:57:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 	char	*delim;
 
 	delim = NULL;
-	i+=2;
+	i += 2;
 	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
 		cmd->redir_tail->expand = false;
 	i = parse_filename(cmd, i, &delim);
@@ -91,8 +91,8 @@ int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 	return (i);
 }
 
-// Handles append redirection, finds the filename and copies data
-// to the redir linked list
+/* Handles append redirection, finds the filename and copies data
+to the redir linked list*/
 int	handle_append(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
@@ -101,7 +101,7 @@ int	handle_append(t_cmd *cmd, int i)
 
 	in_quotes = false;
 	filename = NULL;
-	i+=2;
+	i += 2;
 	i = parse_filename(cmd, i, &filename);
 	if (i == -1 || !filename)
 		return (-1);

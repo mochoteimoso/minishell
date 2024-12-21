@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 19:34:06 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:21:40 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ static int	no_expanding(t_shell *mini, char *str, t_expand *arg, int i)
 
 int	segment_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 {
-	// char	*temp;
-	// free(arg->value);
 	the_arg(arg, i);
 	if (!arg->value)
 		return (-1);
@@ -97,7 +95,6 @@ int	segment_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 	if (the_arg(arg, i))
 		return (-1);
 	temp = arg->value;
-	// free(arg->value);
 	arg->value = ft_strjoin_char(temp, str[arg->i]);
 	free(temp);
 	what_quote(str, arg);

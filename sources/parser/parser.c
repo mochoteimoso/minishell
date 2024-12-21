@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 15:23:26 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:08:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,9 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	cmd_found = 0;
 	if (handle_expand(mini, &cmd))
 		return (1);
-	// printf("segment: {%s}\n", cmd->segment);
 	i = cmd_string_while(mini, cmd, i, &cmd_found);
 	if (i == -1)
 		return (1);
-	// printer(mini);
 	if (cmd_found && (!cmd->args || !cmd->args[0]))
 		i = no_args(cmd, i);
 	return (0);
@@ -95,7 +93,7 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 		}
 		else if (*cmd_found == 0)
 		{
-			i = handle_cmd_name(mini, cmd, i);
+			i = handle_cmd_name(cmd, i);
 			if (i == -1)
 				return (-1);
 			*cmd_found = 1;

@@ -6,13 +6,13 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 13:35:20 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 15:19:09 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 13:56:39 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
+int	handle_cmd_name(t_cmd *cmd, int i);
 
 int	quoted_cmd(t_expand *name, char *segment)
 {
@@ -38,11 +38,10 @@ int	quoted_cmd(t_expand *name, char *segment)
 	return (name->i);
 }
 
-int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
+int	handle_cmd_name(t_cmd *cmd, int i)
 {
 	t_expand	name;
 
-	(void)mini;
 	i = skip_whitespace(cmd->segment, i);
 	the_arg(&name, i);
 	while (cmd->segment[name.i])

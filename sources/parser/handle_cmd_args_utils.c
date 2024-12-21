@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 18:27:58 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 15:11:55 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ int	skip_whitespace(char *str, int i)
 	return (i);
 }
 
-int	arg_no_quotes(t_shell *mini, t_cmd *cmd, t_expand *arg, int i)
+int	arg_no_quotes(t_cmd *cmd, t_expand *arg, int i)
 {
-	(void)mini;
 	the_arg(arg, i);
 	what_quote(cmd->segment, arg);
 	while (cmd->segment[arg->i])
@@ -40,9 +39,8 @@ int	arg_no_quotes(t_shell *mini, t_cmd *cmd, t_expand *arg, int i)
 	return (arg->i);
 }
 
-int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
+int	arg_in_quotes(char *str, int i, t_expand *arg)
 {
-	(void)mini;
 	if (the_arg(arg, i))
 		return (-1);
 	what_quote(str, arg);
@@ -63,9 +61,8 @@ int	arg_in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 	return (arg->i);
 }
 
-int	append_to_array(t_cmd *cmd, char *arg, int len, int *index)
+int	append_to_array(t_cmd *cmd, char *arg, int *index)
 {
-	(void)len;
 	cmd->args[*index] = ft_strdup(arg);
 	if (!cmd->args[*index])
 	{
