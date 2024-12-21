@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 18:33:44 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:34:08 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 static char	*get_path_from_env(t_shell *mini)
 {
 	t_env	*temp;
-	
+
 	temp = mini->env;
 	while (temp)
 	{
