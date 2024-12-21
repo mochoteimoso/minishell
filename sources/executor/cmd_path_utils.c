@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:32:00 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 18:32:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:34:25 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	check_special_cases(t_cmd *cmd)
 {
-	if (cmd->command[0]  == '~' && !cmd->command[1])
+	if (cmd->command[0] == '~' && !cmd->command[1])
 	{
 		ft_putstr_fd(cmd->command, 2);
 		ft_putendl_fd(": Is a directory", 2);
 		cmd->cmd_exit = 126;
 		return (1);
 	}
-	if (cmd->command[0]  == '.' && !cmd->command[1])
+	if (cmd->command[0] == '.' && !cmd->command[1])
 	{
 		ft_putstr_fd(cmd->command, 2);
 		ft_putendl_fd(": filename argument required", 2);
