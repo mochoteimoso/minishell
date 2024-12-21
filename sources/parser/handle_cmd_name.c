@@ -6,27 +6,23 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:06:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 15:01:56 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/21 16:08:05 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i);
-int quoted_cmd(t_expand *name, char *segment);
+int	handle_cmd_name(t_cmd *cmd, int i);
 
-// Retrieves command name from string and copies it to struct
-
-int quoted_cmd(t_expand *name, char *segment)
+int	quoted_cmd(t_expand *name, char *segment)
 {
 	what_quote(segment, name);
 	while (segment[name->i])
 	{
-		// printf("result value: {%s}\n", result->value);
 		if (segment[name->i] == ' ' && !name->sgl && !name->dbl)
 			break ;
 		else if (!name->sgl && !name->dbl && (segment[name->i] == '\''
-			|| segment[name->i] == '"'))
+				|| segment[name->i] == '"'))
 		{
 			what_quote(segment, name);
 		}
@@ -42,16 +38,14 @@ int quoted_cmd(t_expand *name, char *segment)
 	return (name->i);
 }
 
-int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
+int	handle_cmd_name(t_cmd *cmd, int i)
 {
 	t_expand	name;
 
-	(void)mini;
 	i = skip_whitespace(cmd->segment, i);
 	the_arg(&name, i);
 	while (cmd->segment[name.i])
 	{
-		// printf("segment[%d]: {%c}\n", name.i, cmd->segment[name.i]);
 		if (cmd->segment[name.i] == ' ' || cmd->segment[name.i] == '<'
 			|| cmd->segment[name.i] == '>' || cmd->segment[name.i] == '|')
 			break ;
@@ -69,5 +63,6 @@ int	handle_cmd_name(t_shell *mini, t_cmd *cmd, int i)
 			return (free(cmd->segment), 1);
 	}
 	cmd->command = ft_strdup(name.value);
+	free(name.value);
 	return (name.i);
 }

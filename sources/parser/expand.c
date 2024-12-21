@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 13:59:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/21 16:01:30 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg)
 		return (-1);
 	arg->name = ft_strdup(data.name);
 	arg->start += ft_strlen(arg->name) + 1;
+	free(arg->name);
 	return (arg->start);
 }
 
@@ -97,50 +98,59 @@ int	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg)
 
 int	expand_hd_quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expanded)
 {
+	char	*temp;
+
 	if ((*cmd)->segment[arg->i] == '<' && (*cmd)->segment[arg->i + 1] == '<')
 	{
+		temp = ft_strdup(*expanded);
+		free(*expanded);
 		arg->i = we_have_heredoc(arg, (*cmd)->segment);
-		*expanded = ft_strjoin(*expanded, arg->value);
+		*expanded = ft_strjoin(temp, arg->value);
+		free(temp);
 	}
-	if ((*cmd)->segment[arg->i] == '\'')
+	if ((*cmd)->segment[arg->i] == '\'' || (*cmd)->segment[arg->i] == '"')
 	{
-		*expanded = ft_strjoin(*expanded, "'");
+		temp = ft_strdup(*expanded);
+		free(*expanded);
 		arg->i = segment_in_quotes(mini, (*cmd)->segment, arg->i, arg);
-		*expanded = ft_strjoin(*expanded, arg->value);
-		*expanded = ft_strjoin(*expanded, "'");
+		*expanded = ft_strjoin(temp, arg->value);
+		free(temp);
 	}
-	else if ((*cmd)->segment[arg->i] == '"')
-	{
-		*expanded = ft_strjoin(*expanded, "\"");
-		arg->i = segment_in_quotes(mini, (*cmd)->segment, arg->i, arg);
-		*expanded = ft_strjoin(*expanded, arg->value);
-		*expanded = ft_strjoin(*expanded, "\"");
-	}
+	free(arg->value);
 	return (arg->i);
 }
 
 int	handle_expand(t_shell *mini, t_cmd **cmd)
 {
 	char		*expanded;
+	char		*temp;
 	int			i;
 	t_expand	arg;
 
 	i = 0;
 	expanded = ft_strdup("");
 	the_arg(&arg, i);
+	free(arg.value);
 	while ((*cmd)->segment[arg.i])
 	{
 		if (ft_isspace((*cmd)->segment[arg.i]) && !arg.dbl && !arg.sgl)
 		{
-			expanded = ft_strjoin_char(expanded, (*cmd)->segment[arg.i]);
+			temp = ft_strdup(expanded);
+			free(expanded);
+			expanded = ft_strjoin_char(temp, (*cmd)->segment[arg.i]);
+			free(temp);
 			arg.i++;
 		}
 		if ((*cmd)->segment[arg.i] == '\'' || (*cmd)->segment[arg.i] == '"' || ((*cmd)->segment[arg.i] == '<' && (*cmd)->segment[arg.i + 1] == '<'))
 			arg.i = expand_hd_quoted(mini, cmd, &arg, &expanded);
 		else
 		{
+			temp = ft_strdup(expanded);
+			free(expanded);
 			arg.i = segment_no_quotes(mini, *cmd, arg.i, &arg);
-			expanded = ft_strjoin(expanded, arg.value);
+			expanded = ft_strjoin(temp, arg.value);
+			free(temp);
+			free(arg.value);
 		}
 	}
 	free((*cmd)->segment);
