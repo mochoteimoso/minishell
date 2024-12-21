@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 15:57:52 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/21 17:59:45 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static int	allocate_pipes(t_shell *mini);
 
 int	execute_pipeline(t_shell *mini)
 {
-	if (mini->cmd_count == 1 && is_this_built(mini->cmds[0]->command))
+	if (mini->cmd_count == 1 && mini->cmds[0]->command
+		&& is_this_built(mini->cmds[0]->command))
 	{
 		if (handle_single_builtin_cmd(mini))
 			return (mini->exit_stat);
@@ -106,38 +107,6 @@ static int	pipe_and_fork(t_shell *mini)
 	return (0);
 }
 
-/*static int	allocate_pipes(t_shell *mini)
-{
-	int	i;
-
-	mini->pipes = malloc(sizeof(int *) * (mini->cmd_count - 1));
-	if (!mini->pipes)
-	{
-		perror("malloc");
-		return (1);
-	}
-	i = 0;
-	while (i < mini->cmd_count - 1)
-	{
-		mini->pipes[i] = ft_calloc(2, sizeof(int));
-		if (!mini->pipes[i])
-		{
-			perror("malloc");
-			while (i > 0)
-			{
-				i--;
-				free(mini->pipes[i]);
-			}
-			free(mini->pipes);
-			return (1);
-		}
-		i++;
-	}
-	if (create_pipes(mini))
-		return (1);
-	return (0);
-} */
-
 static int	allocate_pipes(t_shell *mini)
 {
 	mini->pipes = malloc(sizeof(int *) * (mini->cmd_count - 1));
@@ -176,18 +145,3 @@ static int	allocate_pipes_array(t_shell *mini)
 	}
 	return (0);
 }
-
-/*void	close_all_pipes(t_shell *mini, int *pipes)
-{
-	int	i;
-
-	if (!pipes)
-		return ;
-	i = 0;
-	while (i < (mini->cmd_count - 1) * 2)
-	{
-		close(pipes[i]);
-		i++;
-	}
-	free(pipes);
-} */
