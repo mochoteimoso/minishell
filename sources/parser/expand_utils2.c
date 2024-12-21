@@ -5,103 +5,99 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/20 14:44:51 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 15:32:56 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/12/21 20:17:22 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/12/21 20:36:20 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*get_value(t_env *env, char *name)
-{
-	t_env	*temp;
-	char	*value;
+int			no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
+static int	this_expands(t_shell *mini, t_cmd *cmd, t_expand *arg);
+static int	expand_var(t_shell *mini, char *str, char **expan, t_expand *arg);
+static int	no_expanding(t_shell *mini, char *str, t_expand *arg);
 
-	temp = env;
-	while (temp)
-	{
-		if (ft_strcmp(temp->name, name) == 0)
-		{
-			value = ft_strdup(temp->value);
-			if (!value)
-			{
-				ft_putendl_fd("malloc fail", 2);
-				return ((char *) -1);
-			}
-			return (value);
-		}
-		temp = temp->next;
-	}
-	value = ft_strdup("");
-	if (!value)
-	{
-		ft_putendl_fd("malloc fail", 2);
-		return ((char *) -1);
-	}
-	return (value);
-}
-
-static int	we_have_value(char *value, char *temp, char **expanded)
+int	no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 {
-	temp = ft_strjoin(*expanded, value);
-	free(value);
-	if (!temp)
-	{
-		ft_putendl_fd("malloc failed", 2);
+	the_arg(arg, i);
+	if (!arg->value)
 		return (-1);
-	}
-	free(*expanded);
-	*expanded = temp;
-	return (0);
-}
-
-int	handle_value(t_shell *mini, t_vdata *data)
-{
-	if (data->name[0] == '?')
+	while (cmd->seg[arg->i])
 	{
-		data->value = ft_itoa(mini->exit_stat);
-		if (we_have_value(data->value, data->temp, data->expanded) == -1)
-			return (1);
-		return (0);
-	}
-	data->value = get_value(mini->env, data->name);
-	if (data->value == (char *)-1)
-		return (1);
-	if (we_have_value(data->value, data->temp, data->expanded) == -1)
-		return (1);
-	return (0);
-}
-
-void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name)
-{
-	data->value = NULL;
-	data->expanded = expanded;
-	data->temp = temp;
-	data->name = name;
-}
-
-char	*ft_strjoin_char(char *str, char c)
-{
-	size_t	len;
-	char	*new_str;
-	size_t	i;
-
-	len = 0;
-	if (str != NULL)
-		len = ft_strlen(str);
-	new_str = malloc(len + 2);
-	if (new_str == NULL)
-		return (NULL);
-	i = 0;
-	if (str != NULL)
-	{
-		while (str[i] != '\0')
-		{
-			new_str[i] = str[i];
+		if ((cmd->seg[arg->i] == '$' && (cmd->seg[arg->i + 1] == '"'
+					|| cmd->seg[arg->i + 1] == '\'')) && !arg->dbl && !arg->sgl)
 			i++;
+		if (ft_isspace(cmd->seg[arg->i])
+			|| (cmd->seg[arg->i] == '\'' || cmd->seg[arg->i] == '"'))
+			break ;
+		if (cmd->seg[arg->i] == '$' || cmd->seg[arg->i] == '~')
+			arg->i = this_expands(mini, cmd, arg);
+		else
+			arg->i = no_expanding(mini, cmd->seg, arg);
+	}
+	arg->len = ft_strlen(arg->value);
+	return (arg->i);
+}
+
+static int	this_expands(t_shell *mini, t_cmd *cmd, t_expand *arg)
+{
+	if ((cmd->seg[arg->i] == '~' && (cmd->seg[arg->i + 1] == '/'
+				|| ft_isspace(cmd->seg[arg->i + 1]) || !cmd->seg[arg->i + 1]))
+		|| (cmd->seg[arg->i] == '$' && (cmd->seg[arg->i + 1]
+				&& (ft_isalnum(cmd->seg[arg->i + 1]) || cmd->seg[arg->i + 1] == '_'
+					|| cmd->seg[arg->i + 1] == '?'))))
+		arg->i = expand_var(mini, cmd->seg, &arg->value, arg);
+	return (arg->i);
+}
+
+static int	expand_var(t_shell *mini, char *str, char **expan, t_expand *arg)
+{
+	int	cont;
+
+	arg->start = arg->i;
+	cont = arg->start;
+	if (str[arg->i] == '$')
+		arg->i = oh_its_a_dollar(mini, str, expan, arg);
+	else if (str[arg->i] == '~')
+		arg->i = tildes_home(mini, str, expan, arg);
+	if (str[cont + 1] == '?')
+		arg->i = cont + 2;
+	return (arg->i);
+}
+
+static int	no_expanding(t_shell *mini, char *str, t_expand *arg)
+{
+	arg->sgl = 0;
+	arg->dbl = 0;
+	arg->start = arg->i;
+	what_quote(str, arg);
+	while (str[arg->i])
+	{
+		if (((str[arg->i] == ' ' || str[arg->i] == '\t') || (str[arg->i] == '\'' || str[arg->i] == '"')) || arg->dbl || arg->sgl)
+			break ;
+		if (str[arg->i] == '$' && (str[arg->i + 1] == '"' || str[arg->i + 1] == '\'') && !arg->dbl && !arg->sgl)
+			arg->i++;
+		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
+		{
+			arg->value = ft_strjoin_char(arg->value, str[arg->i]);
+			what_quote(str, arg);
+		}
+		else if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
+		{
+			arg->value = ft_strjoin_char(arg->value, str[arg->i]);
+			what_quote(str, arg);
+		}
+		if ((((arg->dbl && !arg->sgl) || (!arg->dbl && !arg->sgl)) && str[arg->i] == '$' && ((str[arg->i + 1] && ft_isalnum(str[arg->i + 1])) || str[arg->i + 1] == '?')))
+			arg->i = we_have_dollar(mini, arg, str);
+		else if (add_char(str, arg))
+			return (free(arg->value), -1);
+		if (str[arg->i] == '<' && str[arg->i + 1] == '<')
+		{
+			arg->i = we_have_heredoc(arg, str);
+			if (str[arg->i] == '\0')
+				break ;
 		}
 	}
-	new_str[i] = c;
-	new_str[i + 1] = '\0';
-	return (new_str);
+	arg->len = ft_strlen(arg->value);
+	return (arg->i);
 }

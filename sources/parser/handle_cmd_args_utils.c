@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 15:11:55 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ int	skip_whitespace(char *str, int i)
 int	arg_no_quotes(t_cmd *cmd, t_expand *arg, int i)
 {
 	the_arg(arg, i);
-	what_quote(cmd->segment, arg);
-	while (cmd->segment[arg->i])
+	what_quote(cmd->seg, arg);
+	while (cmd->seg[arg->i])
 	{
-		if ((cmd->segment[arg->i] == ' ' || cmd->segment[arg->i] == '\t' || cmd->segment[arg->i] == '>' || cmd->segment[arg->i] == '<') && !arg->sgl && !arg->dbl)
+		if ((cmd->seg[arg->i] == ' ' || cmd->seg[arg->i] == '\t' || cmd->seg[arg->i] == '>' || cmd->seg[arg->i] == '<') && !arg->sgl && !arg->dbl)
 			break ;
-		if (!arg->sgl && !arg->dbl && (cmd->segment[arg->i] == '\'' || cmd->segment[arg->i] == '"'))
-			what_quote(cmd->segment, arg);
-		else if ((arg->sgl && cmd->segment[arg->i] == '\'')
-			|| (arg->dbl && cmd->segment[arg->i] == '"'))
-			what_quote(cmd->segment, arg);
-		else if (add_char(cmd->segment, arg))
+		if (!arg->sgl && !arg->dbl && (cmd->seg[arg->i] == '\'' || cmd->seg[arg->i] == '"'))
+			what_quote(cmd->seg, arg);
+		else if ((arg->sgl && cmd->seg[arg->i] == '\'')
+			|| (arg->dbl && cmd->seg[arg->i] == '"'))
+			what_quote(cmd->seg, arg);
+		else if (add_char(cmd->seg, arg))
 			return (free(arg->value), -1);
 	}
 	arg->len = ft_strlen(arg->value);

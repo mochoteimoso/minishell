@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/21 15:11:45 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	printer(t_shell *mini)
 		printf("\n");
 		printf("|*************************************************|\n");
 		printf("Struct %d:\n", i);
-		printf("segment: {%s}\n", mini->cmds[i]->segment);
+		printf("seg: {%s}\n", mini->cmds[i]->seg);
 		printf("command: {%s}\n", mini->cmds[i]->command);
 		printf("command path: {%s}\n", mini->cmds[i]->cmd_path);
 		if (mini->cmds[i]->args)

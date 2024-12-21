@@ -16,12 +16,13 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
 	$(SRC_DIR)built_in/env/env_utils.c\
 	$(SRC_DIR)commands/cmd_array.c\
-	$(SRC_DIR)parser/parser.c\
-	$(SRC_DIR)parser/parser_utils.c\
 	$(SRC_DIR)parser/expand.c\
 	$(SRC_DIR)parser/expand_utils.c\
 	$(SRC_DIR)parser/expand_utils2.c\
 	$(SRC_DIR)parser/expand_utils3.c\
+	$(SRC_DIR)parser/expand_utils4.c\
+	$(SRC_DIR)parser/expand_utils5.c\
+	$(SRC_DIR)parser/find_cmd_path.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils2.c\
@@ -29,8 +30,11 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/handle_redirections.c\
 	$(SRC_DIR)parser/handle_redirs_utils.c\
 	$(SRC_DIR)parser/heredoc.c\
+	$(SRC_DIR)parser/heredoc_expand.c\
+	$(SRC_DIR)parser/heredoc_file.c\
+	$(SRC_DIR)parser/parser.c\
+	$(SRC_DIR)parser/parser_utils.c\
 	$(SRC_DIR)parser/split_input.c\
-	$(SRC_DIR)parser/find_cmd_path.c\
 	$(SRC_DIR)syntax/syntax_checker.c\
 	$(SRC_DIR)syntax/redirection_syntax.c\
 	$(SRC_DIR)syntax/pipe_syntax.c\

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:13:39 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 18:51:55 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ bool	is_empty_command(t_cmd *cmd, int i)
 {
 	int	len;
 
-	len = ft_strlen(cmd->segment);
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+	len = ft_strlen(cmd->seg);
+	while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
 		i++;
 	if (i != len - 1)
 	{
-		if (!cmd->segment[i] || cmd->segment[i] == '|')
+		if (!cmd->seg[i] || cmd->seg[i] == '|')
 		{
 			//t_putendl_fd("syntax error: expected a command", 2);
 			return (true);
@@ -51,8 +51,6 @@ int	add_char(char *str, t_expand *arg)
 	char	*temp2;
 	char	*temp3;
 
-	// printf("str[%d]: {%c}\n", arg->i, str[arg->i]);
-	// printf("value: {%s}\n", arg->value);
 	temp2 = ft_strndup(&str[arg->i], 1);
 	if (!temp2)
 		return (1);

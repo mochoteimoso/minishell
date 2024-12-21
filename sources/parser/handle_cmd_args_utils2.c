@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 14:49:34 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/21 15:19:20 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ int	init_args_array(t_cmd *cmd, int i)
 
 int	count_if_redirection(t_cmd *cmd, int i)
 {
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+	while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
 		i++;
-	while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) &&
+	while (cmd->seg[i] && !ft_isspace(cmd->seg[i]) &&
 		is_redirection(cmd, i))
 		i++;
 	return (i);
@@ -56,9 +56,9 @@ int	count_args(t_cmd *cmd, int i)
 	int	args_count;
 
 	args_count = 0;
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+	while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
 		i++;
-	while (cmd->segment[i])
+	while (cmd->seg[i])
 	{
 		if (is_redirection(cmd, i))
 		{
@@ -68,11 +68,11 @@ int	count_args(t_cmd *cmd, int i)
 		else
 		{
 			args_count++;
-			while (cmd->segment[i] && !ft_isspace(cmd->segment[i]) &&
+			while (cmd->seg[i] && !ft_isspace(cmd->seg[i]) &&
 			!is_redirection(cmd, i))
 				i++;
 		}
-		while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+		while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
 			i++;
 	}
 	return (args_count);

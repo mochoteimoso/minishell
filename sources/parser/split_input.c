@@ -6,14 +6,14 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/13 12:09:31 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int		split_input_by_pipes(char *input, t_shell *mini);
-char	*trim_whitespace(char *segment);
+char	*trim_whitespace(char *seg);
 
 static int	segment_handler(t_shell *mini, char *input, int start, int end, int *index)
 {
@@ -26,10 +26,10 @@ static int	segment_handler(t_shell *mini, char *input, int start, int end, int *
 		return (1);
 	}
 	trimmed = trim_whitespace(trimmed);
-	mini->cmds[*index]->segment = trimmed;
+	mini->cmds[*index]->seg = trimmed;
 	if (!mini->cmds[*index])
 	{
-		ft_putendl_fd("No segment in struct", 2);
+		ft_putendl_fd("No seg in struct", 2);
 		free(trimmed);
 		return (1);
 	}
@@ -61,24 +61,24 @@ int	split_input_by_pipes(char *input, t_shell *mini)
 	return (0);
 }
 
-//trims leading and trailing whitespaces from the segment string
+//trims leading and trailing whitespaces from the seg string
 
-char	*trim_whitespace(char *segment)
+char	*trim_whitespace(char *seg)
 {
 	int		end;
 	int		start;
 	int		len;
 
-	if (!segment)
+	if (!seg)
 		return (NULL);
 	start = 0;
-	end = ft_strlen(segment) - 1;
-	while (segment[start] && ft_isspace(segment[start]))
+	end = ft_strlen(seg) - 1;
+	while (seg[start] && ft_isspace(seg[start]))
 		start++;
-	while (end >= start && ft_isspace(segment[end]))
+	while (end >= start && ft_isspace(seg[end]))
 		end--;
 	len = end - start + 1;
-	ft_memmove(segment, segment + start, len + 1);
-	segment[len] = '\0';
-	return (segment);
+	ft_memmove(seg, seg + start, len + 1);
+	seg[len] = '\0';
+	return (seg);
 }

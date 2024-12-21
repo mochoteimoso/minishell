@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 13:57:48 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int		handle_append(t_cmd *cmd, int i);
 // Checks if the input contains a redirection symbol that is not within quotes
 bool	is_redirection(t_cmd *cmd, int i)
 {
-	if ((cmd->segment[i] == '>' || cmd->segment[i] == '<')
-		&& !check_quotes(cmd->segment, i))
+	if ((cmd->seg[i] == '>' || cmd->seg[i] == '<')
+		&& !check_quotes(cmd->seg, i))
 		return (true);
 	else
 		return (false);
@@ -77,7 +77,7 @@ int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 
 	delim = NULL;
 	i += 2;
-	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
+	if (cmd->seg[i] == '\'' || cmd->seg[i] == '"')
 		cmd->redir_tail->expand = false;
 	i = parse_filename(cmd, i, &delim);
 	if (i == -1 || !delim)

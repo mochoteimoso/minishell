@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 10:23:27 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/21 19:51:21 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,10 @@ void	exit_for_single_cmd(t_shell *mini, int exit_status)
 	free(mini->pids);
 	mini->pids = NULL;
 	exit (exit_status);
+}
+
+void hd_free(t_expand *arg, char *expan)
+{
+	free(arg->value);
+	free(expan);
 }

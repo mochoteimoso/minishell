@@ -28,10 +28,19 @@ typedef enum e_redir_type
 	HEREDOC
 }	t_redir_type;
 
+typedef struct s_hd
+{
+	char	*cmd_str;
+	char	*heredoc_str;
+	char	*base;
+	char	*mid;
+	char	*full;
+}	t_hd;
+
 typedef struct s_vdata
 {
 	char	*value;
-	char	**expanded;
+	char	**expan;
 	char	*temp;
 	char	*name;
 }	t_vdata;
@@ -62,7 +71,7 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	char	*segment;
+	char	*seg;
 	char	*command;
 	char	*cmd_path;
 	int		cmd_index;
@@ -175,6 +184,31 @@ void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
 
 /*parser*/
+	/*expand.c*/
+int		handle_expand(t_shell *mini, t_cmd **cmd);
+
+	/*expand_utils.c*/
+int		in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
+int		no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
+int		we_have_heredoc(t_expand *arg, char *str);
+
+	/*expand_utils2.c*/
+int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
+int 	oh_its_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg);
+int		tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg);
+
+	/*expand_utils3.c*/
+int		handle_value(t_shell *mini, t_vdata *data);
+char	*get_value(t_env *env, char *name);
+char	*ft_strjoin_char(char *str, char c);
+
+	/*expand_utils4.c*/
+int		init_expansion(t_expand *arg, char **expan);
+int		the_arg(t_expand *arg, int i);
+void	what_quote(char *str, t_expand *arg);
+int		handle_question(t_shell *mini, char *str, char **expan, t_expand *arg);
+int		new_result(t_expand *arg, char *temp);
+
 	/*parser.c*/
 int		parse_and_validate_input(char **input, t_shell *mini);
 int		parse_input(t_shell *mini);
@@ -182,35 +216,17 @@ int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
 
 	/*parser_utils.c*/
 int		no_args(t_cmd *cmd, int i);
-bool	is_empty_command(t_cmd *cmd, int i);
-
-	/*expand.c*/
-int 	oh_its_a_dollar(t_shell *mini, char *str, char **expanded, t_expand *arg);
-int 	expand_variable(t_shell *mini, char *str, char **expanded, t_expand *arg);
-int		handle_expand(t_shell *mini, t_cmd **cmd);
+int	add_char(char *str, t_expand *arg);
 char	*ft_strjoin_char(char *str, char c);
-
-	/*expand_utils.c*/
-char	*get_value(t_env *env, char *name);
-int		handle_value(t_shell *mini, t_vdata *data);
-void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name);
-
-/*expand_utils2.c*/
-int		add_char(char *str, t_expand *arg);
-int		the_arg(t_expand *arg, int i);
-void	what_quote(char *str, t_expand *arg);
-int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
+bool	is_empty_command(t_cmd *cmd, int i);
 
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 int		count_args(t_cmd *cmd, int i);
-int		we_have_heredoc(t_expand *arg, char *str);
 
 	/*handle_cmd_args_utils.c*/
 int		arg_in_quotes(char *str, int i, t_expand *arg);
 int		arg_no_quotes(t_cmd *cmd, t_expand *arg, int i);
-int		segment_in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
-int		segment_no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 int		append_to_array(t_cmd *cmd, char *arg, int *index);
 int		skip_whitespace(char *str, int i);
 
@@ -234,12 +250,18 @@ int		handle_heredoc(t_shell *mini, t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
 
 	/*heredoc.c*/
-int		generate_hd_file(t_cmd *cmd);
 int		open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
+
+	/*heredoc_expand*/
+int	heredoc_expander(t_shell *mini, char **line);
+int check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
+
+	/*heredoc_file.c*/
+int	generate_hd_file(t_cmd *cmd);
 
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
-char	*trim_whitespace(char *segment);
+char	*trim_whitespace(char *seg);
 
 	/*find_cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
@@ -285,6 +307,7 @@ char	*handle_trailing_pipe(char *input);
 void	exit_for_failure(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	exit_for_single_cmd(t_shell *mini, int exit_status);
+void	hd_free(t_expand *arg, char *expan);
 
 	/*cleaners.c*/
 void	mini_cleaner(t_shell *mini);
