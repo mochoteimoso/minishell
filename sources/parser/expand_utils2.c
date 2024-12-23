@@ -5,12 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/21 16:02:18 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 16:02:33 by henbuska         ###   ########.fr       */
+/*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/12/23 18:48:55 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int			tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg);
+int			handle_value(t_shell *mini, t_vdata *data);
+char		*get_value(t_env *env, char *name);
+char		*ft_strjoin_char(char *str, char c);
+static int	we_have_value(char *value, char *temp, char **expan);
+
+int	tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg)
+{
+	char	*temp;
+	char	*temp2;
+	char	*value;
+
+	temp2 = ft_strndup(&str[arg->start], arg->i - arg->start);
+	temp = ft_strjoin(*expan, temp2);
+	free(temp2);
+	free(*expan);
+	*expan = temp;
+	arg->i++;
+	value = get_value(mini->env, "HOME");
+	if (value)
+	{
+		temp = ft_strjoin(*expan, value);
+		free(*expan);
+		*expan = temp;
+		free(value);
+	}
+	return (arg->i);
+}
+
+int	handle_value(t_shell *mini, t_vdata *data)
+{
+	if (data->name[0] == '?')
+	{
+		data->value = ft_itoa(mini->exit_stat);
+		if (we_have_value(data->value, data->temp, data->expan) == -1)
+			return (1);
+		return (0);
+	}
+	data->value = get_value(mini->env, data->name);
+	if (data->value == (char *)-1)
+		return (1);
+	if (we_have_value(data->value, data->temp, data->expan) == -1)
+		return (1);
+	return (0);
+}
 
 char	*get_value(t_env *env, char *name)
 {
@@ -41,43 +87,18 @@ char	*get_value(t_env *env, char *name)
 	return (value);
 }
 
-static int	we_have_value(char *value, char *temp, char **expanded)
+static int	we_have_value(char *value, char *temp, char **expan)
 {
-	temp = ft_strjoin(*expanded, value);
+	temp = ft_strjoin(*expan, value);
 	free(value);
 	if (!temp)
 	{
 		ft_putendl_fd("malloc failed", 2);
 		return (-1);
 	}
-	free(*expanded);
-	*expanded = temp;
+	free(*expan);
+	*expan = temp;
 	return (0);
-}
-
-int	handle_value(t_shell *mini, t_vdata *data)
-{
-	if (data->name[0] == '?')
-	{
-		data->value = ft_itoa(mini->exit_stat);
-		if (we_have_value(data->value, data->temp, data->expanded) == -1)
-			return (1);
-		return (0);
-	}
-	data->value = get_value(mini->env, data->name);
-	if (data->value == (char *)-1)
-		return (1);
-	if (we_have_value(data->value, data->temp, data->expanded) == -1)
-		return (1);
-	return (0);
-}
-
-void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name)
-{
-	data->value = NULL;
-	data->expanded = expanded;
-	data->temp = temp;
-	data->name = name;
 }
 
 char	*ft_strjoin_char(char *str, char c)

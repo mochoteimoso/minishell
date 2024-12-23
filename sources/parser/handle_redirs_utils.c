@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 19:57:11 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:59:17 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int		handle_append(t_cmd *cmd, int i);
 
 bool	is_redirection(t_cmd *cmd, int i)
 {
-	if ((cmd->segment[i] == '>' || cmd->segment[i] == '<')
-		&& !check_quotes(cmd->segment, i))
+	if ((cmd->seg[i] == '>' || cmd->seg[i] == '<')
+		&& !check_quotes(cmd->seg, i))
 		return (true);
 	else
 		return (false);
@@ -83,8 +83,8 @@ int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 	char	*delim;
 
 	delim = NULL;
-	i+=2;
-	if (cmd->segment[i] == '\'' || cmd->segment[i] == '"')
+	i += 2;
+	if (cmd->seg[i] == '\'' || cmd->seg[i] == '"')
 		cmd->redir_tail->expand = false;
 	i = parse_filename(cmd, i, &delim);
 	if (i == -1 || !delim)
@@ -109,7 +109,7 @@ int	handle_append(t_cmd *cmd, int i)
 
 	in_quotes = false;
 	filename = NULL;
-	i+=2;
+	i += 2;
 	i = parse_filename(cmd, i, &filename);
 	if (i == -1 || !filename)
 		return (-1);

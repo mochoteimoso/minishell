@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:13:39 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 16:44:32 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:49:59 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,13 @@ bool	is_empty_command(t_cmd *cmd, int i)
 {
 	int	len;
 
-	len = ft_strlen(cmd->segment);
-	while (cmd->segment[i] && ft_isspace(cmd->segment[i]))
+	len = ft_strlen(cmd->seg);
+	while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
 		i++;
 	if (i != len - 1)
 	{
-		if (!cmd->segment[i] || cmd->segment[i] == '|')
-		{
-			//t_putendl_fd("syntax error: expected a command", 2);
+		if (!cmd->seg[i] || cmd->seg[i] == '|')
 			return (true);
-		}
 	}
 	return (false);
 }
