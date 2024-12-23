@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/21 18:46:35 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:38:38 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	printer(t_shell *mini)
 		printf("\n");
 		printf("|*************************************************|\n");
 		printf("Struct %d:\n", i);
-		printf("segment: %s\n", mini->cmds[i]->segment);
+		printf("segment: %s\n", mini->cmds[i]->seg);
 		printf("command: %s\n", mini->cmds[i]->command);
 		printf("command path: %s\n", mini->cmds[i]->cmd_path);
 		if (mini->cmds[i]->args)
@@ -96,7 +96,7 @@ static int	is_this_empty(char *input)
 	return (1);
 }
 
-/*static int user_prompt(t_shell *mini)
+/*static int user_prompt(t_shell *mini, int status)
 {
 	char	*input;
 
@@ -127,7 +127,8 @@ static int	is_this_empty(char *input)
 			free(input);
 		}
 	}
-	return (0);
+	status = mini->exit_stat;
+	return (status);
 } */
 
 // Edited for the tester
@@ -169,9 +170,9 @@ static int user_prompt(t_shell *mini, int status)
 				free(input);
 				continue;
 			}
-			//mini->exit_stat = 0;
-			printer(mini);
+			//printer(mini);
 			execute_pipeline(mini);
+			//printf("Exit stat: %d\n", mini->exit_stat);
 			free(input);
 		}
 	}
