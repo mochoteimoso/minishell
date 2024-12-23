@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/19 20:16:33 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 16:43:22 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ char	**env_to_array(t_env *env)
 		temp = temp->next;
 		i++;
 	}
+	array[i] = build_env_string(temp);
+	i++;
 	array[i] = NULL;
 	return (array);
 }
