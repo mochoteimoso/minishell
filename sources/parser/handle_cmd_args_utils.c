@@ -6,11 +6,16 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:12:21 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 19:08:28 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	skip_whitespace(char *str, int i);
+int	arg_no_quotes(t_cmd *cmd, t_expand *arg, int i);
+int	arg_in_quotes(char *str, int i, t_expand *arg);
+int	append_to_array(t_cmd *cmd, char *arg, int *index);
 
 int	skip_whitespace(char *str, int i)
 {
@@ -25,9 +30,11 @@ int	arg_no_quotes(t_cmd *cmd, t_expand *arg, int i)
 	what_quote(cmd->seg, arg);
 	while (cmd->seg[arg->i])
 	{
-		if ((cmd->seg[arg->i] == ' ' || cmd->seg[arg->i] == '\t' || cmd->seg[arg->i] == '>' || cmd->seg[arg->i] == '<') && !arg->sgl && !arg->dbl)
+		if ((ft_isspace(cmd->seg[arg->i]) || cmd->seg[arg->i] == '>'
+				|| cmd->seg[arg->i] == '<') && !arg->sgl && !arg->dbl)
 			break ;
-		if (!arg->sgl && !arg->dbl && (cmd->seg[arg->i] == '\'' || cmd->seg[arg->i] == '"'))
+		if (!arg->sgl && !arg->dbl
+			&& (cmd->seg[arg->i] == '\'' || cmd->seg[arg->i] == '"'))
 			what_quote(cmd->seg, arg);
 		else if ((arg->sgl && cmd->seg[arg->i] == '\'')
 			|| (arg->dbl && cmd->seg[arg->i] == '"'))
@@ -46,11 +53,15 @@ int	arg_in_quotes(char *str, int i, t_expand *arg)
 	what_quote(str, arg);
 	while (str[arg->i])
 	{
-		if (str[arg->i] == '$' && str[arg->i + 1] && (str[arg->i + 1] == '\'' || str[arg->i + 1] == '"') && (!arg->sgl && !arg->dbl))
+		if (str[arg->i] == '$' && str[arg->i + 1]
+			&& (str[arg->i + 1] == '\'' || str[arg->i + 1] == '"')
+			&& (!arg->sgl && !arg->dbl))
 			arg->i++;
-		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
+		else if (!arg->sgl && !arg->dbl
+			&& (str[arg->i] == '\'' || str[arg->i] == '"'))
 			what_quote(str, arg);
-		else if ((arg->sgl && str[arg->i] == '\'') || (arg->dbl && str[arg->i] == '"'))
+		else if ((arg->sgl && str[arg->i] == '\'')
+			|| (arg->dbl && str[arg->i] == '"'))
 			what_quote(str, arg);
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);

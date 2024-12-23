@@ -6,14 +6,14 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 17:49:30 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/21 19:51:21 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:55:26 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	heredoc_expander(t_shell *mini, char **line);
-int	check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
+int			heredoc_expander(t_shell *mini, char **line);
+int			check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
 static int	finalize_hd_expand(t_expand *arg, char *expan, char **line);
 static int	init_heredoc_expander(t_expand *arg, char **expan);
 
@@ -46,7 +46,7 @@ int	heredoc_expander(t_shell *mini, char **line)
 	return (0);
 }
 
-int check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd)
+int	check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd)
 {
 	if (cmd->redir_tail->expand)
 	{
@@ -60,7 +60,7 @@ int check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd)
 	return (0);
 }
 
-static int finalize_hd_expand(t_expand *arg, char *expan, char **line)
+static int	finalize_hd_expand(t_expand *arg, char *expan, char **line)
 {
 	char	*temp;
 

@@ -6,57 +6,15 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 10:05:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 18:43:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:47:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		split_input_by_pipes(char *input, t_shell *mini);
-char	*trim_whitespace(char *seg);
-
-// static int	segment_handler(t_shell *mini, char *input, int s, int e, int *idx)
-// {
-// 	char	*trimmed;
-
-// 	trimmed = ft_strndup(input + s, e - s);
-// 	if (!trimmed)
-// 	{
-// 		ft_putendl_fd("Failed to allocate memory for trimmed string", 2);
-// 		return (1);
-// 	}
-// 	trimmed = trim_whitespace(trimmed);
-// 	mini->cmds[*idx]->seg = trimmed;
-// 	if (!mini->cmds[*idx])
-// 	{
-// 		ft_putendl_fd("No seg in struct", 2);
-// 		free(trimmed);
-// 		return (1);
-// 	}
-// 	(*idx)++;
-// 	return (0);
-// }
-
-static int	segment_handler(t_cmd *cmd, char *input, int s, int e)
-{
-	char	*trimmed;
-
-	trimmed = ft_strndup(input + s, e - s);
-	if (!trimmed)
-	{
-		ft_putendl_fd("Failed to allocate memory for trimmed string", 2);
-		return (1);
-	}
-	trimmed = trim_whitespace(trimmed);
-	cmd->seg = trimmed;
-	if (!cmd->seg)
-	{
-		ft_putendl_fd("No seg in struct", 2);
-		free(trimmed);
-		return (1);
-	}
-	return (0);
-}
+int			split_input_by_pipes(char *input, t_shell *mini);
+char		*trim_whitespace(char *seg);
+static int	segment_handler(t_cmd *cmd, char *input, int s, int e);
 
 int	split_input_by_pipes(char *input, t_shell *mini)
 {
@@ -78,14 +36,13 @@ int	split_input_by_pipes(char *input, t_shell *mini)
 		}
 		i++;
 	}
-	if (segment_handler(mini->cmds[index], input,  start, i))
+	if (segment_handler(mini->cmds[index], input, start, i))
 		return (1);
 	index++;
 	return (0);
 }
 
 //trims leading and trailing whitespaces from the seg string
-
 char	*trim_whitespace(char *seg)
 {
 	int		end;
@@ -104,4 +61,25 @@ char	*trim_whitespace(char *seg)
 	ft_memmove(seg, seg + start, len + 1);
 	seg[len] = '\0';
 	return (seg);
+}
+
+static int	segment_handler(t_cmd *cmd, char *input, int s, int e)
+{
+	char	*trimmed;
+
+	trimmed = ft_strndup(input + s, e - s);
+	if (!trimmed)
+	{
+		ft_putendl_fd("Failed to allocate memory for trimmed string", 2);
+		return (1);
+	}
+	trimmed = trim_whitespace(trimmed);
+	cmd->seg = trimmed;
+	if (!cmd->seg)
+	{
+		ft_putendl_fd("No seg in struct", 2);
+		free(trimmed);
+		return (1);
+	}
+	return (0);
 }

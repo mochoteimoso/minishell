@@ -6,13 +6,13 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:57:16 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 18:05:34 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:55:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	generate_hd_file(t_cmd *cmd);
+int			generate_hd_file(t_cmd *cmd);
 static int	index_to_char(t_cmd *cmd, t_hd *hd);
 static int	create_name(t_cmd *cmd, t_hd *hd);
 

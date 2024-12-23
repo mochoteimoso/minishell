@@ -12,9 +12,9 @@
 
 #include "../../includes/minishell.h"
 
-int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
-static int init_heredoc(t_shell *mini, t_cmd *cmd, int *fd);
-static int stdin_saver(t_shell *mini);
+int			open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
+static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd);
+static int	stdin_saver(t_shell *mini);
 static void	write_close_hd(t_shell *mini, char *line, int fd, int end);
 
 int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
@@ -36,7 +36,7 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 		if (!line || ft_strcmp(line, cmd->redir_tail->delimiter) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		if (check_expand(mini, cmd, &line, fd))
 			return (1);
@@ -46,7 +46,7 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
-static int init_heredoc(t_shell *mini, t_cmd *cmd, int *fd)
+static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd)
 {
 	*fd = open(cmd->redir_tail->heredoc_name, O_RDWR | O_CREAT | O_EXCL, 0600);
 	if (*fd == -1)
@@ -60,9 +60,8 @@ static int init_heredoc(t_shell *mini, t_cmd *cmd, int *fd)
 	return (0);
 }
 
-static int stdin_saver(t_shell *mini)
+static int	stdin_saver(t_shell *mini)
 {
-
 	if (g_sig == SIGINT)
 	{
 		g_sig = 0;

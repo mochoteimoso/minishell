@@ -76,7 +76,7 @@ typedef struct s_cmd
 	char	*cmd_path;
 	int		cmd_index;
 	char	**args;
-	int		args_count;
+	int		a_num;
 	t_redir	*redir_head;
 	t_redir	*redir_tail;
 	int		fd_in;
