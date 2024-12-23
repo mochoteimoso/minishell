@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 13:56:23 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 19:03:17 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 
 void	exit_for_failure(t_shell *mini, int i, int exit_status)
 {
-	if (mini->cmd_count > 2 && i == mini->cmd_count - 1)
-		close(mini->pipes[i - 1][0]);
+	int	j;
+
+	j = 0;
+	while (j < mini->cmd_count - 1)
+	{
+		close(mini->pipes[j][0]);
+		close(mini->pipes[j][1]);
+		j++;
+	}
 	if (mini->cmd_count >= 2 && i < mini->cmd_count - 1)
 	{
 		close(mini->pipes[i][0]);
@@ -60,4 +67,10 @@ void	exit_for_single_cmd(t_shell *mini, int exit_status)
 	free(mini->pids);
 	mini->pids = NULL;
 	exit (exit_status);
+}
+
+void	hd_free(t_expand *arg, char *expan)
+{
+	free(arg->value);
+	free(expan);
 }
