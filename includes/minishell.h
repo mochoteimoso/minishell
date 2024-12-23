@@ -187,6 +187,9 @@ void	wait_children(t_shell *mini);
 	/*expand.c*/
 int		handle_expand(t_shell *mini, t_cmd **cmd);
 
+	/*expand_no_expand.c*/
+int		no_expanding(t_shell *mini, char *str, t_expand *arg);
+
 	/*expand_quoted.c*/
 int		in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
 int		we_have_heredoc(t_expand *arg, char *str, int n);
@@ -194,52 +197,37 @@ int		we_have_heredoc(t_expand *arg, char *str, int n);
 	/*expand_unquoted.c*/
 int		no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 
-	/*expand_no_expand.c*/
-int	no_expanding(t_shell *mini, char *str, t_expand *arg);
-
-	/*expand_utils2.c*/
+	/*expand_utils.c*/
 int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 int 	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg);
-int		tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg);
 
-	/*expand_utils3.c*/
+	/*expand_utils2.c*/
+int		tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg);
 int		handle_value(t_shell *mini, t_vdata *data);
 char	*get_value(t_env *env, char *name);
 char	*ft_strjoin_char(char *str, char c);
 
-	/*expand_utils4.c*/
+	/*expand_utils3.c*/
 int		init_expansion(t_expand *arg, char **expan);
 int		the_arg(t_expand *arg, int i);
 void	what_quote(char *str, t_expand *arg);
 int		handle_question(t_shell *mini, char *str, char **expan, t_expand *arg);
 int		new_result(t_expand *arg, char *temp);
 
-	/*parser.c*/
-int		parse_and_validate_input(char **input, t_shell *mini);
-int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
-
-	/*parser_utils.c*/
-int		no_args(t_cmd *cmd, int i);
-int	add_char(char *str, t_expand *arg);
-char	*ft_strjoin_char(char *str, char c);
-bool	is_empty_command(t_cmd *cmd, int i);
-
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
-int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_args_utils.c*/
-int		arg_in_quotes(char *str, int i, t_expand *arg);
-int		arg_no_quotes(t_cmd *cmd, t_expand *arg, int i);
-int		append_to_array(t_cmd *cmd, char *arg, int *index);
 int		skip_whitespace(char *str, int i);
+int		arg_no_quotes(t_cmd *cmd, t_expand *arg, int i);
+int		arg_in_quotes(char *str, int i, t_expand *arg);
+int		append_to_array(t_cmd *cmd, char *arg, int *index);
 
 	/*handle_cmd_args_utils2.c*/
+int		count_args(t_cmd *cmd, int i);
+int		count_if_redirection(t_cmd *cmd, int i);
 int		only_redirect(char *str, int i);
 int		init_args_array(t_cmd *cmd, int i);
-int		count_if_redirection(t_cmd *cmd, int i);
-int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_name.c*/
 int		handle_cmd_name(t_cmd *cmd, int i);
@@ -258,11 +246,21 @@ int		handle_append(t_cmd *cmd, int i);
 int		open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
 
 	/*heredoc_expand*/
-int	heredoc_expander(t_shell *mini, char **line);
-int check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
+int		heredoc_expander(t_shell *mini, char **line);
+int 	check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
 
 	/*heredoc_file.c*/
-int	generate_hd_file(t_cmd *cmd);
+int		generate_hd_file(t_cmd *cmd);
+	/*parser.c*/
+int	parse_and_validate_input(char **input, t_shell *mini);
+int	parse_input(t_shell *mini);
+int	parse_cmd_string(t_shell *mini, t_cmd *cmd);
+int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found);
+
+	/*parser_utils.c*/
+int		no_args(t_cmd *cmd, int i);
+bool	is_empty_command(t_cmd *cmd, int i);
+int		add_char(char *str, t_expand *arg);
 
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);

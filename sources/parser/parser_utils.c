@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:13:39 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 18:28:23 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 19:22:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int		no_args(t_cmd *cmd, int i);
 bool	is_empty_command(t_cmd *cmd, int i);
+int		add_char(char *str, t_expand *arg);
 
 int	no_args(t_cmd *cmd, int i)
 {
