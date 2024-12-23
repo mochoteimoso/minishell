@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 17:59:45 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:32:07 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	execute_pipeline(t_shell *mini)
 	if (pipe_and_fork(mini))
 	{
 		cleaner_for_failure(mini);
-		return (1); // return exit_stat?
+		return (mini->exit_stat);
 	}
 	wait_children(mini);
 	cleaner_for_success(mini);
