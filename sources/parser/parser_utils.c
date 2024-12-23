@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:13:39 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:28:23 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ bool	is_empty_command(t_cmd *cmd, int i)
 	if (i != len - 1)
 	{
 		if (!cmd->seg[i] || cmd->seg[i] == '|')
-		{
-			//t_putendl_fd("syntax error: expected a command", 2);
 			return (true);
-		}
 	}
 	return (false);
 }

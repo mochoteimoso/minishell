@@ -187,14 +187,19 @@ void	wait_children(t_shell *mini);
 	/*expand.c*/
 int		handle_expand(t_shell *mini, t_cmd **cmd);
 
-	/*expand_utils.c*/
+	/*expand_quoted.c*/
 int		in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
+int		we_have_heredoc(t_expand *arg, char *str, int n);
+
+	/*expand_unquoted.c*/
 int		no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
-int		we_have_heredoc(t_expand *arg, char *str);
+
+	/*expand_no_expand.c*/
+int	no_expanding(t_shell *mini, char *str, t_expand *arg);
 
 	/*expand_utils2.c*/
 int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
-int 	oh_its_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg);
+int 	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg);
 int		tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg);
 
 	/*expand_utils3.c*/

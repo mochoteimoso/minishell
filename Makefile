@@ -25,11 +25,12 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)executor/pipeline.c\
 	$(SRC_DIR)executor/pipeline_utils.c\
 	$(SRC_DIR)parser/expand.c\
+	$(SRC_DIR)parser/expand_quoted.c\
+	$(SRC_DIR)parser/expand_unquoted.c\
+	$(SRC_DIR)parser/expand_no_expand.c\
 	$(SRC_DIR)parser/expand_utils.c\
 	$(SRC_DIR)parser/expand_utils2.c\
 	$(SRC_DIR)parser/expand_utils3.c\
-	$(SRC_DIR)parser/expand_utils4.c\
-	$(SRC_DIR)parser/expand_utils5.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils2.c\
