@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:54:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 12:16:52 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 16:34:47 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	parse_filename(t_cmd *cmd, int i, char **filename)
 	t_expand	arg;
 
 	arg.i = i;
-	if (filename_in_quotes(cmd, cmd->segment, arg.i, &arg) == -1)
+	if (filename_in_quotes(cmd, cmd->seg, arg.i, &arg) == -1)
 		return (-1);
 	*filename = ft_strdup(arg.value);
 	if (!*filename)
