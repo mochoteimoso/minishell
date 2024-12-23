@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 11:36:52 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:30:32 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static char	*build_env_string(t_env *temp)
 	if (!inter)
 		return (NULL);
 	result = inter;
+	// printf("result: {%s}\n", result);
 	return (result);
 }
 
@@ -91,6 +92,8 @@ char	**env_to_array(t_env *env)
 		temp = temp->next;
 		i++;
 	}
+	array[i] = build_env_string(temp);
+	i++;
 	array[i] = NULL;
 	return (array);
 }

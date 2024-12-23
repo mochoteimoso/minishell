@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/21 20:06:40 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 14:59:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static int	this_is_space(t_cmd **cmd, t_expand *arg, char **expan)
 	if (!temp)
 		return (-1);
 	free(*expan);
+	// temp = *expan;
 	*expan = ft_strjoin_char(temp, (*cmd)->seg[arg->i]);
 	if (!*expan)
 		return (-1);
@@ -84,6 +85,7 @@ static int	hd_quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 	{
 		temp = ft_strdup(*expan);
 		free(*expan);
+		// temp = *expan;
 		arg->i = we_have_heredoc(arg, (*cmd)->seg);
 		*expan = ft_strjoin(temp, arg->value);
 		free(temp);
@@ -92,11 +94,12 @@ static int	hd_quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 	{
 		temp = ft_strdup(*expan);
 		free(*expan);
+		// temp = *expan;
 		arg->i = in_quotes(mini, (*cmd)->seg, arg->i, arg);
 		*expan = ft_strjoin(temp, arg->value);
 		free(temp);
 	}
-	free(arg->value);
+	// free(arg->value);
 	return (arg->i);
 }
 
@@ -106,8 +109,11 @@ static int	seg_no_quotes(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan
 
 	temp = ft_strdup(*expan);
 	free(*expan);
+	// temp = *expan;
 	arg->i = no_quotes(mini, *cmd, arg->i, arg);
+	// printf("temp: {%s}\nvalue: {%s}\n", temp, arg->value);
 	*expan = ft_strjoin(temp, arg->value);
+	// printf("exapan: {%s}\n", *expan);
 	free(temp);
 	free(arg->value);
 	return (arg->i);

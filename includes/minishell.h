@@ -329,4 +329,8 @@ void	sig_handler_changer(void);
 void	sig_heredoc();
 void	sig_handler_hd(int signal);
 
+void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
+int	check_special_cases(t_cmd *cmd);
+int	check_for_directory(t_cmd *cmd);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:46:04 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ static int user_prompt(t_shell *mini, int status)
 				continue;
 			}
 			//mini->exit_stat = 0;
-			printer(mini);
+			// printer(mini);
 			while (mini->cmds[i])
 			{
 				if (!mini->cmds[i]->command)

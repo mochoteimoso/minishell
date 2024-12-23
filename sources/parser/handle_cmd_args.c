@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/23 12:15:23 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	handle_arg(t_cmd *cmd, int i, t_expand *arg, int *arg_index)
 		i = handle_export_redir(cmd, arg, i, arg_index);
 		if (i == -1)
 			return (-1);
+		return (i);
 	}
 	if (cmd->seg[i] == '\'' || cmd->seg[i] == '"')
 		i = arg_in_quotes(cmd->seg, i, arg);

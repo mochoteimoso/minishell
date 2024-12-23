@@ -16,13 +16,20 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/env/env_ll.c\
 	$(SRC_DIR)built_in/env/env_utils.c\
 	$(SRC_DIR)commands/cmd_array.c\
+	$(SRC_DIR)executor/child_process.c\
+	$(SRC_DIR)executor/child_process_utils.c\
+	$(SRC_DIR)executor/cmd_path.c\
+	$(SRC_DIR)executor/cmd_path_utils.c\
+	$(SRC_DIR)executor/fd_handler.c\
+	$(SRC_DIR)executor/handle_builtins.c\
+	$(SRC_DIR)executor/pipeline.c\
+	$(SRC_DIR)executor/pipeline_utils.c\
 	$(SRC_DIR)parser/expand.c\
 	$(SRC_DIR)parser/expand_utils.c\
 	$(SRC_DIR)parser/expand_utils2.c\
 	$(SRC_DIR)parser/expand_utils3.c\
 	$(SRC_DIR)parser/expand_utils4.c\
 	$(SRC_DIR)parser/expand_utils5.c\
-	$(SRC_DIR)parser/find_cmd_path.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils2.c\
@@ -43,12 +50,6 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)redirection/redirector.c\
 	$(SRC_DIR)redirection/open_files.c\
 	$(SRC_DIR)redirection/get_filename.c\
-	$(SRC_DIR)executor/pipeline.c\
-	$(SRC_DIR)executor/pipeline_utils.c\
-	$(SRC_DIR)executor/child_process.c\
-	$(SRC_DIR)executor/child_process_utils.c\
-	$(SRC_DIR)executor/fd_handler.c\
-	$(SRC_DIR)executor/handle_builtins.c\
 	$(SRC_DIR)utils/freeing.c\
 	$(SRC_DIR)utils/exit_handler.c\
 	$(SRC_DIR)utils/cleaners.c
