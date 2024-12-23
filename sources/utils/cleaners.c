@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 13:18:31 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 13:53:22 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 16:35:05 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	clean_cmds(t_cmd **cmds)
 	i = 0;
 	while (cmds[i])
 	{
-		free(cmds[i]->segment);
+		free(cmds[i]->seg);
 		if (cmds[i]->command != NULL)
 			free(cmds[i]->command);
 		if (cmds[i]->cmd_path && cmds[i]->cmd_path != cmds[i]->command)
