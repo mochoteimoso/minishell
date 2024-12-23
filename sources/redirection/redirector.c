@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:10:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 12:24:28 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:21:30 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	process_redirections(t_cmd *cmd, int *fd_in, int *fd_out)
 
 int	resolve_input_fd(t_cmd *cmd, t_redir *redir, int *fd_in)
 {
-	if (*fd_in != -1)
+	if (*fd_in > 2)
 	{
 		close(*fd_in);
 		*fd_in = -1;
@@ -79,14 +79,14 @@ int	resolve_input_fd(t_cmd *cmd, t_redir *redir, int *fd_in)
 		*fd_in = open_input_file(cmd, redir->file);
 	else if (redir->type == 3)
 		*fd_in = open_heredoc(cmd, redir->heredoc_name);
-	if (*fd_in == -2)
+	if (*fd_in == -1)
 		return (1);
 	return (0);
 }
 
 int	resolve_output_fd(t_cmd *cmd, t_redir *redir, int *fd_out)
 {
-	if (*fd_out != -1)
+	if (*fd_out > 2)
 	{
 		close(*fd_out);
 		*fd_out = -1;
@@ -95,7 +95,7 @@ int	resolve_output_fd(t_cmd *cmd, t_redir *redir, int *fd_out)
 		*fd_out = open_output_file(cmd, redir->file);
 	else if (redir->type == 2)
 		*fd_out = open_append_file(cmd, redir->file);
-	if (*fd_out == -2)
+	if (*fd_out == -1)
 		return (1);
 	return (0);
 }
@@ -103,5 +103,8 @@ int	resolve_output_fd(t_cmd *cmd, t_redir *redir, int *fd_out)
 static void	close_fd_if_needed(int fd)
 {
 	if (fd > 2)
+	{
+		printf("Closing fd: %d\n", fd);
 		close(fd);
+	}
 }
