@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 14:34:08 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:45:35 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ static int	check_abs_path(t_cmd *cmd)
 			return (-1);
 		}
 		ft_putstr_fd(cmd->command, 2);
-		ft_putendl_fd(": No such file or directory", 2);
+		ft_putendl_fd(": Command not found", 2);
 		cmd->cmd_exit = 127;
 		return (-1);
 	}
