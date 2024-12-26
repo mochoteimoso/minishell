@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:24:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/23 18:26:25 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 10:46:58 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	free_array_on_failure(char **array, int count)
 	free(array);
 }
 
+
 char	**env_to_array(t_env *env)
 {
 	t_env	*temp;
@@ -76,7 +77,7 @@ char	**env_to_array(t_env *env)
 
 	temp = env;
 	len = ft_lstsize((t_list *)temp);
-	array = (char **)malloc(sizeof(char *) * len + 2);
+	array = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!array)
 		return (NULL);
 	i = 0;
