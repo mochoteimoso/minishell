@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 15:08:22 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:10:59 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,8 @@ int	built_unset(t_shell *mini, t_cmd *cmd)
 				ft_putendl_fd("Invalid option", 2);
 				return (2);
 			}
-			if (unset_env(mini, cmd->args[i]))
-			{
-				error(mini, "No such variable");
-				return (1);
-			}
-			if (unset_pending(mini, cmd->args[i]))
+			if (unset_env(mini, cmd->args[i])
+				|| unset_pending(mini, cmd->args[i]))
 			{
 				error(mini, "No such variable");
 				return (1);
@@ -98,4 +94,3 @@ static int	unset_pending(t_shell *mini, char *str)
 	mini->pending[j] = NULL;
 	return (0);
 }
-

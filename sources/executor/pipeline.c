@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 10:28:17 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:47:39 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	execute_pipeline(t_shell *mini)
 	if (pipe_and_fork(mini))
 	{
 		cleaner_for_failure(mini);
-		return (1); // return exit_stat?
+		return (1);
 	}
 	wait_children(mini);
 	cleaner_for_success(mini);
@@ -144,4 +144,3 @@ static int	allocate_pipes_array(t_shell *mini)
 	}
 	return (0);
 }
-

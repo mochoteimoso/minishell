@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:49:25 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 15:33:26 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:56:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int			update_env(t_shell *mini, char *str);
 int			update_pending(t_shell *mini, char *name, char *str);
 int			handle_sign(t_shell *mini, char *str);
+static int	not_on_the_list(t_shell *mini, char *str);
 static int	set_new_value(t_env *temp, char *str);
 
 int	handle_sign(t_shell *mini, char *str)
@@ -56,10 +57,8 @@ int	update_env(t_shell *mini, char *str)
 
 int	update_pending(t_shell *mini, char *name, char *str)
 {
-	size_t	i;
-	char	**temp;
 	int		len;
-	int 	n;
+	int		n;
 
 	len = 0;
 	while (str[len] != '=' && str[len])
@@ -76,9 +75,20 @@ int	update_pending(t_shell *mini, char *name, char *str)
 		}
 		n++;
 	}
+	if (not_on_the_list(mini, str))
+		return (1);
+	return (0);
+}
+
+static int	not_on_the_list(t_shell *mini, char *str)
+{
+	size_t	i;
+	char	**temp;
+
 	i = 0;
 	i = ft_array_len(mini->pending);
-	temp = ft_realloc(mini->pending, i * sizeof(char *), (i + 2) * sizeof(char *));
+	temp = ft_realloc(mini->pending, i * sizeof(char *),
+			(i + 2) * sizeof(char *));
 	if (!temp)
 		return (1);
 	mini->pending = temp;

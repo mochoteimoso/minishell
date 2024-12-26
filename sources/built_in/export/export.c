@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 15:33:11 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:50:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,3 @@ static int	validate_variable(char *name)
 	}
 	return (1);
 }
-

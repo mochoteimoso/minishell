@@ -6,16 +6,16 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 13:18:31 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 15:26:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:49:16 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	mini_cleaner(t_shell *mini);
-void	clean_cmds(t_cmd **cmds);
-void	cleaner_for_success(t_shell *mini);
-void	cleaner_for_failure(t_shell *mini);
+void		mini_cleaner(t_shell *mini);
+void		clean_cmds(t_cmd **cmds);
+void		cleaner_for_success(t_shell *mini);
+void		cleaner_for_failure(t_shell *mini);
 static void	free_and_close_pipes(t_shell *mini);
 
 void	mini_cleaner(t_shell *mini)

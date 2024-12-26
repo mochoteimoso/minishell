@@ -6,17 +6,17 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:42:04 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 15:19:53 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:47:04 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		redirll_head_tail(t_cmd *cmd);
-static void	redir_lstadd_back(t_redir **lst, t_redir *new);
+int				redirll_head_tail(t_cmd *cmd);
+static void		redir_lstadd_back(t_redir **lst, t_redir *new);
 static t_redir	*redir_add_node(void);
 static t_redir	*list_redir(void);
-static void	redir_update_tail(t_cmd *cmd);
+static void		redir_update_tail(t_cmd *cmd);
 
 int	redirll_head_tail(t_cmd *cmd)
 {

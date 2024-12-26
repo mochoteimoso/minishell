@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:40:06 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 15:00:43 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:02:45 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	get_oldpwd(t_env *env, char **pwd);
 int	update_env_value(t_env *env, char *new_value);
 int	update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+int	handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd);
 
 int	get_oldpwd(t_env *env, char **pwd)
 {
@@ -70,5 +71,20 @@ int	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
 			break ;
 		env = env->next;
 	}
+	return (0);
+}
+
+int	handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd)
+{
+	if (update_pwd(mini->env, pwd, &oldpwd, 1))
+	{
+		free(pwd);
+		free(oldpwd);
+		return (1);
+	}
+	if (!oldpwd)
+		error(mini, "No OLDPWD set");
+	free(oldpwd);
+	free(pwd);
 	return (0);
 }

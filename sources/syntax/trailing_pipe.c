@@ -6,13 +6,13 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:32:24 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 15:22:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:47:57 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*handle_trailing_pipe(char *input);
+char		*handle_trailing_pipe(char *input);
 static char	*join_and_free(char *input, char *additional_input);
 
 /* Handles trailing pipe by getting additional input from user
@@ -52,4 +52,3 @@ static char	*join_and_free(char *input, char *additional_input)
 	free(input);
 	return (updated_input);
 }
-

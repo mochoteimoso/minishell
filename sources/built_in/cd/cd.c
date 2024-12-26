@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 15:30:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:03:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int			built_cd(t_shell *mini, t_cmd *cmd);
 static int	to_home(char *cwd);
+static int	cd_choices(t_shell *mini, t_cmd *cmd, char *cwd);
 static int	old_pwd(t_shell *mini, t_cmd *cmd);
 static int	to_path(t_shell *mini, char *path);
-
 
 /*Changes the current directory. Accepts a relative or absolute path
 as an argument.*/
@@ -35,6 +35,13 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 		error(mini, "Malloc fail");
 		return (1);
 	}
+	if (cd_choices(mini, cmd, cwd))
+		return (1);
+	return (0);
+}
+
+static int	cd_choices(t_shell *mini, t_cmd *cmd, char *cwd)
+{
 	if (!cmd->args[1])
 	{
 		if (to_home(cwd))
@@ -90,16 +97,8 @@ static int	old_pwd(t_shell *mini, t_cmd *cmd)
 		return (1);
 	}
 	chdir(pwd);
-	if (update_pwd(mini->env, pwd, &oldpwd, 1))
-	{
-		free(pwd);
-		free(oldpwd);
+	if (handle_update_pwd(mini, pwd, oldpwd))
 		return (1);
-	}
-	if (!oldpwd)
-		error(mini, "No OLDPWD set");
-	free(oldpwd);
-	free(pwd);
 	return (0);
 }
 

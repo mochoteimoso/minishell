@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:43:57 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 11:53:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:48:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	init_sig(void);
 void	sig_handler_changer(void);
 void	sig_reseted(void);
-void	sig_heredoc();
+void	sig_heredoc(void);
 void	sig_handler_hd(int signal);
 
 /*
@@ -43,7 +43,7 @@ void	sig_reseted(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void sig_heredoc()
+void	sig_heredoc(void)
 {
 	signal(SIGINT, sig_handler_heredoc);
 	signal(SIGQUIT, SIG_IGN);

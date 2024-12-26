@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/26 16:22:16 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/12/26 16:24:13 by nzharkev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -16,9 +28,7 @@
 # define TMP_S "/tmp/heredoc"
 # define TMP_EXT ".tmp"
 
-extern int g_sig;
-
-//# include </usr/include/linux/signal.h>
+extern int	g_sig;
 
 typedef enum e_redir_type
 {
@@ -103,9 +113,9 @@ typedef struct s_shell
 	int		stdin_saved;
 	int		stdout_saved;
 	int		exit_stat;
-} t_shell;
+}	t_shell;
 
-void printer(t_shell *mini);
+void	printer(t_shell *mini);
 
 /*built_in*/
 	/*cd/cd.c*/
@@ -115,6 +125,7 @@ int		built_cd(t_shell *mini, t_cmd *cmd);
 int		get_oldpwd(t_env *env, char **pwd);
 int		update_env_value(t_env *env, char *new_value);
 int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+int		handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd);
 
 	/*echo.c*/
 int		built_echo(t_cmd *cmd);
@@ -211,7 +222,7 @@ int		no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 
 	/*expand_utils.c*/
 int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
-int 	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg);
+int		oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg);
 
 	/*expand_utils2.c*/
 int		tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg);
@@ -259,15 +270,15 @@ int		open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
 
 	/*heredoc_expand*/
 int		heredoc_expander(t_shell *mini, char **line);
-int 	check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
+int		check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
 
 	/*heredoc_file.c*/
 int		generate_hd_file(t_cmd *cmd);
 	/*parser.c*/
-int	parse_and_validate_input(char **input, t_shell *mini);
-int	parse_input(t_shell *mini);
-int	parse_cmd_string(t_shell *mini, t_cmd *cmd);
-int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found);
+int		parse_and_validate_input(char **input, t_shell *mini);
+int		parse_input(t_shell *mini);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
+int		cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found);
 
 	/*parser_utils.c*/
 int		no_args(t_cmd *cmd, int i);
@@ -303,7 +314,7 @@ int		resolve_fd(t_cmd *cmd);
 void	init_sig(void);
 void	sig_reseted(void);
 void	sig_handler_changer(void);
-void	sig_heredoc();
+void	sig_heredoc(void);
 void	sig_handler_hd(int signal);
 
 	/*signals_utils.c*/
@@ -341,8 +352,8 @@ void	hd_free(t_expand *arg, char *expan);
 
 	/*freeing*/
 void	ft_free_int_arr(int **array);
-void 	ft_free_int_arr_with_size(int **array, int size);
-void	error(t_shell * mini, char *str);
+void	ft_free_int_arr_with_size(int **array, int size);
+void	error(t_shell *mini, char *str);
 void	clean_env(t_env *ll, char **array);
 void	clean_redir(t_redir *head);
 
