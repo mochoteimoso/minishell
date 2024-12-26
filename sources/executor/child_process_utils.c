@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:58:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 10:29:13 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:10:20 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	dup2_and_close(int old_fd, int new_fd);
 
 // Duplicates input from fd_in if there is a redirection or from previous pipe
 // Redirection takes precedence over pipe
-
 int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 {
 	if (cmd->fd_in != STDIN_FILENO)
@@ -46,7 +45,6 @@ int	dup_input(t_shell *mini, t_cmd *cmd, int i)
 
 // Duplicates output to fd if there is a redirection or to write end of pipe
 // Redirection takes precedence over pipe
-
 int	dup_output(t_shell *mini, t_cmd *cmd, int count, int i)
 {
 	if (cmd->fd_out != STDOUT_FILENO)
@@ -73,7 +71,6 @@ int	dup_output(t_shell *mini, t_cmd *cmd, int count, int i)
 }
 
 // Helper function to duplicate and close fd
-
 int	dup2_and_close(int old_fd, int new_fd)
 {
 	if (old_fd < 0)

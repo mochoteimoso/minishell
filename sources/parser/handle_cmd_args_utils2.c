@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 14:49:34 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/23 18:54:06 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:45:12 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ int	only_redirect(char *str, int i)
 	if (!str[n])
 		return (0);
 	n++;
-	n++;
+	if (str[n])
+		n++;
 	if ((str[n] == '>' || str[n] == '<') || str[n] == '|')
 		return (1);
 	return (0);
@@ -72,7 +73,8 @@ int	only_redirect(char *str, int i)
 
 int	init_args_array(t_cmd *cmd, int i)
 {
-	cmd->args = ft_calloc(cmd->a_num = count_args(cmd, i) + 2, sizeof(char *));
+	cmd->a_num = count_args(cmd, i) + 1;
+	cmd->args = ft_calloc(cmd->a_num + 1, sizeof(char *));
 	if (!cmd->args)
 		return (-1);
 	cmd->args[0] = ft_strdup(cmd->command);

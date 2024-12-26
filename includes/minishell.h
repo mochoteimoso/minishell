@@ -108,44 +108,51 @@ typedef struct s_shell
 void printer(t_shell *mini);
 
 /*built_in*/
+	/*cd/cd.c*/
+int		built_cd(t_shell *mini, t_cmd *cmd);
+
+	/*cd/cd_utils.c*/
+int		get_oldpwd(t_env *env, char **pwd);
+int		update_env_value(t_env *env, char *new_value);
+int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+
 	/*echo.c*/
 int		built_echo(t_cmd *cmd);
-	/*exit.c*/
-int		built_exit(t_shell *mini, t_cmd *cmd);
-	/*export.c*/
-int		built_export(t_shell *mini, t_cmd *cmd);
-	/*pwd.c*/
-int		built_pwd(t_shell *mini);
-	/*unset.c*/
-int		built_unset(t_shell *mini, t_cmd *cmd);
 
-/*built_in/env*/
-	/*env.c*/
+	/*env/env.c*/
 char	**env_to_array(t_env *env);
 int		built_env(t_shell *mini, t_cmd *cmd);
 
-	/*env_handling*/
+	/*env/env_handling*/
 char	**copy_env(char **envp);
 t_env	*list_env(char **envp);
 void	to_alphabetical(char **array);
 
-	/*env_ll*/
+	/*env/env_ll*/
 t_env	*add_node(char *env);
 t_env	*create_node(void);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
-	/*env_utils.c*/
+	/*env/env_utils.c*/
 int		set_value(t_env *node, char *value);
 int		fill_node(t_env *node, char *name, char *value);
 
-/*built_in/cd*/
-	/*cd.c*/
-int		built_cd(t_shell *mini, t_cmd *cmd);
-int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+	/*exit.c*/
+int		built_exit(t_shell *mini, t_cmd *cmd);
 
-	/*cd_utils.c*/
-int		get_oldpwd(t_env *env, char **pwd);
-int		old_pwd(t_shell *mini, t_cmd *cmd);
+	/*export/export.c*/
+int		built_export(t_shell *mini, t_cmd *cmd);
+
+	/*export/export_update.c*/
+int		update_env(t_shell *mini, char *str);
+int		update_pending(t_shell *mini, char *name, char *str);
+int		handle_sign(t_shell *mini, char *str);
+
+	/*pwd.c*/
+int		built_pwd(t_shell *mini);
+
+	/*unset.c*/
+int		built_unset(t_shell *mini, t_cmd *cmd);
 
 /*commands*/
 	/*cmd_array.c*/
@@ -158,17 +165,22 @@ void	initialize_command_struct(t_cmd *cmd);
 int		fork_and_execute(t_shell *mini, t_cmd *cmd, int i);
 void	close_unused_fds(t_shell *mini, int i);
 
-	/*child_process.c*/
+	/*child_process_utils.c*/
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
 
+	/*cmd_path.c*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
+
+	/*cmd_path_utils.c*/
+void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
+int		check_special_cases(t_cmd *cmd);
+int		check_for_directory(t_cmd *cmd);
+
 	/*fd_handlers.c*/
 int		save_fds(t_shell *mini);
 int		reset_fds(t_shell *mini);
-
-	/*find_cmd_path.c*/
-int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 	/*handle_builtins.c*/
 int		built_in_exe(t_shell *mini, t_cmd *cmd);
@@ -272,14 +284,7 @@ int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 /*redirection*/
 	/*get_filename.c*/
 int		parse_filename(t_cmd *cmd, int i, char **filename);
-//int		get_filename_length(t_cmd *cmd, int i, bool in_quotes);
-
-	/*redir_ll*/
-t_redir	*list_redir(void);
-t_redir	*redir_add_node(void);
-void	redir_lstadd_back(t_redir **lst, t_redir *new);
-void	redir_update_tail(t_cmd *cmd);
-int		redirll_head_tail(t_cmd *cmd);
+int		filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg);
 
 	/*open_files.c*/
 int		open_input_file(t_cmd *cmd, char *input_file);
@@ -287,8 +292,24 @@ int		open_output_file(t_cmd *cmd, char *output_file);
 int		open_append_file(t_cmd *cmd, char *output_file);
 int		open_heredoc(t_cmd *cmd, char *delimiter);
 
+	/*redir_ll*/
+int		redirll_head_tail(t_cmd *cmd);
+
 	/*redirector.c*/
 int		resolve_fd(t_cmd *cmd);
+
+/*signals.c*/
+	/*signals.c*/
+void	init_sig(void);
+void	sig_reseted(void);
+void	sig_handler_changer(void);
+void	sig_heredoc();
+void	sig_handler_hd(int signal);
+
+	/*signals_utils.c*/
+void	sigint_handler(int sig);
+void	sig_handler2(int sig);
+void	sig_handler_heredoc(int signum);
 
 /*syntax*/
 	/*pipe_syntax*/
@@ -306,17 +327,17 @@ int		check_non_whitespace(char *str);
 char	*handle_trailing_pipe(char *input);
 
 /*utils*/
+	/*cleaners.c*/
+void	mini_cleaner(t_shell *mini);
+void	clean_cmds(t_cmd **cmds);
+void	cleaner_for_success(t_shell *mini);
+void	cleaner_for_failure(t_shell *mini);
+
 	/*exit_handler.c*/
 void	exit_for_failure(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	exit_for_single_cmd(t_shell *mini, int exit_status);
 void	hd_free(t_expand *arg, char *expan);
-
-	/*cleaners.c*/
-void	mini_cleaner(t_shell *mini);
-void	cleaner_for_failure(t_shell *mini);
-void	cleaner_for_success(t_shell *mini);
-void	clean_cmds(t_cmd **cmds);
 
 	/*freeing*/
 void	ft_free_int_arr(int **array);
@@ -324,16 +345,5 @@ void 	ft_free_int_arr_with_size(int **array, int size);
 void	error(t_shell * mini, char *str);
 void	clean_env(t_env *ll, char **array);
 void	clean_redir(t_redir *head);
-
-/*signals.c*/
-void	init_sig(void);
-void	sig_reseted(void);
-void	sig_handler_changer(void);
-void	sig_heredoc();
-void	sig_handler_hd(int signal);
-
-void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
-int	check_special_cases(t_cmd *cmd);
-int	check_for_directory(t_cmd *cmd);
 
 #endif

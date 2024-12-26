@@ -6,25 +6,14 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:10:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 10:32:01 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:04:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	no_new_line(char *arg)
-{
-	int	i;
-
-	i = 1;
-	while (arg[i])
-	{
-		if (arg[i] != 'n')
-			return (0);
-		i++;
-	}
-	return (1);
-}
+int			built_echo(t_cmd *cmd);
+static int	no_new_line(char *arg);
 
 /*Prints the given arguments to the standard output.
 Supports the -n flag to suppress the newline at the end.*/
@@ -58,4 +47,18 @@ int	built_echo(t_cmd *cmd)
 	if (nl)
 		printf("\n");
 	return (0);
+}
+
+static int	no_new_line(char *arg)
+{
+	int	i;
+
+	i = 1;
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
 }

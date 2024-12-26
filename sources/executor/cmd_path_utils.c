@@ -6,11 +6,15 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:32:00 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 16:06:02 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:12:13 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int		check_special_cases(t_cmd *cmd);
+int		check_for_directory(t_cmd *cmd);
+void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
 
 int	check_special_cases(t_cmd *cmd)
 {

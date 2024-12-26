@@ -6,11 +6,45 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 10:30:40 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:08:22 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int			built_unset(t_shell *mini, t_cmd *cmd);
+static int	unset_env(t_shell *mini, char *str);
+static int	unset_pending(t_shell *mini, char *str);
+
+int	built_unset(t_shell *mini, t_cmd *cmd)
+{
+	int	i;
+
+	i = 1;
+	if (cmd->a_num >= 2)
+	{
+		while (i < cmd->a_num)
+		{
+			if (cmd->args[i][0] == '-')
+			{
+				ft_putendl_fd("Invalid option", 2);
+				return (2);
+			}
+			if (unset_env(mini, cmd->args[i]))
+			{
+				error(mini, "No such variable");
+				return (1);
+			}
+			if (unset_pending(mini, cmd->args[i]))
+			{
+				error(mini, "No such variable");
+				return (1);
+			}
+			i++;
+		}
+	}
+	return (0);
+}
 
 static int	unset_env(t_shell *mini, char *str)
 {
@@ -65,36 +99,3 @@ static int	unset_pending(t_shell *mini, char *str)
 	return (0);
 }
 
-int	built_unset(t_shell *mini, t_cmd *cmd)
-{
-	int	sum;
-	int	i;
-
-	sum = 0;
-	i = 1;
-	while (cmd->args[sum])
-		sum++;
-	if (sum >= 2)
-	{
-		while (i < sum)
-		{
-			if (cmd->args[i][0] == '-')
-			{
-				ft_putendl_fd("Invalid option", 2);
-				return (2);
-			}
-			if (unset_env(mini, cmd->args[i]))
-			{
-				error(mini, "No such variable");
-				return (1);
-			}
-			if (unset_pending(mini, cmd->args[i]))
-			{
-				error(mini, "No such variable");
-				return (1);
-			}
-			i++;
-		}
-	}
-	return (0);
-}

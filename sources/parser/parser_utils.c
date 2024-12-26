@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:13:39 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 19:22:00 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:44:20 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	no_args(t_cmd *cmd, int i)
 	if (!cmd->args)
 		return (-1);
 	cmd->args[0] = ft_strdup(cmd->command);
+	cmd->a_num = 1;
 	if (!cmd->args)
 		return (-1);
 	cmd->args[1] = NULL;

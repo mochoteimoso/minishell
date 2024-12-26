@@ -3,12 +3,12 @@ NAME = minishell
 SRC_DIR = sources/
 
 SRC = $(SRC_DIR)main.c\
-	$(SRC_DIR)signals.c\
 	$(SRC_DIR)built_in/cd/cd.c\
-	$(SRC_DIR)built_in//cd/cd_utils.c\
+	$(SRC_DIR)built_in/cd/cd_utils.c\
 	$(SRC_DIR)built_in/echo.c\
 	$(SRC_DIR)built_in/exit.c\
-	$(SRC_DIR)built_in/export.c\
+	$(SRC_DIR)built_in/export/export.c\
+	$(SRC_DIR)built_in/export/export_update.c\
 	$(SRC_DIR)built_in/pwd.c\
 	$(SRC_DIR)built_in/unset.c\
 	$(SRC_DIR)built_in/env/env.c\
@@ -43,6 +43,8 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/parser.c\
 	$(SRC_DIR)parser/parser_utils.c\
 	$(SRC_DIR)parser/split_input.c\
+	$(SRC_DIR)signals/signal_handlers.c\
+	$(SRC_DIR)signals/signals_utils.c\
 	$(SRC_DIR)syntax/syntax_checker.c\
 	$(SRC_DIR)syntax/redirection_syntax.c\
 	$(SRC_DIR)syntax/pipe_syntax.c\

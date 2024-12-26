@@ -6,11 +6,16 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 19:51:21 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:27:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	exit_for_failure(t_shell *mini, int i, int exit_status);
+void	exit_for_success(t_shell *mini, int i, int exit_status);
+void	exit_for_single_cmd(t_shell *mini, int exit_status);
+void 	hd_free(t_expand *arg, char *expan);
 
 void	exit_for_failure(t_shell *mini, int i, int exit_status)
 {
@@ -62,7 +67,7 @@ void	exit_for_single_cmd(t_shell *mini, int exit_status)
 	exit (exit_status);
 }
 
-void hd_free(t_expand *arg, char *expan)
+void	hd_free(t_expand *arg, char *expan)
 {
 	free(arg->value);
 	free(expan);
