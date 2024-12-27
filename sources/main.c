@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/23 18:38:38 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 21:05:46 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ static int	is_this_empty(char *input)
 
 // Edited for the tester
 
-static int user_prompt(t_shell *mini, int status)
+static int	user_prompt(t_shell *mini, int status)
 {
 	char	*input;
 	int		i;
@@ -147,20 +147,20 @@ static int user_prompt(t_shell *mini, int status)
 		{
 			input = readline("minishell> ");
 			if (input == NULL)
-				break;
+				break ;
 		}
 		else
 		{
 			char *line = get_next_line(fileno(stdin));
 			if (line == NULL)
-				break;
+				break ;
 			input = ft_strtrim(line, "\n");
 			free(line);
 		}
 		if (is_this_empty(input))
 		{
 			free(input);
-			continue;
+			continue ;
 		}
 		if (input && *input)
 		{
@@ -168,11 +168,10 @@ static int user_prompt(t_shell *mini, int status)
 			if (parse_and_validate_input(&input, mini))
 			{
 				free(input);
-				continue;
+				continue ;
 			}
 			//printer(mini);
 			execute_pipeline(mini);
-			//printf("Exit stat: %d\n", mini->exit_stat);
 			free(input);
 		}
 	}
