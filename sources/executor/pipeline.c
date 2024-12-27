@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 15:32:07 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:01:28 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	execute_pipeline(t_shell *mini)
 		return (mini->exit_stat);
 	}
 	wait_children(mini);
+	unlink_all_heredocs(mini);
 	cleaner_for_success(mini);
 	return (mini->exit_stat);
 }
