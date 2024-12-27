@@ -6,11 +6,17 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/19 13:31:11 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 15:29:46 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	ft_free_int_arr(int **array);
+void	ft_free_int_arr_with_size(int **array, int size);
+void	error(t_shell *mini, char *str);
+void	clean_env(t_env *ll, char **array);
+void	clean_redir(t_redir *head);
 
 void	ft_free_int_arr(int **array)
 {
