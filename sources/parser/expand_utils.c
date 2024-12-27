@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:44:51 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/23 18:48:26 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 21:03:31 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,22 @@ int	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg)
 	int		indx;
 	t_vdata	data;
 
+	indx = 0;
 	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
-	if (!temp)
-		return (-1);
-	if (handle_new_expand(temp, expan))
+	if (!temp || handle_new_expand(temp, expan))
 		return (-1);
 	arg->i++;
-	indx = 0;
-	while (str[arg->i] && (ft_isalnum(str[arg->i])
-			|| str[arg->i] == '_' || str[arg->i] == '?'))
+	if (str[arg->i] == '?')
+		just_a_quest(str, name, &indx, arg);
+	else
 	{
-		if (indx < (int) sizeof(name) - 1)
-			name[indx++] = str[arg->i++];
+		while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_'))
+		{
+			if (indx < (int) sizeof(name) - 1)
+				name[indx++] = str[arg->i++];
+		}
+		name[indx] = '\0';
 	}
-	name[indx] = '\0';
 	init_vdata(&data, expan, temp, name);
 	if (finalize_expand(mini, &data, arg))
 		return (-1);
