@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 18:49:43 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 16:44:15 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	parse_input(t_shell *mini)
 	index = 0;
 	while (mini->cmds[index])
 	{
+		mini->cmds[index]->cmd_index = index;
 		if (parse_cmd_string(mini, mini->cmds[index]))
 		{
 			mini->exit_stat = 1;
@@ -76,6 +77,7 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 			i = handle_redirections(mini, cmd, i);
 			if (i == -1)
 				return (-1);
+			i = skip_whitespace(cmd->seg, i);
 		}
 		else if (*cmd_found == 0)
 		{
