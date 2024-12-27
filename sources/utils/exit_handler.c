@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 15:49:00 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 09:04:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,15 @@ void	hd_free(t_expand *arg, char *expan);
 
 void	exit_for_failure(t_shell *mini, int i, int exit_status)
 {
-	if (mini->cmd_count > 2 && i == mini->cmd_count - 1)
-		close(mini->pipes[i - 1][0]);
+	int	j;
+
+	j = 0;
+	while (j < mini->cmd_count - 1)
+	{
+		close(mini->pipes[j][0]);
+		close(mini->pipes[j][1]);
+		j++;
+	}
 	if (mini->cmd_count >= 2 && i < mini->cmd_count - 1)
 	{
 		close(mini->pipes[i][0]);

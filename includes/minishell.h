@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 16:22:16 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 16:24:13 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:27:15 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,10 @@ int		update_env_value(t_env *env, char *new_value);
 int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
 int		handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd);
 
+	/*cd_utils2.c*/
+int		no_cwd(t_shell *mini, t_env *pwd, char **cwd);
+int		handle_path(t_shell *mini, char *oldpwd, char *path);
+
 	/*echo.c*/
 int		built_echo(t_cmd *cmd);
 
@@ -161,6 +165,7 @@ int		handle_sign(t_shell *mini, char *str);
 
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
+t_env	*find_pwd(t_env *env, char *name);
 
 	/*unset.c*/
 int		built_unset(t_shell *mini, t_cmd *cmd);

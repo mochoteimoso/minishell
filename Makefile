@@ -5,6 +5,7 @@ SRC_DIR = sources/
 SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/cd/cd.c\
 	$(SRC_DIR)built_in/cd/cd_utils.c\
+	$(SRC_DIR)built_in/cd/cd_utils2.c\
 	$(SRC_DIR)built_in/echo.c\
 	$(SRC_DIR)built_in/exit.c\
 	$(SRC_DIR)built_in/export/export.c\

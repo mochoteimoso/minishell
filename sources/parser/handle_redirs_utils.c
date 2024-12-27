@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:37:34 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,11 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_IN;
-	temp_fd = open_input_file(cmd, cmd->redir_tail->file);
-	close(temp_fd);
+	if (!cmd->command)
+	{
+		temp_fd = open_input_file(cmd, cmd->redir_tail->file);
+		close(temp_fd);
+	}
 	return (i);
 }
 
