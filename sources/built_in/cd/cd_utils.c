@@ -6,11 +6,16 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:40:06 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 10:34:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:02:45 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
+
+int	get_oldpwd(t_env *env, char **pwd);
+int	update_env_value(t_env *env, char *new_value);
+int	update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+int	handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd);
 
 int	get_oldpwd(t_env *env, char **pwd)
 {
@@ -28,25 +33,49 @@ int	get_oldpwd(t_env *env, char **pwd)
 	return (0);
 }
 
-int	old_pwd(t_shell *mini, t_cmd *cmd)
+int	update_env_value(t_env *env, char *new_value)
 {
-	t_env	*env;
-	char	*pwd;
-	char	*oldpwd;
+	char	*temp;
 
-	if (cmd->args[1][1])
+	temp = ft_strdup(new_value);
+	if (!temp)
 		return (1);
-	env = mini->env;
-	pwd = NULL;
-	if (get_oldpwd(env, &pwd))
-		return (1);
-	oldpwd = getcwd(NULL, 0);
-	if (!oldpwd)
+	free(env->value);
+	env->value = temp;
+	return (0);
+}
+
+int	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
+{
+	int	flg;
+
+	flg = 0;
+	while (env)
 	{
-		free(pwd);
-		return (1);
+		if (ft_strcmp(env->name, "OLDPWD") == 0
+			&& update_env_value(env, *oldpwd))
+			return (1);
+		if (ft_strcmp(env->name, "PWD") == 0)
+		{
+			if (n)
+			{
+				wd = ft_strdup(env->value);
+				if (!wd)
+					return (1);
+			}
+			else if (update_env_value(env, wd))
+				return (1);
+			flg += 1;
+		}
+		if (flg == 2)
+			break ;
+		env = env->next;
 	}
-	chdir(pwd);
+	return (0);
+}
+
+int	handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd)
+{
 	if (update_pwd(mini->env, pwd, &oldpwd, 1))
 	{
 		free(pwd);

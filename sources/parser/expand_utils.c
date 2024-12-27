@@ -5,104 +5,105 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 12:48:17 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/12/20 14:44:51 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/12/23 17:37:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*get_value(t_env *env, char *name)
-{
-	t_env	*temp;
-	char	*value;
+int			we_have_dollar(t_shell *mini, t_expand *arg, char *str);
+int			oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg);
+static int	finalize_expand(t_shell *mini, t_vdata *data, t_expand *arg);
+static int	handle_new_expand(char *temp, char **expan);
+static void	init_vdata(t_vdata *data, char **expan, char *temp, char *name);
 
-	temp = env;
-	// printf("name: {%s}\n", name);
-	while (temp)
+int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
+{
+	int		s_exp;
+	char	*temp;
+	char	*new_res;
+
+	s_exp = arg->i;
+	temp = ft_strdup("");
+	if (!temp)
+		return (-1);
+	arg->start = arg->i;
+	arg->i = oh_a_dollar(mini, str, &temp, arg);
+	if (arg->i == -1)
 	{
-		if (ft_strcmp(temp->name, name) == 0)
-		{
-			value = ft_strdup(temp->value);
-			if (!value)
-			{
-				ft_putendl_fd("malloc fail", 2);
-				return ((char *) -1);
-			}
-			return (value);
-		}
-		temp = temp->next;
+		free(temp);
+		return (-1);
 	}
-	value = ft_strdup("");
-	if (!value)
+	new_res = ft_strjoin(arg->value, temp);
+	if (!new_res)
 	{
-		ft_putendl_fd("malloc fail", 2);
-		return ((char *) -1);
+		free(temp);
+		return (-1);
 	}
-	return (value);
+	free(arg->value);
+	free(temp);
+	arg->value = new_res;
+	return (0);
 }
 
-static int	we_have_value(char *value, char *temp, char **expanded)
+int	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg)
 {
-	temp = ft_strjoin(*expanded, value);
-	free(value);
+	char	*temp;
+	char	name[100];
+	int		indx;
+	t_vdata	data;
+
+	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
 	if (!temp)
+		return (-1);
+	if (handle_new_expand(temp, expan))
+		return (-1);
+	arg->i++;
+	indx = 0;
+	while (str[arg->i] && (ft_isalnum(str[arg->i])
+			|| str[arg->i] == '_' || str[arg->i] == '?'))
+	{
+		if (indx < (int) sizeof(name) - 1)
+			name[indx++] = str[arg->i++];
+	}
+	name[indx] = '\0';
+	init_vdata(&data, expan, temp, name);
+	if (finalize_expand(mini, &data, arg))
+		return (-1);
+	return (arg->start);
+}
+
+static int	finalize_expand(t_shell *mini, t_vdata *data, t_expand *arg)
+{
+	if (handle_value(mini, data))
+		return (-1);
+	arg->name = ft_strdup(data->name);
+	arg->start += ft_strlen(arg->name) + 1;
+	free(arg->name);
+	return (0);
+}
+
+static int	handle_new_expand(char *temp, char **expan)
+{
+	char	*new_expanded;
+
+	new_expanded = ft_strjoin(*expan, temp);
+	if (!new_expanded)
 	{
 		ft_putendl_fd("malloc failed", 2);
 		return (-1);
 	}
-	free(*expanded);
-	*expanded = temp;
+	free(temp);
+	free(*expan);
+	*expan = new_expanded;
 	return (0);
 }
 
-int	handle_value(t_shell *mini, t_vdata *data)
-{
-	if (data->name[0] == '?')
-	{
-		data->value = ft_itoa(mini->exit_stat);
-		if (we_have_value(data->value, data->temp, data->expanded) == -1)
-			return (1);
-		return (0);
-	}
-	data->value = get_value(mini->env, data->name);
-	if (data->value == (char *)-1)
-		return (1);
-	if (we_have_value(data->value, data->temp, data->expanded) == -1)
-		return (1);
-	return (0);
-}
-
-void	init_vdata(t_vdata *data, char **expanded, char *temp, char *name)
+static void	init_vdata(t_vdata *data, char **expan, char *temp, char *name)
 {
 	data->value = NULL;
-	data->expanded = expanded;
+	data->expan = expan;
 	data->temp = temp;
 	data->name = name;
-}
-
-char	*ft_strjoin_char(char *str, char c)
-{
-	size_t	len;
-	char	*new_str;
-	size_t	i;
-
-	len = 0;
-	if (str != NULL)
-		len = ft_strlen(str);
-	new_str = malloc(len + 2);
-	if (new_str == NULL)
-		return (NULL);
-	i = 0;
-	if (str != NULL)
-	{
-		while (str[i] != '\0')
-		{
-			new_str[i] = str[i];
-			i++;
-		}
-	}
-	new_str[i] = c;
-	new_str[i + 1] = '\0';
-	return (new_str);
 }
