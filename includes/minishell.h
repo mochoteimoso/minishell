@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 19:14:24 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 20:35:43 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,51 +118,52 @@ typedef struct s_shell
 }	t_shell;
 
 /*built_in*/
+	/*cd/cd.c*/
+int		built_cd(t_shell *mini, t_cmd *cmd);
+
+	/*cd/cd_utils.c*/
+int		get_oldpwd(t_env *env, char **pwd);
+int		update_env_value(t_env *env, char *new_value);
+int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+int		handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd);
+
 	/*echo.c*/
 int		built_echo(t_cmd *cmd);
-	/*exit.c*/
-int		built_exit(t_shell *mini, t_cmd *cmd);
-	/*pwd.c*/
-int		built_pwd(t_shell *mini);
-	/*unset.c*/
-int		built_unset(t_shell *mini, t_cmd *cmd);
 
-/*built_in/env*/
-	/*env.c*/
+	/*env/env.c*/
 char	**env_to_array(t_env *env);
 int		built_env(t_shell *mini, t_cmd *cmd);
 
-	/*env_handling*/
+	/*env/env_handling*/
 char	**copy_env(char **envp);
 t_env	*list_env(char **envp);
 void	to_alphabetical(char **array);
 
-	/*env_ll*/
+	/*env/env_ll*/
 t_env	*add_node(char *env);
 t_env	*create_node(void);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
-	/*env_utils.c*/
+	/*env/env_utils.c*/
 int		set_value(t_env *node, char *value);
 int		fill_node(t_env *node, char *name, char *value);
 
-/*built_in/cd*/
-	/*cd.c*/
-int		built_cd(t_shell *mini, t_cmd *cmd);
-int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+	/*exit.c*/
+int		built_exit(t_shell *mini, t_cmd *cmd);
 
-	/*cd_utils.c*/
-int		get_oldpwd(t_env *env, char **pwd);
-int		old_pwd(t_shell *mini, t_cmd *cmd);
-
-/*built_in/export*/
-	/*export.c*/
+	/*export/export.c*/
 int		built_export(t_shell *mini, t_cmd *cmd);
 
-	/*export_utils.c*/
+	/*export/export_update.c*/
+int		handle_sign(t_shell *mini, char *str);
 int		update_env(t_shell *mini, char *str);
-int		validate_variable(char *name);
-int		set_new_value(t_env *temp, char *str);
+int		update_pending(t_shell *mini, char *name, char *str);
+
+	/*pwd.c*/
+int		built_pwd(t_shell *mini);
+
+	/*unset.c*/
+int		built_unset(t_shell *mini, t_cmd *cmd);
 
 /*commands*/
 	/*cmd_array.c*/
@@ -180,10 +181,6 @@ int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
 
-	/*fd_handlers.c*/
-int		save_fds(t_shell *mini);
-int		reset_fds(t_shell *mini);
-
 	/*cmd_path.c*/
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
@@ -191,6 +188,10 @@ int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 int		check_special_cases(t_cmd *cmd);
 int		check_for_directory(t_cmd *cmd);
 void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
+
+	/*fd_handlers.c*/
+int		save_fds(t_shell *mini);
+int		reset_fds(t_shell *mini);
 
 	/*handle_builtins.c*/
 int		built_in_exe(t_shell *mini, t_cmd *cmd);
@@ -204,10 +205,14 @@ int		create_pipes(t_shell *mini);
 int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
 void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
+void	unlink_all_heredocs(t_shell *mini);
 
 /*parser*/
 	/*expand.c*/
 int		handle_expand(t_shell *mini, t_cmd **cmd);
+
+	/*expand_no_expand.c*/
+int		no_expanding(t_shell *mini, char *str, t_expand *arg);
 
 	/*expand_quoted.c*/
 int		in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
@@ -216,36 +221,26 @@ int		we_have_heredoc(t_expand *arg, char *str, int n);
 	/*expand_unquoted.c*/
 int		no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 
-	/*expand_no_expand.c*/
-int		no_expanding(t_shell *mini, char *str, t_expand *arg);
-
-	/*expand_utils2.c*/
+	/*expand_utils.c*/
 int		we_have_dollar(t_shell *mini, t_expand *arg, char *str);
 int		oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg);
-int		tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg);
 
-	/*expand_utils3.c*/
+	/*expand_utils2.c*/
+int		tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg);
 int		handle_value(t_shell *mini, t_vdata *data);
 char	*get_value(t_env *env, char *name);
 char	*ft_strjoin_char(char *str, char c);
 
-	/*expand_utils4.c*/
+	/*expand_utils3.c*/
 int		init_expansion(t_expand *arg, char **expan);
 int		the_arg(t_expand *arg, int i);
 void	what_quote(char *str, t_expand *arg);
 int		handle_question(t_shell *mini, char *str, char **expan, t_expand *arg);
 int		new_result(t_expand *arg, char *temp);
 
-	/*parser.c*/
-int		parse_and_validate_input(char **input, t_shell *mini);
-int		parse_input(t_shell *mini);
-int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
+	/*expand_utils4.c*/
 
-	/*parser_utils.c*/
-int		no_args(t_cmd *cmd, int i);
-int		add_char(char *str, t_expand *arg);
-char	*ft_strjoin_char(char *str, char c);
-bool	is_empty_command(t_cmd *cmd, int i);
+void	just_a_quest(char *str, char *name, int *indx, t_expand *arg);
 
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
@@ -286,6 +281,18 @@ int		check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
 	/*heredoc_file.c*/
 int		generate_hd_file(t_cmd *cmd);
 
+	/*parser.c*/
+int		parse_and_validate_input(char **input, t_shell *mini);
+int		parse_input(t_shell *mini);
+int		parse_cmd_string(t_shell *mini, t_cmd *cmd);
+int		cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found);
+
+	/*parser_utils.c*/
+int		no_args(t_cmd *cmd, int i);
+int		add_char(char *str, t_expand *arg);
+char	*ft_strjoin_char(char *str, char c);
+bool	is_empty_command(t_cmd *cmd, int i);
+
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *seg);
@@ -293,14 +300,7 @@ char	*trim_whitespace(char *seg);
 /*redirection*/
 	/*get_filename.c*/
 int		parse_filename(t_cmd *cmd, int i, char **filename);
-//int		get_filename_length(t_cmd *cmd, int i, bool in_quotes);
-
-	/*redir_ll*/
-t_redir	*list_redir(void);
-t_redir	*redir_add_node(void);
-void	redir_lstadd_back(t_redir **lst, t_redir *new);
-void	redir_update_tail(t_cmd *cmd);
-int		redirll_head_tail(t_cmd *cmd);
+int		filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg);
 
 	/*open_files.c*/
 int		open_input_file(t_cmd *cmd, char *input_file);
@@ -308,9 +308,25 @@ int		open_output_file(t_cmd *cmd, char *output_file);
 int		open_append_file(t_cmd *cmd, char *output_file);
 int		open_heredoc(t_cmd *cmd, char *delimiter);
 
+	/*redir_ll*/
+int		redirll_head_tail(t_cmd *cmd);
+
 	/*redirector.c*/
 int		resolve_fd(t_cmd *cmd);
 
+/*signals.c*/
+	/*signals.c*/
+void	init_sig(void);
+void	sig_reseted(void);
+void	sig_handler_changer(void);
+void	sig_heredoc(void);
+void	sig_handler_hd(int signal);
+
+	/*signals_utils.c*/
+void	sigint_handler(int sig);
+void	sig_handler2(int sig);
+void	sig_handler_heredoc(int signum);
+	
 /*syntax*/
 	/*pipe_syntax*/
 int		check_pipes(char **input, t_shell *mini);
@@ -327,17 +343,17 @@ int		check_non_whitespace(char *str);
 char	*handle_trailing_pipe(char *input);
 
 /*utils*/
+	/*cleaners.c*/
+void	mini_cleaner(t_shell *mini);
+void	clean_cmds(t_cmd **cmds);
+void	cleaner_for_failure(t_shell *mini);
+void	cleaner_for_success(t_shell *mini);
+
 	/*exit_handler.c*/
 void	exit_for_failure(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
 void	exit_for_single_cmd(t_shell *mini, int exit_status);
 void	hd_free(t_expand *arg, char *expan);
-
-	/*cleaners.c*/
-void	mini_cleaner(t_shell *mini);
-void	cleaner_for_failure(t_shell *mini);
-void	cleaner_for_success(t_shell *mini);
-void	clean_cmds(t_cmd **cmds);
 
 	/*freeing*/
 void	ft_free_int_arr(int **array);
@@ -345,12 +361,5 @@ void	ft_free_int_arr_with_size(int **array, int size);
 void	error(t_shell *mini, char *str);
 void	clean_env(t_env *ll, char **array);
 void	clean_redir(t_redir *head);
-
-/*signals.c*/
-void	init_sig(void);
-void	sig_reseted(void);
-void	sig_handler_changer(void);
-void	sig_heredoc(void);
-void	sig_handler_hd(int signal);
 
 #endif
