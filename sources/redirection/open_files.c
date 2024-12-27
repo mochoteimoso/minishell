@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:18:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 13:14:30 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:04:59 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	open_output_file(t_cmd *cmd, char *output_file)
 	{
 		close(fd_out);
 		error_and_update(cmd, output_file, "Is a directory", 1);
-		return (-2);
+		return (-1);
 	}
 	if (access(output_file, F_OK) == 0 && access(output_file, W_OK) == -1)
 	{
@@ -64,7 +64,7 @@ int	open_output_file(t_cmd *cmd, char *output_file)
 	if (fd_out == -1)
 	{
 		error_and_update(cmd, output_file, "No such file or directory", 1);
-		return (-2);
+		return (-1);
 	}
 	return (fd_out);
 }
@@ -80,18 +80,18 @@ int	open_append_file(t_cmd *cmd, char *output_file)
 	{
 		close(fd_out);
 		error_and_update(cmd, output_file, "Is a directory", 1);
-		return (-2);
+		return (-1);
 	}
 	if (access(output_file, F_OK) == 0 && access(output_file, W_OK) == -1)
 	{
 		error_and_update(cmd, output_file, "Permission denied", 1);
-		return (-2);
+		return (-1);
 	}
 	fd_out = open(output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd_out == -1)
 	{
 		error_and_update(cmd, output_file, "No such file or directory", 1);
-		return (-2);
+		return (-1);
 	}
 	return (fd_out);
 }
@@ -108,12 +108,12 @@ int	open_heredoc(t_cmd *cmd, char *heredoc_file)
 		if (access(heredoc_file, F_OK) != 0)
 		{
 			error_and_update(cmd, heredoc_file, "No such file or directory", 1);
-			return (-2);
+			return (-1);
 		}
 		if (access(heredoc_file, R_OK) != 0)
 		{
 			error_and_update(cmd, heredoc_file, "Permission denied", 1);
-			return (-2);
+			return (-1);
 		}
 	}
 	return (fd_in);
