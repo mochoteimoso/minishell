@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:01:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/19 12:10:53 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:04:29 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int		create_pipes(t_shell *mini);
 int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
 void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
+void	unlink_all_heredocs(t_shell *mini);
 
 // Duplicates fds in main process and resets fds to STDIN/STDOUT when needed
 // only difference is that this resets fds in case of error here to save space
@@ -91,6 +92,32 @@ void	wait_children(t_shell *mini)
 		waitpid(mini->pids[i], &status, 0);
 		if (WIFEXITED(status))
 			mini->exit_stat = WEXITSTATUS(status);
+		i++;
+	}
+}
+
+void	unlink_all_heredocs(t_shell *mini)
+{
+	t_redir	*current;
+	int		i;
+
+	i = 0;
+	while (i < mini->cmd_count)
+	{
+		current = mini->cmds[i]->redir_head;
+		while (current)
+		{
+			if (current->type == HEREDOC)
+			{
+				if (current->heredoc_name)
+				{
+					unlink(current->heredoc_name);
+					free(current->heredoc_name);
+					current->heredoc_name = NULL;
+				}
+			}
+			current = current->next;
+		}
 		i++;
 	}
 }
