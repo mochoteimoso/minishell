@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 18:59:17 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:44:35 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 {
 	char	*filename;
 	bool	in_quotes;
-	int		temp_fd;
 
 	filename = NULL;
 	in_quotes = false;
@@ -46,11 +45,6 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_IN;
-	if (!cmd->command)
-	{
-		temp_fd = open_input_file(cmd, cmd->redir_tail->file);
-		close(temp_fd);
-	}
 	return (i);
 }
 
@@ -61,7 +55,6 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
-	int		temp_fd;
 
 	in_quotes = false;
 	filename = NULL;
@@ -71,8 +64,6 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_OUT;
-	temp_fd = open_output_file(cmd, cmd->redir_tail->file);
-	close(temp_fd);
 	return (i);
 }
 
@@ -95,6 +86,7 @@ int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 		return (-1);
 	if (open_and_write_to_heredoc(mini, cmd))
 		return (-1);
+	cmd->redir_tail->heredoc_index++;
 	return (i);
 }
 
@@ -105,7 +97,6 @@ int	handle_append(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
-	int		temp_fd;
 
 	in_quotes = false;
 	filename = NULL;
@@ -115,7 +106,5 @@ int	handle_append(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = APPEND;
-	temp_fd = open_append_file(cmd, cmd->redir_tail->file);
-	close(temp_fd);
 	return (i);
 }
