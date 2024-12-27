@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:10:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 13:21:30 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:20:51 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,5 @@ int	resolve_output_fd(t_cmd *cmd, t_redir *redir, int *fd_out)
 static void	close_fd_if_needed(int fd)
 {
 	if (fd > 2)
-	{
-		printf("Closing fd: %d\n", fd);
 		close(fd);
-	}
 }

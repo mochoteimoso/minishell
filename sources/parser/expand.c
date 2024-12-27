@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/23 18:45:41 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:57:45 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ static int	hd_quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 		arg->i = we_have_heredoc(arg, (*cmd)->seg, 0);
 		*expan = ft_strjoin(temp, arg->value);
 		free(temp);
+		free(arg->value);
 	}
 	if ((*cmd)->seg[arg->i] == '\'' || (*cmd)->seg[arg->i] == '"')
 	{
@@ -90,6 +91,7 @@ static int	hd_quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 		arg->i = in_quotes(mini, (*cmd)->seg, arg->i, arg);
 		*expan = ft_strjoin(temp, arg->value);
 		free(temp);
+		free(arg->value);
 	}
 	return (arg->i);
 }
@@ -103,5 +105,6 @@ static int	s_unquoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 	arg->i = no_quotes(mini, *cmd, arg->i, arg);
 	*expan = ft_strjoin(temp, arg->value);
 	free(temp);
+	free(arg->value);
 	return (arg->i);
 }
