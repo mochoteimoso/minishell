@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/27 17:01:28 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/28 12:50:38 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ int	execute_pipeline(t_shell *mini)
 	if (!mini->pids)
 	{
 		clean_cmds(mini->cmds);
-		mini->exit_stat = 1;
-		return (mini->exit_stat);
+		return (mini->exit_stat = 1);
 	}
 	if (pipe_and_fork(mini))
 	{
@@ -56,7 +55,10 @@ int	execute_pipeline(t_shell *mini)
 static int	handle_single_builtin_cmd(t_shell *mini)
 {
 	if (resolve_fd(mini->cmds[0]) || save_fds(mini))
+	{
+		mini->exit_stat = mini->cmds[0]->cmd_exit;
 		return (1);
+	}
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
 		if (dup2_and_close_in_main(mini, mini->cmds[0]->fd_in, STDIN_FILENO))
