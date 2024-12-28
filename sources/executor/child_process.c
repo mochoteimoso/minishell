@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/27 18:03:06 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/28 12:00:16 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 			execute_forked_builtin_cmd(mini, cmd, i);
 		else
 		{
-			if (get_cmd_path(mini, cmd) == 1)
+			if (get_cmd_path(mini, cmd))
 				exit_for_failure(mini, i, cmd->cmd_exit);
 			execute_forked_cmd(mini, cmd, i);
 		}
