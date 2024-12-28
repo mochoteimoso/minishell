@@ -30,7 +30,11 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 		if (g_sig == SIGINT)
 		{
 			if (stdin_saver(mini))
+			{
+				close(fd);
 				return (1);
+			}
+			close(fd);
 			return (0);
 		}
 		if (!line || ft_strcmp(line, cmd->redir_tail->delimiter) == 0)
@@ -39,7 +43,10 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 			break ;
 		}
 		if (check_expand(mini, cmd, &line, fd))
+		{
+			close(fd);
 			return (1);
+		}
 		write_close_hd(mini, line, fd, 0);
 	}
 	write_close_hd(mini, line, fd, 1);
@@ -69,6 +76,7 @@ static int	stdin_saver(t_shell *mini)
 		if (dup2_and_close(mini->stdin_saved, STDIN_FILENO))
 		{
 			perror("Failed to restore original STDIN");
+			close(mini->stdin_saved);
 			mini->exit_stat = 1;
 			mini->stdin_saved = -1;
 			return (1);
@@ -78,7 +86,8 @@ static int	stdin_saver(t_shell *mini)
 	if (mini->stdin_saved == -1)
 	{
 		mini->exit_stat = 1;
-		return (perror("Failed to save STDIN"), 1);
+		perror("Failed to save STDIN");
+		return (1);
 	}
 	return (0);
 }
