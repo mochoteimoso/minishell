@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 18:54:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:58:55 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 	return (0);
 }
 
-// Allocates memory for an array of structs
+/* Allocates memory for an array of structs */
 
 int	prepare_command_structs(t_shell *mini, char *input)
 {
@@ -76,7 +76,7 @@ int	prepare_command_structs(t_shell *mini, char *input)
 	return (0);
 }
 
-// Initializes individual structs in the array
+/* Initializes individual structs in the array */
 
 void	initialize_command_struct(t_cmd *cmd)
 {

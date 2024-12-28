@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 11:03:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:10:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int	check_trailing_pipe(char **input, t_shell *mini)
 	char	*updated_input;
 
 	i = ft_strlen(*input) - 1;
-	while (i >= 0 && (*input)[i] == ' ')
+	while (i >= 0 && ft_isspace((*input)[i]))
 		i--;
 	if (i >= 0 && (*input)[i] == '|' && !check_quotes(*input, i))
 	{
@@ -105,36 +105,3 @@ static int	check_trailing_pipe(char **input, t_shell *mini)
 	}
 	return (0);
 }
-
-/*static char	*handle_trailing_pipe(char *input)
-{
-	char	*additional_input;
-	char	*updated_input;
-
-	additional_input = NULL;
-	updated_input = NULL;
-	while (1)
-	{
-		additional_input = readline(">");
-		if (!additional_input)
-		{
-			perror("readline error");
-			free(input);
-			return (NULL);
-		}
-		if (check_non_whitespace(additional_input))
-		{
-			updated_input = ft_strjoin(input, additional_input);
-			free(additional_input);
-			if (!updated_input)
-			{
-				perror("malloc");
-				free(input);
-				return (NULL);
-			}
-			free(input);
-			return (updated_input);
-		}
-		free(additional_input);
-	}
-} */

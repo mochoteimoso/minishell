@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:44:51 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/23 17:37:00 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/28 19:23:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,26 @@ int	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg)
 	int		indx;
 	t_vdata	data;
 
-	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
-	if (!temp)
-		return (-1);
-	if (handle_new_expand(temp, expan))
-		return (-1);
-	arg->i++;
 	indx = 0;
-	while (str[arg->i] && (ft_isalnum(str[arg->i])
-			|| str[arg->i] == '_' || str[arg->i] == '?'))
+	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
+	if (!temp || handle_new_expand(temp, expan))
 	{
-		if (indx < (int) sizeof(name) - 1)
-			name[indx++] = str[arg->i++];
+		if (temp)
+			free(temp);
+		return (-1);
 	}
-	name[indx] = '\0';
+	arg->i++;
+	if (str[arg->i] == '?')
+		just_a_quest(str, name, &indx, arg);
+	else
+	{
+		while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_'))
+		{
+			if (indx < (int) sizeof(name) - 1)
+				name[indx++] = str[arg->i++];
+		}
+		name[indx] = '\0';
+	}
 	init_vdata(&data, expan, temp, name);
 	if (finalize_expand(mini, &data, arg))
 		return (-1);

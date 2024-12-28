@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:13:39 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 14:44:20 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/28 19:20:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ int	add_char(char *str, t_expand *arg)
 	if (!temp2)
 		return (1);
 	temp3 = ft_strdup(arg->value);
+	if (!temp3)
+	{
+		free(temp2);
+		return (1);
+	}
 	temp = ft_strjoin(temp3, temp2);
 	free(temp2);
 	free(temp3);

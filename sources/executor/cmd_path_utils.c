@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:32:00 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 15:12:13 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:07:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,6 @@ int	check_for_directory(t_cmd *cmd)
 void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status)
 {
 	ft_putstr_fd(cmd->command, 2);
-	ft_putendl_fd(": No such file or directory", 2);
+	ft_putendl_fd(": command not found", 2);
 	cmd->cmd_exit = exit_status;
 }

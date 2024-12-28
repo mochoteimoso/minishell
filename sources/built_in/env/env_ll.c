@@ -6,11 +6,16 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:06:03 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 10:33:05 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:56:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
+
+void		ft_env_lstadd_back(t_env **lst, t_env *new);
+t_env		*create_node(void);
+static int	check_alloc_and_free(void *ptr, void *free_ptr1, void *free_ptr2);
+t_env		*add_node(char *env);
 
 void	ft_env_lstadd_back(t_env **lst, t_env *new)
 {
@@ -63,13 +68,13 @@ t_env	*add_node(char *env)
 	char	*sign;
 
 	node = create_node();
-	if (!node)
-		return (NULL);
 	sign = ft_strchr(env, '=');
+	if (!node || !sign)
+		return (NULL);
 	name = ft_substr(env, 0, (sign - env));
 	if (check_alloc_and_free(name, node, NULL))
 		return (NULL);
-	value = strdup(sign + 1);
+	value = ft_strdup(sign + 1);
 	if (check_alloc_and_free(value, name, node))
 		return (NULL);
 	if (fill_node(node, name, value))

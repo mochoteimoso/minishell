@@ -31,7 +31,7 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 		{
 			if (stdin_saver(mini))
 				return (1);
-			return (0);
+			return (1);
 		}
 		if (!line || ft_strcmp(line, cmd->redir_tail->delimiter) == 0)
 		{
@@ -73,6 +73,7 @@ static int	stdin_saver(t_shell *mini)
 			mini->stdin_saved = -1;
 			return (1);
 		}
+		mini->exit_stat = 1;
 	}
 	mini->stdin_saved = dup(STDIN_FILENO);
 	if (mini->stdin_saved == -1)

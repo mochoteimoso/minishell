@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 16:22:16 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 11:27:15 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/28 12:45:13 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,6 +242,9 @@ void	what_quote(char *str, t_expand *arg);
 int		handle_question(t_shell *mini, char *str, char **expan, t_expand *arg);
 int		new_result(t_expand *arg, char *temp);
 
+	/*expand_utils4.c*/
+void	just_a_quest(char *str, char *name, int *indx, t_expand *arg);
+
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
 
@@ -337,7 +340,7 @@ int		check_redirects(char *input, t_shell *mini);
 	/*syntax_checker.c*/
 int		validate_input_syntax(char **input, t_shell *mini);
 int		check_quotes(char *input, int limit);
-int		check_non_whitespace(char *str);
+int		is_this_empty(char *input);
 
 	/*trailing_pipe.c*/
 char	*handle_trailing_pipe(char *input);

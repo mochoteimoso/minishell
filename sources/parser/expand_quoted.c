@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 16:13:12 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/28 19:50:57 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ int	in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 		return (-1);
 	temp = arg->value;
 	arg->value = ft_strjoin_char(temp, str[arg->i]);
+	if (!arg->value)
+	{
+		free(temp);
+		return (-1);
+	}
 	free(temp);
 	what_quote(str, arg);
 	while (str[arg->i])
@@ -37,7 +42,11 @@ int	in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 					|| str[arg->i] == '"'))
 			|| ((arg->sgl && str[arg->i] == '\'')
 				|| (arg->dbl && str[arg->i] == '"')))
+		{
 			arg->i = handle_quotes(arg, str);
+			if (arg->i == -1)
+				return (-1);
+		}
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);
 	}
@@ -50,10 +59,18 @@ int	we_have_heredoc(t_expand *arg, char *str, int n)
 	if (!n)
 		arg->value = ft_strdup("");
 	while (str[arg->i] == '<' || str[arg->i] == ' ')
+	{
 		add_char(str, arg);
+		if (!arg->value)
+			return (-1);
+	}
 	while (str[arg->i] && (!ft_isspace(str[arg->i])
 			|| !(str[arg->i] == '<') || !(str[arg->i] == '>')))
+	{
 		add_char(str, arg);
+		if (!arg->value)
+			return (-1);
+	}
 	return (arg->i);
 }
 
