@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 11:14:49 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 15:36:16 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:28:43 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	handle_path(t_shell *mini, char *oldpwd, char *path)
 	newcwd = getcwd(NULL, 0);
 	if (!newcwd)
 		newcwd = ft_strdup(path);
-	if (update_pwd(mini->env, newcwd, &oldpwd, 0))
+	if (update_pwd(mini->env, newcwd, &oldpwd))
 	{
 		free(newcwd);
 		free(oldpwd);

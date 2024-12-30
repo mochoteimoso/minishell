@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 11:40:34 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:23:09 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	handle_value(t_shell *mini, t_vdata *data)
 	if (data->name[0] == '?')
 	{
 		data->value = ft_itoa(mini->exit_stat);
+		if (!data->value)
+			return (1);
 		if (we_have_value(data->value, data->temp, data->expan) == -1)
 			return (1);
 		return (0);

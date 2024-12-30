@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:44:51 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 11:40:06 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:22:53 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 		return (-1);
 	}
 	free(arg->value);
+	arg->value = NULL;
 	free(temp);
 	arg->value = new_res;
 	return (0);
@@ -83,8 +84,10 @@ int	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg)
 static int	finalize_expand(t_shell *mini, t_vdata *data, t_expand *arg)
 {
 	if (handle_value(mini, data))
-		return (-1);
+		return (1);
 	arg->name = ft_strdup(data->name);
+	if (!arg->name)
+		return (1);
 	arg->start += ft_strlen(arg->name) + 1;
 	free(arg->name);
 	return (0);

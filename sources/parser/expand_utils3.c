@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:55:47 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 15:38:56 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:23:30 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,12 @@ int	init_expansion(t_expand *arg, char **expan)
 		return (1);
 	the_arg(arg, 0);
 	if (!arg->value)
+	{
+		free(*expan);
 		return (1);
+	}
 	free(arg->value);
+	arg->value = NULL;
 	return (0);
 }
 
@@ -95,6 +99,7 @@ int	new_result(t_expand *arg, char *temp)
 		return (-1);
 	}
 	free(arg->value);
+	arg->value = NULL;
 	free(temp);
 	arg->value = new_res;
 	return (0);

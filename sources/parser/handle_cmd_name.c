@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:06:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 15:54:16 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:23:59 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 			name.i = quoted_cmd(&name, cmd->seg);
 			if (ft_strlen(name.value) == 0)
 			{
-				cmd->command = ft_strdup("''");
 				free(name.value);
+				cmd->command = ft_strdup("''");
 				return (name.i);
 			}
 			break ;

@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 16:29:31 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 11:39:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:21:58 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int			no_expanding(t_shell *mini, char *str, t_expand *arg);
 static int	this_breaks(t_expand *arg, char *str);
 static int	no_expand_dollar(t_expand *arg, char *str);
-static int	no_expand_quotes(t_expand *arg, char *str);
 
 int	no_expanding(t_shell *mini, char *str, t_expand *arg)
 {
@@ -29,14 +28,11 @@ int	no_expanding(t_shell *mini, char *str, t_expand *arg)
 			break ;
 		if (no_expand_dollar(arg, str) == 1)
 			arg->i++;
-		else if (str[arg->i] == '\'' || str[arg->i] == '"')
+		if (no_expand_dollar(arg, str) == 2)
 		{
-			arg->i = no_expand_quotes(arg, str);
-			if (arg->i == -1)
+			if (we_have_dollar(mini, arg, str))
 				return (-1);
 		}
-		if (no_expand_dollar(arg, str) == 2)
-			we_have_dollar(mini, arg, str);
 		else if (add_char(str, arg))
 			return (-1);
 		if (str[arg->i] == '<' && str[arg->i + 1] == '<')
@@ -44,42 +40,17 @@ int	no_expanding(t_shell *mini, char *str, t_expand *arg)
 			arg->i = we_have_heredoc(arg, str, 1);
 			if (arg->i == -1)
 				return (-1);
-			if (str[arg->i] == '\0')
-				break ;
 		}
 	}
-	arg->len = ft_strlen(arg->value);
 	return (arg->i);
 }
 
 static int	this_breaks(t_expand *arg, char *str)
 {
-	if (((str[arg->i] == ' ' || str[arg->i] == '\t')
-			|| (str[arg->i] == '\'' || str[arg->i] == '"'))
-		|| arg->dbl || arg->sgl)
+	if (ft_isspace(str[arg->i]) || str[arg->i] == '\'' || str[arg->i] == '"')
 		return (1);
 	else
 		return (0);
-}
-
-static int	no_expand_quotes(t_expand *arg, char *str)
-{
-	if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
-	{
-		arg->value = ft_strjoin_char(arg->value, str[arg->i]);
-		if (!arg->value)
-			return (-1);
-		what_quote(str, arg);
-	}
-	else if ((arg->sgl && str[arg->i] == '\'')
-		|| (arg->dbl && str[arg->i] == '"'))
-	{
-		arg->value = ft_strjoin_char(arg->value, str[arg->i]);
-		if (!arg->value)
-			return (-1);
-		what_quote(str, arg);
-	}
-	return (arg->i);
 }
 
 static int	no_expand_dollar(t_expand *arg, char *str)
