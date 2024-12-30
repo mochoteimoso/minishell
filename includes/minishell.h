@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 11:58:57 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:42:45 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <sys/stat.h> 
 # include <fcntl.h>
 
 # define TMP_S "/tmp/heredoc"
@@ -285,6 +286,7 @@ int		check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
 
 	/*heredoc_file.c*/
 int		generate_hd_file(t_cmd *cmd);
+void	write_close_hd(t_shell *mini, char *line, int fd, int end);
 
 	/*parser.c*/
 int		parse_and_validate_input(char **input, t_shell *mini);
