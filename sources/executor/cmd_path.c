@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 15:45:35 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:51:43 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,11 @@ static int	check_abs_path(t_cmd *cmd)
 {
 	if (check_special_cases(cmd))
 		return (-1);
-	if (cmd->command[0] == '/'
-		|| (cmd->command[0] == '.' && cmd->command[1] == '/'))
+	if (cmd->command[0] == '/' || (cmd->command[0] == '.'
+		&& cmd->command[1] == '/') || (cmd->command[0] == '.'
+		&& cmd->command[1] == '.' && cmd->command[0] == '/'))
 	{
-		if (check_for_directory(cmd))
+		if (check_for_directory(cmd) != 0)
 			return (-1);
 		if (access(cmd->command, X_OK) == 0)
 		{
