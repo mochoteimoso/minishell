@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:40:06 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/27 15:02:36 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:04:40 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
 			break ;
 		env = env->next;
 	}
+	if (n)
+		free(wd);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 11:39:33 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:38:43 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,3 @@ static int	handle_quotes(t_expand *arg, char *str)
 	}
 	return (arg->i);
 }
-
