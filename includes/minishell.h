@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/28 12:50:46 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:58:57 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,10 @@ int		update_env_value(t_env *env, char *new_value);
 int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
 int		handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd);
 
+	/*cd_utils2.c*/
+int		no_cwd(t_shell *mini, t_env *pwd, char **cwd);
+int		handle_path(t_shell *mini, char *oldpwd, char *path);
+
 	/*echo.c*/
 int		built_echo(t_cmd *cmd);
 
@@ -161,6 +165,7 @@ int		update_pending(t_shell *mini, char *name, char *str);
 
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
+t_env	*find_pwd(t_env *env, char *name);
 
 	/*unset.c*/
 int		built_unset(t_shell *mini, t_cmd *cmd);
@@ -337,7 +342,7 @@ int		check_redirects(char *input, t_shell *mini);
 	/*syntax_checker.c*/
 int		validate_input_syntax(char **input, t_shell *mini);
 int		check_quotes(char *input, int limit);
-int		check_non_whitespace(char *str);
+int		is_this_empty(char *input);
 
 	/*trailing_pipe.c*/
 char	*handle_trailing_pipe(char *input);
