@@ -14,13 +14,15 @@
 
 int			open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
 static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd);
+static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd);
+static int	handle_sigint_in_hd(t_shell *mini, int fd);
 static int	stdin_saver(t_shell *mini);
-static void	write_close_hd(t_shell *mini, char *line, int fd, int end);
 
 int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 {
 	int		fd;
 	char	*line;
+	int		result;
 
 	if (init_heredoc(mini, cmd, &fd))
 		return (1);
@@ -28,26 +30,12 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 	{
 		line = readline("heredoc> ");
 		if (g_sig == SIGINT)
-		{
-			if (stdin_saver(mini))
-			{
-				close(fd);
-				return (1);
-			}
-			close(fd);
-			return (0);
-		}
-		if (!line || ft_strcmp(line, cmd->redir_tail->delimiter) == 0)
-		{
-			free(line);
+			return (handle_sigint_in_hd (mini, fd));
+		result = process_heredoc_line(mini, cmd, line, fd);
+		if (result == 1)
 			break ;
-		}
-		if (check_expand(mini, cmd, &line, fd))
-		{
-			close(fd);
+		if (result == -1)
 			return (1);
-		}
-		write_close_hd(mini, line, fd, 0);
 	}
 	write_close_hd(mini, line, fd, 1);
 	return (0);
@@ -64,6 +52,33 @@ static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd)
 	if (stdin_saver(mini))
 		return (1);
 	signal(SIGINT, sig_handler_hd);
+	return (0);
+}
+
+static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd)
+{
+	if (!line || ft_strcmp(line, cmd->redir_tail->delimiter) == 0)
+	{
+		free(line);
+		return (1);
+	}
+	if (check_expand(mini, cmd, &line, fd))
+	{
+		close(fd);
+		return (-1);
+	}
+	write_close_hd(mini, line, fd, 0);
+	return (0);
+}
+
+static int	handle_sigint_in_hd(t_shell *mini, int fd)
+{
+	if (stdin_saver(mini))
+	{
+		close(fd);
+		return (1);
+	}
+	close(fd);
 	return (0);
 }
 
@@ -91,17 +106,4 @@ static int	stdin_saver(t_shell *mini)
 		return (1);
 	}
 	return (0);
-}
-
-static void	write_close_hd(t_shell *mini, char *line, int fd, int end)
-{
-	if (end)
-	{
-		close(mini->stdin_saved);
-		close(fd);
-		return ;
-	}
-	write(fd, line, ft_strlen(line));
-	write(fd, "\n", 1);
-	free(line);
 }
