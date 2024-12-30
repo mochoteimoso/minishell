@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/27 15:26:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:39:23 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int			check_pipes(char **input, t_shell *mini);
 static int	check_consecutive_pipes(char *input, t_shell *mini);
 static int	check_pipe_error(char *input, int i, t_shell *mini);
-static int	check_trailing_pipe(char **input, t_shell *mini);
+static int	check_trailing_pipe(char **input);
 
 /* Checks syntax for pipes, i.e. that it is not a the start or that
 there are no consecutive pipes. Also handles a trailing pipe */
@@ -35,7 +35,7 @@ int	check_pipes(char **input, t_shell *mini)
 	}
 	if (check_consecutive_pipes(*input, mini))
 		return (1);
-	if (check_trailing_pipe(input, mini))
+	if (check_trailing_pipe(input))
 		return (1);
 	return (0);
 }
@@ -83,7 +83,7 @@ static int	check_pipe_error(char *input, int i, t_shell *mini)
 
 // Checks for trailing pipe
 
-static int	check_trailing_pipe(char **input, t_shell *mini)
+static int	check_trailing_pipe(char **input)
 {
 	int		i;
 	char	*updated_input;
@@ -96,8 +96,6 @@ static int	check_trailing_pipe(char **input, t_shell *mini)
 		updated_input = handle_trailing_pipe(*input);
 		if (!updated_input)
 		{
-			ft_putendl_fd("syntax error: unexpected end of input", 2);
-			mini->exit_stat = 2;
 			*input = NULL;
 			return (1);
 		}
