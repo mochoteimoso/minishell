@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/28 19:50:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/30 12:49:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,20 @@ int	in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 		return (-1);
 	temp = arg->value;
 	arg->value = ft_strjoin_char(temp, str[arg->i]);
-	if (!arg->value)
-	{
-		free(temp);
-		return (-1);
-	}
 	free(temp);
+	if (!arg->value)
+		return (-1);
 	what_quote(str, arg);
 	while (str[arg->i])
 	{
 		if (!arg->sgl && !arg->dbl)
 			break ;
 		if (str[arg->i] == '$')
+		{
 			arg->i = handle_dollar(mini, arg, str);
+			if (arg->i == -1)
+				return (-1);
+		}
 		if ((!arg->sgl && !arg->dbl && (str[arg->i] == '\''
 					|| str[arg->i] == '"'))
 			|| ((arg->sgl && str[arg->i] == '\'')
@@ -60,15 +61,13 @@ int	we_have_heredoc(t_expand *arg, char *str, int n)
 		arg->value = ft_strdup("");
 	while (str[arg->i] == '<' || str[arg->i] == ' ')
 	{
-		add_char(str, arg);
-		if (!arg->value)
+		if (add_char(str, arg))
 			return (-1);
 	}
 	while (str[arg->i] && (!ft_isspace(str[arg->i])
 			|| !(str[arg->i] == '<') || !(str[arg->i] == '>')))
 	{
-		add_char(str, arg);
-		if (!arg->value)
+		if (add_char(str, arg))
 			return (-1);
 	}
 	return (arg->i);
@@ -85,7 +84,7 @@ static int	handle_dollar(t_shell *mini, t_expand *arg, char *str)
 				|| str[arg->i + 1] == '_' || str[arg->i + 1] == '?')))
 	{
 		if (we_have_dollar(mini, arg, str) == -1)
-			return (free(arg->value), -1);
+			return (-1);
 	}
 	return (arg->i);
 }

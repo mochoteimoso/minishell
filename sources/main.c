@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/28 14:04:46 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:14:05 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ static int	user_prompt(t_shell *mini, int status)
 				free(input);
 				continue ;
 			}
-			//printer(mini);
+			// printer(mini);
 			execute_pipeline(mini);
 			free(input);
 		}
@@ -182,6 +182,8 @@ static int	activate_shell(int status, char **envp)
 		return (status);
 	}
 	status = user_prompt(mini, status);
+	clean_env(mini->env, mini->pending);
+	free(mini);
 	return (status);
 }
 
@@ -195,6 +197,6 @@ int	main(int argc, char **argv, char **envp)
 	{
 		printf("Minishell doesn't take arguments\n");
 		return (1);
-	}
+	};
 	return (activate_shell(status, envp));
 }

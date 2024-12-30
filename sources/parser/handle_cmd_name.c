@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 13:35:20 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/23 19:17:58 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:52:35 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 			name.i = quoted_cmd(&name, cmd->seg);
 			if (ft_strlen(name.value) == 0)
 			{
+				free(name.value);
 				cmd->command = ft_strdup("''");
 				return (name.i);
 			}

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 11:32:58 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:45:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	cd_choices(t_shell *mini, t_cmd *cmd, char *cwd)
 			return (1);
 		return (0);
 	}
-	else if (cmd->args[1][0] == '-')
+	else if (cmd->args[1][0] == '-' && cmd->args[1][1] == '\0')
 	{
 		if (old_pwd(mini, cmd))
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:40:06 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 16:02:45 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:58:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	get_oldpwd(t_env *env, char **pwd);
 int	update_env_value(t_env *env, char *new_value);
-int	update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+int	update_pwd(t_env *env, char *wd, char **oldpwd);
 int	handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd);
 
 int	get_oldpwd(t_env *env, char **pwd)
@@ -45,11 +45,12 @@ int	update_env_value(t_env *env, char *new_value)
 	return (0);
 }
 
-int	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
+int	update_pwd(t_env *env, char *wd, char **oldpwd)
 {
 	int	flg;
 
 	flg = 0;
+
 	while (env)
 	{
 		if (ft_strcmp(env->name, "OLDPWD") == 0
@@ -57,13 +58,7 @@ int	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
 			return (1);
 		if (ft_strcmp(env->name, "PWD") == 0)
 		{
-			if (n)
-			{
-				wd = ft_strdup(env->value);
-				if (!wd)
-					return (1);
-			}
-			else if (update_env_value(env, wd))
+			if (update_env_value(env, wd))
 				return (1);
 			flg += 1;
 		}
@@ -76,7 +71,7 @@ int	update_pwd(t_env *env, char *wd, char **oldpwd, int n)
 
 int	handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd)
 {
-	if (update_pwd(mini->env, pwd, &oldpwd, 1))
+	if (update_pwd(mini->env, pwd, &oldpwd))
 	{
 		free(pwd);
 		free(oldpwd);
