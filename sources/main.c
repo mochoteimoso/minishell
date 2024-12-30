@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/28 12:34:01 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 12:00:26 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,17 +83,6 @@ static int	init_shell(t_shell *mini, char **envp)
 	mini->pipes = NULL;
 	mini->exit_stat = 0;
 	return (0);
-}
-
-static int	is_this_empty(char *input)
-{
-	while (*input)
-	{
-		if (!ft_isspace(*input))
-			return (0);
-		input++;
-	}
-	return (1);
 }
 
 /*static int user_prompt(t_shell *mini, int status)
