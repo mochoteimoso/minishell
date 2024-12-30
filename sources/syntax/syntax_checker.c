@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 15:14:55 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:48:31 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,13 @@ int	check_quotes(char *input, int limit)
 
 /* Checks whether a string contains non-whitespace characters */
 
-int	check_non_whitespace(char *str)
+int	is_this_empty(char *input)
 {
-	while (*str)
+	while (*input)
 	{
-		if (!ft_isspace(*str))
-			return (1);
-		str++;
+		if (!ft_isspace(*input))
+			return (0);
+		input++;
 	}
-	return (0);
+	return (1);
 }

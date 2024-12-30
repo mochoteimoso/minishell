@@ -6,48 +6,20 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 17:46:47 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:41:21 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int			count_args(t_cmd *cmd, int i);
-static int	skip_quoted_segment(const char *seg, int i);
-int			count_if_redirection(t_cmd *cmd, int i);
-int			only_redirect(char *str, int i);
-int			init_args_array(t_cmd *cmd, int i);
+int	count_args(t_cmd *cmd, int i);
+int	count_if_redirection(t_cmd *cmd, int i);
+int	only_redirect(char *str, int i);
+int	init_args_array(t_cmd *cmd, int i);
 
-/*int	count_args(t_cmd *cmd, int i)
+static int  skip_quoted_segment(const char *seg, int i)
 {
-	int	args_count;
-
-	args_count = 0;
-	while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
-		i++;
-	while (cmd->seg[i])
-	{
-		if (is_redirection(cmd, i))
-		{
-			i++;
-			i = count_if_redirection(cmd, i);
-		}
-		else
-		{
-			args_count++;
-			while (cmd->seg[i] && !ft_isspace(cmd->seg[i])
-				&& !is_redirection(cmd, i))
-				i++;
-		}
-		while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
-			i++;
-	}
-	return (args_count);
-} */
-
-static int	skip_quoted_segment(const char *seg, int i)
-{
-	char	quote;
+	char quote;
 
 	quote = seg[i];
 	i++;
@@ -58,9 +30,9 @@ static int	skip_quoted_segment(const char *seg, int i)
 	return (i);
 }
 
-int	count_args(t_cmd *cmd, int i)
+int count_args(t_cmd *cmd, int i)
 {
-	int	args_count;
+	int args_count;
 
 	args_count = 0;
 	while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
@@ -73,8 +45,8 @@ int	count_args(t_cmd *cmd, int i)
 		{
 			args_count++;
 			while (cmd->seg[i] && (!ft_isspace(cmd->seg[i])
-					|| check_quotes(cmd->seg, i)) && !is_redirection(cmd, i))
-			{
+				|| check_quotes(cmd->seg, i)) && !is_redirection(cmd, i))
+			 {
 				if (cmd->seg[i] == '\'' || cmd->seg[i] == '"')
 					i = skip_quoted_segment(cmd->seg, i);
 				else

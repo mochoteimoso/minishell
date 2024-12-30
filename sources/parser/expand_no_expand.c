@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 16:29:31 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 15:11:26 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:39:05 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,20 @@ int	no_expanding(t_shell *mini, char *str, t_expand *arg)
 		if (no_expand_dollar(arg, str) == 1)
 			arg->i++;
 		else if (str[arg->i] == '\'' || str[arg->i] == '"')
+		{
 			arg->i = no_expand_quotes(arg, str);
+			if (arg->i == -1)
+				return (-1);
+		}
 		if (no_expand_dollar(arg, str) == 2)
 			we_have_dollar(mini, arg, str);
 		else if (add_char(str, arg))
-			return (free(arg->value), -1);
+			return (-1);
 		if (str[arg->i] == '<' && str[arg->i + 1] == '<')
 		{
 			arg->i = we_have_heredoc(arg, str, 1);
+			if (arg->i == -1)
+				return (-1);
 			if (str[arg->i] == '\0')
 				break ;
 		}
@@ -61,12 +67,16 @@ static int	no_expand_quotes(t_expand *arg, char *str)
 	if (!arg->sgl && !arg->dbl && (str[arg->i] == '\'' || str[arg->i] == '"'))
 	{
 		arg->value = ft_strjoin_char(arg->value, str[arg->i]);
+		if (!arg->value)
+			return (-1);
 		what_quote(str, arg);
 	}
 	else if ((arg->sgl && str[arg->i] == '\'')
 		|| (arg->dbl && str[arg->i] == '"'))
 	{
 		arg->value = ft_strjoin_char(arg->value, str[arg->i]);
+		if (!arg->value)
+			return (-1);
 		what_quote(str, arg);
 	}
 	return (arg->i);

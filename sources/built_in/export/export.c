@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 17:21:44 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:33:28 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	validate_variable(char *name);
 
 /*Sets an environment variable. Accepts VAR=VALUE format to
 define or update variables.*/
-
 int	built_export(t_shell *mini, t_cmd *cmd)
 {
 	int	i;

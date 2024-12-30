@@ -6,15 +6,18 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:08:35 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/27 15:03:53 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:32:54 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
+static int	set_name(t_env *node, char *name);
+int			set_value(t_env *node, char *value);
+int			fill_node(t_env *node, char *name, char *value);
+
 static int	set_name(t_env *node, char *name)
 {
-	(void)name;
 	node->name = ft_strdup(name);
 	if (!node->name)
 		return (1);

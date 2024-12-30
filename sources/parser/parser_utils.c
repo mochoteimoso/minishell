@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:13:39 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 18:49:59 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:45:11 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int		no_args(t_cmd *cmd, int i);
 bool	is_empty_command(t_cmd *cmd, int i);
+int		add_char(char *str, t_expand *arg);
 
 int	no_args(t_cmd *cmd, int i)
 {
@@ -21,6 +22,7 @@ int	no_args(t_cmd *cmd, int i)
 	if (!cmd->args)
 		return (-1);
 	cmd->args[0] = ft_strdup(cmd->command);
+	cmd->a_num = 1;
 	if (!cmd->args)
 		return (-1);
 	cmd->args[1] = NULL;
@@ -52,6 +54,11 @@ int	add_char(char *str, t_expand *arg)
 	if (!temp2)
 		return (1);
 	temp3 = ft_strdup(arg->value);
+	if (!temp3)
+	{
+		free(temp2);
+		return (1);
+	}
 	temp = ft_strjoin(temp3, temp2);
 	free(temp2);
 	free(temp3);

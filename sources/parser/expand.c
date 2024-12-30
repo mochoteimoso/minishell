@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 19:57:45 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:38:48 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ int	handle_expand(t_shell *mini, t_cmd **cmd)
 	if (init_expansion(&arg, &expan))
 		return (1);
 	if (exp_while(mini, cmd, &arg, &expan))
+	{
+		if (arg.value)
+			free(arg.value);
 		return (1);
+	}
 	free((*cmd)->seg);
 	(*cmd)->seg = expan;
 	return (0);
@@ -48,7 +52,11 @@ static int	exp_while(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 		{
 			arg->i = hd_quoted(mini, cmd, arg, expan);
 			if (arg->i == -1)
+			{
+				if (*expan)
+					free(*expan);
 				return (1);
+			}
 		}
 		else
 		{
@@ -81,6 +89,8 @@ static int	hd_quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 	{
 		temp = *expan;
 		arg->i = we_have_heredoc(arg, (*cmd)->seg, 0);
+		if (arg->i == -1)
+			return (-1);
 		*expan = ft_strjoin(temp, arg->value);
 		free(temp);
 		free(arg->value);
@@ -89,6 +99,8 @@ static int	hd_quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 	{
 		temp = *expan;
 		arg->i = in_quotes(mini, (*cmd)->seg, arg->i, arg);
+		if (arg->i == -1)
+			return (-1);
 		*expan = ft_strjoin(temp, arg->value);
 		free(temp);
 		free(arg->value);
@@ -103,6 +115,11 @@ static int	s_unquoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 	temp = ft_strdup(*expan);
 	free(*expan);
 	arg->i = no_quotes(mini, *cmd, arg->i, arg);
+	if (arg->i == -1)
+	{
+		free(temp);
+		return (-1);
+	}
 	*expan = ft_strjoin(temp, arg->value);
 	free(temp);
 	free(arg->value);

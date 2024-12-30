@@ -81,6 +81,7 @@ static int	stdin_saver(t_shell *mini)
 			mini->stdin_saved = -1;
 			return (1);
 		}
+		mini->exit_stat = 1;
 	}
 	mini->stdin_saved = dup(STDIN_FILENO);
 	if (mini->stdin_saved == -1)

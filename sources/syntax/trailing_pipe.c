@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:32:24 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/27 15:25:55 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:49:35 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*handle_trailing_pipe(char *input)
 			free(input);
 			return (NULL);
 		}
-		if (check_non_whitespace(additional_input))
+		if (!is_this_empty(additional_input))
 			return (join_and_free(input, additional_input));
 		free(additional_input);
 	}
@@ -46,7 +46,6 @@ static char	*join_and_free(char *input, char *additional_input)
 	free(additional_input);
 	if (!updated_input)
 	{
-		perror("malloc");
 		free(input);
 		return (NULL);
 	}

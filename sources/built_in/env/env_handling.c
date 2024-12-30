@@ -6,11 +6,15 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:14:43 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 15:03:24 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:32:03 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
+
+t_env	*list_env(char **envp);
+char	**copy_env(char **envp);
+void	to_alphabetical(char **array);
 
 t_env	*list_env(char **envp)
 {

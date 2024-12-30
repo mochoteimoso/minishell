@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:44:51 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 21:03:31 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:40:06 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,11 @@ int	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg)
 	indx = 0;
 	temp = ft_strndup(&str[arg->start], arg->i - arg->start);
 	if (!temp || handle_new_expand(temp, expan))
+	{
+		if (temp)
+			free(temp);
 		return (-1);
+	}
 	arg->i++;
 	if (str[arg->i] == '?')
 		just_a_quest(str, name, &indx, arg);

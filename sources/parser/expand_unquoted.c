@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:17:22 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 15:12:02 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:39:50 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 			arg->i = this_expands(mini, cmd, arg);
 		else
 			arg->i = no_expanding(mini, cmd->seg, arg);
+		if (arg->i == -1)
+			return (-1);
 	}
 	arg->len = ft_strlen(arg->value);
 	return (arg->i);
@@ -61,6 +63,8 @@ static int	this_expands(t_shell *mini, t_cmd *cmd, t_expand *arg)
 					|| cmd->seg[arg->i + 1] == '_'
 					|| cmd->seg[arg->i + 1] == '?'))))
 		arg->i = expand_var(mini, cmd->seg, &arg->value, arg);
+	if (arg->i == -1)
+		return (-1);
 	return (arg->i);
 }
 
@@ -72,6 +76,8 @@ static int	expand_var(t_shell *mini, char *str, char **expan, t_expand *arg)
 	cont = arg->start;
 	if (str[arg->i] == '$')
 		arg->i = oh_a_dollar(mini, str, expan, arg);
+	if (arg->i == -1)
+		return (-1);
 	else if (str[arg->i] == '~')
 		arg->i = tildes_home(mini, str, expan, arg);
 	if (str[cont + 1] == '?')

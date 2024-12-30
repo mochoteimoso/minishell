@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 15:12:43 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:40:34 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ int	tildes_home(t_shell *mini, char *str, char **expan, t_expand *arg)
 	if (value)
 	{
 		temp = ft_strjoin(*expan, value);
+		if (!temp)
+		{
+			free(value);
+			return (-1);
+		}
 		free(*expan);
 		*expan = temp;
 		free(value);
