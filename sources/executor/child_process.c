@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/28 12:00:16 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:26:38 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd, int i)
 	sig_reseted();
 	if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
 	{
+		ft_free_array(env_array);
 		perror(cmd->command);
 		exit_for_failure(mini, i, -1);
 	}
