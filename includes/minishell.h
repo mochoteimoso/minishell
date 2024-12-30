@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 17:42:45 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:27:41 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int		built_cd(t_shell *mini, t_cmd *cmd);
 	/*cd/cd_utils.c*/
 int		get_oldpwd(t_env *env, char **pwd);
 int		update_env_value(t_env *env, char *new_value);
-int		update_pwd(t_env *env, char *wd, char **oldpwd, int n);
+int		update_pwd(t_env *env, char *wd, char **oldpwd);
 int		handle_update_pwd(t_shell *mini, char *pwd, char *oldpwd);
 
 	/*cd_utils2.c*/
@@ -245,7 +245,6 @@ int		handle_question(t_shell *mini, char *str, char **expan, t_expand *arg);
 int		new_result(t_expand *arg, char *temp);
 
 	/*expand_utils4.c*/
-
 void	just_a_quest(char *str, char *name, int *indx, t_expand *arg);
 
 	/*handle_cmd_args.c*/
