@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 12:00:26 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:04:17 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ static int	init_shell(t_shell *mini, char **envp)
 	return (0);
 }
 
-/*static int user_prompt(t_shell *mini, int status)
+/*
+static int user_prompt(t_shell *mini, int status)
 {
 	char	*input;
 
@@ -105,14 +106,11 @@ static int	init_shell(t_shell *mini, char **envp)
 			add_history(input);
 			if (parse_and_validate_input(&input, mini))
 			{
-				if (input)
-					free(input);
+				free(input);
 				continue ;
 			}
 			//printer(mini);
 			execute_pipeline(mini);
-			//if (execute_pipeline(mini))
-			//	ft_putendl_fd("execution failed", 2);
 			free(input);
 		}
 	}
@@ -185,6 +183,8 @@ static int	activate_shell(int status, char **envp)
 		return (status);
 	}
 	status = user_prompt(mini, status);
+	clean_env(mini->env, mini->pending);
+	free(mini);
 	return (status);
 }
 
