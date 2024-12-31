@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 16:22:16 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 18:58:09 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:31:05 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <fcntl.h>
 
 # define TMP_S "/tmp/heredoc"

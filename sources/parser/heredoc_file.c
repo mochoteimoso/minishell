@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:57:16 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 18:55:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:29:21 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int			generate_hd_file(t_cmd *cmd);
 static int	index_to_char(t_cmd *cmd, t_hd *hd);
 static int	create_name(t_cmd *cmd, t_hd *hd);
+void		write_close_hd(t_shell *mini, char *line, int fd, int end);
 
 int	generate_hd_file(t_cmd *cmd)
 {
@@ -75,4 +76,17 @@ static int	create_name(t_cmd *cmd, t_hd *hd)
 	if (!cmd->redir_tail->heredoc_name)
 		return (1);
 	return (0);
+}
+
+void	write_close_hd(t_shell *mini, char *line, int fd, int end)
+{
+	if (end)
+	{
+		close(mini->stdin_saved);
+		close(fd);
+		return ;
+	}
+	write(fd, line, ft_strlen(line));
+	write(fd, "\n", 1);
+	free(line);
 }
