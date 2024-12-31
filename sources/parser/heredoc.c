@@ -13,10 +13,10 @@
 #include "../../includes/minishell.h"
 
 int			open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
-static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd);
+static int	restore_and_cleanup(t_shell *mini, int fd, int exit_code);
+static int	init_heredoc(t_cmd *cmd, int *fd);
 static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd);
-static int	handle_sigint_in_hd(t_shell *mini, int fd);
-static int	stdin_saver(t_shell *mini);
+static void	write_close_hd(char *line, int fd, int end);
 
 int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 {
@@ -24,24 +24,44 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 	char	*line;
 	int		result;
 
-	if (init_heredoc(mini, cmd, &fd))
+	mini->stdin_saved = dup(STDIN_FILENO);
+	if (mini->stdin_saved == -1)
+	{
+		perror("Failed to save STDIN");
 		return (1);
+	}
+	if (init_heredoc(cmd, &fd))
+		return (restore_and_cleanup(mini, fd, 1));
 	while (1)
 	{
 		line = readline("heredoc> ");
 		if (g_sig == SIGINT)
-			return (handle_sigint_in_hd (mini, fd));
+			return (restore_and_cleanup(mini, fd, 1));
 		result = process_heredoc_line(mini, cmd, line, fd);
 		if (result == 1)
 			break ;
 		if (result == -1)
-			return (1);
+			return (restore_and_cleanup(mini, fd, 1));
 	}
-	write_close_hd(mini, line, fd, 1);
-	return (0);
+	write_close_hd(line, fd, 1);
+	return (restore_and_cleanup(mini, fd, 0));
 }
 
-static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd)
+static int	restore_and_cleanup(t_shell *mini, int fd, int exit_code)
+{
+	if (fd != -1)
+		close(fd);
+	if (mini->stdin_saved != -1)
+	{
+		if (dup2(mini->stdin_saved, STDIN_FILENO) == -1)
+			perror("Failed to restore original STDIN");
+		close(mini->stdin_saved);
+		mini->stdin_saved = -1;
+	}
+	return (exit_code);
+}
+
+static int	init_heredoc(t_cmd *cmd, int *fd)
 {
 	*fd = open(cmd->redir_tail->heredoc_name, O_RDWR | O_CREAT | O_EXCL, 0600);
 	if (*fd == -1)
@@ -49,8 +69,6 @@ static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd)
 		ft_putendl_fd("Failed to open temp file for heredoc", 2);
 		return (1);
 	}
-	if (stdin_saver(mini))
-		return (1);
 	signal(SIGINT, sig_handler_hd);
 	return (0);
 }
@@ -67,43 +85,18 @@ static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd)
 		close(fd);
 		return (-1);
 	}
-	write_close_hd(mini, line, fd, 0);
+	write_close_hd(line, fd, 0);
 	return (0);
 }
 
-static int	handle_sigint_in_hd(t_shell *mini, int fd)
+static void	write_close_hd(char *line, int fd, int end)
 {
-	if (stdin_saver(mini))
+	if (end)
 	{
 		close(fd);
-		return (1);
+		return ;
 	}
-	close(fd);
-	return (0);
-}
-
-static int	stdin_saver(t_shell *mini)
-{
-	if (g_sig == SIGINT)
-	{
-		g_sig = 0;
-		printf("\n");
-		if (dup2_and_close(mini->stdin_saved, STDIN_FILENO))
-		{
-			perror("Failed to restore original STDIN");
-			close(mini->stdin_saved);
-			mini->exit_stat = 1;
-			mini->stdin_saved = -1;
-			return (1);
-		}
-		mini->exit_stat = 1;
-	}
-	mini->stdin_saved = dup(STDIN_FILENO);
-	if (mini->stdin_saved == -1)
-	{
-		mini->exit_stat = 1;
-		perror("Failed to save STDIN");
-		return (1);
-	}
-	return (0);
+	write(fd, line, ft_strlen(line));
+	write(fd, "\n", 1);
+	free(line);
 }
