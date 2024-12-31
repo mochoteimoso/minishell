@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trailing_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:32:24 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/28 13:46:02 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:25:44 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ char	*handle_trailing_pipe(char *input)
 	char	*additional_input;
 
 	additional_input = NULL;
+	signal(SIGINT, sigint_handler);
 	while (1)
 	{
 		additional_input = readline(">");

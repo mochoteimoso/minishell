@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtins.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:53:40 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/16 16:41:13 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:11:00 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

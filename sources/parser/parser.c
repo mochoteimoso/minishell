@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/28 14:07:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:19:12 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	parse_input(t_shell *mini)
 	index = 0;
 	while (mini->cmds[index])
 	{
+		mini->cmds[index]->cmd_index = index;
 		if (parse_cmd_string(mini, mini->cmds[index]))
 		{
 			mini->exit_stat = 1;

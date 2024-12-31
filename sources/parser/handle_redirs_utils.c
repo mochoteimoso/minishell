@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirs_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/28 14:08:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:18:13 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
+	bool	in_quotes;
+	int		temp_fd;
 
 	filename = NULL;
 	in_quotes = false;
@@ -64,8 +66,9 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 	return (i);
 }
 
-/*Handles heredoc, finds the delimiter and copies data to the redir linked list*/
-int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
+// Handles heredoc, finds the delimiter and copies data to the redir linked list
+
+int	handle_heredoc(t_cmd *cmd, int i)
 {
 	char	*delim;
 
@@ -78,10 +81,10 @@ int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->delimiter = delim;
 	cmd->redir_tail->type = HEREDOC;
-	if (generate_hd_file(cmd))
-		return (-1);
-	if (open_and_write_to_heredoc(mini, cmd))
-		return (-1);
+	if (in_quotes)
+		cmd->redir_tail->expand = false;
+	else
+		cmd->redir_tail->expand = true;
 	return (i);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:57:16 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 10:29:21 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:18:32 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

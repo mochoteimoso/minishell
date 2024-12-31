@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_syntax.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:06:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 10:25:17 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:24:35 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static int	check_out_redir(char *input, t_shell *mini, int *i)
 	return (0);
 }
 
-// Returns an error if there is no non-whitespace character after
-// redirection symbol before input ends or a pipe is encountered
+// Returns an error if there is no non-whitespace character after redirection symbol
+// before input ends or a pipe is encountered
 
 static int	validate_redirect(char *input, t_shell *mini, int *i, char *type)
 {

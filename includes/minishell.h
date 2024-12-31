@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/26 16:22:16 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 10:31:05 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
+/*   Updated: 2024/12/31 11:03:42 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <sys/wait.h>
-# include <sys/stat.h>
+# include <sys/stat.h> 
 # include <fcntl.h>
 
 # define TMP_S "/tmp/heredoc"
@@ -160,9 +160,9 @@ int		built_exit(t_shell *mini, t_cmd *cmd);
 int		built_export(t_shell *mini, t_cmd *cmd);
 
 	/*export/export_update.c*/
+int		handle_sign(t_shell *mini, char *str);
 int		update_env(t_shell *mini, char *str);
 int		update_pending(t_shell *mini, char *name, char *str);
-int		handle_sign(t_shell *mini, char *str);
 
 	/*pwd.c*/
 int		built_pwd(t_shell *mini);
@@ -191,9 +191,9 @@ int		dup2_and_close(int old_fd, int new_fd);
 int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 	/*cmd_path_utils.c*/
-void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
 int		check_special_cases(t_cmd *cmd);
 int		check_for_directory(t_cmd *cmd);
+void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
 
 	/*fd_handlers.c*/
 int		save_fds(t_shell *mini);
@@ -211,6 +211,7 @@ int		create_pipes(t_shell *mini);
 int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
 void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
+void	unlink_all_heredocs(t_shell *mini);
 
 /*parser*/
 	/*expand.c*/
@@ -283,6 +284,8 @@ int		check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
 
 	/*heredoc_file.c*/
 int		generate_hd_file(t_cmd *cmd);
+void	write_close_hd(t_shell *mini, char *line, int fd, int end);
+
 	/*parser.c*/
 int		parse_and_validate_input(char **input, t_shell *mini);
 int		parse_input(t_shell *mini);
@@ -330,7 +333,7 @@ void	sig_handler_hd(int signal);
 void	sigint_handler(int sig);
 void	sig_handler2(int sig);
 void	sig_handler_heredoc(int signum);
-
+	
 /*syntax*/
 	/*pipe_syntax*/
 int		check_pipes(char **input, t_shell *mini);

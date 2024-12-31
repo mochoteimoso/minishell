@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 17:14:05 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:23:09 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	printer(t_shell *mini)
 		printf("\n");
 		printf("|*************************************************|\n");
 		printf("Struct %d:\n", i);
-		printf("seg: {%s}\n", mini->cmds[i]->seg);
-		printf("command: {%s}\n", mini->cmds[i]->command);
-		printf("command path: {%s}\n", mini->cmds[i]->cmd_path);
+		printf("segment: %s\n", mini->cmds[i]->seg);
+		printf("command: %s\n", mini->cmds[i]->command);
+		printf("command path: %s\n", mini->cmds[i]->cmd_path);
 		if (mini->cmds[i]->args)
 		{
 			int j = 0;
@@ -43,6 +43,8 @@ void	printer(t_shell *mini)
 			printf("Redirection %d - type: %d\n", redir_index, redir->type);
 			printf("Redirection %d - file: %s\n", redir_index, redir->file);
 			printf("Redirection %d - delimiter: %s\n", redir_index, redir->delimiter);
+			printf("Redirection %d - heredoc file: %s\n", redir_index, redir->heredoc_name);
+			printf("Redirection %d - expand or not: %d\n", redir_index, redir->expand);
 			redir = redir->next;
 			redir_index++;
 		}
@@ -83,7 +85,8 @@ static int	init_shell(t_shell *mini, char **envp)
 	return (0);
 }
 
-/*static int user_prompt(t_shell *mini)
+/*
+static int user_prompt(t_shell *mini, int status)
 {
 	char	*input;
 
@@ -103,18 +106,16 @@ static int	init_shell(t_shell *mini, char **envp)
 			add_history(input);
 			if (parse_and_validate_input(&input, mini))
 			{
-				if (input)
-					free(input);
+				free(input);
 				continue ;
 			}
 			//printer(mini);
 			execute_pipeline(mini);
-			//if (execute_pipeline(mini))
-			//	ft_putendl_fd("execution failed", 2);
 			free(input);
 		}
 	}
-	return (0);
+	status = mini->exit_stat;
+	return (status);
 } */
 
 // Edited for the tester
@@ -156,7 +157,7 @@ static int	user_prompt(t_shell *mini, int status)
 				free(input);
 				continue ;
 			}
-			// printer(mini);
+			//printer(mini);
 			execute_pipeline(mini);
 			free(input);
 		}

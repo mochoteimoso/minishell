@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:55:47 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 12:03:40 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:14:35 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:32:00 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 10:30:29 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:10:35 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,10 @@ int	check_special_cases(t_cmd *cmd)
 	return (0);
 }
 
-
 int	check_for_directory(t_cmd *cmd)
 {
 	struct stat path_stat;
-
+	
 	if (stat(cmd->command, &path_stat) == -1)
 	{
 		ft_putstr_fd(cmd->command, 2);

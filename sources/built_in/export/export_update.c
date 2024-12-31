@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_update.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:49:25 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 15:56:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:07:45 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

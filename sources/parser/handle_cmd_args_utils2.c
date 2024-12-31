@@ -3,60 +3,96 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmd_args_utils2.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/21 14:49:34 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/28 15:28:43 by nzharkev         ###   ########.fr       */
+/*   Created: 2024/12/02 09:18:09 by nzharkev          #+#    #+#             */
+/*   Updated: 2024/12/31 11:16:26 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	count_args(t_cmd *cmd, int i);
-int	count_if_redirection(t_cmd *cmd, int i);
-int	only_redirect(char *str, int i);
-int	init_args_array(t_cmd *cmd, int i);
-
-static int  skip_quoted_segment(const char *seg, int i)
+int	handle_question(t_shell *mini, char *str, char **expanded, t_expand *arg)
 {
-	char quote;
-
-	quote = seg[i];
-	i++;
-	while (seg[i] && seg[i] != quote)
-		i++;
-	if (seg[i] == quote)
-		i++;
-	return (i);
+	int	cont;
+	arg->start = arg->i;
+	cont = arg->start;
+	if (str[arg->i] == '$')
+		arg->i = oh_its_a_dollar(mini, str, expanded, arg);
+	arg->i = cont + 2;
+	return (arg->i);
 }
 
-int count_args(t_cmd *cmd, int i)
+int	new_result(t_expand *arg, char *temp)
 {
-	int args_count;
+	char	*new_res;
 
-	args_count = 0;
-	while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
-		i++;
-	while (cmd->seg[i])
+	new_res = ft_strjoin(arg->value, temp);
+	if (!new_res)
+	{
+		free(temp);
+		return (-1);
+	}
+	free(arg->value);
+	free(temp);
+	arg->value = new_res;
+	return (0);
+}
+
+int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
+{
+	int		s_exp;
+	char	*temp;
+	char	*new_res;
+
+	s_exp = arg->i;
+	temp = ft_strdup("");
+	if (!temp)
+		return (-1);
+	arg->start = arg->i;
+	arg->i = oh_its_a_dollar(mini, str, &temp, arg);
+	if (arg->i == -1)
+	{
+		free(temp);
+		return (-1);
+	}
+	new_res = ft_strjoin(arg->value, temp);
+	if (!new_res)
+	{
+		free(temp);
+		return (-1);
+	}
+	free(arg->value);
+	free(temp);
+	arg->value = new_res;
+	return (0);
+}
+
+void	what_quote(char *str, t_expand *arg)
+{
+	if ((arg->sgl == 1 && str[arg->i] == '\'') || (arg->dbl == 1
+		&& str[arg->i] == '"'))
 	{
 		if (is_redirection(cmd, i))
 			i = count_if_redirection(cmd, ++i);
 		else
 		{
-			args_count++;
-			while (cmd->seg[i] && (!ft_isspace(cmd->seg[i])
-				|| check_quotes(cmd->seg, i)) && !is_redirection(cmd, i))
-			 {
-				if (cmd->seg[i] == '\'' || cmd->seg[i] == '"')
-					i = skip_quoted_segment(cmd->seg, i);
-				else
-					i++;
-			}
+			arg->i++;
+			return ;
 		}
-		while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
-			i++;
 	}
-	return (args_count);
+	if (str[arg->i] == '\'' && arg->sgl == 0)
+	{
+		arg->sgl = 1;
+		arg->i++;
+		return ;
+	}
+	if (str[arg->i] == '"' && arg->dbl == 0)
+	{
+		arg->dbl = 1;
+		arg->i++;
+		return ;
+	}
 }
 
 int	count_if_redirection(t_cmd *cmd, int i)

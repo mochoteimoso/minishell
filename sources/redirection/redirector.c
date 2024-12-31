@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirector.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:10:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/27 11:31:32 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:22:34 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

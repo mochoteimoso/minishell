@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 15:32:59 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:12:19 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,15 @@ int	execute_pipeline(t_shell *mini)
 	if (!mini->pids)
 	{
 		clean_cmds(mini->cmds);
-		return (mini->exit_stat == 1);
+		return (mini->exit_stat = 1);
 	}
 	if (pipe_and_fork(mini))
 	{
 		cleaner_for_failure(mini);
-		return (1);
+		return (mini->exit_stat);
 	}
 	wait_children(mini);
+	unlink_all_heredocs(mini);
 	cleaner_for_success(mini);
 	return (mini->exit_stat);
 }
