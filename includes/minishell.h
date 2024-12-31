@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 10:52:15 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:03:42 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void	initialize_command_struct(t_cmd *cmd);
 int		fork_and_execute(t_shell *mini, t_cmd *cmd, int i);
 void	close_unused_fds(t_shell *mini, int i);
 
-	/*child_process.c*/
+	/*child_process_utils.c*/
 int		dup_input(t_shell *mini, t_cmd *cmd, int i);
 int		dup_output(t_shell *mini, t_cmd *cmd, int count, int i);
 int		dup2_and_close(int old_fd, int new_fd);
@@ -249,19 +249,18 @@ void	just_a_quest(char *str, char *name, int *indx, t_expand *arg);
 
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
-int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_args_utils.c*/
-int		arg_in_quotes(char *str, int i, t_expand *arg);
-int		arg_no_quotes(t_cmd *cmd, t_expand *arg, int i);
-int		append_to_array(t_cmd *cmd, char *arg, int *index);
 int		skip_whitespace(char *str, int i);
+int		arg_no_quotes(t_cmd *cmd, t_expand *arg, int i);
+int		arg_in_quotes(char *str, int i, t_expand *arg);
+int		append_to_array(t_cmd *cmd, char *arg, int *index);
 
 	/*handle_cmd_args_utils2.c*/
+int		count_args(t_cmd *cmd, int i);
+int		count_if_redirection(t_cmd *cmd, int i);
 int		only_redirect(char *str, int i);
 int		init_args_array(t_cmd *cmd, int i);
-int		count_if_redirection(t_cmd *cmd, int i);
-int		count_args(t_cmd *cmd, int i);
 
 	/*handle_cmd_name.c*/
 int		handle_cmd_name(t_cmd *cmd, int i);
@@ -295,13 +294,15 @@ int		cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found);
 
 	/*parser_utils.c*/
 int		no_args(t_cmd *cmd, int i);
-int		add_char(char *str, t_expand *arg);
-char	*ft_strjoin_char(char *str, char c);
 bool	is_empty_command(t_cmd *cmd, int i);
+int		add_char(char *str, t_expand *arg);
 
 	/*split_inputs.c*/
 int		split_input_by_pipes(char *input, t_shell *mini);
 char	*trim_whitespace(char *seg);
+
+	/*find_cmd_path.c*/
+int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 
 /*redirection*/
 	/*get_filename.c*/
@@ -352,8 +353,8 @@ char	*handle_trailing_pipe(char *input);
 	/*cleaners.c*/
 void	mini_cleaner(t_shell *mini);
 void	clean_cmds(t_cmd **cmds);
-void	cleaner_for_failure(t_shell *mini);
 void	cleaner_for_success(t_shell *mini);
+void	cleaner_for_failure(t_shell *mini);
 
 	/*exit_handler.c*/
 void	exit_for_failure(t_shell *mini, int i, int exit_status);

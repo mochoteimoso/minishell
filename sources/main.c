@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 15:04:17 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:23:09 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,6 @@ int	main(int argc, char **argv, char **envp)
 	{
 		printf("Minishell doesn't take arguments\n");
 		return (1);
-	}
+	};
 	return (activate_shell(status, envp));
 }

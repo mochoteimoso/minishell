@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:18:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 17:19:17 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:21:45 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	error_and_update(t_cmd *cmd, char *file, char *error, int ex);
 
 // Tries to open input file and prints correct error in case of failure
 
-int	open_input_file(t_cmd *cmd, char *input_file)
+int	open_input_file(t_cmd *cmd, char *file)
 {
 	int	fd_in;
 
-	fd_in = open(input_file, O_RDONLY);
+	fd_in = open(file, O_RDONLY);
 	if (fd_in == -1)
 	{
-		if (access(input_file, F_OK) != 0)
+		if (access(file, F_OK) != 0)
 		{
 			error_and_update(cmd, input_file, "No such file or directory", 1);
 			return (-1);
@@ -71,7 +71,7 @@ int	open_output_file(t_cmd *cmd, char *output_file)
 
 // Tries to open output append file and prints correct error in case of failure
 
-int	open_append_file(t_cmd *cmd, char *output_file)
+int	open_append_file(t_cmd *cmd, char *file)
 {
 	int	fd_out;
 

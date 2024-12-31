@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:48:43 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/27 15:25:01 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:23:42 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	sigint_handler(int sig);
 void	sig_handler2(int sig);
 void	sig_handler_heredoc(int signum);
-
 /*
  * sigint_handler - Signal handler for SIGINT (Ctrl-C).
  * Clears the current line, moves to a new line, and redisplays the prompt

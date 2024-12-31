@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 11:48:31 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:24:56 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	validate_input_syntax(char **input, t_shell *mini);
 int	check_quotes(char *input, int limit);
-int	check_non_whitespace(char *str);
+int	is_this_empty(char *input);
 
 /* Checks the syntax of the input string
 for unmatched quotes and incorrectly placed pipes and redirection symbols*/

@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 15:39:23 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:24:05 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int	check_trailing_pipe(char **input)
 	char	*updated_input;
 
 	i = ft_strlen(*input) - 1;
-	while (i >= 0 && (*input)[i] == ' ')
+	while (i >= 0 && ft_isspace((*input)[i]))
 		i--;
 	if (i >= 0 && (*input)[i] == '|' && !check_quotes(*input, i))
 	{

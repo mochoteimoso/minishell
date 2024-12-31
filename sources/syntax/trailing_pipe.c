@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:32:24 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 15:39:50 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:25:44 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*handle_trailing_pipe(char *input)
 	signal(SIGINT, sigint_handler);
 	while (1)
 	{
+		additional_input = readline(">");
 		if (!additional_input)
 		{
 			free(input);

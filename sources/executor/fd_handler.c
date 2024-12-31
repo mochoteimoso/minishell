@@ -6,11 +6,14 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:18:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/04 16:01:16 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:13:47 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	save_fds(t_shell *mini);
+int	reset_fds(t_shell *mini);
 
 // Saves original STDIN and STDOUT before possible duplication
 
