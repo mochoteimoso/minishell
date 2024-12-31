@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 15:50:14 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:22:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	built_export(t_shell *mini, t_cmd *cmd)
 	{
 		while (i < cmd->a_num)
 		{
-			if (cmd->args[i][0] == '-')
+			if (cmd->args[i][0] && cmd->args[i][0] == '-')
 			{
 				ft_putendl_fd("Invalid option", 2);
 				return (2);

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/20 11:03:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:26:22 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int			check_pipes(char **input, t_shell *mini);
 static int	check_consecutive_pipes(char *input, t_shell *mini);
 static int	check_pipe_error(char *input, int i, t_shell *mini);
-static int	check_trailing_pipe(char **input, t_shell *mini);
+static int	check_trailing_pipe(char **input);
 
 /* Checks syntax for pipes, i.e. that it is not a the start or that
 there are no consecutive pipes. Also handles a trailing pipe */
@@ -35,7 +35,7 @@ int	check_pipes(char **input, t_shell *mini)
 	}
 	if (check_consecutive_pipes(*input, mini))
 		return (1);
-	if (check_trailing_pipe(input, mini))
+	if (check_trailing_pipe(input))
 		return (1);
 	return (0);
 }
@@ -83,21 +83,19 @@ static int	check_pipe_error(char *input, int i, t_shell *mini)
 
 // Checks for trailing pipe
 
-static int	check_trailing_pipe(char **input, t_shell *mini)
+static int	check_trailing_pipe(char **input)
 {
 	int		i;
 	char	*updated_input;
 
 	i = ft_strlen(*input) - 1;
-	while (i >= 0 && (*input)[i] == ' ')
+	while (i >= 0 && ft_isspace((*input)[i]))
 		i--;
 	if (i >= 0 && (*input)[i] == '|' && !check_quotes(*input, i))
 	{
 		updated_input = handle_trailing_pipe(*input);
 		if (!updated_input)
 		{
-			ft_putendl_fd("syntax error: unexpected end of input", 2);
-			mini->exit_stat = 2;
 			*input = NULL;
 			return (1);
 		}
@@ -105,36 +103,3 @@ static int	check_trailing_pipe(char **input, t_shell *mini)
 	}
 	return (0);
 }
-
-/*static char	*handle_trailing_pipe(char *input)
-{
-	char	*additional_input;
-	char	*updated_input;
-
-	additional_input = NULL;
-	updated_input = NULL;
-	while (1)
-	{
-		additional_input = readline(">");
-		if (!additional_input)
-		{
-			perror("readline error");
-			free(input);
-			return (NULL);
-		}
-		if (check_non_whitespace(additional_input))
-		{
-			updated_input = ft_strjoin(input, additional_input);
-			free(additional_input);
-			if (!updated_input)
-			{
-				perror("malloc");
-				free(input);
-				return (NULL);
-			}
-			free(input);
-			return (updated_input);
-		}
-		free(additional_input);
-	}
-} */

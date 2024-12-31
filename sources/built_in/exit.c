@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 16:20:53 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:11:45 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 		ec = mini->exit_stat;
 	mini_cleaner(mini);
 	free(mini);
+	rl_clear_history();
 	exit(ec);
 }
 
@@ -50,6 +51,7 @@ static void	not_all_num(t_shell *mini, t_cmd *cmd)
 	ft_putstr_fd(": numeric argument required\n", 2);
 	mini_cleaner(mini);
 	free(mini);
+	rl_clear_history();
 	exit(2);
 }
 

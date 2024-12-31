@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 15:34:12 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:14:05 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,17 +83,6 @@ static int	init_shell(t_shell *mini, char **envp)
 	return (0);
 }
 
-static int	is_this_empty(char *input)
-{
-	while (*input)
-	{
-		if (!ft_isspace(*input))
-			return (0);
-		input++;
-	}
-	return (1);
-}
-
 /*static int user_prompt(t_shell *mini)
 {
 	char	*input;
@@ -130,15 +119,13 @@ static int	is_this_empty(char *input)
 
 // Edited for the tester
 
-static int user_prompt(t_shell *mini, int status)
+static int	user_prompt(t_shell *mini, int status)
 {
 	char	*input;
 	int		i;
-	int		flg;
 
 	while (1)
 	{
-		flg = 0;
 		i = 0;
 		if (isatty(fileno(stdin)))
 			init_sig();
@@ -146,20 +133,20 @@ static int user_prompt(t_shell *mini, int status)
 		{
 			input = readline("minishell> ");
 			if (input == NULL)
-				break;
+				break ;
 		}
 		else
 		{
 			char *line = get_next_line(fileno(stdin));
 			if (line == NULL)
-				break;
+				break ;
 			input = ft_strtrim(line, "\n");
 			free(line);
 		}
 		if (is_this_empty(input))
 		{
 			free(input);
-			continue;
+			continue ;
 		}
 		if (input && *input)
 		{
@@ -167,23 +154,10 @@ static int user_prompt(t_shell *mini, int status)
 			if (parse_and_validate_input(&input, mini))
 			{
 				free(input);
-				continue;
+				continue ;
 			}
-			//mini->exit_stat = 0;
 			// printer(mini);
-			while (mini->cmds[i])
-			{
-				if (!mini->cmds[i]->command)
-				{
-					// mini->exit_stat = 1;
-					clean_cmds(mini->cmds);
-					flg = 1;
-					break ;
-				}
-				i++;
-			}
-			if (!flg)
-				execute_pipeline(mini);
+			execute_pipeline(mini);
 			free(input);
 		}
 	}
@@ -208,6 +182,8 @@ static int	activate_shell(int status, char **envp)
 		return (status);
 	}
 	status = user_prompt(mini, status);
+	clean_env(mini->env, mini->pending);
+	free(mini);
 	return (status);
 }
 
@@ -221,6 +197,6 @@ int	main(int argc, char **argv, char **envp)
 	{
 		printf("Minishell doesn't take arguments\n");
 		return (1);
-	}
+	};
 	return (activate_shell(status, envp));
 }

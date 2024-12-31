@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/21 19:48:03 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/28 14:08:30 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,8 @@ bool	is_redirection(t_cmd *cmd, int i)
 // to the redir linked list
 int	handle_redirect_in(t_cmd *cmd, int i)
 {
-	char	*filename;
 	bool	in_quotes;
-	int		temp_fd;
+	char	*filename;
 
 	filename = NULL;
 	in_quotes = false;
@@ -44,8 +43,6 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_IN;
-	temp_fd = open_input_file(cmd, cmd->redir_tail->file);
-	close(temp_fd);
 	return (i);
 }
 
@@ -55,22 +52,19 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
-	int		temp_fd;
 
-	in_quotes = false;
 	filename = NULL;
+	in_quotes = false;
 	i++;
 	i = parse_filename(cmd, i, &filename);
 	if (i == -1 || !filename)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = REDIRECT_OUT;
-	temp_fd = open_output_file(cmd, cmd->redir_tail->file);
-	close(temp_fd);
 	return (i);
 }
 
-// Handles heredoc, finds the delimiter and copies data to the redir linked list
+/*Handles heredoc, finds the delimiter and copies data to the redir linked list*/
 int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 {
 	char	*delim;
@@ -97,7 +91,6 @@ int	handle_append(t_cmd *cmd, int i)
 {
 	bool	in_quotes;
 	char	*filename;
-	int		temp_fd;
 
 	in_quotes = false;
 	filename = NULL;
@@ -107,9 +100,5 @@ int	handle_append(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->file = filename;
 	cmd->redir_tail->type = APPEND;
-	temp_fd = open_append_file(cmd, cmd->redir_tail->file);
-	if (temp_fd == -2)
-		return (-1);
-	close(temp_fd);
 	return (i);
 }

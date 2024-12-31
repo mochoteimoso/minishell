@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 15:47:39 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:32:59 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static int	allocate_pipes(t_shell *mini);
 
 int	execute_pipeline(t_shell *mini)
 {
-	if (mini->cmd_count == 1 && is_this_built(mini->cmds[0]->command))
+	if (mini->cmd_count == 1 && mini->cmds[0]->command
+		&& is_this_built(mini->cmds[0]->command))
 	{
 		if (handle_single_builtin_cmd(mini))
 			return (mini->exit_stat);
@@ -35,8 +36,7 @@ int	execute_pipeline(t_shell *mini)
 	if (!mini->pids)
 	{
 		clean_cmds(mini->cmds);
-		mini->exit_stat = 1;
-		return (mini->exit_stat);
+		return (mini->exit_stat == 1);
 	}
 	if (pipe_and_fork(mini))
 	{
@@ -54,7 +54,10 @@ int	execute_pipeline(t_shell *mini)
 static int	handle_single_builtin_cmd(t_shell *mini)
 {
 	if (resolve_fd(mini->cmds[0]) || save_fds(mini))
+	{
+		mini->exit_stat = mini->cmds[0]->cmd_exit;
 		return (1);
+	}
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
 	{
 		if (dup2_and_close_in_main(mini, mini->cmds[0]->fd_in, STDIN_FILENO))

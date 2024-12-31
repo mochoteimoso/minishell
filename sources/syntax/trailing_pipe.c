@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:32:24 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 15:47:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/28 13:46:02 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static char	*join_and_free(char *input, char *additional_input);
 
 /* Handles trailing pipe by getting additional input from user
 and joining that to the original input string */
+
 char	*handle_trailing_pipe(char *input)
 {
 	char	*additional_input;
@@ -27,11 +28,10 @@ char	*handle_trailing_pipe(char *input)
 		additional_input = readline(">");
 		if (!additional_input)
 		{
-			perror("readline error");
 			free(input);
 			return (NULL);
 		}
-		if (check_non_whitespace(additional_input))
+		if (!is_this_empty(additional_input))
 			return (join_and_free(input, additional_input));
 		free(additional_input);
 	}
@@ -45,7 +45,6 @@ static char	*join_and_free(char *input, char *additional_input)
 	free(additional_input);
 	if (!updated_input)
 	{
-		perror("malloc");
 		free(input);
 		return (NULL);
 	}

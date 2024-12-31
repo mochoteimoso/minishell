@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 14:49:34 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 14:45:12 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/28 15:28:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,22 @@ int	count_if_redirection(t_cmd *cmd, int i);
 int	only_redirect(char *str, int i);
 int	init_args_array(t_cmd *cmd, int i);
 
-int	count_args(t_cmd *cmd, int i)
+static int  skip_quoted_segment(const char *seg, int i)
 {
-	int	args_count;
+	char quote;
+
+	quote = seg[i];
+	i++;
+	while (seg[i] && seg[i] != quote)
+		i++;
+	if (seg[i] == quote)
+		i++;
+	return (i);
+}
+
+int count_args(t_cmd *cmd, int i)
+{
+	int args_count;
 
 	args_count = 0;
 	while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
@@ -27,16 +40,18 @@ int	count_args(t_cmd *cmd, int i)
 	while (cmd->seg[i])
 	{
 		if (is_redirection(cmd, i))
-		{
-			i++;
-			i = count_if_redirection(cmd, i);
-		}
+			i = count_if_redirection(cmd, ++i);
 		else
 		{
 			args_count++;
-			while (cmd->seg[i] && !ft_isspace(cmd->seg[i])
-				&& !is_redirection(cmd, i))
-				i++;
+			while (cmd->seg[i] && (!ft_isspace(cmd->seg[i])
+				|| check_quotes(cmd->seg, i)) && !is_redirection(cmd, i))
+			 {
+				if (cmd->seg[i] == '\'' || cmd->seg[i] == '"')
+					i = skip_quoted_segment(cmd->seg, i);
+				else
+					i++;
+			}
 		}
 		while (cmd->seg[i] && ft_isspace(cmd->seg[i]))
 			i++;
@@ -85,3 +100,5 @@ int	init_args_array(t_cmd *cmd, int i)
 	}
 	return (0);
 }
+
+

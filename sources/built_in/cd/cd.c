@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/26 16:03:14 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:45:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ as an argument.*/
 int	built_cd(t_shell *mini, t_cmd *cmd)
 {
 	char	*cwd;
+	t_env	*pwd;
 
 	if (ft_array_len(cmd->args) > 2)
 	{
@@ -30,13 +31,17 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 		return (1);
 	}
 	cwd = getcwd(NULL, 0);
+	pwd = NULL;
 	if (!cwd)
 	{
-		error(mini, "Malloc fail");
-		return (1);
+		if (no_cwd(mini, pwd, &cwd))
+			return (1);
 	}
 	if (cd_choices(mini, cmd, cwd))
+	{
+		free(cwd);
 		return (1);
+	}
 	return (0);
 }
 
@@ -48,7 +53,7 @@ static int	cd_choices(t_shell *mini, t_cmd *cmd, char *cwd)
 			return (1);
 		return (0);
 	}
-	else if (cmd->args[1][0] == '-')
+	else if (cmd->args[1][0] == '-' && cmd->args[1][1] == '\0')
 	{
 		if (old_pwd(mini, cmd))
 			return (0);
@@ -106,27 +111,24 @@ static int	to_path(t_shell *mini, char *path)
 {
 	char	*cwd;
 	char	*oldpwd;
-	t_env	*env;
+	t_env	*pwd;
 
-	env = mini->env;
-	oldpwd = getcwd(NULL, 0);
-	if (!oldpwd)
-		return (1);
-	if (chdir(path))
-	{
-		ft_putendl_fd("No such file or directory", 2);
-		mini->exit_stat = 1;
-		free(oldpwd);
-		return (1);
-	}
 	cwd = getcwd(NULL, 0);
-	if (update_pwd(env, cwd, &oldpwd, 0))
+	oldpwd = NULL;
+	pwd = find_pwd(mini->env, "PWD");
+	if (cwd)
+		oldpwd = ft_strdup(cwd);
+	else
 	{
-		free(cwd);
-		free(oldpwd);
-		return (1);
+		if (pwd)
+			oldpwd = ft_strdup(pwd->value);
+		else
+			oldpwd = NULL;
 	}
 	free(cwd);
-	free(oldpwd);
+	if (!oldpwd)
+		return (ft_putendl_fd("cd: failed to get OLDPWD", 2), 1);
+	if (handle_path(mini, oldpwd, path))
+		return (1);
 	return (0);
 }

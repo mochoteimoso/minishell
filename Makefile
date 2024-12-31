@@ -5,6 +5,7 @@ SRC_DIR = sources/
 SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)built_in/cd/cd.c\
 	$(SRC_DIR)built_in/cd/cd_utils.c\
+	$(SRC_DIR)built_in/cd/cd_utils2.c\
 	$(SRC_DIR)built_in/echo.c\
 	$(SRC_DIR)built_in/exit.c\
 	$(SRC_DIR)built_in/export/export.c\
@@ -31,6 +32,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/expand_utils.c\
 	$(SRC_DIR)parser/expand_utils2.c\
 	$(SRC_DIR)parser/expand_utils3.c\
+	$(SRC_DIR)parser/expand_utils4.c\
 	$(SRC_DIR)parser/handle_cmd_args.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils.c\
 	$(SRC_DIR)parser/handle_cmd_args_utils2.c\

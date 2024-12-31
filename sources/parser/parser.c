@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 14:38:02 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/28 14:07:28 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 			i = handle_redirections(mini, cmd, i);
 			if (i == -1)
 				return (-1);
+			i = skip_whitespace(cmd->seg, i);
 		}
 		else if (*cmd_found == 0)
 		{

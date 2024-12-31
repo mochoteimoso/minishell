@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/23 16:05:42 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:29:55 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,11 @@ static int	check_abs_path(t_cmd *cmd)
 {
 	if (check_special_cases(cmd))
 		return (-1);
-	if (cmd->command[0] == '/'
-		|| (cmd->command[0] == '.' && cmd->command[1] == '/'))
+	if (cmd->command[0] == '/' || (cmd->command[0] == '.'
+		&& cmd->command[1] == '/') || (cmd->command[0] == '.'
+		&& cmd->command[1] == '.' && cmd->command[0] == '/'))
 	{
-		if (check_for_directory(cmd))
+		if (check_for_directory(cmd) != 0)
 			return (-1);
 		if (access(cmd->command, X_OK) == 0)
 		{
@@ -128,7 +129,7 @@ static int	check_abs_path(t_cmd *cmd)
 			return (-1);
 		}
 		ft_putstr_fd(cmd->command, 2);
-		ft_putendl_fd(": No such file or directory", 2);
+		ft_putendl_fd(": Command not found", 2);
 		cmd->cmd_exit = 127;
 		return (-1);
 	}
