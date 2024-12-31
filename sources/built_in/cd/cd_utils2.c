@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 11:14:49 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 18:57:24 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:38:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,21 @@ int	handle_path(t_shell *mini, char *oldpwd, char *path);
 
 int	no_cwd(t_shell *mini, t_env *pwd, char **cwd)
 {
-		pwd = find_pwd(mini->env, "PWD");
-		if (pwd && pwd->value)
+	pwd = find_pwd(mini->env, "PWD");
+	if (pwd && pwd->value)
+	{
+		*cwd = ft_strdup(pwd->value);
+		if (!(*cwd))
 		{
-			*cwd = ft_strdup(pwd->value);
-			if (!(*cwd))
-			{
-				error(mini, "cd: malloc failed");
-				return (1);
-			}
-		}
-		else
-		{
-			error(mini, "getcwd: cannot access parent directories: No such file or directory");
+			error(mini, "cd: malloc failed");
 			return (1);
 		}
+	}
+	else
+	{
+		error(mini, "getcwd: cannot access parent directories: No such file or directory");
+		return (1);
+	}
 	return (0);
 }
 
