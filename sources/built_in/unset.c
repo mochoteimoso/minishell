@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:51:52 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:08:50 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:03:45 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,22 @@ int			built_unset(t_shell *mini, t_cmd *cmd);
 static int	unset_env(t_shell *mini, char *str);
 static int	unset_pending(t_shell *mini, char *str);
 
+/**
+ * built_unset - Unsets environment variables or pending variables.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure containing arguments.
+ *
+ * Iterates through the command arguments, unsetting the specified environment
+ * or pending variables. Checks for invalid options
+ * (arguments starting with `-`).
+ * Calls `unset_env` and `unset_pending` to remove the variables.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 2 if an invalid option is detected.
+ * - 1 if a variable is not found or another error occurs.
+ */
 int	built_unset(t_shell *mini, t_cmd *cmd)
 {
 	int	i;
@@ -42,6 +58,19 @@ int	built_unset(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
+/**
+ * unset_env - Removes an environment variable from the shell's environment list.
+ *
+ * @mini: Pointer to the shell structure containing the environment list.
+ * @str: Name of the variable to unset.
+ *
+ * Traverses the linked list of environment variables to find and remove
+ * the specified variable. Frees the memory associated with the variable node.
+ *
+ * Returns:
+ * - 0 if the variable is successfully removed or not found.
+ * - Non-zero values are not currently used.
+ */
 static int	unset_env(t_shell *mini, char *str)
 {
 	t_env	*cur;
@@ -68,6 +97,18 @@ static int	unset_env(t_shell *mini, char *str)
 	return (0);
 }
 
+/**
+ * unset_pending - Removes a variable from the pending environment array.
+ *
+ * @mini: Pointer to the shell structure containing the pending variables array.
+ * @str: Name of the variable to unset.
+ *
+ * Searches for the specified variable in the `mini->pending` array.
+ * If found, removes the variable by shifting subsequent array elements
+ * to close the gap and sets the last pointer to `NULL`.
+ *
+ * Returns: Always 0.
+ */
 static int	unset_pending(t_shell *mini, char *str)
 {
 	int	i;

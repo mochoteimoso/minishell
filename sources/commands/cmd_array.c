@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_array.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:09:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:09:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:42:45 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,17 @@ int			count_pipes(char *line);
 int			prepare_command_structs(t_shell *mini, char *input);
 void		initialize_command_struct(t_cmd *cmd);
 
-// Counts the number of pipes in input string
-
+/**
+ * count_pipes - Counts the number of unquoted pipe characters in a line.
+ *
+ * @line: The input line to process.
+ *
+ * Iterates through the input line, counting the number of `|` characters
+ * that are not enclosed in quotes. This is used to determine the number
+ * of commands in a pipeline.
+ *
+ * Returns: The number of unquoted pipe characters found in the line.
+ */
 int	count_pipes(char *line)
 {
 	int	i;
@@ -34,8 +43,18 @@ int	count_pipes(char *line)
 	return (pipe_count);
 }
 
-// Sets up an array of structs and allocates memory for individual structs
-
+/**
+ * cmd_struct_while - Allocates and initializes command structures.
+ *
+ * @mini: Pointer to the shell structure containing the command array.
+ * @cmd_count: The total number of commands to allocate.
+ *
+ * Iterates through the `mini->cmds` array, allocating memory for each
+ * command structure and initializing it using `initialize_command_struct`.
+ * If allocation fails, frees previously allocated memory and returns 1.
+ *
+ * Returns: 0 on success, or 1 on allocation failure.
+ */
 static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 {
 	int	i;
@@ -57,8 +76,18 @@ static	int	cmd_struct_while(t_shell *mini, int cmd_count)
 	return (0);
 }
 
-/* Allocates memory for an array of structs */
-
+/**
+ * prepare_command_structs - Prepares the array of command structures.
+ *
+ * @mini: Pointer to the shell structure containing the command details.
+ * @input: The input line to process.
+ *
+ * Calculates the number of commands based on the pipe count in the input
+ * line and allocates memory for the command array. Calls `cmd_struct_while`
+ * to allocate and initialize individual command structures.
+ *
+ * Returns: 0 on success, or 1 if memory allocation fails.
+ */
 int	prepare_command_structs(t_shell *mini, char *input)
 {
 	int	command_count;
@@ -76,8 +105,15 @@ int	prepare_command_structs(t_shell *mini, char *input)
 	return (0);
 }
 
-/* Initializes individual structs in the array */
-
+/**
+ * initialize_command_struct - Initializes the fields of a command structure.
+ *
+ * @cmd: Pointer to the command structure to initialize.
+ *
+ * Sets all fields of the command structure to their initial values:
+ * `NULL` for pointers, `0` for integers, and `-1` for file descriptors.
+ * This ensures a clean state before populating the structure.
+ */
 void	initialize_command_struct(t_cmd *cmd)
 {
 	cmd->command = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:17:17 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:20:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,22 @@ int			handle_redirections(t_shell *mini, t_cmd *cmd, int i);
 static int	single_redirect(t_cmd *cmd, int i);
 static int	double_redirect(t_shell *mini, t_cmd *cmd, int i);
 
-/*Loops through seg string to find redirection symbols
-creates a linked list if redirection symbol(s) are found
-each redirect will be its own node and will contain
-information about redirection type,
-filename, delimiter and pointer to next node*/
-
+/**
+ * handle_redirections - Parses and processes redirections
+ * 						 in the command segment.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ * @i: Index in the command segment to start processing.
+ *
+ * Iterates through the command segment,
+ * handling both single (`<`, `>`) and double (`<<`, `>>`) redirections.
+ * Depending on the type of redirection,
+ * it delegates processing to the appropriate
+ * functions. Handles updating the redirection linked list
+ * and ensures no syntax errors occur.
+ * Returns the updated index on success, or -1 on failure.
+ */
 int	handle_redirections(t_shell *mini, t_cmd *cmd, int i)
 {
 	while (i < (int)ft_strlen(cmd->seg) && cmd->seg[i])
@@ -51,6 +61,18 @@ int	handle_redirections(t_shell *mini, t_cmd *cmd, int i)
 	return (i);
 }
 
+/**
+ * single_redirect - Handles single redirections `<` or `>`
+ * 					 in the command segment.
+ *
+ * @cmd: Pointer to the command structure.
+ * @i: Index in the command segment where the single redirection starts.
+ *
+ * Depending on the redirection type, calls either `handle_redirect_in`
+ * for input redirection `<`
+ * or `handle_redirect_out` for output redirection `>`.
+ * Returns the updated index on success, or -1 on failure.
+ */
 static int	single_redirect(t_cmd *cmd, int i)
 {
 	if (cmd->seg[i] == '<')
@@ -68,6 +90,19 @@ static int	single_redirect(t_cmd *cmd, int i)
 	return (i);
 }
 
+/**
+ * double_redirect - Handles double redirections `<<` or `>>`
+ * 					 in the command segment.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ * @i: Index in the command segment where the double redirection starts.
+ *
+ * Depending on the redirection type, calls either `handle_heredoc`
+ * for heredoc redirection `<<`
+ * or `handle_append` for append redirection `>>`.
+ * Returns the updated index on success, or -1 on failure.
+ */
 static int	double_redirect(t_shell *mini, t_cmd *cmd, int i)
 {
 	if (cmd->seg[i] == '<' && cmd->seg[i + 1] == '<')

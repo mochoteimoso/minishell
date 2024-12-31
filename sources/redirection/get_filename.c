@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_filename.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:54:32 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:19:36 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:25:08 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,19 @@
 int	parse_filename(t_cmd *cmd, int i, char **filename);
 int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg);
 
+/**
+ * parse_filename - Parses and extracts a filename from the command segment.
+ *
+ * @cmd: Pointer to the command structure containing the segment to parse.
+ * @i: Current index in the segment where filename parsing starts.
+ * @filename: Pointer to store the extracted filename.
+ *
+ * Uses `filename_in_quotes` to handle quoted or unquoted filenames,
+ * and copies the result into the `filename` parameter.
+ * Handles memory allocation errors and updates
+ * the index `i` to reflect the end of the parsed filename.
+ * Returns the updated index on success, or -1 on failure.
+ */
 int	parse_filename(t_cmd *cmd, int i, char **filename)
 {
 	t_expand	arg;
@@ -34,6 +47,23 @@ int	parse_filename(t_cmd *cmd, int i, char **filename)
 	return (i);
 }
 
+/**
+ * filename_in_quotes - Extracts a filename while
+ * 						respecting quotes in the segment.
+ *
+ * @cmd: Pointer to the command structure, used to track redirection properties.
+ * @str: The segment string being parsed.
+ * @i: Current index in the segment.
+ * @arg: Pointer to the expansion structure for
+ * 		 managing quotes and intermediate data.
+ *
+ * Handles single and double quotes during filename parsing,
+ * updating the `expand` flag in the command's redirection
+ * structure when quoted. Stops parsing on encountering
+ * whitespace or redirection operators outside of quotes. Updates `arg` to store
+ * the extracted filename and its length. Returns the updated index on success,
+ * or -1 on failure.
+ */
 int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg)
 {
 	i = skip_whitespace(str, i);

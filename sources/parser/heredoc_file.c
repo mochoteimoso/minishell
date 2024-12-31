@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:57:16 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:18:32 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:23:24 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@ static int	index_to_char(t_cmd *cmd, t_hd *hd);
 static int	create_name(t_cmd *cmd, t_hd *hd);
 void		write_close_hd(t_shell *mini, char *line, int fd, int end);
 
+/**
+ * generate_hd_file - Generates a unique file name
+ * 					  for the heredoc temporary file.
+ *
+ * @cmd: Pointer to the command structure.
+ *
+ * Combines command and heredoc indices into a unique file name for the heredoc.
+ * Cleans up resources and unlinks any pre-existing file with the same name.
+ * Returns 0 on success or 1 on failure.
+ */
 int	generate_hd_file(t_cmd *cmd)
 {
 	t_hd	hd;
@@ -43,6 +53,15 @@ int	generate_hd_file(t_cmd *cmd)
 	return (0);
 }
 
+/**
+ * index_to_char - Converts command and heredoc indices into strings.
+ *
+ * @cmd: Pointer to the command structure.
+ * @hd: Pointer to the heredoc data structure containing string buffers.
+ *
+ * Allocates memory and converts indices to strings for further use in file name
+ * generation. Returns 0 on success or 1 on failure.
+ */
 static int	index_to_char(t_cmd *cmd, t_hd *hd)
 {
 	hd->cmd_str = ft_itoa(cmd->cmd_index);
@@ -57,6 +76,16 @@ static int	index_to_char(t_cmd *cmd, t_hd *hd)
 	return (0);
 }
 
+/**
+ * create_name - Constructs the heredoc file name using indices and constants.
+ *
+ * @cmd: Pointer to the command structure.
+ * @hd: Pointer to the heredoc data structure containing string buffers.
+ *
+ * Combines strings and constants to create the unique heredoc file name.
+ * Frees intermediate strings during the process.
+ * Returns 0 on success or 1 on failure.
+ */
 static int	create_name(t_cmd *cmd, t_hd *hd)
 {
 	hd->base = ft_strjoin(TMP_S, hd->cmd_str);
@@ -78,6 +107,19 @@ static int	create_name(t_cmd *cmd, t_hd *hd)
 	return (0);
 }
 
+/**
+ * write_close_hd - Writes a line to the heredoc file
+ * 					or closes the file descriptor.
+ *
+ * @mini: Pointer to the shell structure.
+ * @line: Line to write to the heredoc file.
+ * @fd: File descriptor of the heredoc file.
+ * @end: Indicates whether to write or close the file.
+ *
+ * If `end` is true, closes the heredoc file and restores STDIN. If false, writes
+ * the line to the file, appending a newline character.
+ * Frees the line after writing.
+ */
 void	write_close_hd(t_shell *mini, char *line, int fd, int end)
 {
 	if (end)

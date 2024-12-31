@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:45:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:24:56 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:39:39 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,18 @@ int	validate_input_syntax(char **input, t_shell *mini);
 int	check_quotes(char *input, int limit);
 int	is_this_empty(char *input);
 
-/* Checks the syntax of the input string
-for unmatched quotes and incorrectly placed pipes and redirection symbols*/
-
+/**
+ * validate_input_syntax - Validates the syntax of the input command string.
+ *
+ * @input: Pointer to the input string.
+ * @mini: Shell structure for managing shell state and exit status.
+ *
+ * Checks the input for unmatched quotes, invalid pipe usage,
+ * and illegal characters such as `;` and `\\`.
+ * Sets the shell's exit status to 2 for syntax errors.
+ *
+ * Return: 1 if syntax is invalid, 0 otherwise.
+ */
 int	validate_input_syntax(char **input, t_shell *mini)
 {
 	int	i;
@@ -48,9 +57,18 @@ int	validate_input_syntax(char **input, t_shell *mini)
 	return (0);
 }
 
-/* Checks if a given index is within quotes or if there are unbalanced
-	quotes in the string*/
-
+/**
+ * check_quotes - Verifies if quotes in the input are properly matched.
+ *
+ * @input: Input string to check.
+ * @limit: Maximum index to check in the string (-1 to check the entire string).
+ *
+ * Tracks the state of single and double quotes
+ * and ensures that they are properly closed by the end of the input.
+ * If `limit` is specified, checks up to the given index.
+ *
+ * Return: 1 if unmatched quotes are found, 0 otherwise.
+ */
 int	check_quotes(char *input, int limit)
 {
 	int	in_single_quote;
@@ -75,8 +93,16 @@ int	check_quotes(char *input, int limit)
 	return (in_single_quote || in_double_quote);
 }
 
-/* Checks whether a string contains non-whitespace characters */
-
+/**
+ * is_this_empty - Checks if the input string contains only whitespace.
+ *
+ * @input: Input string to check.
+ *
+ * Iterates through the input
+ * and ensures it contains no non-whitespace characters.
+ *
+ * Return: 1 if the input is empty or only whitespace, 0 otherwise.
+ */
 int	is_this_empty(char *input)
 {
 	while (*input)

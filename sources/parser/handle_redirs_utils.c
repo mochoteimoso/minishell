@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 15:14:27 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:21:54 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,16 @@ int		handle_redirect_out(t_cmd *cmd, int i);
 int		handle_heredoc(t_shell *mini, t_cmd *cmd, int i);
 int		handle_append(t_cmd *cmd, int i);
 
-// Checks if the input contains a redirection symbol that is not within quotes
+/**
+ * is_redirection - Determines if the current segment character is a redirection.
+ *
+ * @cmd: Pointer to the command structure containing the segment.
+ * @i: Index in the segment to check.
+ *
+ * Returns true if the character at the specified index is
+ * a redirection symbol (`<` or `>`)
+ * and is not within quotes; otherwise, returns false.
+ */
 bool	is_redirection(t_cmd *cmd, int i)
 {
 	if ((cmd->seg[i] == '>' || cmd->seg[i] == '<')
@@ -28,8 +37,17 @@ bool	is_redirection(t_cmd *cmd, int i)
 		return (false);
 }
 
-// Handles < redirection, finds the filename and copies data
-// to the redir linked list
+/**
+ * handle_redirect_in - Handles the `<` redirection in the command segment.
+ *
+ * @cmd: Pointer to the command structure.
+ * @i: Index in the command segment where the redirection starts.
+ *
+ * Parses the filename following the `<` symbol,
+ * assigns it to the `file` field of the
+ * current redirection node, and sets the redirection type to `REDIRECT_IN`.
+ * Returns the updated index on success, or -1 on failure.
+ */
 int	handle_redirect_in(t_cmd *cmd, int i)
 {
 	char	*filename;
@@ -44,8 +62,17 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 	return (i);
 }
 
-// Handles > redirection, finds the filename and copies data
-// to the redir linked list
+/**
+ * handle_redirect_out - Handles the `>` redirection in the command segment.
+ *
+ * @cmd: Pointer to the command structure.
+ * @i: Index in the command segment where the redirection starts.
+ *
+ * Parses the filename following the `>` symbol,
+ * assigns it to the `file` field of the
+ * current redirection node, and sets the redirection type to `REDIRECT_OUT`.
+ * Returns the updated index on success, or -1 on failure.
+ */
 int	handle_redirect_out(t_cmd *cmd, int i)
 {
 	char	*filename;
@@ -60,8 +87,20 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 	return (i);
 }
 
-/* Handles heredoc, finds the delimiter and
- * copies data to the redir linked list */
+/**
+ * handle_heredoc - Handles the `<<` heredoc redirection in the command segment.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ * @i: Index in the command segment where the heredoc starts.
+ *
+ * Parses the delimiter following the `<<` symbol,
+ * assigns it to the `delimiter` field of the
+ * current redirection node, and sets the redirection type to `HEREDOC`.
+ * Handles the heredoc
+ * content by generating a temporary file and writing the heredoc lines to it.
+ * Returns the updated index on success, or -1 on failure.
+ */
 int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 {
 	char	*delim;
@@ -82,8 +121,17 @@ int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 	return (i);
 }
 
-/* Handles append redirection, finds the filename and copies data
-to the redir linked list*/
+/**
+ * handle_append - Handles the `>>` append redirection in the command segment.
+ *
+ * @cmd: Pointer to the command structure.
+ * @i: Index in the command segment where the append redirection starts.
+ *
+ * Parses the filename following the `>>` symbol,
+ * assigns it to the `file` field of the
+ * current redirection node, and sets the redirection type to `APPEND`.
+ * Returns the updated index on success, or -1 on failure.
+ */
 int	handle_append(t_cmd *cmd, int i)
 {
 	char	*filename;

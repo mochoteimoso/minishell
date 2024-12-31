@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:17:22 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 14:07:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:26:28 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@ static int	if_check(t_cmd *cmd, t_expand *arg);
 static int	this_expands(t_shell *mini, t_cmd *cmd, t_expand *arg);
 static int	expand_var(t_shell *mini, char *str, char **expan, t_expand *arg);
 
+/**
+ * s_unquoted - Processes unquoted segments in the command.
+ *
+ * @mini: Pointer to the shell structure for context.
+ * @cmd: Double pointer to the command structure.
+ * @arg: Pointer to the t_expand structure tracking expansion state.
+ * @expan: Pointer to the string accumulating expanded results.
+ *
+ * Handles unquoted segments of a command by processing them for expansions
+ * and appending results to the expanded string. Frees intermediate memory
+ * as needed. Returns the updated index or -1 on failure.
+ */
 int	s_unquoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 {
 	char	*temp;
@@ -37,6 +49,17 @@ int	s_unquoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 	return (arg->i);
 }
 
+/**
+ * no_quotes - Processes a command segment without quotes.
+ *
+ * @mini: Pointer to the shell structure for context.
+ * @cmd: Pointer to the command structure.
+ * @i: Current index in the command segment.
+ * @arg: Pointer to the t_expand structure tracking expansion state.
+ *
+ * Processes the segment for variables, tildes, or other expansions when
+ * no quotes are present. Returns the updated index or -1 on failure.
+ */
 int	no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 {
 	the_arg(arg, i);
@@ -61,6 +84,15 @@ int	no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 	return (arg->i);
 }
 
+/**
+ * if_check - Determines if the current segment requires expansion.
+ *
+ * @cmd: Pointer to the command structure.
+ * @arg: Pointer to the t_expand structure tracking expansion state.
+ *
+ * Checks if the current segment contains a tilde ('~') or a dollar ('$')
+ * that requires expansion. Returns 1 if expansion is needed, 0 otherwise.
+ */
 static int	if_check(t_cmd *cmd, t_expand *arg)
 {
 	if ((cmd->seg[arg->i] == '~' && (cmd->seg[arg->i + 1] == '/'
@@ -74,6 +106,16 @@ static int	if_check(t_cmd *cmd, t_expand *arg)
 		return (0);
 }
 
+/**
+ * this_expands - Handles expansion for the current segment.
+ *
+ * @mini: Pointer to the shell structure for context.
+ * @cmd: Pointer to the command structure.
+ * @arg: Pointer to the t_expand structure tracking expansion state.
+ *
+ * Expands variables or tildes in the current segment. Returns the updated
+ * index after expansion or -1 on failure.
+ */
 static int	this_expands(t_shell *mini, t_cmd *cmd, t_expand *arg)
 {
 	if ((cmd->seg[arg->i] == '~' && (cmd->seg[arg->i + 1] == '/'
@@ -88,6 +130,17 @@ static int	this_expands(t_shell *mini, t_cmd *cmd, t_expand *arg)
 	return (arg->i);
 }
 
+/**
+ * expand_var - Expands a variable or tilde in the command segment.
+ *
+ * @mini: Pointer to the shell structure for context.
+ * @str: Input string containing the segment.
+ * @expan: Pointer to the string accumulating the expanded results.
+ * @arg: Pointer to the t_expand structure tracking expansion state.
+ *
+ * Handles variable ('$') or tilde ('~') expansion in the segment. Updates
+ * the expanded string and returns the updated index or -1 on failure.
+ */
 static int	expand_var(t_shell *mini, char *str, char **expan, t_expand *arg)
 {
 	int	cont;

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 15:01:12 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:01:28 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@
 
 extern int	g_sig;
 
+/**
+ * e_redir_type - Enum representing the types of redirections.
+ *
+ * Members:
+ * - REDIRECT_IN: Input redirection using '<'.
+ * - REDIRECT_OUT: Output redirection using '>'.
+ * - APPEND: Output redirection in append mode using '>>'.
+ * - HEREDOC: Heredoc redirection using '<<'.
+ */
 typedef enum e_redir_type
 {
 	REDIRECT_IN,
@@ -39,6 +48,16 @@ typedef enum e_redir_type
 	HEREDOC
 }	t_redir_type;
 
+/**
+ * s_hd - Structure for heredoc-related metadata.
+ *
+ * Members:
+ * - cmd_str: Command identifier string.
+ * - heredoc_str: Heredoc-specific identifier string.
+ * - base: Base string for heredoc file naming.
+ * - mid: Intermediate string for heredoc file naming.
+ * - full: Full string for the heredoc file path.
+ */
 typedef struct s_hd
 {
 	char	*cmd_str;
@@ -48,6 +67,15 @@ typedef struct s_hd
 	char	*full;
 }	t_hd;
 
+/**
+ * s_vdata - Structure for variable expansion data.
+ *
+ * Members:
+ * - value: The expanded value of the variable.
+ * - expan: Pointer to the current expansion result.
+ * - temp: Temporary buffer for intermediate operations.
+ * - name: Name of the variable being expanded.
+ */
 typedef struct s_vdata
 {
 	char	*value;
@@ -56,6 +84,18 @@ typedef struct s_vdata
 	char	*name;
 }	t_vdata;
 
+/**
+ * s_expand - Structure for tracking the state of variable expansion.
+ *
+ * Members:
+ * - sgl: Single quote state (1 if inside single quotes, 0 otherwise).
+ * - dbl: Double quote state (1 if inside double quotes, 0 otherwise).
+ * - i: Current position in the string being processed.
+ * - name: Name of the variable being expanded.
+ * - value: Value of the expanded variable.
+ * - start: Starting index of the current expansion.
+ * - len: Length of the expanded result.
+ */
 typedef struct s_expand
 {
 	int		sgl;
@@ -67,7 +107,19 @@ typedef struct s_expand
 	int		len;
 }	t_expand;
 
-// linked list for redirects in each command struct
+/**
+ * s_redir - Linked list node representing redirections for a command.
+ *
+ * Members:
+ * - file: The file name for input/output redirection.
+ * - delimiter: The delimiter string for heredocs.
+ * - type: Type of redirection (from `t_redir_type` enum).
+ * - expand: Boolean indicating whether variable expansion is enabled.
+ * - node_ind: Index of the redirection node.
+ * - heredoc_name: Name of the heredoc temporary file.
+ * - heredoc_index: Index of the heredoc in the command.
+ * - next: Pointer to the next redirection node in the list.
+ */
 typedef struct s_redir
 {
 	char			*file;
@@ -80,6 +132,22 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
+/**
+ * s_cmd - Structure representing a parsed command.
+ *
+ * Members:
+ * - seg: The original command segment string.
+ * - command: The name of the command.
+ * - cmd_path: The full path to the command executable.
+ * - cmd_index: Index of the command in the pipeline.
+ * - args: Array of arguments for the command.
+ * - a_num: Number of arguments in the `args` array.
+ * - redir_head: Pointer to the head of the redirection list.
+ * - redir_tail: Pointer to the tail of the redirection list.
+ * - fd_in: File descriptor for input redirection.
+ * - fd_out: File descriptor for output redirection.
+ * - cmd_exit: Exit status of the command after execution.
+ */
 typedef struct s_cmd
 {
 	char	*seg;
@@ -95,6 +163,14 @@ typedef struct s_cmd
 	int		cmd_exit;
 }	t_cmd;
 
+/**
+ * s_env - Linked list node representing an environment variable.
+ *
+ * Members:
+ * - name: The name of the environment variable.
+ * - value: The value of the environment variable.
+ * - next: Pointer to the next environment variable node.
+ */
 typedef struct s_env
 {
 	char			*name;
@@ -103,6 +179,20 @@ typedef struct s_env
 
 }	t_env;
 
+/**
+ * s_shell - Main structure for the shell state.
+ *
+ * Members:
+ * - cmds: Array of command structures for the pipeline.
+ * - env: Linked list of environment variables.
+ * - cmd_count: Number of commands in the pipeline.
+ * - pending: Array of pending environment variable declarations.
+ * - pids: Array of process IDs for forked commands.
+ * - pipes: 2D array of pipes for inter-process communication.
+ * - stdin_saved: File descriptor for the saved standard input.
+ * - stdout_saved: File descriptor for the saved standard output.
+ * - exit_stat: Exit status of the last executed command.
+ */
 typedef struct s_shell
 {
 	t_cmd	**cmds;
@@ -115,8 +205,6 @@ typedef struct s_shell
 	int		stdout_saved;
 	int		exit_stat;
 }	t_shell;
-
-void	printer(t_shell *mini);
 
 /*built_in*/
 	/*cd/cd.c*/
@@ -194,6 +282,7 @@ int		get_cmd_path(t_shell *mini, t_cmd *cmd);
 int		check_special_cases(t_cmd *cmd);
 int		check_for_directory(t_cmd *cmd);
 void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
+int		check_access(t_cmd *cmd);
 
 	/*fd_handlers.c*/
 int		save_fds(t_shell *mini);
@@ -212,6 +301,9 @@ int		dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd);
 void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
 void	unlink_all_heredocs(t_shell *mini);
+
+	/*pipe;ine_utils2.c*/
+int		redirect_fd(int src_fd, int target_fd);
 
 /*parser*/
 	/*expand.c*/

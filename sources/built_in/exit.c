@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:55:24 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:08:45 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:02:42 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,23 @@ int			built_exit(t_shell *mini, t_cmd *cmd);
 static void	not_all_num(t_shell *mini, t_cmd *cmd);
 static int	isonlynum(char *str);
 
+/**
+ * built_exit - Handles the "exit" command for the minishell.
+ *
+ * @mini: Pointer to the shell structure containing state and resources.
+ * @cmd: Pointer to the command structure containing arguments for "exit".
+ *
+ * Prints "exit" and processes the optional numeric
+ * exit code from the first argument.
+ * If the argument is not a valid numeric string,
+ * it prints an error and exits with code 2.
+ * If there are more than one arguments, it prints an error message
+ * and returns 1 without exiting.
+ * Cleans up resources before exiting.
+ *
+ * Returns:
+ * - Does not return; calls `exit` to terminate the program.
+ */
 int	built_exit(t_shell *mini, t_cmd *cmd)
 {
 	int	ec;
@@ -44,6 +61,15 @@ int	built_exit(t_shell *mini, t_cmd *cmd)
 	exit(ec);
 }
 
+/**
+ * not_all_num - Handles invalid numeric arguments for the "exit" command.
+ *
+ * @mini: Pointer to the shell structure containing state and resources.
+ * @cmd: Pointer to the command structure containing the invalid argument.
+ *
+ * Prints an error message indicating that the argument is not a valid number.
+ * Cleans up resources and exits with code 2.
+ */
 static void	not_all_num(t_shell *mini, t_cmd *cmd)
 {
 	ft_putstr_fd("exit: ", 2);
@@ -55,6 +81,17 @@ static void	not_all_num(t_shell *mini, t_cmd *cmd)
 	exit(2);
 }
 
+/**
+ * isonlynum - Checks if a string consists only of numeric characters.
+ *
+ * @str: The string to check.
+ *
+ * Allows an optional '+' or '-' at the beginning, followed by digits only.
+ *
+ * Returns:
+ * - 1 if the string is a valid numeric representation.
+ * - 0 if the string contains non-numeric characters.
+ */
 static int	isonlynum(char *str)
 {
 	int	i;

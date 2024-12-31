@@ -25,6 +25,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)executor/handle_builtins.c\
 	$(SRC_DIR)executor/pipeline.c\
 	$(SRC_DIR)executor/pipeline_utils.c\
+	$(SRC_DIR)executor/pipeline_utils2.c\
 	$(SRC_DIR)parser/expand.c\
 	$(SRC_DIR)parser/expand_quoted.c\
 	$(SRC_DIR)parser/expand_unquoted.c\

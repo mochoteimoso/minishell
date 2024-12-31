@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:16:56 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:15:58 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@ static int	this_is_quote(t_cmd *cmd, t_expand *arg);
 static int	handle_export_redir(t_cmd *cmd, t_expand *arg, int i, int *index);
 static int	export_args(t_cmd *cmd, t_expand *arg, int i);
 
+/**
+ * handle_cmd_args - Parses and processes the command arguments.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ * @i: Starting index in the command segment.
+ *
+ * Allocates memory for the command's arguments and iterates through the command
+ * segment to extract arguments. Handles redirections,
+ * quoted arguments, and whitespace.
+ * Returns the updated index on success or -1 on failure.
+ */
 int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 {
 	int			arg_index;
@@ -47,6 +59,20 @@ int	handle_cmd_args(t_shell *mini, t_cmd *cmd, int i)
 	return (i);
 }
 
+/**
+ * handle_arg - Processes a single argument from the command segment.
+ *
+ * @cmd: Pointer to the command structure.
+ * @i: Current index in the command segment.
+ * @arg: Pointer to the t_expand structure holding the parsed argument.
+ * @arg_index: Pointer to the current argument index in the command's args array.
+ *
+ * Handles arguments enclosed in quotes or unquoted arguments.
+ * For the `export` command,
+ * also processes redirection arguments.
+ * Appends the processed argument to the args array.
+ * Returns the updated index or -1 on failure.
+ */
 static int	handle_arg(t_cmd *cmd, int i, t_expand *arg, int *arg_index)
 {
 	if (ft_strcmp(cmd->command, "export") == 0 && only_redirect(cmd->seg, i))
@@ -73,6 +99,19 @@ static int	handle_arg(t_cmd *cmd, int i, t_expand *arg, int *arg_index)
 	return (i);
 }
 
+/**
+ * handle_export_redir - Handles arguments specific to
+ * 						 `export` command with redirection.
+ *
+ * @cmd: Pointer to the command structure.
+ * @arg: Pointer to the t_expand structure holding the argument being processed.
+ * @i: Current index in the command segment.
+ * @index: Pointer to the current argument index in the command's args array.
+ *
+ * Processes redirection arguments for `export`
+ * and appends them to the args array.
+ * Returns the updated index or -1 on failure.
+ */
 static int	handle_export_redir(t_cmd *cmd, t_expand *arg, int i, int *index)
 {
 	i = export_args(cmd, arg, i);
@@ -87,6 +126,17 @@ static int	handle_export_redir(t_cmd *cmd, t_expand *arg, int i, int *index)
 	return (i);
 }
 
+/**
+ * export_args - Parses an argument for the `export` command.
+ *
+ * @cmd: Pointer to the command structure.
+ * @arg: Pointer to the t_expand structure holding the argument being processed.
+ * @i: Starting index in the command segment.
+ *
+ * Extracts an argument for the `export` command,
+ * handling quoted values and adding
+ * characters to the argument. Returns the updated index or -1 on failure.
+ */
 static int	export_args(t_cmd *cmd, t_expand *arg, int i)
 {
 	the_arg(arg, i);
@@ -104,6 +154,15 @@ static int	export_args(t_cmd *cmd, t_expand *arg, int i)
 	return (arg->i);
 }
 
+/**
+ * this_is_quote - Handles quoted sections of an argument during parsing.
+ *
+ * @cmd: Pointer to the command structure.
+ * @arg: Pointer to the t_expand structure holding the current parsing state.
+ *
+ * Adds a quoted character to the argument value and updates the quote state.
+ * Returns the updated index in the command segment.
+ */
 static int	this_is_quote(t_cmd *cmd, t_expand *arg)
 {
 	char	*temp;

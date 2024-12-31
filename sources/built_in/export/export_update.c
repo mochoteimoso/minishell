@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_update.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:49:25 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:07:45 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:09:59 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,19 @@ int			handle_sign(t_shell *mini, char *str);
 static int	not_on_the_list(t_shell *mini, char *str);
 static int	set_new_value(t_env *temp, char *str);
 
+/**
+ * handle_sign - Adds or updates an environment variable in the shell.
+ *
+ * @mini: Pointer to the shell structure containing environment variables.
+ * @str: The variable string to add or update.
+ *
+ * If the variable exists in the environment, it updates the value.
+ * Otherwise, it adds a new variable to the environment
+ * and updates pending variables.
+ *
+ * Returns:
+ * - 0 on success.
+ */
 int	handle_sign(t_shell *mini, char *str)
 {
 	t_env	*new;
@@ -31,6 +44,20 @@ int	handle_sign(t_shell *mini, char *str)
 	return (0);
 }
 
+/**
+ * update_env - Updates the value of an existing environment variable.
+ *
+ * @mini: Pointer to the shell structure containing environment variables.
+ * @str: The variable string with a new value to update.
+ *
+ * Searches for the variable by its name in the environment list. If found,
+ * updates its value and reflects the change in the pending list. If not found,
+ * does nothing.
+ *
+ * Returns:
+ * - 1 if the variable was updated successfully.
+ * - 0 if the variable was not found.
+ */
 int	update_env(t_shell *mini, char *str)
 {
 	t_env	*temp;
@@ -55,6 +82,20 @@ int	update_env(t_shell *mini, char *str)
 	return (0);
 }
 
+/**
+ * update_pending - Updates the value of a variable in the pending list.
+ *
+ * @mini: Pointer to the shell structure containing the pending list.
+ * @name: The name of the variable to update.
+ * @str: The full variable string to update.
+ *
+ * Searches for the variable in the pending list. If found, updates its value.
+ * If not found, adds the variable to the pending list.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 if there is a memory allocation error.
+ */
 int	update_pending(t_shell *mini, char *name, char *str)
 {
 	int		len;
@@ -80,6 +121,19 @@ int	update_pending(t_shell *mini, char *name, char *str)
 	return (0);
 }
 
+/**
+ * not_on_the_list - Adds a new variable to the pending list if it doesn't exist.
+ *
+ * @mini: Pointer to the shell structure containing the pending list.
+ * @str: The variable string to add.
+ *
+ * Expands the pending list and appends the new variable.
+ * Ensures null termination of the list.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 if there is a memory allocation error.
+ */
 static int	not_on_the_list(t_shell *mini, char *str)
 {
 	size_t	i;
@@ -97,6 +151,20 @@ static int	not_on_the_list(t_shell *mini, char *str)
 	return (0);
 }
 
+/**
+ * set_new_value - Sets a new value for an existing environment variable.
+ *
+ * @temp: Pointer to the environment variable node to update.
+ * @str: The variable string containing the new value.
+ *
+ * Extracts the value from the variable string
+ * and updates the `value` field of the
+ * environment variable node. Frees the old value before updating.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 if there is a memory allocation error or failure to set the value.
+ */
 static int	set_new_value(t_env *temp, char *str)
 {
 	char	*value;

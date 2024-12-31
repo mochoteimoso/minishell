@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:01:15 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:07:41 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:09:11 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,23 @@ static void	print_pending(t_shell *mini);
 static int	parse_and_add(t_shell *mini, char *str);
 static int	validate_variable(char *name);
 
-/*Sets an environment variable. Accepts VAR=VALUE format to
-define or update variables.*/
+/**
+ * built_export - Handles the "export" built-in command in the minishell.
+ *
+ * @mini: Pointer to the shell structure containing environment
+ * 		  and pending variables.
+ * @cmd: Pointer to the command structure with arguments for "export".
+ *
+ * Handles exporting variables to the environment or pending list.
+ * If no arguments are provided, it prints the current pending variables.
+ * Validates and processes each argument to either
+ * add it to the environment or pending list.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 if an argument is not a valid identifier.
+ * - 2 if an invalid option is provided.
+ */
 int	built_export(t_shell *mini, t_cmd *cmd)
 {
 	int	i;
@@ -46,6 +61,13 @@ int	built_export(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
+/**
+ * print_pending - Prints all variables in the pending list.
+ *
+ * @mini: Pointer to the shell structure containing the pending variables.
+ *
+ * Iterates through the pending list and prints each variable.
+ */
 static void	print_pending(t_shell *mini)
 {
 	int	i;
@@ -58,6 +80,22 @@ static void	print_pending(t_shell *mini)
 	}
 }
 
+/**
+ * parse_and_add - Parses and adds a variable to the environment or pending list.
+ *
+ * @mini: Pointer to the shell structure containing environment
+ * 		  and pending variables.
+ * @str: The variable string to parse and add.
+ *
+ * Splits the variable string into a name
+ * and value pair based on the '=' character.
+ * If the '=' is absent, the variable is added to the pending list.
+ * Otherwise, the variable is added to the environment.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 if the variable is not valid.
+ */
 static int	parse_and_add(t_shell *mini, char *str)
 {
 	char	*sign;
@@ -82,6 +120,20 @@ static int	parse_and_add(t_shell *mini, char *str)
 	return (1);
 }
 
+/**
+ * validate_variable - Validates the syntax of a variable name.
+ *
+ * @name: The variable name to validate.
+ *
+ * Ensures that the name starts with an alphabetic character or '_'.
+ * Verifies that the rest of the name contains only
+ * alphanumeric characters or '_'.
+ * Stops validation at the '=' character, if present.
+ *
+ * Returns:
+ * - 1 if the variable name is valid.
+ * - 0 if the variable name is invalid.
+ */
 static int	validate_variable(char *name)
 {
 	int	i;

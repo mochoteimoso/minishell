@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:10:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:36:53 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,18 @@ static char	**split_paths(const char *paths_str);
 static char	*search_command_in_paths(char **paths, t_cmd *cmd);
 static int	check_abs_path(t_cmd *cmd);
 
-// Resolves absolute path for command
-
+/**
+ * get_cmd_path - Determines the executable path for a command.
+ *
+ * @mini: Pointer to the shell structure containing environment variables.
+ * @cmd: Pointer to the command structure with command details.
+ *
+ * Checks if the command is an absolute or relative path. If not, retrieves
+ * the "PATH" environment variable, splits it into directories, and searches
+ * for the command in those paths. Updates `cmd->cmd_path` with the resolved
+ * path or handles errors if the command is not found or executable.
+ * Returns 0 on success, 1 on failure, and sets the command's exit status.
+ */
 int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 {
 	char	*paths_str;
@@ -49,6 +59,14 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
+/**
+ * get_path_from_env - Retrieves the value of the "PATH" environment variable.
+ *
+ * @mini: Pointer to the shell structure containing environment variables.
+ *
+ * Searches the environment variable list for the "PATH" variable and
+ * returns its value. If not found, returns NULL.
+ */
 static char	*get_path_from_env(t_shell *mini)
 {
 	t_env	*temp;
@@ -63,6 +81,15 @@ static char	*get_path_from_env(t_shell *mini)
 	return (NULL);
 }
 
+/**
+ * split_paths - Splits the "PATH" environment variable into directories.
+ *
+ * @paths_str: The string containing the colon-separated paths.
+ *
+ * Uses `ft_split` to separate the paths by ':' and returns an array of
+ * directory strings. If splitting fails, prints an error message and
+ * returns NULL.
+ */
 static char	**split_paths(const char *paths_str)
 {
 	char	**paths;
@@ -73,9 +100,17 @@ static char	**split_paths(const char *paths_str)
 	return (paths);
 }
 
-// Tests each possible path until finds one that works,
-// returns correct absolute path
-
+/**
+ * search_command_in_paths - Searches for a command in the given paths.
+ *
+ * @paths: Array of directory paths to search.
+ * @cmd: Pointer to the command structure with command details.
+ *
+ * Constructs potential paths for the command by appending the command
+ * name to each directory in `paths`. Checks for executable access to each
+ * constructed path. Frees resources and returns the valid path if found,
+ * or NULL if not found.
+ */
 static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 {
 	char	*cmd_path;
@@ -104,30 +139,33 @@ static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 	return (NULL);
 }
 
-// Checks whether command is already an absolute path
-
+/**
+ * check_abs_path - Checks if the command is an absolute or relative path.
+ *
+ * @cmd: Pointer to the command structure with command details.
+ *
+ * Determines if the command starts with '/', './', or '../' indicating
+ * an absolute or relative path. Handles special cases like directories
+ * and access permissions. Returns:
+ *   - 0: If the command is a valid executable at the specified path.
+ *   - 1: If the command is not an absolute/relative path.
+ *   - -1: If the command is invalid or inaccessible.
+ */
 static int	check_abs_path(t_cmd *cmd)
 {
+	int	access_result;
+
 	if (check_special_cases(cmd))
 		return (-1);
 	if (cmd->command[0] == '/' || (cmd->command[0] == '.'
-		&& cmd->command[1] == '/') || (cmd->command[0] == '.'
-		&& cmd->command[1] == '.' && cmd->command[0] == '/'))
+			&& cmd->command[1] == '/') || (cmd->command[0] == '.'
+			&& cmd->command[1] == '.' && cmd->command[2] == '/'))
 	{
 		if (check_for_directory(cmd) != 0)
 			return (-1);
-		if (access(cmd->command, X_OK) == 0)
-		{
-			cmd->cmd_path = cmd->command;
-			return (0);
-		}
-		if (access(cmd->command, F_OK) == 0 && access(cmd->command, X_OK) != 0)
-		{
-			ft_putstr_fd(cmd->command, 2);
-			ft_putendl_fd(": Permission denied", 2);
-			cmd->cmd_exit = 126;
-			return (-1);
-		}
+		access_result = check_access(cmd);
+		if (access_result <= 0)
+			return (access_result);
 		ft_putstr_fd(cmd->command, 2);
 		ft_putendl_fd(": Command not found", 2);
 		cmd->cmd_exit = 127;

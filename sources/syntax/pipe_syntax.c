@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_syntax.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:24:05 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:37:17 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,17 @@ static int	check_consecutive_pipes(char *input, t_shell *mini);
 static int	check_pipe_error(char *input, int i, t_shell *mini);
 static int	check_trailing_pipe(char **input);
 
-/* Checks syntax for pipes, i.e. that it is not a the start or that
-there are no consecutive pipes. Also handles a trailing pipe */
-
+/**
+ * check_pipes - Validates the syntax of pipes (`|`) in the input string.
+ *
+ * @input: Pointer to the input string, may be updated for trailing pipes.
+ * @mini: Shell structure for managing shell state and exit status.
+ *
+ * Ensures the input doesn't start with a pipe, doesn't contain consecutive pipes
+ * without valid tokens between them, and properly handles trailing pipes.
+ *
+ * Return: 1 if pipe syntax is invalid, 0 otherwise.
+ */
 int	check_pipes(char **input, t_shell *mini)
 {
 	int	i;
@@ -40,8 +48,18 @@ int	check_pipes(char **input, t_shell *mini)
 	return (0);
 }
 
-// checks if there are consecutive pipes without text in between
-
+/**
+ * check_consecutive_pipes - Validates that consecutive pipes
+ * 							 are properly handled.
+ *
+ * @input: Input string to check.
+ * @mini: Shell structure for managing shell state and exit status.
+ *
+ * Scans the input string for consecutive pipes without valid tokens
+ * between them, skipping quoted characters and whitespace.
+ *
+ * Return: 1 if syntax errors are found, 0 otherwise.
+ */
 static int	check_consecutive_pipes(char *input, t_shell *mini)
 {
 	int	i;
@@ -64,6 +82,18 @@ static int	check_consecutive_pipes(char *input, t_shell *mini)
 	return (0);
 }
 
+/**
+ * check_pipe_error - Validates syntax for a specific pipe operator.
+ *
+ * @input: Input string to check.
+ * @i: Current index of the pipe operator.
+ * @mini: Shell structure for managing shell state and exit status.
+ *
+ * Skips whitespace after the pipe operator and ensures the next token is valid
+ * (not another pipe or EOF). Prints an error message if invalid.
+ *
+ * Return: 1 if the syntax is invalid, 0 otherwise.
+ */
 static int	check_pipe_error(char *input, int i, t_shell *mini)
 {
 	int	j;
@@ -81,8 +111,17 @@ static int	check_pipe_error(char *input, int i, t_shell *mini)
 	return (0);
 }
 
-// Checks for trailing pipe
-
+/**
+ * check_trailing_pipe - Handles trailing pipes in the input string.
+ *
+ * @input: Pointer to the input string, may be updated to include more input.
+ *
+ * If the input ends with a pipe, prompts the user for additional input via
+ * `handle_trailing_pipe` and updates the input string. Returns an error if
+ * additional input is not provided.
+ *
+ * Return: 1 if handling fails, 0 otherwise.
+ */
 static int	check_trailing_pipe(char **input)
 {
 	int		i;

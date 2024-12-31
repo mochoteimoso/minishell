@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:58:12 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 14:14:47 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:20:42 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,17 @@ static int	exp_while(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan);
 static int	hd(t_cmd **cmd, t_expand *arg, char **expan);
 static int	quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan);
 
+/**
+ * handle_expand - Expands variables and handles heredoc in a command segment.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Double pointer to the command structure.
+ *
+ * Expands environment variables, handles quoted strings, and processes
+ * heredoc indicators in the command's segment. Updates the segment
+ * with the expanded string.
+ * Returns 0 on success or 1 on failure.
+ */
 int	handle_expand(t_shell *mini, t_cmd **cmd)
 {
 	char		*expan;
@@ -39,6 +50,18 @@ int	handle_expand(t_shell *mini, t_cmd **cmd)
 	return (0);
 }
 
+/**
+ * exp_while - Processes the command segment for expansion and modification.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Double pointer to the command structure.
+ * @arg: Pointer to the expansion context structure.
+ * @expan: Pointer to the expanded string.
+ *
+ * Iterates over the command segment, handling spaces, quotes, heredoc,
+ * and unquoted sections. Modifies the expanded string accordingly.
+ * Returns 0 on success or 1 on failure.
+ */
 static int	exp_while(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 {
 	while ((*cmd)->seg[arg->i])
@@ -60,6 +83,17 @@ static int	exp_while(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 	return (0);
 }
 
+/**
+ * this_is_space - Appends a space character to the expanded string.
+ *
+ * @cmd: Double pointer to the command structure.
+ * @arg: Pointer to the expansion context structure.
+ * @expan: Pointer to the expanded string.
+ *
+ * Appends a space character from the segment to the expanded string,
+ * accounting for unquoted spaces.
+ * Returns the updated index or -1 on failure.
+ */
 static int	this_is_space(t_cmd **cmd, t_expand *arg, char **expan)
 {
 	char	*temp;
@@ -74,6 +108,17 @@ static int	this_is_space(t_cmd **cmd, t_expand *arg, char **expan)
 	return (arg->i);
 }
 
+/**
+ * hd - Handles heredoc indicator in the command segment.
+ *
+ * @cmd: Double pointer to the command structure.
+ * @arg: Pointer to the expansion context structure.
+ * @expan: Pointer to the expanded string.
+ *
+ * Processes a heredoc indicator (<<) in the command segment and updates
+ * the expanded string with the processed value.
+ * Returns the updated index or -1 on failure.
+ */
 static int	hd(t_cmd **cmd, t_expand *arg, char **expan)
 {
 	char	*temp;
@@ -94,6 +139,18 @@ static int	hd(t_cmd **cmd, t_expand *arg, char **expan)
 	return (arg->i);
 }
 
+/**
+ * quoted - Handles a quoted section in the command segment.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Double pointer to the command structure.
+ * @arg: Pointer to the expansion context structure.
+ * @expan: Pointer to the expanded string.
+ *
+ * Processes a quoted section, expanding its content and appending it
+ * to the expanded string.
+ * Returns the updated index or -1 on failure.
+ */
 static int	quoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 {
 	char	*temp;

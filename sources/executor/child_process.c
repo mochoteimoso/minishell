@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:08:05 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:12:54 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:32:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,20 @@ static void	execute_forked_builtin_cmd(t_shell *mini, t_cmd *cmd, int i);
 static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd, int i);
 void		close_unused_fds(t_shell *mini, int i);
 
-// Forks child processes based on number of commands
-// duplicates input/output
-
+/**
+ * fork_and_execute - Forks a process and executes a command.
+ *
+ * @mini: Pointer to the shell structure containing environment details.
+ * @cmd: Pointer to the command structure containing command details.
+ * @i: Index of the command in the pipeline.
+ *
+ * Creates a new process using `fork`. The child process handles:
+ *  - Closing unused file descriptors.
+ *  - Setting up input and output redirections.
+ *  - Executing either a built-in command or an external command.
+ * The parent process continues managing other commands in the pipeline.
+ * Returns 0 on success or -1 if `fork` fails.
+ */
 int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 {
 	sig_reseted();
@@ -49,6 +60,19 @@ int	fork_and_execute(t_shell *mini, t_cmd *cmd, int i)
 	return (0);
 }
 
+/**
+ * setup_fds_and_check - Resolves and duplicates file descriptors
+ * 						 for the command.
+ *
+ * @mini: Pointer to the shell structure containing environment details.
+ * @cmd: Pointer to the command structure containing command details.
+ * @i: Index of the command in the pipeline.
+ *
+ * Sets up input and output file descriptors for the command by:
+ *  - Resolving redirections.
+ *  - Duplicating input and output file descriptors.
+ * Returns 0 on success or 1 on failure.
+ */
 static int	setup_fds_and_check(t_shell *mini, t_cmd *cmd, int i)
 {
 	if (resolve_fd(cmd))
@@ -60,8 +84,17 @@ static int	setup_fds_and_check(t_shell *mini, t_cmd *cmd, int i)
 	return (0);
 }
 
-// Executes builtin command and closes fds in case of failure
-
+/**
+ * execute_forked_builtin_cmd - Executes a built-in command in the child process.
+ *
+ * @mini: Pointer to the shell structure containing environment details.
+ * @cmd: Pointer to the command structure containing command details.
+ * @i: Index of the command in the pipeline.
+ *
+ * Executes a built-in command within the child process. On failure,
+ * it exits using `exit_for_failure`. On success, it exits using
+ * `exit_for_success`.
+ */
 static void	execute_forked_builtin_cmd(t_shell *mini, t_cmd *cmd, int i)
 {
 	if (built_in_exe(mini, cmd))
@@ -71,9 +104,17 @@ static void	execute_forked_builtin_cmd(t_shell *mini, t_cmd *cmd, int i)
 	exit_for_success(mini, i, EXIT_SUCCESS);
 }
 
-// Executes non-builtin command
-// Parses env_array to use in execve
-
+/**
+ * execute_forked_cmd - Executes an external command in the child process.
+ *
+ * @mini: Pointer to the shell structure containing environment details.
+ * @cmd: Pointer to the command structure containing command details.
+ * @i: Index of the command in the pipeline.
+ *
+ * Converts the environment list to an array and calls `execve` to execute
+ * the external command. If `execve` fails, it cleans up resources and exits
+ * using `exit_for_failure`.
+ */
 static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd, int i)
 {
 	char	**env_array;
@@ -91,6 +132,15 @@ static int	execute_forked_cmd(t_shell *mini, t_cmd *cmd, int i)
 	exit(EXIT_SUCCESS);
 }
 
+/**
+ * close_unused_fds - Closes unused file descriptors in the child process.
+ *
+ * @mini: Pointer to the shell structure containing environment details.
+ * @i: Index of the command in the pipeline.
+ *
+ * Closes unused file descriptors to avoid resource leaks in the child process.
+ * Ensures proper management of pipe file descriptors for commands in a pipeline.
+ */
 void	close_unused_fds(t_shell *mini, int i)
 {
 	int	j;

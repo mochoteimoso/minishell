@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_syntax.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:06:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:24:35 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:38:31 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,19 @@ static int	check_in_redir(char *input, t_shell *mini, int *i);
 static int	check_out_redir(char *input, t_shell *mini, int *i);
 static int	validate_redirect(char *input, t_shell *mini, int *i, char *type);
 
-// Checks that there is a non-whitespace character after redirects
-
+/**
+ * check_redirects - Validates the syntax of redirection operators
+ * 					 in the input string.
+ *
+ * @input: Input string to check.
+ * @mini: Shell structure for managing shell state and exit status.
+ *
+ * Scans the input for redirection operators (`>`, `>>`, `<`, `<<`)
+ * outside of quotes and ensures they are followed by a valid token
+ * (not `|`, `<`, `>`, or EOF).
+ *
+ * Return: 1 if redirection syntax is invalid, 0 otherwise.
+ */
 int	check_redirects(char *input, t_shell *mini)
 {
 	int	i;
@@ -41,6 +52,18 @@ int	check_redirects(char *input, t_shell *mini)
 	return (0);
 }
 
+/**
+ * check_in_redir - Validates input redirection syntax.
+ *
+ * @input: Input string to check.
+ * @mini: Shell structure for managing shell state and exit status.
+ * @i: Pointer to the current index in the input string.
+ *
+ * Handles `>` and `>>` syntax. Advances the index appropriately
+ * and validates the token following the redirection operator.
+ *
+ * Return: 1 if input redirection syntax is invalid, 0 otherwise.
+ */
 static int	check_in_redir(char *input, t_shell *mini, int *i)
 {
 	if (input[*i + 1] == '>')
@@ -57,6 +80,18 @@ static int	check_in_redir(char *input, t_shell *mini, int *i)
 	return (0);
 }
 
+/**
+ * check_out_redir - Validates output redirection syntax.
+ *
+ * @input: Input string to check.
+ * @mini: Shell structure for managing shell state and exit status.
+ * @i: Pointer to the current index in the input string.
+ *
+ * Handles `<` and `<<` syntax. Advances the index appropriately
+ * and validates the token following the redirection operator.
+ *
+ * Return: 1 if output redirection syntax is invalid, 0 otherwise.
+ */
 static int	check_out_redir(char *input, t_shell *mini, int *i)
 {
 	if (input[*i + 1] == '<')
@@ -73,9 +108,20 @@ static int	check_out_redir(char *input, t_shell *mini, int *i)
 	return (0);
 }
 
-// Returns an error if there is no non-whitespace character after redirection symbol
-// before input ends or a pipe is encountered
-
+/**
+ * validate_redirect - Ensures that a redirection operator is
+ * 					   followed by a valid token.
+ *
+ * @input: Input string to check.
+ * @mini: Shell structure for managing shell state and exit status.
+ * @i: Pointer to the current index in the input string.
+ * @type: Redirection type (e.g., `>`, `>>`, `<`, `<<`) for error messaging.
+ *
+ * Skips whitespace after the redirection operator and verifies the next token is
+ * valid (not `|`, `<`, `>`, or EOF). Prints an error message if invalid.
+ *
+ * Return: 1 if the syntax is invalid, 0 otherwise.
+ */
 static int	validate_redirect(char *input, t_shell *mini, int *i, char *type)
 {
 	(*i)++;

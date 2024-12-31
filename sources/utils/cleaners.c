@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaners.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 13:18:31 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:25:54 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:11:02 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@ void		cleaner_for_success(t_shell *mini);
 void		cleaner_for_failure(t_shell *mini);
 static void	free_and_close_pipes(t_shell *mini);
 
+/**
+ * mini_cleaner - Frees all allocated resources within the t_shell structure.
+ *
+ * @mini: Pointer to the shell structure containing resources to clean.
+ *
+ * Frees the environment, pending variables, command structures, process IDs,
+ * and pipes associated with the shell.
+ * Ensures no memory leaks when the shell exits.
+ */
 void	mini_cleaner(t_shell *mini)
 {
 	if (mini->env)
@@ -32,6 +41,14 @@ void	mini_cleaner(t_shell *mini)
 		ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
 }
 
+/**
+ * clean_cmds - Frees the command array and all associated data.
+ *
+ * @cmds: Array of pointers to t_cmd structures representing shell commands.
+ *
+ * Frees each command's arguments, command paths, redirection structures,
+ * and finally the command array itself.
+ */
 void	clean_cmds(t_cmd **cmds)
 {
 	int	i;
@@ -54,6 +71,15 @@ void	clean_cmds(t_cmd **cmds)
 	cmds = NULL;
 }
 
+/**
+ * cleaner_for_success - Cleans up resources after
+ * 						 a successful pipeline execution.
+ *
+ * @mini: Pointer to the shell structure containing resources to clean.
+ *
+ * Frees command structures, process IDs, and closes any open pipes
+ * related to a successful command execution.
+ */
 void	cleaner_for_success(t_shell *mini)
 {
 	int	i;
@@ -77,6 +103,14 @@ void	cleaner_for_success(t_shell *mini)
 		ft_free_int_arr_with_size(mini->pipes, mini->cmd_count - 1);
 }
 
+/**
+ * cleaner_for_failure - Cleans up resources after a failed pipeline execution.
+ *
+ * @mini: Pointer to the shell structure containing resources to clean.
+ *
+ * Frees command structures, process IDs, and closes and frees pipes
+ * associated with the failed execution.
+ */
 void	cleaner_for_failure(t_shell *mini)
 {
 	clean_cmds(mini->cmds);
@@ -89,6 +123,15 @@ void	cleaner_for_failure(t_shell *mini)
 		free_and_close_pipes(mini);
 }
 
+/**
+ * free_and_close_pipes - Frees and closes all pipe file descriptors
+ * 						  in the shell.
+ *
+ * @mini: Pointer to the shell structure containing the pipes to clean.
+ *
+ * Closes the read and write ends of each pipe and frees the memory associated
+ * with the pipe array. Sets the pipe array pointer to NULL.
+ */
 static void	free_and_close_pipes(t_shell *mini)
 {
 	int	i;

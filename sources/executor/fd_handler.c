@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:18:10 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 15:13:47 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:34:11 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,16 @@
 int	save_fds(t_shell *mini);
 int	reset_fds(t_shell *mini);
 
-// Saves original STDIN and STDOUT before possible duplication
-
+/**
+ * save_fds - Saves the current standard input/output file descriptors.
+ *
+ * @mini: Pointer to the shell structure for managing state.
+ *
+ * If the input or output file descriptors are redirected, duplicates the
+ * current STDIN_FILENO and STDOUT_FILENO file descriptors to save their
+ * states. Updates `mini->stdin_saved` and `mini->stdout_saved` respectively.
+ * Returns 0 on success or 1 on failure with an updated exit status.
+ */
 int	save_fds(t_shell *mini)
 {
 	if (mini->cmds[0]->fd_in != STDIN_FILENO)
@@ -42,8 +50,16 @@ int	save_fds(t_shell *mini)
 	return (0);
 }
 
-// Restores original STDIN and STDOUT after possible duplication
-
+/**
+ * reset_fds - Restores the saved standard input/output file descriptors.
+ *
+ * @mini: Pointer to the shell structure for managing state.
+ *
+ * If `mini->stdin_saved` or `mini->stdout_saved` were saved earlier, restores
+ * the original STDIN_FILENO or STDOUT_FILENO using `dup2_and_close`.
+ * Clears saved descriptors after restoration. Returns 0 on success or 1 on
+ * failure with an updated exit status.
+ */
 int	reset_fds(t_shell *mini)
 {
 	if (mini->stdin_saved != -1 && mini->stdin_saved != STDIN_FILENO)

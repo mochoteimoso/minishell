@@ -18,6 +18,17 @@ static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd);
 static int	handle_sigint_in_hd(t_shell *mini, int fd);
 static int	stdin_saver(t_shell *mini);
 
+/**
+ * open_and_write_to_heredoc - Handles heredoc logic,
+ * 							   including file creation and input processing.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the current command structure.
+ *
+ * Creates a temporary file for the heredoc and processes input lines until the
+ * delimiter is matched or an interruption occurs. Writes valid input lines to
+ * the file. Returns 0 on success or 1 on failure.
+ */
 int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 {
 	int		fd;
@@ -41,6 +52,18 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
+/**
+ * init_heredoc - Initializes the heredoc by
+ * 				  opening a temporary file and saving STDIN.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the current command structure.
+ * @fd: Pointer to store the file descriptor of the heredoc file.
+ *
+ * Opens a temporary file for the heredoc and saves the current STDIN state for
+ * restoration. Sets up signal handling for SIGINT during heredoc input.
+ * Returns 0 on success or 1 on failure.
+ */
 static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd)
 {
 	*fd = open(cmd->redir_tail->heredoc_name, O_RDWR | O_CREAT | O_EXCL, 0600);
@@ -55,6 +78,20 @@ static int	init_heredoc(t_shell *mini, t_cmd *cmd, int *fd)
 	return (0);
 }
 
+/**
+ * process_heredoc_line - Processes each line input during heredoc.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the current command structure.
+ * @line: The input line to process.
+ * @fd: File descriptor of the heredoc file.
+ *
+ * Handles each heredoc line by checking if it matches the delimiter, and writes
+ * the expanded line (if applicable) to the file.
+ * Frees the line memory as needed.
+ * Returns 1 when the delimiter is matched, -1 on error,
+ * or 0 to continue processing.
+ */
 static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd)
 {
 	if (!line || ft_strcmp(line, cmd->redir_tail->delimiter) == 0)
@@ -71,6 +108,15 @@ static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd)
 	return (0);
 }
 
+/**
+ * handle_sigint_in_hd - Handles SIGINT during heredoc processing.
+ *
+ * @mini: Pointer to the shell structure.
+ * @fd: File descriptor of the heredoc file.
+ *
+ * Restores STDIN and closes the heredoc file when interrupted by SIGINT.
+ * Returns 0 on success or 1 if restoration fails.
+ */
 static int	handle_sigint_in_hd(t_shell *mini, int fd)
 {
 	if (stdin_saver(mini))
@@ -82,6 +128,15 @@ static int	handle_sigint_in_hd(t_shell *mini, int fd)
 	return (0);
 }
 
+/**
+ * stdin_saver - Saves or restores the original STDIN during heredoc processing.
+ *
+ * @mini: Pointer to the shell structure.
+ *
+ * Saves the current STDIN to allow restoration after heredoc processing. If a
+ * SIGINT occurs, it restores the original STDIN and updates the exit status.
+ * Returns 0 on success or 1 on failure.
+ */
 static int	stdin_saver(t_shell *mini)
 {
 	if (g_sig == SIGINT)

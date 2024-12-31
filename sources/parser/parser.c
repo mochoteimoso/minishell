@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:19:12 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:50:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,16 @@ int	parse_input(t_shell *mini);
 int	parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found);
 
-// Validates input string and parses the content into an array of structs
-
+/**
+ * parse_and_validate_input - Validates and parses the input into commands.
+ *
+ * @input: Pointer to the input string to parse.
+ * @mini: Pointer to the shell structure.
+ *
+ * Validates input syntax, initializes command structures, splits the input into
+ * pipe-separated segments, and parses each command. Returns 1 on failure or 0
+ * on success.
+ */
 int	parse_and_validate_input(char **input, t_shell *mini)
 {
 	if (validate_input_syntax(input, mini))
@@ -32,6 +40,15 @@ int	parse_and_validate_input(char **input, t_shell *mini)
 	return (0);
 }
 
+/**
+ * parse_input - Parses each command segment and populates the shell structure.
+ *
+ * @mini: Pointer to the shell structure.
+ *
+ * Iterates over each command segment, assigns indices, and parses the command
+ * string. Cleans up and sets an error status if parsing fails. Returns 1 on
+ * failure or 0 on success.
+ */
 int	parse_input(t_shell *mini)
 {
 	int	index;
@@ -51,6 +68,16 @@ int	parse_input(t_shell *mini)
 	return (0);
 }
 
+/**
+ * parse_cmd_string - Parses a single command string and handles expansion.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure for the command being parsed.
+ *
+ * Handles variable expansion and iterates through the command string to
+ * process redirections, command names, and arguments. Returns 1 on failure or
+ * 0 on success.
+ */
 int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 {
 	int	i;
@@ -68,6 +95,18 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
+/**
+ * cmd_string_while - Iterates through a command string and processes elements.
+ *
+ * @mini: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ * @i: Current position in the command string.
+ * @cmd_found: Pointer to an integer indicating if a command has been found.
+ *
+ * Processes redirections, command names, and arguments in the command string.
+ * Skips whitespace and updates `cmd_found` when a command is identified.
+ * Returns the updated position in the string, or -1 on failure.
+ */
 int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found)
 {
 	while (cmd->seg[i])

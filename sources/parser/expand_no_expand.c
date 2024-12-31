@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_no_expand.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 16:29:31 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:13:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:12:26 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@ int			no_expanding(t_shell *mini, char *str, t_expand *arg);
 static int	this_breaks(t_expand *arg, char *str);
 static int	no_expand_dollar(t_expand *arg, char *str);
 
+/**
+ * no_expanding - Handles parsing of segments where
+ * 				  variable expansion is not allowed.
+ *
+ * @mini: Pointer to the shell structure for context.
+ * @str: Command string to process.
+ * @arg: Pointer to the t_expand structure tracking parsing state.
+ *
+ * Parses segments without expanding variables,
+ * handling special cases such as heredoc.
+ * Updates the t_expand structure with the parsed segment.
+ * Returns the updated index or -1 on failure.
+ */
 int	no_expanding(t_shell *mini, char *str, t_expand *arg)
 {
 	arg->sgl = 0;
@@ -45,6 +58,16 @@ int	no_expanding(t_shell *mini, char *str, t_expand *arg)
 	return (arg->i);
 }
 
+/**
+ * this_breaks - Determines if a character breaks the current segment.
+ *
+ * @arg: Pointer to the t_expand structure tracking parsing state.
+ * @str: Command string to check.
+ *
+ * Checks if the current character is a space, single quote, or double quote,
+ * which would indicate the end of the current segment.
+ * Returns 1 if the character breaks the segment, 0 otherwise.
+ */
 static int	this_breaks(t_expand *arg, char *str)
 {
 	if (ft_isspace(str[arg->i]) || str[arg->i] == '\'' || str[arg->i] == '"')
@@ -53,6 +76,17 @@ static int	this_breaks(t_expand *arg, char *str)
 		return (0);
 }
 
+/**
+ * no_expand_dollar - Determines the type of dollar ('$') usage in the segment.
+ *
+ * @arg: Pointer to the t_expand structure tracking parsing state.
+ * @str: Command string containing the segment.
+ *
+ * Analyzes the dollar sign ('$') to determine if it should be ignored, expanded,
+ * or treated as part of a quoted segment. Handles cases for single quotes,
+ * double quotes, and unquoted variables.
+ * Returns 1 to ignore, 2 to expand, or 0 for normal processing.
+ */
 static int	no_expand_dollar(t_expand *arg, char *str)
 {
 	if (str[arg->i] == '$' && (str[arg->i + 1] == '"'

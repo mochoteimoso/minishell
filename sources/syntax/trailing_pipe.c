@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trailing_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:32:24 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:25:44 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:40:44 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,20 @@
 char		*handle_trailing_pipe(char *input);
 static char	*join_and_free(char *input, char *additional_input);
 
-/* Handles trailing pipe by getting additional input from user
-and joining that to the original input string */
-
+/**
+ * handle_trailing_pipe - Handles additional input
+ * 						  for commands ending with a trailing pipe.
+ *
+ * @input: Current input string to be appended.
+ *
+ * Continuously prompts the user with a secondary prompt (">")
+ * to complete the command when a trailing pipe is detected.
+ * Joins additional input to the current input until valid input is provided.
+ * Frees memory and returns NULL if input is canceled.
+ *
+ * Return: The updated input string with additional input appended,
+ * or NULL if canceled.
+ */
 char	*handle_trailing_pipe(char *input)
 {
 	char	*additional_input;
@@ -38,6 +49,19 @@ char	*handle_trailing_pipe(char *input)
 	}
 }
 
+/**
+ * join_and_free - Joins two strings and frees the original inputs.
+ *
+ * @input: Original input string.
+ * @additional_input: Additional input string to be joined.
+ *
+ * Allocates memory for a new string that concatenates `input`
+ * and `additional_input`.
+ * Frees the memory of both input strings. If allocation fails,
+ * frees remaining resources.
+ *
+ * Return: The newly concatenated string, or NULL on failure.
+ */
 static char	*join_and_free(char *input, char *additional_input)
 {
 	char	*updated_input;

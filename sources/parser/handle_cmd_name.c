@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 13:35:20 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 15:13:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:18:59 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@ int			handle_cmd_name(t_cmd *cmd, int i);
 static int	quoted_cmd(t_expand *name, char *seg);
 static int	this_is_redirection(t_cmd *cmd, t_expand *name);
 
+/**
+ * handle_cmd_name - Parses and extracts the command name
+ * 					 from the command segment.
+ *
+ * @cmd: Pointer to the command structure.
+ * @i: Index in the command segment to start processing.
+ *
+ * Skips leading whitespace, then identifies
+ * and processes the command name. Handles
+ * quoted command names and stops parsing when encountering a redirection or pipe
+ * symbol. Allocates memory for and assigns the command name to `cmd->command`.
+ * Returns the updated index on success, or 1 on error.
+ */
 int	handle_cmd_name(t_cmd *cmd, int i)
 {
 	t_expand	name;
@@ -45,6 +58,17 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	return (name.i);
 }
 
+/**
+ * this_is_redirection - Checks if the current character is
+ * 						 a redirection or pipe symbol.
+ *
+ * @cmd: Pointer to the command structure.
+ * @name: Pointer to the t_expand structure,
+ * 		  which contains the current index and state.
+ *
+ * Returns 1 if the current character is a redirection
+ * (`<` or `>`) or pipe (`|`), or if it is whitespace. Otherwise, returns 0.
+ */
 static int	this_is_redirection(t_cmd *cmd, t_expand *name)
 {
 	if (cmd->seg[name->i] == ' ' || cmd->seg[name->i] == '<'
@@ -54,6 +78,19 @@ static int	this_is_redirection(t_cmd *cmd, t_expand *name)
 		return (0);
 }
 
+/**
+ * quoted_cmd - Parses a command name enclosed in quotes.
+ *
+ * @name: Pointer to the t_expand structure,
+ * 		  which tracks the current parsing state.
+ * @seg: The command segment being processed.
+ *
+ * Processes single-quoted or double-quoted command names, updating the quote
+ * state as needed. Stops parsing at unquoted spaces or end of the quotes.
+ * Appends the characters to `name->value`.
+ * Returns the updated index in the segment on success,
+ * or -1 on memory allocation error.
+ */
 static int	quoted_cmd(t_expand *name, char *seg)
 {
 	what_quote(seg, name);

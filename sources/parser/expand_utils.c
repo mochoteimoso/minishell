@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:44:51 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 15:11:07 by nzharkev         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:13:31 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,17 @@ static int	finalize_expand(t_shell *mini, t_vdata *data, t_expand *arg);
 static int	handle_new_expand(char *temp, char **expan);
 static void	init_vdata(t_vdata *data, char **expan, char *temp, char *name);
 
+/**
+ * we_have_dollar - Expands a dollar sign ('$') sequence in the input string.
+ *
+ * @mini: Pointer to the shell structure for accessing environment variables.
+ * @arg: Pointer to the t_expand structure tracking expansion state.
+ * @str: Input string containing the dollar sequence.
+ *
+ * Handles variable expansion for sequences starting with '$'. Joins the expanded
+ * result with the current expansion value and updates the t_expand structure.
+ * Returns 0 on success or -1 on failure.
+ */
 int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 {
 	int		s_exp;
@@ -47,6 +58,18 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 	return (0);
 }
 
+/**
+ * oh_a_dollar - Processes the content following a dollar sign ('$').
+ *
+ * @mini: Pointer to the shell structure for accessing environment variables.
+ * @str: Input string being processed.
+ * @expan: Pointer to the string accumulating the expanded result.
+ * @arg: Pointer to the t_expand structure tracking expansion state.
+ *
+ * Extracts the variable name following the '$', resolves its value, and appends
+ * it to the expanded result. Supports special cases like '$?'.
+ * Returns the updated index or -1 on failure.
+ */
 int	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg)
 {
 	char	*temp;
@@ -73,6 +96,18 @@ int	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg)
 	return (arg->start);
 }
 
+/**
+ * finalize_expand - Finalizes the expansion process for a variable.
+ *
+ * @mini: Pointer to the shell structure for accessing environment variables.
+ * @data: Pointer to the t_vdata structure containing expansion details.
+ * @arg: Pointer to the t_expand structure tracking expansion state.
+ *
+ * Handles the resolution and appending of
+ * a variable's value to the expanded result.
+ * Updates the starting index and frees temporary memory.
+ * Returns 0 on success or 1 on failure.
+ */
 static int	finalize_expand(t_shell *mini, t_vdata *data, t_expand *arg)
 {
 	if (handle_value(mini, data))
@@ -85,6 +120,16 @@ static int	finalize_expand(t_shell *mini, t_vdata *data, t_expand *arg)
 	return (0);
 }
 
+/**
+ * handle_new_expand - Appends a newly expanded variable value to the result.
+ *
+ * @temp: Temporary string containing the value to append.
+ * @expan: Pointer to the string accumulating the expanded result.
+ *
+ * Concatenates the temporary value to the current expanded result,
+ * handling memory
+ * management for both strings. Returns 0 on success or -1 on failure.
+ */
 static int	handle_new_expand(char *temp, char **expan)
 {
 	char	*new_expanded;
@@ -101,6 +146,17 @@ static int	handle_new_expand(char *temp, char **expan)
 	return (0);
 }
 
+/**
+ * init_vdata - Initializes a t_vdata structure for expansion processing.
+ *
+ * @data: Pointer to the t_vdata structure to initialize.
+ * @expan: Pointer to the string accumulating the expanded result.
+ * @temp: Temporary string used during expansion.
+ * @name: Name of the variable being expanded.
+ *
+ * Prepares the t_vdata structure with pointers to relevant data
+ * for the expansion process.
+ */
 static void	init_vdata(t_vdata *data, char **expan, char *temp, char *name)
 {
 	data->value = NULL;

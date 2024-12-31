@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:01:57 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:11:25 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:36:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,15 @@ void	close_fds_and_pipes(t_shell *mini, int i);
 void	wait_children(t_shell *mini);
 void	unlink_all_heredocs(t_shell *mini);
 
-// Duplicates fds in main process and resets fds to STDIN/STDOUT when needed
-// only difference is that this resets fds in case of error here to save space
-
+/**
+ * create_pipes - Creates pipes for inter-process communication.
+ *
+ * @mini: Pointer to the shell structure containing pipe information.
+ *
+ * Loops through the required number of pipes
+ * and initializes them using `pipe()`.
+ * Returns 0 on success, or 1 if `pipe()` fails (printing an error message).
+ */
 int	create_pipes(t_shell *mini)
 {
 	int	i;
@@ -38,6 +44,17 @@ int	create_pipes(t_shell *mini)
 	return (0);
 }
 
+/**
+ * dup2_and_close_in_main - Duplicates and closes file descriptors safely.
+ *
+ * @mini: Pointer to the shell structure for managing resources.
+ * @old_fd: The source file descriptor to duplicate.
+ * @new_fd: The target file descriptor to redirect to.
+ *
+ * Ensures valid `old_fd`, duplicates it onto `new_fd` using `dup2()`,
+ * and closes the original `old_fd`. If an error occurs, resets file descriptors
+ * in the shell and returns 1; otherwise, returns 0.
+ */
 int	dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd)
 {
 	if (old_fd < 0)
@@ -56,8 +73,15 @@ int	dup2_and_close_in_main(t_shell *mini, int old_fd, int new_fd)
 	return (0);
 }
 
-// Closes current command's fds, previous pipe and pipe_fds when needed
-
+/**
+ * close_fds_and_pipes - Closes file descriptors and pipes for a command.
+ *
+ * @mini: Pointer to the shell structure containing pipe information.
+ * @i: The index of the current command in the pipeline.
+ *
+ * Closes write ends of the pipe for the first command, read and write ends
+ * for middle commands, and read ends for the last command.
+ */
 void	close_fds_and_pipes(t_shell *mini, int i)
 {
 	if (mini->cmd_count > 1)
@@ -78,8 +102,14 @@ void	close_fds_and_pipes(t_shell *mini, int i)
 	}
 }
 
-// Waits for all child prcocesses to complete and catches their exit status
-
+/**
+ * wait_children - Waits for all child processes to finish.
+ *
+ * @mini: Pointer to the shell structure containing process IDs.
+ *
+ * Uses `waitpid()` to wait for each child process and updates the shell's
+ * exit status to reflect the last child's exit code.
+ */
 void	wait_children(t_shell *mini)
 {
 	int	i;
@@ -96,6 +126,14 @@ void	wait_children(t_shell *mini)
 	}
 }
 
+/**
+ * unlink_all_heredocs - Removes all heredoc temporary files.
+ *
+ * @mini: Pointer to the shell structure containing command redirection data.
+ *
+ * Iterates through all commands and unlinks (deletes) temporary files
+ * associated with heredoc redirections. Frees memory for the filenames.
+ */
 void	unlink_all_heredocs(t_shell *mini)
 {
 	t_redir	*current;

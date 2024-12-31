@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:12:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:36:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,20 @@ static int	pipe_and_fork(t_shell *mini);
 static int	allocate_pipes_array(t_shell *mini);
 static int	allocate_pipes(t_shell *mini);
 
-// Sets up pipeline and forks child processes when needed
-// Allocates memory for an array of pids to store IDs of child processes
-
+/**
+ * execute_pipeline - Executes a pipeline of commands,
+ * 					  including single built-in commands.
+ *
+ * @mini: Pointer to the shell structure containing command and pipeline data.
+ *
+ * Handles execution of either a single built-in command
+ * or a pipeline of commands.
+ * Allocates necessary resources (like pipes and process IDs),
+ * manages redirections, forks processes for each command in the pipeline,
+ * waits for children, and cleans up.
+ *
+ * Returns the exit status of the last command executed.
+ */
 int	execute_pipeline(t_shell *mini)
 {
 	if (mini->cmd_count == 1 && mini->cmds[0]->command
@@ -49,26 +60,30 @@ int	execute_pipeline(t_shell *mini)
 	return (mini->exit_stat);
 }
 
-// Executes single builtin command in parent process
-// duplicates fd based on fd_in and fd_out and resets STDIN and STDOUT
-
+/**
+ * handle_single_builtin_cmd - Executes a single built-in command
+ * 							   without forking.
+ *
+ * @mini: Pointer to the shell structure containing the built-in command.
+ *
+ * Resolves file descriptors for input and output redirection,
+ * executes the built-in command,
+ * and restores the original file descriptors. Cleans up resources in case
+ * of failure.
+ *
+ * Returns 0 on success or 1 on failure.
+ */
 static int	handle_single_builtin_cmd(t_shell *mini)
 {
 	if (resolve_fd(mini->cmds[0]) || save_fds(mini))
 	{
 		mini->exit_stat = mini->cmds[0]->cmd_exit;
+		clean_cmds(mini->cmds);
 		return (1);
 	}
-	if (mini->cmds[0]->fd_in != STDIN_FILENO)
-	{
-		if (dup2_and_close_in_main(mini, mini->cmds[0]->fd_in, STDIN_FILENO))
-			return (1);
-	}
-	if (mini->cmds[0]->fd_out != STDOUT_FILENO)
-	{
-		if (dup2_and_close_in_main(mini, mini->cmds[0]->fd_out, STDOUT_FILENO))
-			return (1);
-	}
+	if (redirect_fd(mini->cmds[0]->fd_in, STDIN_FILENO)
+		|| redirect_fd(mini->cmds[0]->fd_out, STDOUT_FILENO))
+		return (1);
 	if (built_in_exe(mini, mini->cmds[0]))
 	{
 		clean_cmds(mini->cmds);
@@ -84,9 +99,17 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 	return (0);
 }
 
-// Creates pipes when needed and forks child processes
-// After forking, closes cmd-specific fds that were passed to child
-
+/**
+ * pipe_and_fork - Handles the creation of pipes
+ * 				   and forks processes for a pipeline.
+ *
+ * @mini: Pointer to the shell structure containing command and pipeline data.
+ *
+ * Allocates pipes for inter-process communication if required,
+ * forks processes for each command in the pipeline,
+ * and sets up redirections. Closes unnecessary file
+ * descriptors. Returns 0 on success or 1 on failure.
+ */
 static int	pipe_and_fork(t_shell *mini)
 {
 	int		i;
@@ -110,6 +133,17 @@ static int	pipe_and_fork(t_shell *mini)
 	return (0);
 }
 
+/**
+ * allocate_pipes - Allocates memory for pipes and initializes them.
+ *
+ * @mini: Pointer to the shell structure containing pipeline data.
+ *
+ * Allocates memory for the pipes used in the pipeline,
+ * creates the pipe file descriptors, and ensures proper cleanup
+ * in case of allocation failure.
+ *
+ * Returns 0 on success or 1 on failure.
+ */
 static int	allocate_pipes(t_shell *mini)
 {
 	mini->pipes = malloc(sizeof(int *) * (mini->cmd_count - 1));
@@ -125,6 +159,16 @@ static int	allocate_pipes(t_shell *mini)
 	return (0);
 }
 
+/**
+ * allocate_pipes_array - Allocates memory for each pipe pair in the pipeline.
+ *
+ * @mini: Pointer to the shell structure containing pipeline data.
+ *
+ * Allocates memory for individual pipe file descriptor pairs. Ensures cleanup of
+ * previously allocated resources in case of failure.
+ *
+ * Returns 0 on success or 1 on failure.
+ */
 static int	allocate_pipes_array(t_shell *mini)
 {
 	int	i;
