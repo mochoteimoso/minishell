@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:40:06 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 19:18:07 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:52:55 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	update_pwd(t_env *env, char *wd, char **oldpwd)
 	int	flg;
 
 	flg = 0;
-
 	while (env)
 	{
 		if (ft_strcmp(env->name, "OLDPWD") == 0

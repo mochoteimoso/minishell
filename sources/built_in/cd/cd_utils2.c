@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 11:14:49 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/30 19:28:43 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:53:11 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ int	no_cwd(t_shell *mini, t_env *pwd, char **cwd)
 	}
 	else
 	{
-		error(mini, "getcwd: cannot access parent directories:\
-			No such file or directory");
+		error(mini, "getcwd: cannot access parent directories: No such file or directory");
 		return (1);
 	}
 	return (0);

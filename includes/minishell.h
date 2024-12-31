@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 19:27:41 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:52:15 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 # define TMP_EXT ".tmp"
 
 extern int	g_sig;
-
-//# include </usr/include/linux/signal.h>
 
 typedef enum e_redir_type
 {
@@ -117,6 +115,8 @@ typedef struct s_shell
 	int		stdout_saved;
 	int		exit_stat;
 }	t_shell;
+
+void	printer(t_shell *mini);
 
 /*built_in*/
 	/*cd/cd.c*/

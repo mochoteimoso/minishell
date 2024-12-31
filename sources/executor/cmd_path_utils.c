@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:32:00 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/30 18:32:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:54:42 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,6 @@ int	check_special_cases(t_cmd *cmd)
 	}
 	return (0);
 }
-
-/*int	check_for_directory(t_cmd *cmd)
-{
-	int	fd;
-
-	fd = open(cmd->command, O_DIRECTORY);
-	if (fd != -1)
-	{
-		close(fd);
-		ft_putstr_fd(cmd->command, 2);
-		ft_putendl_fd(": Is a directory", 2);
-		cmd->cmd_exit = 126;
-		return (1);
-	}
-	return (0);
-} */
 
 int	check_for_directory(t_cmd *cmd)
 {
