@@ -3,19 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   expand_unquoted.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:17:22 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:13:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 14:07:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+int			s_unquoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan);
 int			no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 static int	if_check(t_cmd *cmd, t_expand *arg);
 static int	this_expands(t_shell *mini, t_cmd *cmd, t_expand *arg);
 static int	expand_var(t_shell *mini, char *str, char **expan, t_expand *arg);
+
+int	s_unquoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
+{
+	char	*temp;
+
+	temp = *expan;
+	arg->i = no_quotes(mini, *cmd, arg->i, arg);
+	if (arg->i == -1)
+	{
+		free(temp);
+		*expan = NULL;
+		return (-1);
+	}
+	*expan = ft_strjoin(temp, arg->value);
+	free(temp);
+	free(arg->value);
+	arg->value = NULL;
+	return (arg->i);
+}
 
 int	no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 {

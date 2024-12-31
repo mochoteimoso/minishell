@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:03:42 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:01:12 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <sys/wait.h>
-# include <sys/stat.h> 
+# include <sys/stat.h>
 # include <fcntl.h>
 
 # define TMP_S "/tmp/heredoc"
@@ -225,6 +225,7 @@ int		in_quotes(t_shell *mini, char *str, int i, t_expand *arg);
 int		we_have_heredoc(t_expand *arg, char *str, int n);
 
 	/*expand_unquoted.c*/
+int		s_unquoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan);
 int		no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg);
 
 	/*expand_utils.c*/
@@ -246,6 +247,7 @@ int		new_result(t_expand *arg, char *temp);
 
 	/*expand_utils4.c*/
 void	just_a_quest(char *str, char *name, int *indx, t_expand *arg);
+void	we_need_name(t_expand *arg, char *str, char *name, int *indx);
 
 	/*handle_cmd_args.c*/
 int		handle_cmd_args(t_shell *mini, t_cmd *cmd, int i);
@@ -333,7 +335,7 @@ void	sig_handler_hd(int signal);
 void	sigint_handler(int sig);
 void	sig_handler2(int sig);
 void	sig_handler_heredoc(int signum);
-	
+
 /*syntax*/
 	/*pipe_syntax*/
 int		check_pipes(char **input, t_shell *mini);

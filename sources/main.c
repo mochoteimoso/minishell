@@ -3,57 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:23:09 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 13:46:36 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+int			main(int argc, char **argv, char **envp);
+static int	activate_shell(int status, char **envp);
+static int	init_shell(t_shell *mini, char **envp);
+static int	user_prompt(t_shell *mini, int status);
+static int	handle_input(t_shell *mini, char *input);
+
 int	g_sig = 0;
 
-void	printer(t_shell *mini)
+int	main(int argc, char **argv, char **envp)
 {
-	int i = 0;
+	int	status;
 
-	while (mini->cmds[i])
+	status = 0;
+	(void)argv;
+	if (argc != 1)
 	{
-		printf("\n");
-		printf("|*************************************************|\n");
-		printf("Struct %d:\n", i);
-		printf("segment: %s\n", mini->cmds[i]->seg);
-		printf("command: %s\n", mini->cmds[i]->command);
-		printf("command path: %s\n", mini->cmds[i]->cmd_path);
-		if (mini->cmds[i]->args)
-		{
-			int j = 0;
-			while (mini->cmds[i]->args[j])
-			{
-				printf("arg %d: {%s}\n", j, mini->cmds[i]->args[j]);
-				j++;
-			}
-		}
-		t_redir *redir = mini->cmds[i]->redir_head;
-		int redir_index = 0;
-		while (redir)
-		{
-			printf("Redir\n");
-			printf("Redirection %d - type: %d\n", redir_index, redir->type);
-			printf("Redirection %d - file: %s\n", redir_index, redir->file);
-			printf("Redirection %d - delimiter: %s\n", redir_index, redir->delimiter);
-			printf("Redirection %d - heredoc file: %s\n", redir_index, redir->heredoc_name);
-			printf("Redirection %d - expand or not: %d\n", redir_index, redir->expand);
-			redir = redir->next;
-			redir_index++;
-		}
-		//printf("fd_in: %d\n", mini->cmds[i]->fd_in);
-		//printf("fd_out: %d\n", mini->cmds[i]->fd_out);
-		printf("|*************************************************|");
-		printf("\n");
-		i++;
+		printf("Minishell doesn't take arguments\n");
+		return (1);
 	}
+	return (activate_shell(status, envp));
+}
+
+static int	activate_shell(int status, char **envp)
+{
+	t_shell	*mini;
+
+	mini = ft_calloc(1, sizeof(t_shell));
+	if (!mini)
+	{
+		ft_putendl_fd("mini struct malloc failed", 2);
+		status = 1;
+		return (status);
+	}
+	if (init_shell(mini, envp))
+	{
+		status = 1;
+		return (status);
+	}
+	status = user_prompt(mini, status);
+	clean_env(mini->env, mini->pending);
+	free(mini);
+	return (status);
 }
 
 static int	init_shell(t_shell *mini, char **envp)
@@ -85,14 +85,14 @@ static int	init_shell(t_shell *mini, char **envp)
 	return (0);
 }
 
-/*
-static int user_prompt(t_shell *mini, int status)
+static int	user_prompt(t_shell *mini, int status)
 {
 	char	*input;
 
 	while (1)
 	{
-		init_sig();
+		if (isatty(fileno(stdin)))
+			init_sig();
 		input = readline("minishell> ");
 		if (input == NULL)
 			break ;
@@ -103,101 +103,65 @@ static int user_prompt(t_shell *mini, int status)
 		}
 		if (input && *input)
 		{
-			add_history(input);
-			if (parse_and_validate_input(&input, mini))
-			{
-				free(input);
+			if (handle_input(mini, input))
 				continue ;
-			}
-			//printer(mini);
-			execute_pipeline(mini);
-			free(input);
-		}
-	}
-	status = mini->exit_stat;
-	return (status);
-} */
-
-// Edited for the tester
-
-static int	user_prompt(t_shell *mini, int status)
-{
-	char	*input;
-	int		i;
-
-	while (1)
-	{
-		i = 0;
-		if (isatty(fileno(stdin)))
-			init_sig();
-		if (isatty(fileno(stdin)))
-		{
-			input = readline("minishell> ");
-			if (input == NULL)
-				break ;
-		}
-		else
-		{
-			char *line = get_next_line(fileno(stdin));
-			if (line == NULL)
-				break ;
-			input = ft_strtrim(line, "\n");
-			free(line);
-		}
-		if (is_this_empty(input))
-		{
-			free(input);
-			continue ;
-		}
-		if (input && *input)
-		{
-			add_history(input);
-			if (parse_and_validate_input(&input, mini))
-			{
-				free(input);
-				continue ;
-			}
-			//printer(mini);
-			execute_pipeline(mini);
-			free(input);
 		}
 	}
 	status = mini->exit_stat;
 	return (status);
 }
 
-static int	activate_shell(int status, char **envp)
+static int	handle_input(t_shell *mini, char *input)
 {
-	t_shell	*mini;
-
-	mini = ft_calloc(1, sizeof(t_shell));
-	if (!mini)
+	add_history(input);
+	if (parse_and_validate_input(&input, mini))
 	{
-		ft_putendl_fd("mini struct malloc failed", 2);
-		status = 1;
-		return (status);
-	}
-	if (init_shell(mini, envp))
-	{
-		status = 1;
-		return (status);
-	}
-	status = user_prompt(mini, status);
-	clean_env(mini->env, mini->pending);
-	free(mini);
-	return (status);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	int	status;
-
-	status = 0;
-	(void)argv;
-	if (argc != 1)
-	{
-		printf("Minishell doesn't take arguments\n");
+		free(input);
 		return (1);
-	};
-	return (activate_shell(status, envp));
+	}
+	execute_pipeline(mini);
+	free(input);
+	return (0);
 }
+
+// void	printer(t_shell *mini)
+// {
+// 	int i = 0;
+
+// 	while (mini->cmds[i])
+// 	{
+// 		printf("\n");
+// 		printf("|*************************************************|\n");
+// 		printf("Struct %d:\n", i);
+// 		printf("segment: %s\n", mini->cmds[i]->seg);
+// 		printf("command: %s\n", mini->cmds[i]->command);
+// 		printf("command path: %s\n", mini->cmds[i]->cmd_path);
+// 		if (mini->cmds[i]->args)
+// 		{
+// 			int j = 0;
+// 			while (mini->cmds[i]->args[j])
+// 			{
+// 				printf("arg %d: {%s}\n", j, mini->cmds[i]->args[j]);
+// 				j++;
+// 			}
+// 		}
+// 		t_redir *redir = mini->cmds[i]->redir_head;
+// 		int redir_index = 0;
+// 		while (redir)
+// 		{
+// 			printf("Redir\n");
+// 			printf("Redirection %d - type: %d\n", redir_index, redir->type);
+// 			printf("Redirection %d - file: %s\n", redir_index, redir->file);
+// 			printf("Redirection %d - delimiter: %s\n", redir_index, redir->delimiter);
+// 			printf("Redirection %d - heredoc file: %s\n", redir_index, redir->heredoc_name);
+// 			printf("Redirection %d - expand or not: %d\n", redir_index, redir->expand);
+// 			redir = redir->next;
+// 			redir_index++;
+// 		}
+// 		//printf("fd_in: %d\n", mini->cmds[i]->fd_in);
+// 		//printf("fd_out: %d\n", mini->cmds[i]->fd_out);
+// 		printf("|*************************************************|");
+// 		printf("\n");
+// 		i++;
+// 	}
+// }

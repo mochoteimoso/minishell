@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:44:51 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:13:46 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:11:07 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	we_have_dollar(t_shell *mini, t_expand *arg, char *str)
 		return (-1);
 	}
 	free(arg->value);
-	arg->value = NULL;
 	free(temp);
 	arg->value = new_res;
 	return (0);
@@ -67,14 +66,7 @@ int	oh_a_dollar(t_shell *mini, char *str, char **expan, t_expand *arg)
 	if (str[arg->i] == '?')
 		just_a_quest(str, name, &indx, arg);
 	else
-	{
-		while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_'))
-		{
-			if (indx < (int) sizeof(name) - 1)
-				name[indx++] = str[arg->i++];
-		}
-		name[indx] = '\0';
-	}
+		we_need_name(arg, str, name, &indx);
 	init_vdata(&data, expan, temp, name);
 	if (finalize_expand(mini, &data, arg))
 		return (-1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmd_name.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 13:35:20 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:17:07 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:13:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int			handle_cmd_name(t_cmd *cmd, int i);
 static int	quoted_cmd(t_expand *name, char *seg);
+static int	this_is_redirection(t_cmd *cmd, t_expand *name);
 
 int	handle_cmd_name(t_cmd *cmd, int i)
 {
@@ -23,8 +24,7 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	the_arg(&name, i);
 	while (cmd->seg[name.i])
 	{
-		if (cmd->seg[name.i] == ' ' || cmd->seg[name.i] == '<'
-			|| cmd->seg[name.i] == '>' || cmd->seg[name.i] == '|')
+		if (this_is_redirection(cmd, &name))
 			break ;
 		if (cmd->seg[name.i] == '\'' || cmd->seg[name.i] == '"')
 		{
@@ -43,6 +43,15 @@ int	handle_cmd_name(t_cmd *cmd, int i)
 	cmd->command = ft_strdup(name.value);
 	free(name.value);
 	return (name.i);
+}
+
+static int	this_is_redirection(t_cmd *cmd, t_expand *name)
+{
+	if (cmd->seg[name->i] == ' ' || cmd->seg[name->i] == '<'
+		|| cmd->seg[name->i] == '>' || cmd->seg[name->i] == '|')
+		return (1);
+	else
+		return (0);
 }
 
 static int	quoted_cmd(t_expand *name, char *seg)
