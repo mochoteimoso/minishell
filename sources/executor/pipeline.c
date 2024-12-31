@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:12:19 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:52:33 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,12 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 	if (resolve_fd(mini->cmds[0]) || save_fds(mini))
 	{
 		mini->exit_stat = mini->cmds[0]->cmd_exit;
+		clean_cmds(mini->cmds);
 		return (1);
 	}
-	if (mini->cmds[0]->fd_in != STDIN_FILENO)
-	{
-		if (dup2_and_close_in_main(mini, mini->cmds[0]->fd_in, STDIN_FILENO))
-			return (1);
-	}
-	if (mini->cmds[0]->fd_out != STDOUT_FILENO)
-	{
-		if (dup2_and_close_in_main(mini, mini->cmds[0]->fd_out, STDOUT_FILENO))
-			return (1);
-	}
+	if (redirect_fd(mini->cmds[0]->fd_in, STDIN_FILENO)
+		|| redirect_fd(mini->cmds[0]->fd_out, STDOUT_FILENO))
+		return (1);
 	if (built_in_exe(mini, mini->cmds[0]))
 	{
 		clean_cmds(mini->cmds);
