@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:01:48 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:18:13 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 12:20:56 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,9 @@ bool	is_redirection(t_cmd *cmd, int i)
 // to the redir linked list
 int	handle_redirect_in(t_cmd *cmd, int i)
 {
-	bool	in_quotes;
 	char	*filename;
-	bool	in_quotes;
-	int		temp_fd;
 
 	filename = NULL;
-	in_quotes = false;
 	i++;
 	i = parse_filename(cmd, i, &filename);
 	if (i == -1 || !filename)
@@ -52,11 +48,9 @@ int	handle_redirect_in(t_cmd *cmd, int i)
 // to the redir linked list
 int	handle_redirect_out(t_cmd *cmd, int i)
 {
-	bool	in_quotes;
 	char	*filename;
 
 	filename = NULL;
-	in_quotes = false;
 	i++;
 	i = parse_filename(cmd, i, &filename);
 	if (i == -1 || !filename)
@@ -68,7 +62,7 @@ int	handle_redirect_out(t_cmd *cmd, int i)
 
 // Handles heredoc, finds the delimiter and copies data to the redir linked list
 
-int	handle_heredoc(t_cmd *cmd, int i)
+int	handle_heredoc(t_shell *mini, t_cmd *cmd, int i)
 {
 	char	*delim;
 
@@ -81,10 +75,10 @@ int	handle_heredoc(t_cmd *cmd, int i)
 		return (-1);
 	cmd->redir_tail->delimiter = delim;
 	cmd->redir_tail->type = HEREDOC;
-	if (in_quotes)
-		cmd->redir_tail->expand = false;
-	else
-		cmd->redir_tail->expand = true;
+	if (generate_hd_file(cmd))
+		return (-1);
+	if (open_and_write_to_heredoc(mini, cmd))
+		return (-1);
 	return (i);
 }
 
@@ -92,10 +86,8 @@ int	handle_heredoc(t_cmd *cmd, int i)
 to the redir linked list*/
 int	handle_append(t_cmd *cmd, int i)
 {
-	bool	in_quotes;
 	char	*filename;
 
-	in_quotes = false;
 	filename = NULL;
 	i += 2;
 	i = parse_filename(cmd, i, &filename);

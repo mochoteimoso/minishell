@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:32:00 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:10:35 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:40:28 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int		check_special_cases(t_cmd *cmd);
 int		check_for_directory(t_cmd *cmd);
 void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
+int		check_access(t_cmd *cmd);
 
 int	check_special_cases(t_cmd *cmd)
 {
@@ -40,8 +41,8 @@ int	check_special_cases(t_cmd *cmd)
 
 int	check_for_directory(t_cmd *cmd)
 {
-	struct stat path_stat;
-	
+	struct stat	path_stat;
+
 	if (stat(cmd->command, &path_stat) == -1)
 	{
 		ft_putstr_fd(cmd->command, 2);
@@ -64,4 +65,22 @@ void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status)
 	ft_putstr_fd(cmd->command, 2);
 	ft_putendl_fd(": Command not found", 2);
 	cmd->cmd_exit = exit_status;
+}
+
+int	check_access(t_cmd *cmd)
+{
+	if (access(cmd->command, X_OK) == 0)
+	{
+		cmd->cmd_path = cmd->command;
+		return (0);
+	}
+	if (access(cmd->command, F_OK) == 0)
+	{
+		ft_putstr_fd(cmd->command, 2);
+		ft_putendl_fd(": Permission denied", 2);
+		cmd->cmd_exit = 126;
+		return (-1);
+	}
+	else
+		return (1);
 }

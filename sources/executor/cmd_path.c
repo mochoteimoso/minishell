@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 11:10:51 by henbuska         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:43:41 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,30 +104,21 @@ static char	*search_command_in_paths(char **paths, t_cmd *cmd)
 	return (NULL);
 }
 
-// Checks whether command is already an absolute path
-
 static int	check_abs_path(t_cmd *cmd)
 {
+	int	access_result;
+
 	if (check_special_cases(cmd))
 		return (-1);
 	if (cmd->command[0] == '/' || (cmd->command[0] == '.'
-		&& cmd->command[1] == '/') || (cmd->command[0] == '.'
-		&& cmd->command[1] == '.' && cmd->command[0] == '/'))
+			&& cmd->command[1] == '/') || (cmd->command[0] == '.'
+			&& cmd->command[1] == '.' && cmd->command[2] == '/'))
 	{
 		if (check_for_directory(cmd) != 0)
 			return (-1);
-		if (access(cmd->command, X_OK) == 0)
-		{
-			cmd->cmd_path = cmd->command;
-			return (0);
-		}
-		if (access(cmd->command, F_OK) == 0 && access(cmd->command, X_OK) != 0)
-		{
-			ft_putstr_fd(cmd->command, 2);
-			ft_putendl_fd(": Permission denied", 2);
-			cmd->cmd_exit = 126;
-			return (-1);
-		}
+		access_result = check_access(cmd);
+		if (access_result <= 0)
+			return (access_result);
 		ft_putstr_fd(cmd->command, 2);
 		ft_putendl_fd(": Command not found", 2);
 		cmd->cmd_exit = 127;
