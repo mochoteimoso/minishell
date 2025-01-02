@@ -76,7 +76,11 @@ OBJ_DIRS = $(sort $(dir $(OBJS)))
 
 MAKEFLAGS += --no-print-directory
 
-all: $(LIBFT) $(OBJ_DIRS) $(NAME)
+all: $(NAME)
+
+$(NAME): $(LIBFT) $(OBJ_DIRS) $(OBJS)
+		@cc $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS) > /dev/null
+		@echo "\n\033[0;32mLet's mini!\033[0m\n"
 
 $(OBJ_DIRS):
 		@mkdir -p $(OBJ_DIRS)
@@ -87,10 +91,6 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 $(LIBFT):
 		@make -C $(LIBFT_DIR)
 		@echo "\n\033[0;32mLibft ready\033[0m\n"
-
-$(NAME): $(OBJS)
-		@cc $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS) > /dev/null
-		@echo "\n\033[0;32mLet's mini!\033[0m\n"
 
 clean:
 		@rm -rf $(OBJ_DIR)
