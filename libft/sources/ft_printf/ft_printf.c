@@ -6,12 +6,21 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:00:50 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/25 14:22:39 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:39:09 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_printf.h"
 
+/**
+ * ft_printf - A custom implementation of printf for formatted output.
+ *
+ * @str: The format string containing specifiers and plain text.
+ * @...: Variable arguments to format and print based on specifiers.
+ *
+ * Returns:
+ * The number of characters printed, or -1 on error.
+ */
 int	ft_printf(char const *str, ...)
 {
 	int		num_c;

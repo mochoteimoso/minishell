@@ -6,12 +6,21 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:20:18 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:13:49 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_strjoin - Concatenates two strings into a new string.
+ *
+ * @s1: First string.
+ * @s2: Second string.
+ *
+ * Returns:
+ * A pointer to the concatenated string, or NULL on memory allocation failure.
+ */
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*str;

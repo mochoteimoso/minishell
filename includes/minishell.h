@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 17:01:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:26:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,7 +378,6 @@ int		check_expand(t_shell *mini, t_cmd *cmd, char **line, int fd);
 
 	/*heredoc_file.c*/
 int		generate_hd_file(t_cmd *cmd);
-void	write_close_hd(t_shell *mini, char *line, int fd, int end);
 
 	/*parser.c*/
 int		parse_and_validate_input(char **input, t_shell *mini);

@@ -6,12 +6,21 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 16:49:06 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:14:21 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_strmapi - Creates a new string by applying a function to each character of the input string.
+ *
+ * @s: Input string.
+ * @f: Function to apply.
+ *
+ * Returns:
+ * A pointer to the newly created string, or NULL on memory allocation failure.
+ */
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
 	char			*str;

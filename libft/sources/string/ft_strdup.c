@@ -6,12 +6,20 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 12:52:47 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/25 13:27:54 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:13:34 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_strdup - Duplicates a string.
+ *
+ * @src: Source string to duplicate.
+ *
+ * Returns:
+ * A pointer to the duplicated string, or NULL on memory allocation failure.
+ */
 char	*ft_strdup(char *src)
 {
 	char	*dup;

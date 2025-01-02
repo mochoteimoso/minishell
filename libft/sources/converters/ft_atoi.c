@@ -6,12 +6,20 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 09:49:20 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:33:22 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:32:34 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_atoi - Converts a string representation of a number to an integer.
+ *
+ * @str: The input string.
+ *
+ * Returns:
+ * The integer representation of the string, or -1 if overflow occurs.
+ */
 int	ft_atoi(char const *str)
 {
 	int			p_n;

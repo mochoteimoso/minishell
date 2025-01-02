@@ -6,12 +6,22 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 09:57:32 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:09:45 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_putstr_fd - Outputs a string to the given file descriptor.
+ *
+ * @s: String to output.
+ * @fd: File descriptor to write to.
+ *
+ * Details:
+ * - Writes the string to the file descriptor using `write`.
+ * - Does nothing if the string is NULL.
+ */
 void	ft_putstr_fd(char *s, int fd)
 {
 	if (s != NULL)

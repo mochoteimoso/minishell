@@ -6,12 +6,20 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:27:39 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:31:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_lower - Converts an uppercase character to lowercase.
+ *
+ * @c: The character to convert.
+ *
+ * Returns:
+ * The lowercase equivalent if the input is uppercase, otherwise the original character.
+ */
 static char	ft_lower(char c)
 {
 	if (c >= 65 && c <= 90)
@@ -19,6 +27,15 @@ static char	ft_lower(char c)
 	return (c);
 }
 
+/**
+ * put_nbr - Converts a character to its integer representation in a specific base.
+ *
+ * @c: The character to convert.
+ * @base: The numeric base (e.g., 10 for decimal, 16 for hexadecimal).
+ *
+ * Returns:
+ * The integer value of the character in the given base, or -1 if invalid.
+ */
 static int	put_nbr(char c, int base)
 {
 	int	max;
@@ -35,6 +52,15 @@ static int	put_nbr(char c, int base)
 		return (-1);
 }
 
+/**
+ * ft_atoi_base - Converts a string representation of a number in a specific base to an integer.
+ *
+ * @str: The string containing the number.
+ * @base: The numeric base of the number.
+ *
+ * Returns:
+ * The integer representation of the number, or -1 if conversion fails.
+ */
 int	ft_atoi_base(const char *str, int base)
 {
 	int	res;

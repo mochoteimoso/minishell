@@ -6,12 +6,26 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:10:31 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:07:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_memmove - Copies memory safely, handling overlapping regions.
+ *
+ * @dest: Pointer to the destination memory.
+ * @src: Pointer to the source memory.
+ * @num: Number of bytes to copy.
+ *
+ * Returns:
+ * A pointer to the destination memory.
+ *
+ * Details:
+ * - Handles overlapping regions by copying from the end when needed.
+ * - Uses `ft_memcpy` for non-overlapping memory.
+ */
 void	*ft_memmove(void *dest, void const *src, size_t num)
 {
 	unsigned char	*t_dest;

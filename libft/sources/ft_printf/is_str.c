@@ -6,12 +6,20 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:39:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/25 14:18:04 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:40:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_printf.h"
 
+/**
+ * s_len - Calculates the length of a string.
+ *
+ * @l: The string to measure.
+ *
+ * Returns:
+ * The length of the string.
+ */
 int	s_len(char *l)
 {
 	int	n;
@@ -25,6 +33,15 @@ int	s_len(char *l)
 	return (n);
 }
 
+/**
+ * is_str - Prints a string.
+ *
+ * @s: The string to print.
+ * @check: Pointer to the error flag.
+ *
+ * Returns:
+ * The number of characters printed, or -1 on error.
+ */
 int	is_str(char *s, int *check)
 {
 	int	len;

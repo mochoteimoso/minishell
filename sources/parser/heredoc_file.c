@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:57:16 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 17:23:24 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:25:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int			generate_hd_file(t_cmd *cmd);
 static int	index_to_char(t_cmd *cmd, t_hd *hd);
 static int	create_name(t_cmd *cmd, t_hd *hd);
-void		write_close_hd(t_shell *mini, char *line, int fd, int end);
 
 /**
  * generate_hd_file - Generates a unique file name
@@ -107,28 +106,3 @@ static int	create_name(t_cmd *cmd, t_hd *hd)
 	return (0);
 }
 
-/**
- * write_close_hd - Writes a line to the heredoc file
- * 					or closes the file descriptor.
- *
- * @mini: Pointer to the shell structure.
- * @line: Line to write to the heredoc file.
- * @fd: File descriptor of the heredoc file.
- * @end: Indicates whether to write or close the file.
- *
- * If `end` is true, closes the heredoc file and restores STDIN. If false, writes
- * the line to the file, appending a newline character.
- * Frees the line after writing.
- */
-void	write_close_hd(t_shell *mini, char *line, int fd, int end)
-{
-	if (end)
-	{
-		close(mini->stdin_saved);
-		close(fd);
-		return ;
-	}
-	write(fd, line, ft_strlen(line));
-	write(fd, "\n", 1);
-	free(line);
-}

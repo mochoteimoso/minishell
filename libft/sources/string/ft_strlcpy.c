@@ -6,12 +6,22 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 16:00:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/11/29 11:01:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:14:06 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_strlcpy - Copies a string with a size limit.
+ *
+ * @dest: Destination buffer.
+ * @src: Source string to copy.
+ * @size: Size of the destination buffer.
+ *
+ * Returns:
+ * The length of the source string.
+ */
 size_t	ft_strlcpy(char *dest, char const *src, size_t size)
 {
 	size_t	s;

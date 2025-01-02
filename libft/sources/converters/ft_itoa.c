@@ -6,12 +6,20 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:03:34 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:33:50 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * number_len - Calculates the number of digits in an integer.
+ *
+ * @nb: The input number.
+ *
+ * Returns:
+ * The length of the number in digits, including the sign if negative.
+ */
 static int	number_len(long nb)
 {
 	int	count;
@@ -30,6 +38,14 @@ static int	number_len(long nb)
 	return (count);
 }
 
+/**
+ * ft_itoa - Converts an integer to its string representation.
+ *
+ * @n: The integer to convert.
+ *
+ * Returns:
+ * A dynamically allocated string representing the integer.
+ */
 char	*ft_itoa(int n)
 {
 	char	*str;

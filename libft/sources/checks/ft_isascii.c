@@ -6,10 +6,18 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 10:05:34 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/05/16 10:58:16 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:27:44 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * ft_isascii - Checks if a character is an ASCII character.
+ *
+ * @ch: The character to check.
+ *
+ * Returns:
+ * 1 if the character is within the ASCII range (0 to 127), otherwise 0.
+ */
 int	ft_isascii(int ch)
 {
 	if (ch >= 0 && ch <= 127)

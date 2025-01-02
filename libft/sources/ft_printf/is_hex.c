@@ -6,12 +6,22 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:39:44 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/25 14:17:51 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:39:35 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_printf.h"
 
+/**
+ * is_hex - Converts and prints a number in hexadecimal format.
+ *
+ * @lng: The number to convert.
+ * @cap: Flag for uppercase (1) or lowercase (0) output.
+ * @check: Pointer to the error flag.
+ *
+ * Returns:
+ * The number of characters printed, or -1 on error.
+ */
 int	is_hex(unsigned long lng, int cap, int *check)
 {
 	int	c;

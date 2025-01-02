@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_array.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:04:07 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/11 18:25:56 by henbuska         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:06:29 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_free_array - Frees a NULL-terminated array of strings.
+ *
+ * @array: Pointer to the array of strings to free.
+ *
+ * Details:
+ * - Iterates through the array, freeing each string.
+ * - Frees the array itself.
+ */
 void	ft_free_array(char **array)
 {
 	int	a;

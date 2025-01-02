@@ -6,10 +6,19 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:30 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/03 10:32:00 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:30:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * ft_countchar - Counts the occurrences of a character in a string.
+ *
+ * @str: The input string.
+ * @c: The character to count.
+ *
+ * Returns:
+ * The number of times the character appears in the string.
+ */
 int	ft_countchar(char *str, char c)
 {
 	int	count;

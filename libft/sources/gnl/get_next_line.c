@@ -6,12 +6,20 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 08:54:42 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:36:05 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:20:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/get_next_line.h"
 
+/**
+ * find_nl - Checks if a newline character exists in the list's buffer.
+ *
+ * @list: Pointer to the head of the buffer list.
+ *
+ * Returns:
+ * 1 if a newline character is found, 0 otherwise.
+ */
 int	find_nl(t_gnl_list *list)
 {
 	int			i;
@@ -30,6 +38,15 @@ int	find_nl(t_gnl_list *list)
 	return (0);
 }
 
+/**
+ * getting_line - Extracts the line from the buffer list up to the newline.
+ *
+ * @list: Pointer to the buffer list.
+ * @next_l: Pointer to the resulting line.
+ *
+ * Allocates memory for `next_l` and copies characters from the buffer list
+ * up to (and including) the newline character.
+ */
 void	getting_line(t_gnl_list *list, char **next_l)
 {
 	int	i;
@@ -58,6 +75,15 @@ void	getting_line(t_gnl_list *list, char **next_l)
 	(*next_l)[j] = '\0';
 }
 
+/**
+ * line_till_nl - Calculates the length of the line up to the newline.
+ *
+ * @list: Pointer to the buffer list.
+ *
+ * Returns:
+ * The length of the line including the newline, or the total length if
+ * no newline is found.
+ */
 int	line_till_nl(t_gnl_list *list)
 {
 	int	i;
@@ -84,6 +110,15 @@ int	line_till_nl(t_gnl_list *list)
 	return (len);
 }
 
+/**
+ * read_old - Removes processed characters from the buffer after a newline.
+ *
+ * @clean_n: Pointer to the cleaned node where the leftover buffer
+ * 			 will be stored.
+ * @last_n: Pointer to the last node of the buffer list containing the old data.
+ *
+ * Copies characters from after the newline in `last_n` to `clean_n`.
+ */
 void	read_old(t_gnl_list *clean_n, t_gnl_list *last_n)
 {
 	int	i;
@@ -100,6 +135,18 @@ void	read_old(t_gnl_list *clean_n, t_gnl_list *last_n)
 	clean_n->l_buffer[j] = '\0';
 }
 
+/**
+ * get_next_line - Reads a line from the file descriptor.
+ *
+ * @fd: File descriptor to read from.
+ *
+ * Returns:
+ * A pointer to the line read, or NULL if an error occurs or the file ends.
+ *
+ * Details:
+ * - Manages a static linked list (`list`) to store data across calls.
+ * - Calls helper functions to read, extract, and reset the buffer.
+ */
 char	*get_next_line(int fd)
 {
 	static t_gnl_list	*list = NULL;

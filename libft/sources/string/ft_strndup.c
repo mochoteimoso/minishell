@@ -6,12 +6,21 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:24:13 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/26 11:46:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:14:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_strndup - Duplicates the first `n` characters of a string.
+ *
+ * @src: Source string.
+ * @n: Number of characters to duplicate.
+ *
+ * Returns:
+ * A pointer to the duplicated string, or NULL on memory allocation failure.
+ */
 char	*ft_strndup(const char *src, size_t n)
 {
 	size_t	src_len;

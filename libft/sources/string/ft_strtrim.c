@@ -6,12 +6,21 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:36:31 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/20 10:20:46 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:15:04 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_strtrim - Removes characters from the start and end of a string.
+ *
+ * @s1: String to trim.
+ * @set: Set of characters to remove.
+ *
+ * Returns:
+ * A pointer to the trimmed string, or NULL on memory allocation failure.
+ */
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	size_t	front;

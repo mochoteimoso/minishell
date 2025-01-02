@@ -6,12 +6,26 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 16:23:21 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:52:04 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_lstmap - Creates a new list by applying a function to each node's content.
+ *
+ * @lst: Pointer to the head of the source list.
+ * @f: Function to apply to each node's content.
+ * @del: Function to delete the content of a node in case of allocation failure.
+ *
+ * Returns:
+ * A pointer to the head of the new list or NULL if allocation fails.
+ *
+ * Details:
+ * - Allocates and creates a new node for each transformed content.
+ * - Frees the new list using `del` if memory allocation fails.
+ */
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
 	t_list	*new_l;

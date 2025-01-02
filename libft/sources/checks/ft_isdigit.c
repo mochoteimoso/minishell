@@ -6,10 +6,18 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:25:48 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/05/16 10:58:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:28:00 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * ft_isdigit - Checks if a character is a numeric digit.
+ *
+ * @ch: The character to check.
+ *
+ * Returns:
+ * 1 if the character is a digit ('0' to '9'), otherwise 0.
+ */
 int	ft_isdigit(int ch)
 {
 	if (ch >= '0' && ch <= '9')

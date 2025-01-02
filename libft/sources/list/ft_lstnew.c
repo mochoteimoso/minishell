@@ -6,12 +6,24 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 11:55:16 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/10/24 11:34:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:58:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
+/**
+ * ft_lstnew - Creates a new node for a linked list.
+ *
+ * @content: The content to store in the new node.
+ *
+ * Returns:
+ * A pointer to the newly created node or NULL if allocation fails.
+ *
+ * Details:
+ * - Allocates memory for a new node.
+ * - Initializes the node's `content` and sets `next` to NULL.
+ */
 t_list	*ft_lstnew(void *content)
 {
 	t_list	*new;
