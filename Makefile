@@ -46,16 +46,16 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)parser/parser.c\
 	$(SRC_DIR)parser/parser_utils.c\
 	$(SRC_DIR)parser/split_input.c\
+	$(SRC_DIR)redirection/redir_ll.c\
+	$(SRC_DIR)redirection/redirector.c\
+	$(SRC_DIR)redirection/open_files.c\
+	$(SRC_DIR)redirection/get_filename.c\
 	$(SRC_DIR)signals/signal_handlers.c\
 	$(SRC_DIR)signals/signals_utils.c\
 	$(SRC_DIR)syntax/syntax_checker.c\
 	$(SRC_DIR)syntax/redirection_syntax.c\
 	$(SRC_DIR)syntax/pipe_syntax.c\
 	$(SRC_DIR)syntax/trailing_pipe.c\
-	$(SRC_DIR)redirection/redir_ll.c\
-	$(SRC_DIR)redirection/redirector.c\
-	$(SRC_DIR)redirection/open_files.c\
-	$(SRC_DIR)redirection/get_filename.c\
 	$(SRC_DIR)utils/freeing.c\
 	$(SRC_DIR)utils/exit_handler.c\
 	$(SRC_DIR)utils/cleaners.c

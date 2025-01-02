@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 13:18:31 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 11:42:42 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 12:59:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	clean_cmds(t_cmd **cmds)
 
 /**
  * cleaner_for_success - Cleans up resources after
- * 						 a successful pipeline execution.
+ * a successful pipeline execution.
  *
  * @mini: Pointer to the shell structure containing resources to clean.
  *
