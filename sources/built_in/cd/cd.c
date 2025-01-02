@@ -6,7 +6,7 @@
 /*   By: henbuska <henbuska@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:23:40 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 11:05:37 by henbuska         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:41:49 by henbuska         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,21 @@ static int	cd_choices(t_shell *mini, t_cmd *cmd, char *cwd);
 static int	old_pwd(t_shell *mini, t_cmd *cmd);
 static int	to_path(t_shell *mini, char *path);
 
-/*Changes the current directory. Accepts a relative or absolute path
-as an argument.*/
+/**
+ * built_cd - Handles the `cd` (change directory) command.
+ *
+ * @mini: The shell structure containing environment and state information.
+ * @cmd: The command structure containing arguments for `cd`.
+ *
+ * Validates the number of arguments and determines the directory to change to.
+ * Handles various `cd` cases: no arguments, `-`, or a specific path. Updates
+ * the environment variables appropriately.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 on failure.
+ */
+
 int	built_cd(t_shell *mini, t_cmd *cmd)
 {
 	char	*cwd;
@@ -45,6 +58,23 @@ int	built_cd(t_shell *mini, t_cmd *cmd)
 	return (0);
 }
 
+/**
+ * cd_choices - Determines the type of `cd` operation based on the arguments.
+ *
+ * @mini: The shell structure.
+ * @cmd: The command structure containing arguments for `cd`.
+ * @cwd: The current working directory.
+ *
+ * Handles different `cd` operations:
+ * - No arguments: Change to the home directory.
+ * - Argument `-`: Change to the old working directory (`OLDPWD`).
+ * - Specific path: Change to the specified directory.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 on failure.
+ */
+
 static int	cd_choices(t_shell *mini, t_cmd *cmd, char *cwd)
 {
 	if (!cmd->args[1])
@@ -67,6 +97,19 @@ static int	cd_choices(t_shell *mini, t_cmd *cmd, char *cwd)
 	return (0);
 }
 
+/**
+ * to_home - Changes the directory to the home directory.
+ *
+ * @cwd: The current working directory.
+ *
+ * Retrieves the `HOME` environment variable and changes to that directory.
+ * Prints an error if `HOME` is not set.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 if `HOME` is not set or the change directory operation fails.
+ */
+
 static int	to_home(char *cwd)
 {
 	const char	*path;
@@ -82,6 +125,20 @@ static int	to_home(char *cwd)
 	free(cwd);
 	return (0);
 }
+
+/**
+ * old_pwd - Handles the `cd -` command to change to the previous directory.
+ *
+ * @mini: The shell structure containing environment information.
+ * @cmd: The command structure.
+ *
+ * Retrieves the `OLDPWD` value and changes to that directory. Updates the
+ * `PWD` and `OLDPWD` environment variables.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 on failure.
+ */
 
 static int	old_pwd(t_shell *mini, t_cmd *cmd)
 {
@@ -106,6 +163,20 @@ static int	old_pwd(t_shell *mini, t_cmd *cmd)
 		return (1);
 	return (0);
 }
+
+/**
+ * to_path - Changes the directory to the specified path.
+ *
+ * @mini: The shell structure containing environment information.
+ * @path: The target directory path.
+ *
+ * Retrieves the current directory and uses it to update the `OLDPWD` variable.
+ * Attempts to change to the specified path and updates the `PWD` variable.
+ *
+ * Returns:
+ * - 0 on success.
+ * - 1 on failure.
+ */
 
 static int	to_path(t_shell *mini, char *path)
 {
