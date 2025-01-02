@@ -6,12 +6,11 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:13:18 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 11:14:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:30:37 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
-
 
 /**
  * ft_strnstr - Locates a substring in a string within a size limit.

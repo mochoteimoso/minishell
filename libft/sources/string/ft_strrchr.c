@@ -6,12 +6,11 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 14:26:32 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 11:14:57 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:31:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
-
 
 /**
  * ft_strrchr - Finds the last occurrence of a character in a string.

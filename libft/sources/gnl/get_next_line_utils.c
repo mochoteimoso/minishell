@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 08:55:39 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 11:21:18 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:29:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,8 @@ void	reset_list(t_gnl_list **list)
 }
 
 /**
- * list_emptier - Frees all nodes in the linked list and optionally a specific node.
+ * list_emptier - Frees all nodes in the linked list
+ * 				  and optionally a specific node.
  *
  * @list: Pointer to the head of the buffer list.
  * @node: Pointer to a specific node to free (optional).

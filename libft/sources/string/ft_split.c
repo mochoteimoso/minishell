@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:09:31 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 11:10:30 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:32:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
  * The number of words in the string.
  *
  * Details:
- * - Iterates through the string, identifying words as sequences of characters not equal to `c`.
+ * - Iterates through the string, identifying words as sequences
+ * 	 of characters not equal to `c`.
  */
 static	size_t	count_words(char const *s, char c)
 {
@@ -63,7 +64,6 @@ static void	free_array(char **array, size_t i)
 	}
 	free(array);
 }
-
 
 /**
  * separator - Splits the string into words based on a delimiter.

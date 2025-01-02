@@ -6,14 +6,15 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 16:41:53 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 11:09:25 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:31:35 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
 /**
- * ft_putendl_fd - Outputs a string followed by a newline to the given file descriptor.
+ * ft_putendl_fd - Outputs a string followed by a newline
+ * 				   to the given file descriptor.
  *
  * @s: String to output.
  * @fd: File descriptor to write to.

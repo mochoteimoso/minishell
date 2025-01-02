@@ -58,6 +58,21 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
 	return (restore_and_cleanup(mini, fd, 0));
 }
 
+/**
+ * restore_and_cleanup - Closes file descriptors and restores the saved stdin.
+ *
+ * @mini: Pointer to the shell structure.
+ * @fd: File descriptor to close.
+ * @exit_code: Exit code to return.
+ *
+ * Returns:
+ * The provided exit code after performing cleanup.
+ *
+ * Details:
+ * - Closes the provided file descriptor if it's valid.
+ * - Restores the original stdin using `mini->stdin_saved`.
+ * - Cleans up resources and resets the saved stdin to -1.
+ */
 static int	restore_and_cleanup(t_shell *mini, int fd, int exit_code)
 {
 	if (fd != -1)
@@ -73,16 +88,18 @@ static int	restore_and_cleanup(t_shell *mini, int fd, int exit_code)
 }
 
 /**
- * init_heredoc - Initializes the heredoc by
- * 				  opening a temporary file and saving STDIN.
+ * init_heredoc - Initializes a file for heredoc input and sets up signals.
  *
- * @mini: Pointer to the shell structure.
- * @cmd: Pointer to the current command structure.
- * @fd: Pointer to store the file descriptor of the heredoc file.
+ * @cmd: Pointer to the command structure containing heredoc information.
+ * @fd: Pointer to an integer to store the opened file descriptor.
  *
- * Opens a temporary file for the heredoc and saves the current STDIN state for
- * restoration. Sets up signal handling for SIGINT during heredoc input.
- * Returns 0 on success or 1 on failure.
+ * Returns:
+ * 0 on success, 1 on failure.
+ *
+ * Details:
+ * - Opens a temporary file for the heredoc with specific permissions.
+ * - Prints an error message if the file cannot be opened.
+ * - Configures the signal handler for SIGINT to handle heredoc interruptions.
  */
 static int	init_heredoc(t_cmd *cmd, int *fd)
 {
@@ -127,17 +144,16 @@ static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd)
 }
 
 /**
- * write_close_hd - Writes a line to the heredoc file
- * 					or closes the file descriptor.
+ * write_close_hd - Writes a line to a file descriptor and handles cleanup.
  *
- * @mini: Pointer to the shell structure.
- * @line: Line to write to the heredoc file.
- * @fd: File descriptor of the heredoc file.
- * @end: Indicates whether to write or close the file.
+ * @line: Line to write to the file descriptor.
+ * @fd: File descriptor to write to.
+ * @end: Flag to indicate whether to close the file descriptor.
  *
- * If `end` is true, closes the heredoc file and restores STDIN. If false, writes
- * the line to the file, appending a newline character.
- * Frees the line after writing.
+ * Details:
+ * - If `end` is true, closes the file descriptor.
+ * - Otherwise, writes the line to the file,
+ * 	appends a newline, and frees the line.
  */
 static void	write_close_hd(char *line, int fd, int end)
 {

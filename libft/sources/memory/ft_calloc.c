@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:49:16 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 11:06:21 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:33:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
  * @elem_size: Size of each element.
  *
  * Returns:
- * A pointer to the allocated memory initialized to zero, or NULL if allocation fails.
+ * A pointer to the allocated memory initialized to zero,
+ * or NULL if allocation fails.
  *
  * Details:
  * - Checks for overflow in `num_elem * elem_size`.

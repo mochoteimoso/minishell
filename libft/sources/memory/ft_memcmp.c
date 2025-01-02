@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:54:48 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 11:06:51 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:33:26 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
  * @num: Number of bytes to compare.
  *
  * Returns:
- * An integer greater than, equal to, or less than 0, depending on the comparison result.
+ * An integer greater than, equal to, or less than 0,
+ * depending on the comparison result.
  *
  * Details:
  * - Stops comparing when a difference is found or `num` bytes are compared.

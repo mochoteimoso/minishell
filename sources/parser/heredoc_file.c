@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:57:16 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 11:25:41 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:35:13 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,3 @@ static int	create_name(t_cmd *cmd, t_hd *hd)
 		return (1);
 	return (0);
 }
-

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 12:52:44 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 11:10:51 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:32:37 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
  * @s2: Second string.
  *
  * Returns:
- * An integer greater than, equal to, or less than 0, depending on the comparison result.
+ * An integer greater than, equal to, or less than 0,
+ * depending on the comparison result.
  *
  * Details:
- * - Iterates through both strings, comparing characters until a difference is found or the end is reached.
+ * - Iterates through both strings, comparing characters until
+ * 	 a difference is found or the end is reached.
  */
 int	ft_strcmp(char *s1, char *s2)
 {

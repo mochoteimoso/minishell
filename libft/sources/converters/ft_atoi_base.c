@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:27:39 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 10:31:43 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:29:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
  * @c: The character to convert.
  *
  * Returns:
- * The lowercase equivalent if the input is uppercase, otherwise the original character.
+ * The lowercase equivalent if the input is uppercase,
+ * otherwise the original character.
  */
 static char	ft_lower(char c)
 {
@@ -28,7 +29,8 @@ static char	ft_lower(char c)
 }
 
 /**
- * put_nbr - Converts a character to its integer representation in a specific base.
+ * put_nbr - Converts a character to its integer representation
+ * 			 in a specific base.
  *
  * @c: The character to convert.
  * @base: The numeric base (e.g., 10 for decimal, 16 for hexadecimal).
@@ -53,7 +55,8 @@ static int	put_nbr(char c, int base)
 }
 
 /**
- * ft_atoi_base - Converts a string representation of a number in a specific base to an integer.
+ * ft_atoi_base - Converts a string representation of a number
+ * 				  in a specific base to an integer.
  *
  * @str: The string containing the number.
  * @base: The numeric base of the number.

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 20:34:02 by henbuska          #+#    #+#             */
-/*   Updated: 2024/12/31 16:21:31 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 12:44:10 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	we_need_name(t_expand *arg, char *str, char *name, int *indx)
 {
 	while (str[arg->i] && (ft_isalnum(str[arg->i]) || str[arg->i] == '_'))
 	{
-		if (*indx < (int) sizeof(name) - 1)
+		if (*indx < 100 - 1)
 			name[(*indx)++] = str[arg->i++];
 	}
 	name[*indx] = '\0';

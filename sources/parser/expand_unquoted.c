@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:17:22 by nzharkev          #+#    #+#             */
-/*   Updated: 2024/12/31 16:26:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 12:44:26 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	expand_var(t_shell *mini, char *str, char **expan, t_expand *arg);
 int	s_unquoted(t_shell *mini, t_cmd **cmd, t_expand *arg, char **expan)
 {
 	char	*temp;
-
 	temp = *expan;
 	arg->i = no_quotes(mini, *cmd, arg->i, arg);
 	if (arg->i == -1)
