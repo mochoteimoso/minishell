@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:53:25 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/02 14:00:02 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			get_cmd_path(t_shell *mini, t_cmd *cmd);
 static char	*get_path_from_env(t_shell *mini);
-static char	**split_paths(const char *paths_str);
+static char	**split_paths(t_cmd *cmd, const char *paths_str);
 static char	*search_command_in_paths(char **paths, t_cmd *cmd);
 static int	check_abs_path(t_cmd *cmd);
 
@@ -47,7 +47,7 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 	if (abs_path_status != 1)
 		return (cmd->cmd_exit != 0);
 	paths_str = get_path_from_env(mini);
-	paths = split_paths(paths_str);
+	paths = split_paths(cmd, paths_str);
 	if (!paths)
 		return (1);
 	cmd->cmd_path = search_command_in_paths(paths, cmd);
@@ -90,12 +90,19 @@ static char	*get_path_from_env(t_shell *mini)
  * directory strings. If splitting fails, prints an error message and
  * returns NULL.
  */
-static char	**split_paths(const char *paths_str)
+static char	**split_paths(t_cmd *cmd, const char *paths_str)
 {
 	char	**paths;
 
+	if (!paths_str)
+	{
+		ft_putstr_fd(cmd->command, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		cmd->cmd_exit = 127;
+		return (NULL);
+	}
 	paths = ft_split(paths_str, ':');
-	if (!paths)
+	if (!paths || !paths_str)
 		perror("Failed to split PATH");
 	return (paths);
 }
