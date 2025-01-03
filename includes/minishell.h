@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 13:35:46 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 10:20:05 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,6 +409,7 @@ int		handle_append(t_cmd *cmd, int i);
 	/*heredoc.c*/
 
 int		open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
+int	restore_and_cleanup(t_shell *mini, int fd, int exit_code);
 
 	/*heredoc_expand*/
 
@@ -494,7 +495,7 @@ int		is_this_empty(char *input);
 
 	/*trailing_pipe.c*/
 
-char	*handle_trailing_pipe(char *input);
+char	*handle_trailing_pipe(t_shell *mini, char *input);
 
 /*utils*/
 	/*cleaners.c*/

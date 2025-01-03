@@ -13,7 +13,7 @@
 #include "../../includes/minishell.h"
 
 int			open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
-static int	restore_and_cleanup(t_shell *mini, int fd, int exit_code);
+int	restore_and_cleanup(t_shell *mini, int fd, int exit_code);
 static int	init_heredoc(t_cmd *cmd, int *fd);
 static int	process_heredoc_line(t_shell *mini, t_cmd *cmd, char *line, int fd);
 static void	write_close_hd(char *line, int fd, int end);
@@ -73,7 +73,7 @@ int	open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd)
  * - Restores the original stdin using `mini->stdin_saved`.
  * - Cleans up resources and resets the saved stdin to -1.
  */
-static int	restore_and_cleanup(t_shell *mini, int fd, int exit_code)
+int	restore_and_cleanup(t_shell *mini, int fd, int exit_code)
 {
 	if (fd != -1)
 		close(fd);

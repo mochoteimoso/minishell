@@ -6,14 +6,15 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:32:24 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:56:36 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 10:48:47 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char		*handle_trailing_pipe(char *input);
-static char	*join_and_free(char *input, char *additional_input);
+char		*handle_trailing_pipe(t_shell *mini, char *input);
+static char	*join_and_free(t_shell *mini, char *input, char *additional_input);
+static char    *finalize_trailing_pipe(t_shell *mini, char *input);
 
 /**
  * handle_trailing_pipe - Handles additional input
@@ -29,24 +30,32 @@ static char	*join_and_free(char *input, char *additional_input);
  * Return: The updated input string with additional input appended,
  * or NULL if canceled.
  */
-char	*handle_trailing_pipe(char *input)
+char	*handle_trailing_pipe(t_shell *mini, char *input)
 {
 	char	*additional_input;
 
 	additional_input = NULL;
-	signal(SIGINT, sigint_handler);
+	signal(SIGINT, sig_handler_hd);
+	mini->stdin_saved = dup(STDIN_FILENO);
+	if (mini->stdin_saved == -1)
+	{
+		perror("Failed to save STDIN");
+		return (NULL);
+	}
 	while (1)
 	{
-		additional_input = readline(">");
-		if (!additional_input)
+		additional_input = readline("> ");
+		if (!additional_input || g_sig == SIGINT)
 		{
+			mini->exit_stat = restore_and_cleanup(mini, -1, 1);
 			free(input);
 			return (NULL);
 		}
 		if (!is_this_empty(additional_input))
-			return (join_and_free(input, additional_input));
+			return (join_and_free(mini, input, additional_input));
 		free(additional_input);
 	}
+	return (finalize_trailing_pipe(mini, input));
 }
 
 /**
@@ -62,7 +71,7 @@ char	*handle_trailing_pipe(char *input)
  *
  * Return: The newly concatenated string, or NULL on failure.
  */
-static char	*join_and_free(char *input, char *additional_input)
+static char	*join_and_free(t_shell *mini, char *input, char *additional_input)
 {
 	char	*updated_input;
 
@@ -70,9 +79,26 @@ static char	*join_and_free(char *input, char *additional_input)
 	free(additional_input);
 	if (!updated_input)
 	{
+		mini->exit_stat = restore_and_cleanup(mini, 0, 1);
 		free(input);
 		return (NULL);
 	}
+	mini->exit_stat = restore_and_cleanup(mini, 0, 0);
 	free(input);
 	return (updated_input);
+}
+
+static char    *finalize_trailing_pipe(t_shell *mini, char *input)
+{
+    if (restore_and_cleanup(mini, 0, 0) != 0)
+    {
+        free(input);
+        return (NULL);
+    }
+	if (mini->stdin_saved != -1)
+	{
+		close(mini->stdin_saved);
+		mini->stdin_saved = -1;
+	}
+    return (input);
 }

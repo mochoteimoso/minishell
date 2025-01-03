@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:56:23 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 10:10:48 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int			check_pipes(char **input, t_shell *mini);
 static int	check_consecutive_pipes(char *input, t_shell *mini);
 static int	check_pipe_error(char *input, int i, t_shell *mini);
-static int	check_trailing_pipe(char **input);
+static int	check_trailing_pipe(t_shell *mini, char **input);
 
 /**
  * check_pipes - Validates the syntax of pipes (`|`) in the input string.
@@ -43,7 +43,7 @@ int	check_pipes(char **input, t_shell *mini)
 	}
 	if (check_consecutive_pipes(*input, mini))
 		return (1);
-	if (check_trailing_pipe(input))
+	if (check_trailing_pipe(mini, input))
 		return (1);
 	return (0);
 }
@@ -122,7 +122,7 @@ static int	check_pipe_error(char *input, int i, t_shell *mini)
  *
  * Return: 1 if handling fails, 0 otherwise.
  */
-static int	check_trailing_pipe(char **input)
+static int	check_trailing_pipe(t_shell *mini, char **input)
 {
 	int		i;
 	char	*updated_input;
@@ -132,7 +132,7 @@ static int	check_trailing_pipe(char **input)
 		i--;
 	if (i >= 0 && (*input)[i] == '|' && !check_quotes(*input, i))
 	{
-		updated_input = handle_trailing_pipe(*input);
+		updated_input = handle_trailing_pipe(mini, *input);
 		if (!updated_input)
 		{
 			*input = NULL;
