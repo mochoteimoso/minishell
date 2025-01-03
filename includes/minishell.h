@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/03 10:20:05 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 11:22:27 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,7 +409,7 @@ int		handle_append(t_cmd *cmd, int i);
 	/*heredoc.c*/
 
 int		open_and_write_to_heredoc(t_shell *mini, t_cmd *cmd);
-int	restore_and_cleanup(t_shell *mini, int fd, int exit_code);
+int		restore_and_cleanup(t_shell *mini, int fd, int exit_code);
 
 	/*heredoc_expand*/
 

@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 12:57:59 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 11:38:29 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ static int	handle_input(t_shell *mini, char *input)
 		free(input);
 		return (1);
 	}
-	execute_pipeline(mini);
 	free(input);
+	execute_pipeline(mini);
 	return (0);
 }
