@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:06:48 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:56:28 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:53:04 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,7 @@ static int	check_out_redir(char *input, t_shell *mini, int *i)
 static int	validate_redirect(char *input, t_shell *mini, int *i, char *type)
 {
 	(*i)++;
-	while (input[*i] == ' ')
-		(*i)++;
+	(*i) = skip_whitespace(input, *i);
 	if (!input[*i] || input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
 	{
 		ft_putstr_fd("syntax error near unexpected token ", 2);

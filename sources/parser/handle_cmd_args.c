@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:26:25 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:54:45 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 17:26:02 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,6 @@ static int	export_args(t_cmd *cmd, t_expand *arg, int i)
 		else if (add_char(cmd->seg, arg))
 			return (free(arg->value), -1);
 	}
-	arg->len = ft_strlen(arg->value);
 	return (arg->i);
 }
 

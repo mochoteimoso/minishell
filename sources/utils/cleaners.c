@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 13:18:31 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:59:43 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:35:01 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,13 @@ void	cleaner_for_success(t_shell *mini)
  *
  * @mini: Pointer to the shell structure containing resources to clean.
  *
- * Frees command structures, process IDs, and closes and frees pipes
- * associated with the failed execution.
+ * Unlinks all heredocs to clean up temporary files
+ * used during command execution.
+ * Frees command structures, process IDs, and pipes associated with the pipeline.
  */
 void	cleaner_for_failure(t_shell *mini)
 {
+	unlink_all_heredocs(mini);
 	clean_cmds(mini->cmds);
 	if (mini->pids)
 	{

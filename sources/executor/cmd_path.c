@@ -6,16 +6,16 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:37:17 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 14:00:02 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 17:01:13 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int			get_cmd_path(t_shell *mini, t_cmd *cmd);
+static int	process_paths(t_shell *mini, t_cmd *cmd);
 static char	*get_path_from_env(t_shell *mini);
-static char	**split_paths(t_cmd *cmd, const char *paths_str);
-static char	*search_command_in_paths(char **paths, t_cmd *cmd);
+static int	no_path_var(t_cmd *cmd);
 static int	check_abs_path(t_cmd *cmd);
 
 /**
@@ -32,11 +32,9 @@ static int	check_abs_path(t_cmd *cmd);
  */
 int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 {
-	char	*paths_str;
-	char	**paths;
-	int		abs_path_status;
+	int	abs_path_status;
 
-	if (cmd->command == NULL || ft_strlen(cmd->command) == 0)
+	if (!cmd->command || ft_strlen(cmd->command) == 0)
 	{
 		cmd->cmd_exit = 0;
 		return (1);
@@ -46,104 +44,7 @@ int	get_cmd_path(t_shell *mini, t_cmd *cmd)
 		return (0);
 	if (abs_path_status != 1)
 		return (cmd->cmd_exit != 0);
-	paths_str = get_path_from_env(mini);
-	paths = split_paths(cmd, paths_str);
-	if (!paths)
-		return (1);
-	cmd->cmd_path = search_command_in_paths(paths, cmd);
-	if (!cmd->cmd_path)
-	{
-		cmd_error_and_exit_stat(cmd, 127);
-		return (1);
-	}
-	return (0);
-}
-
-/**
- * get_path_from_env - Retrieves the value of the "PATH" environment variable.
- *
- * @mini: Pointer to the shell structure containing environment variables.
- *
- * Searches the environment variable list for the "PATH" variable and
- * returns its value. If not found, returns NULL.
- */
-static char	*get_path_from_env(t_shell *mini)
-{
-	t_env	*temp;
-
-	temp = mini->env;
-	while (temp)
-	{
-		if (ft_strncmp(temp->name, "PATH", 4) == 0)
-			return (temp->value);
-		temp = temp->next;
-	}
-	return (NULL);
-}
-
-/**
- * split_paths - Splits the "PATH" environment variable into directories.
- *
- * @paths_str: The string containing the colon-separated paths.
- *
- * Uses `ft_split` to separate the paths by ':' and returns an array of
- * directory strings. If splitting fails, prints an error message and
- * returns NULL.
- */
-static char	**split_paths(t_cmd *cmd, const char *paths_str)
-{
-	char	**paths;
-
-	if (!paths_str)
-	{
-		ft_putstr_fd(cmd->command, 2);
-		ft_putendl_fd(": No such file or directory", 2);
-		cmd->cmd_exit = 127;
-		return (NULL);
-	}
-	paths = ft_split(paths_str, ':');
-	if (!paths || !paths_str)
-		perror("Failed to split PATH");
-	return (paths);
-}
-
-/**
- * search_command_in_paths - Searches for a command in the given paths.
- *
- * @paths: Array of directory paths to search.
- * @cmd: Pointer to the command structure with command details.
- *
- * Constructs potential paths for the command by appending the command
- * name to each directory in `paths`. Checks for executable access to each
- * constructed path. Frees resources and returns the valid path if found,
- * or NULL if not found.
- */
-static char	*search_command_in_paths(char **paths, t_cmd *cmd)
-{
-	char	*cmd_path;
-	char	*temp_cmd;
-	int		i;
-
-	i = 0;
-	while (paths[i])
-	{
-		temp_cmd = ft_strjoin(paths[i], "/");
-		if (!temp_cmd)
-			break ;
-		cmd_path = ft_strjoin(temp_cmd, cmd->command);
-		free(temp_cmd);
-		if (!cmd_path)
-			break ;
-		if (access(cmd_path, X_OK) == 0)
-		{
-			ft_free_array(paths);
-			return (cmd_path);
-		}
-		free(cmd_path);
-		i++;
-	}
-	ft_free_array(paths);
-	return (NULL);
+	return (process_paths(mini, cmd));
 }
 
 /**
@@ -179,4 +80,98 @@ static int	check_abs_path(t_cmd *cmd)
 		return (-1);
 	}
 	return (1);
+}
+
+/**
+ * process_paths - Resolves the command's executable path
+ * using the "PATH" variable.
+ *
+ * @mini: Pointer to the shell structure containing environment information.
+ * @cmd: Pointer to the command structure containing the command to execute.
+ *
+ * This function retrieves the "PATH" environment variable and splits it into
+ * directories. If "PATH" is missing or empty, it falls back to checking if the
+ * command can be executed directly via `no_path_var`. Otherwise, it searches
+ * through the directories in "PATH" for the command
+ * using `search_command_in_paths`.
+ * If the command is not found, it sets an error state, prints an error message,
+ * and assigns a `127` exit status.
+ *
+ * Returns:
+ * - 0 on success, if the command's executable path is resolved.
+ * - 1 on failure, if the "PATH" variable is missing/empty, the command cannot
+ *   be executed directly, or memory allocation fails.
+ */
+static int	process_paths(t_shell *mini, t_cmd *cmd)
+{
+	char	*paths_str;
+	char	**paths;
+
+	paths_str = get_path_from_env(mini);
+	if (!paths_str || ft_strlen(paths_str) == 0)
+	{
+		if (no_path_var(cmd) == 0)
+			return (0);
+		return (1);
+	}
+	paths = split_paths(cmd, paths_str);
+	if (!paths)
+		return (1);
+	cmd->cmd_path = search_command_in_paths(paths, cmd);
+	if (!cmd->cmd_path)
+	{
+		cmd_error_and_exit_stat(cmd, 127);
+		return (1);
+	}
+	return (0);
+}
+
+/**
+ * no_path_var - Handles command execution when the "PATH" variable is absent.
+ *
+ * @cmd: Pointer to the command structure containing the command to execute.
+ *
+ * This function checks if the provided command can be executed directly
+ * without relying on the "PATH" environment variable. If the command is
+ * executable (using `access` with `X_OK`), it duplicates the command string
+ * into `cmd_path` for execution. Otherwise, it sets an error state, prints
+ * an error message, and assigns an appropriate exit status to the command.
+ *
+ * Returns:
+ * - 0 on success, if the command is executable and `cmd_path` is set.
+ * - 1 on failure, if the command cannot be executed or memory allocation fails.
+ */
+static int	no_path_var(t_cmd *cmd)
+{
+	if (access(cmd->command, X_OK) == 0)
+	{
+		cmd->cmd_path = ft_strdup(cmd->command);
+		if (!cmd->cmd_path)
+			return (1);
+		return (0);
+	}
+	cmd_error_and_exit_stat(cmd, 127);
+	return (1);
+}
+
+/**
+ * get_path_from_env - Retrieves the value of the "PATH" environment variable.
+ *
+ * @mini: Pointer to the shell structure containing environment variables.
+ *
+ * Searches the environment variable list for the "PATH" variable and
+ * returns its value. If not found, returns NULL.
+ */
+static char	*get_path_from_env(t_shell *mini)
+{
+	t_env	*temp;
+
+	temp = mini->env;
+	while (temp)
+	{
+		if (ft_strncmp(temp->name, "PATH", 4) == 0)
+			return (temp->value);
+		temp = temp->next;
+	}
+	return (NULL);
 }

@@ -6,37 +6,16 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:13:29 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 12:57:36 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 12:52:18 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_free_int_arr(int **array);
 void	ft_free_int_arr_with_size(int **array, int size);
 void	error(t_shell *mini, char *str);
 void	clean_env(t_env *ll, char **array);
 void	clean_redir(t_redir *head);
-
-/**
- * ft_free_int_arr - Frees a null-terminated array of integer pointers.
- *
- * @array: Pointer to the array of integer pointers to be freed.
- */
-void	ft_free_int_arr(int **array)
-{
-	int	a;
-
-	a = 0;
-	if (!array)
-		return ;
-	while (array[a] != NULL)
-	{
-		free(array[a]);
-		a++;
-	}
-	free(array);
-}
 
 /**
  * ft_free_int_arr_with_size - Frees an array of integer pointers

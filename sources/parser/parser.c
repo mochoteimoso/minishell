@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:26 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:55:21 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:05:03 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,17 @@ int	parse_cmd_string(t_shell *mini, t_cmd *cmd);
 int	cmd_string_while(t_shell *mini, t_cmd *cmd, int i, int *cmd_found);
 
 /**
- * parse_and_validate_input - Validates and parses the input into commands.
+ * parse_and_validate_input - Validates and parses the user's input
+ * into commands.
  *
  * @input: Pointer to the input string to parse.
- * @mini: Pointer to the shell structure.
+ * @mini: Pointer to the shell structure containing command and execution data.
  *
- * Validates input syntax, initializes command structures, splits the input into
- * pipe-separated segments, and parses each command. Returns 1 on failure or 0
- * on success.
+ * This function is responsible for ensuring the input syntax is correct,
+ * initializing command structures, splitting the input string by pipe symbols,
+ * and parsing each segment into command structures. If any step fails,
+ * the function cleans up resources (such as unlinking heredocs) and returns 1.
+ * On successful parsing and validation, the function returns 0.
  */
 int	parse_and_validate_input(char **input, t_shell *mini)
 {
@@ -41,13 +44,19 @@ int	parse_and_validate_input(char **input, t_shell *mini)
 }
 
 /**
- * parse_input - Parses each command segment and populates the shell structure.
+ * parse_input - Parses individual command segments into the shell structure.
  *
- * @mini: Pointer to the shell structure.
+ * @mini: Pointer to the shell structure containing command and execution data.
  *
- * Iterates over each command segment, assigns indices, and parses the command
- * string. Cleans up and sets an error status if parsing fails. Returns 1 on
- * failure or 0 on success.
+ * This function iterates through each command segment generated during input
+ * splitting, assigns a unique index to each command, and parses the segment
+ * into a command structure. If parsing fails for any command segment, the
+ * function cleans up the resources, unlinks heredocs, and sets the shell's
+ * exit status to an error state.
+ *
+ * Returns:
+ * - 0 on successful parsing of all commands.
+ * - 1 if parsing fails for any command segment.
  */
 int	parse_input(t_shell *mini)
 {
@@ -60,6 +69,7 @@ int	parse_input(t_shell *mini)
 		if (parse_cmd_string(mini, mini->cmds[index]))
 		{
 			mini->exit_stat = 1;
+			unlink_all_heredocs(mini);
 			clean_cmds(mini->cmds);
 			return (1);
 		}

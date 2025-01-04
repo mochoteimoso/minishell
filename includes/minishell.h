@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/03 11:22:27 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 17:31:45 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ typedef struct s_vdata
  * - name: Name of the variable being expanded.
  * - value: Value of the expanded variable.
  * - start: Starting index of the current expansion.
- * - len: Length of the expanded result.
  */
 typedef struct s_expand
 {
@@ -104,7 +103,6 @@ typedef struct s_expand
 	char	*name;
 	char	*value;
 	int		start;
-	int		len;
 }	t_expand;
 
 /**
@@ -115,7 +113,6 @@ typedef struct s_expand
  * - delimiter: The delimiter string for heredocs.
  * - type: Type of redirection (from `t_redir_type` enum).
  * - expand: Boolean indicating whether variable expansion is enabled.
- * - node_ind: Index of the redirection node.
  * - heredoc_name: Name of the heredoc temporary file.
  * - heredoc_index: Index of the heredoc in the command.
  * - next: Pointer to the next redirection node in the list.
@@ -126,7 +123,6 @@ typedef struct s_redir
 	char			*delimiter;
 	t_redir_type	type;
 	bool			expand;
-	int				node_ind;
 	char			*heredoc_name;
 	int				heredoc_index;
 	struct s_redir	*next;
@@ -301,6 +297,11 @@ int		check_special_cases(t_cmd *cmd);
 int		check_for_directory(t_cmd *cmd);
 void	cmd_error_and_exit_stat(t_cmd *cmd, int exit_status);
 int		check_access(t_cmd *cmd);
+
+	/*cmd_path_utils2.c*/
+
+char	*search_command_in_paths(char **paths, t_cmd *cmd);
+char	**split_paths(t_cmd *cmd, const char *paths_str);
 
 	/*fd_handlers.c*/
 
@@ -509,12 +510,11 @@ void	cleaner_for_failure(t_shell *mini);
 
 void	exit_for_failure(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
-void	exit_for_single_cmd(t_shell *mini, int exit_status);
+void	clean_cmd_unlink(t_shell *mini);
 void	hd_free(t_expand *arg, char *expan);
 
 	/*freeing*/
 
-void	ft_free_int_arr(int **array);
 void	ft_free_int_arr_with_size(int **array, int size);
 void	error(t_shell *mini, char *str);
 void	clean_env(t_env *ll, char **array);

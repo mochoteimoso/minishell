@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/03 11:38:29 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 18:08:19 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int argc, char **argv, char **envp)
  * @status: Exit status of the shell.
  * @envp: Environment variables passed to the shell.
  *
- * Returns the final status of the shell.
+ * Returns the final exit status of the shell.
  */
 static int	activate_shell(int status, char **envp)
 {
@@ -71,7 +71,7 @@ static int	activate_shell(int status, char **envp)
 
 /**
  * init_shell - Prepares the shell's internal state and environment.
- * Initializes the environment list, alphabetical order,
+ * Initializes the environment list, pending list alphabetical order,
  * and basic shell variables.
  *
  * @mini: Pointer to the shell structure to be initialized.

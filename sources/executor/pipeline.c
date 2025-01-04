@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 13:28:23 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:53:50 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 12:58:46 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,13 @@ static int	allocate_pipes_array(t_shell *mini);
 static int	allocate_pipes(t_shell *mini);
 
 /**
- * execute_pipeline - Executes a pipeline of commands,
- * 					  including single built-in commands.
+ * execute_pipeline - Executes a pipeline of commands or a single built-in.
  *
  * @mini: Pointer to the shell structure containing command and pipeline data.
  *
- * Handles execution of either a single built-in command
- * or a pipeline of commands.
- * Allocates necessary resources (like pipes and process IDs),
- * manages redirections, forks processes for each command in the pipeline,
- * waits for children, and cleans up.
+ * Handles the execution of either a single built-in command or multiple
+ * piped commands. Allocates resources, sets up pipes, forks processes,
+ * manages redirections, waits for children, and performs cleanup.
  *
  * Returns the exit status of the last command executed.
  */
@@ -46,7 +43,7 @@ int	execute_pipeline(t_shell *mini)
 	mini->pids = ft_calloc(mini->cmd_count, sizeof(pid_t));
 	if (!mini->pids)
 	{
-		clean_cmds(mini->cmds);
+		clean_cmd_unlink(mini);
 		return (mini->exit_stat = 1);
 	}
 	if (pipe_and_fork(mini))
@@ -62,14 +59,13 @@ int	execute_pipeline(t_shell *mini)
 
 /**
  * handle_single_builtin_cmd - Executes a single built-in command
- * 							   without forking.
+ * without forking.
  *
  * @mini: Pointer to the shell structure containing the built-in command.
  *
- * Resolves file descriptors for input and output redirection,
- * executes the built-in command,
- * and restores the original file descriptors. Cleans up resources in case
- * of failure.
+ * Resolves file descriptors for input and output redirection, saves original
+ * file descriptors, executes the built-in command, and restores file
+ * descriptors upon completion. Cleans up resources in case of failure.
  *
  * Returns 0 on success or 1 on failure.
  */
@@ -78,7 +74,7 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 	if (resolve_fd(mini->cmds[0]) || save_fds(mini))
 	{
 		mini->exit_stat = mini->cmds[0]->cmd_exit;
-		clean_cmds(mini->cmds);
+		clean_cmd_unlink(mini);
 		return (1);
 	}
 	if (redirect_fd(mini->cmds[0]->fd_in, STDIN_FILENO)
@@ -86,7 +82,7 @@ static int	handle_single_builtin_cmd(t_shell *mini)
 		return (1);
 	if (built_in_exe(mini, mini->cmds[0]))
 	{
-		clean_cmds(mini->cmds);
+		clean_cmd_unlink(mini);
 		reset_fds(mini);
 		return (1);
 	}

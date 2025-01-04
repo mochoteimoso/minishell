@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:54:32 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:55:51 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 17:25:26 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	parse_filename(t_cmd *cmd, int i, char **filename)
  * updating the `expand` flag in the command's redirection
  * structure when quoted. Stops parsing on encountering
  * whitespace or redirection operators outside of quotes. Updates `arg` to store
- * the extracted filename and its length. Returns the updated index on success,
+ * the extracted filename. Returns the updated index on success,
  * or -1 on failure.
  */
 int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg)
@@ -74,7 +74,8 @@ int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg)
 		cmd->redir_tail->expand = false;
 	while (str[arg->i])
 	{
-		if ((str[arg->i] == ' ' || str[arg->i] == '<' || str[arg->i] == '>')
+		if ((ft_isspace(str[arg->i]) || str[arg->i] == '<'
+				|| str[arg->i] == '>')
 			&& (!arg->sgl && !arg->dbl))
 			break ;
 		else if (!arg->sgl && !arg->dbl && (str[arg->i] == '\''
@@ -86,6 +87,5 @@ int	filename_in_quotes(t_cmd *cmd, char *str, int i, t_expand *arg)
 		else if (add_char(str, arg))
 			return (free(arg->value), -1);
 	}
-	arg->len = ft_strlen(arg->value);
 	return (arg->i);
 }

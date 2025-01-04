@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:32:24 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/03 11:45:32 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:22:43 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ char	*handle_trailing_pipe(t_shell *mini, char *input)
 		additional_input = readline("> ");
 		if (!additional_input || g_sig == SIGINT)
 		{
+			g_sig = 0;
 			mini->exit_stat = restore_and_cleanup(mini, -1, 1);
 			free(input);
 			return (NULL);

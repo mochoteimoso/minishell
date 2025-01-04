@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:49:25 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 12:52:35 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:04:38 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,8 @@ int	update_pending(t_shell *mini, char *name, char *str)
 	while (mini->pending[n] != NULL)
 	{
 		if (name && (len == (int)ft_strlen(name))
-			&& (ft_strncmp(mini->pending[n], str, len) == 0))
+			&& (ft_strncmp(mini->pending[n], str, len) == 0)
+			&& (str[len] && (str[len] == '=')))
 		{
 			free(mini->pending[n]);
 			mini->pending[n] = ft_strdup(str);

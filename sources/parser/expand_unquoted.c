@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:17:22 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 12:54:10 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 17:26:32 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int	no_quotes(t_shell *mini, t_cmd *cmd, int i, t_expand *arg)
 		if (arg->i == -1)
 			return (-1);
 	}
-	arg->len = ft_strlen(arg->value);
 	return (arg->i);
 }
 

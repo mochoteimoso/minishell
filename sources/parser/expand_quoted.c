@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:12:11 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 12:54:06 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 17:26:41 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int	in_quotes(t_shell *mini, char *str, int i, t_expand *arg)
 		if (arg->i == -1)
 			return (-1);
 	}
-	arg->len = ft_strlen(arg->value);
 	return (arg->i);
 }
 
@@ -72,7 +71,7 @@ int	we_have_heredoc(t_expand *arg, char *str, int n)
 {
 	if (!n)
 		arg->value = ft_strdup("");
-	while (str[arg->i] == '<' || str[arg->i] == ' ')
+	while (str[arg->i] == '<' || ft_isspace(str[arg->i]))
 	{
 		if (add_char(str, arg))
 			return (-1);

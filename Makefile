@@ -21,6 +21,7 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)executor/child_process_utils.c\
 	$(SRC_DIR)executor/cmd_path.c\
 	$(SRC_DIR)executor/cmd_path_utils.c\
+	$(SRC_DIR)executor/cmd_path_utils2.c\
 	$(SRC_DIR)executor/fd_handler.c\
 	$(SRC_DIR)executor/handle_builtins.c\
 	$(SRC_DIR)executor/pipeline.c\
@@ -61,32 +62,29 @@ SRC = $(SRC_DIR)main.c\
 	$(SRC_DIR)utils/cleaners.c
 
 FLAGS = -Wall -Werror -Wextra -g
-
 LDFLAGS = -lreadline
+MAKEFLAGS += --no-print-directory
 
 LIBFT = ./libft/libft.a
-
 LIBFT_DIR = ./libft
+LIBFT_LINK = -L$(LIBFT_DIR) -lft
+LIBFT_INC = -I$(LIBFT_DIR)/includes
 
 OBJ_DIR = objects/
-
 OBJS = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
-
 OBJ_DIRS = $(sort $(dir $(OBJS)))
-
-MAKEFLAGS += --no-print-directory
 
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ_DIRS) $(OBJS)
-		@cc $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS) > /dev/null
+		@cc $(OBJS) $(LIBFT_LINK) -o $(NAME) $(LDFLAGS) > /dev/null
 		@echo "\n\033[0;32mLet's mini!\033[0m\n"
 
 $(OBJ_DIRS):
 		@mkdir -p $(OBJ_DIRS)
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c
-		@cc $(FLAGS) -c $< -o $@
+		@cc $(FLAGS) $(LIBFT_INC) -c $< -o $@
 
 $(LIBFT):
 		@make -C $(LIBFT_DIR)

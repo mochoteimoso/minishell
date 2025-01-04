@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:06:20 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/03 11:41:48 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:53:26 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ int	check_pipes(char **input, t_shell *mini)
 	int	i;
 
 	i = 0;
-	while ((*input)[i] == ' ')
-		i++;
+	i = skip_whitespace(*input, i);
 	if ((*input)[i] == '|' && !check_quotes(*input, i))
 	{
 		ft_putendl_fd("syntax error near unexpected token ", 2);
@@ -75,7 +74,7 @@ static int	check_consecutive_pipes(char *input, t_shell *mini)
 				return (1);
 			pipe_found = 1;
 		}
-		else if (input[i] == ' ')
+		else if (ft_isspace(input[i]))
 			pipe_found = 0;
 		i++;
 	}
@@ -99,8 +98,7 @@ static int	check_pipe_error(char *input, int i, t_shell *mini)
 	int	j;
 
 	j = i + 1;
-	while (input[j] == ' ')
-		j++;
+	j = skip_whitespace(input, j);
 	if (input[j] == '|' && !check_quotes(input, j))
 	{
 		ft_putstr_fd("syntax error near unexpected token ", 2);

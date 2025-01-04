@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 09:49:20 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/02 12:47:13 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:50:56 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_atoi(char const *str)
 
 	p_n = 1;
 	num = 0;
-	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
+	while (ft_isspace(*str) || (*str >= '\t' && *str <= '\r'))
 		str++;
 	if (*str == '-' || *str == '+')
 	{

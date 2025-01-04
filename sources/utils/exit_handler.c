@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:43:47 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/02 12:58:54 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/03 15:35:13 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,25 @@
 
 void	exit_for_failure(t_shell *mini, int i, int exit_status);
 void	exit_for_success(t_shell *mini, int i, int exit_status);
-void	exit_for_single_cmd(t_shell *mini, int exit_status);
+void	clean_cmd_unlink(t_shell *mini);
 void	close_all_pipes(t_shell *mini);
 void	hd_free(t_expand *arg, char *expan);
 
 /**
- * exit_for_failure - Cleans up resources
- * and exits the shell with the given status upon failure.
+ * exit_for_failure - Cleans up resources and exits the shell on failure.
  *
  * @mini: Pointer to the shell structure containing resources to free.
  * @i: Index of the current command being executed.
  * @exit_status: Exit status code to terminate the shell with.
+ *
+ * This function performs a comprehensive cleanup, including closing file
+ * descriptors,  unlinking heredocs, freeing memory, and releasing resources
+ * before terminating the shell with the specified exit status.
  */
 void	exit_for_failure(t_shell *mini, int i, int exit_status)
 {
 	close_all_pipes(mini);
+	unlink_all_heredocs(mini);
 	if (mini->cmds[i]->fd_out > 2)
 		close(mini->cmds[i]->fd_out);
 	if (mini->cmds[i]->fd_in > 2)
@@ -70,19 +74,17 @@ void	exit_for_success(t_shell *mini, int i, int exit_status)
 }
 
 /**
- * exit_for_single_cmd - Cleans up resources
- * and exits the shell for single command execution.
+ * clean_cmd_unlink - Cleans up command resources and unlinks heredocs.
  *
- * @mini: Pointer to the shell structure containing resources to free.
- * @exit_status: Exit status code to terminate the shell with.
+ * @mini: Pointer to the shell structure containing commands and heredocs.
+ *
+ * Unlinks all heredoc files used during execution
+ * and frees the allocated memory for command structures.
  */
-void	exit_for_single_cmd(t_shell *mini, int exit_status)
+void	clean_cmd_unlink(t_shell *mini)
 {
-	clean_env(mini->env, mini->pending);
+	unlink_all_heredocs(mini);
 	clean_cmds(mini->cmds);
-	free(mini->pids);
-	mini->pids = NULL;
-	exit (exit_status);
 }
 
 /**
