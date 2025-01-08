@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 15:40:55 by nzharkev          #+#    #+#             */
-/*   Updated: 2025/01/03 18:08:19 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/08 12:01:14 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	init_shell(t_shell *mini, char **envp);
 static int	user_prompt(t_shell *mini, int status);
 static int	handle_input(t_shell *mini, char *input);
 
-int	g_sig = 0;
+volatile sig_atomic_t	g_sig = 0;
 
 /**
  * main - Entry point for the minishell program.

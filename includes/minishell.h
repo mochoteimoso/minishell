@@ -6,7 +6,7 @@
 /*   By: nzharkev <nzharkev@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 19:03:42 by henbuska          #+#    #+#             */
-/*   Updated: 2025/01/03 17:31:45 by nzharkev         ###   ########.fr       */
+/*   Updated: 2025/01/08 12:00:44 by nzharkev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define TMP_S "/tmp/heredoc"
 # define TMP_EXT ".tmp"
 
-extern int	g_sig;
+extern volatile sig_atomic_t	g_sig;
 
 /**
  * e_redir_type - Enum representing the types of redirections.
